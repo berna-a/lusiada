@@ -24,23 +24,23 @@ export function EventsCarousel() {
             <CarouselContent>
               {placeholderItems.map((item, i) => (
                 <CarouselItem key={i} className="md:basis-1/2 lg:basis-1/3">
-                  <Card className="glass-card h-full rounded-xl transition-all duration-300 hover:premium-shadow-lg hover:-translate-y-0.5">
+                  <Card className="h-full rounded-xl border-border/40 bg-card/80 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_-12px_hsl(var(--primary)/0.12),0_0_0_1px_hsl(var(--accent)/0.1)] hover:border-accent/20">
                     <CardHeader className="pb-2">
                       <div className="flex items-center justify-between mb-2">
-                        <Badge variant="secondary" className="text-xs font-medium font-body rounded-full px-3">{item.type}</Badge>
-                        <span className="text-xs text-muted-foreground font-body">{item.date}</span>
+                        <Badge variant="secondary" className="text-[11px] font-medium font-body rounded-full px-3 py-0.5">{item.type}</Badge>
+                        <span className="text-[11px] text-muted-foreground/60 font-body">{item.date}</span>
                       </div>
                       <CardTitle className="text-base leading-snug font-display font-semibold">{item.title}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-muted-foreground leading-relaxed font-body">{item.description}</p>
+                      <p className="text-sm text-muted-foreground/80 leading-relaxed font-body">{item.description}</p>
                     </CardContent>
                   </Card>
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="rounded-full" />
-            <CarouselNext className="rounded-full" />
+            <CarouselPrevious className="rounded-full border-border/40 hover:border-accent/30 hover:shadow-[0_0_12px_-2px_hsl(var(--accent)/0.2)]" />
+            <CarouselNext className="rounded-full border-border/40 hover:border-accent/30 hover:shadow-[0_0_12px_-2px_hsl(var(--accent)/0.2)]" />
           </Carousel>
         </div>
       </div>
