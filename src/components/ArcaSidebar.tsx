@@ -122,17 +122,6 @@ export function ArcaSidebar() {
         </div>
       )}
 
-      {/* Back to site */}
-      <div className="p-3 border-t border-sidebar-border">
-        <Link
-          to="/"
-          className={`text-xs text-sidebar-foreground/50 hover:text-sidebar-foreground transition-colors ${
-            collapsed ? "text-center block" : ""
-          }`}
-        >
-          {collapsed ? "←" : "← Voltar ao site"}
-        </Link>
-      </div>
     </aside>
   );
 }
