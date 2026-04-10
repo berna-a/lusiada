@@ -54,11 +54,6 @@ export function InstitutionalNavbar() {
           >
             {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
-          <Link to="/arca">
-            <Button size="sm" className="rounded-full hidden md:inline-flex">
-              Portal
-            </Button>
-          </Link>
           <button
             className="md:hidden p-2 text-foreground"
             onClick={() => setMobileOpen(!mobileOpen)}
