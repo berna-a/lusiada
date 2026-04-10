@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Menu, X, Sun, Moon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
 
 const navLinks = [
   { label: "Associação", to: "/associacao" },
@@ -81,11 +81,6 @@ export function InstitutionalNavbar() {
                 {link.label}
               </Link>
             ))}
-            <Link to="/arca" onClick={() => setMobileOpen(false)}>
-              <Button size="sm" className="rounded-full w-full mt-2">
-                Portal
-              </Button>
-            </Link>
           </div>
         </div>
       )}

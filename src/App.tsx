@@ -4,8 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
-import { InstitutionalLayout } from "@/layouts/InstitutionalLayout";
-import { ArcaLayout } from "@/layouts/ArcaLayout";
+import { GlobalLayout } from "@/layouts/GlobalLayout";
 import { AdminLayout } from "@/layouts/AdminLayout";
 
 import HomePage from "@/pages/HomePage";
@@ -38,17 +37,13 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          {/* Institutional layout */}
-          <Route element={<InstitutionalLayout />}>
+          {/* Global layout — dual navigation on all pages */}
+          <Route element={<GlobalLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/associacao" element={<AssociacaoPage />} />
             <Route path="/programa" element={<ProgramaPage />} />
             <Route path="/apoiar" element={<ApoiarPage />} />
             <Route path="/contactos" element={<ContactosPage />} />
-          </Route>
-
-          {/* Arca layout */}
-          <Route element={<ArcaLayout />}>
             <Route path="/arca" element={<ArcaPage />} />
             <Route path="/arca/panteao" element={<PanteaoPage />} />
             <Route path="/arca/calendario" element={<CalendarioPage />} />
