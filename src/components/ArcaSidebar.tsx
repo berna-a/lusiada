@@ -48,9 +48,7 @@ export function ArcaSidebar() {
 
   return (
     <aside
-      className={`${
-        pinned ? "relative" : "fixed left-0 top-0 z-40"
-      } h-screen bg-sidebar text-sidebar-foreground border-r border-sidebar-border flex flex-col transition-all duration-300 ${
+      className={`sticky top-20 self-start h-[calc(100vh-5rem)] bg-sidebar text-sidebar-foreground border-r border-sidebar-border flex flex-col transition-all duration-300 ${
         collapsed ? "w-14" : "w-56"
       }`}
     >
