@@ -1,4 +1,3 @@
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Crown, MapPin, Users, BookOpen, FolderOpen } from "lucide-react";
 
@@ -12,27 +11,25 @@ const arcaEntries = [
 
 export function ExploreArcaSection() {
   return (
-    <section className="py-12 md:py-16 bg-background">
+    <section className="py-14 md:py-20 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-8 space-y-1">
-          <h2 className="text-xl md:text-2xl font-bold text-foreground">Explorar a Arca</h2>
-          <p className="text-sm text-muted-foreground">A Arca Lusíada reúne o património vivo da lusofonia.</p>
+        <div className="text-center mb-10 space-y-2">
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground font-display">Explorar a Arca</h2>
+          <p className="text-sm text-muted-foreground font-body">A Arca Lusíada reúne o património vivo da lusofonia.</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
           {arcaEntries.map((entry) => (
             <Link key={entry.to} to={entry.to} className="group">
-              <Card className="h-full border-border/60 transition-all group-hover:border-accent/50 group-hover:shadow-md">
-                <CardHeader className="flex flex-row items-center gap-3 p-4">
-                  <div className="rounded-lg bg-primary/10 p-2.5 group-hover:bg-accent/15 transition-colors">
-                    <entry.icon className="h-5 w-5 text-accent" />
-                  </div>
-                  <div className="space-y-0.5">
-                    <CardTitle className="text-sm font-semibold">{entry.title}</CardTitle>
-                    <CardDescription className="text-xs">{entry.description}</CardDescription>
-                  </div>
-                </CardHeader>
-              </Card>
+              <div className="glass-card h-full rounded-xl p-5 flex items-center gap-4 transition-all duration-300 hover:premium-shadow-lg hover:-translate-y-0.5 hover:border-accent/30">
+                <div className="rounded-xl bg-primary/8 p-3 group-hover:bg-accent/15 transition-colors shrink-0">
+                  <entry.icon className="h-5 w-5 text-accent" />
+                </div>
+                <div className="space-y-0.5">
+                  <p className="text-sm font-semibold text-foreground font-display">{entry.title}</p>
+                  <p className="text-xs text-muted-foreground font-body">{entry.description}</p>
+                </div>
+              </div>
             </Link>
           ))}
         </div>
