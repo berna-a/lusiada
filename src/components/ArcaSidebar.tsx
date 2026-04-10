@@ -10,8 +10,6 @@ import {
   FolderOpen,
   ChevronLeft,
   ChevronRight,
-  Pin,
-  PinOff,
 } from "lucide-react";
 
 const arcaLinks = [
@@ -28,8 +26,7 @@ type SidebarState = "expanded" | "collapsed" | "pip";
 
 export function ArcaSidebar() {
   const location = useLocation();
-  const [state, setState] = useState<SidebarState>("expanded");
-  const [pinned, setPinned] = useState(false);
+  const [state, setState] = useState<SidebarState>("collapsed");
 
   if (state === "pip") {
     return (
@@ -48,50 +45,31 @@ export function ArcaSidebar() {
 
   return (
     <aside
-      className={`${
-        pinned ? "relative" : "fixed left-0 top-0 z-40"
-      } h-screen bg-sidebar text-sidebar-foreground border-r border-sidebar-border flex flex-col transition-all duration-300 ${
+      className={`sticky top-20 self-start h-[calc(100vh-5rem)] bg-sidebar text-sidebar-foreground border-r border-sidebar-border flex flex-col transition-all duration-300 shrink-0 ${
         collapsed ? "w-14" : "w-56"
       }`}
     >
       {/* Header */}
       <div className="p-3 flex items-center justify-between border-b border-sidebar-border">
         {!collapsed && (
-          <span className="text-sm font-semibold text-sidebar-primary">Arca</span>
+          <span className="text-sm font-semibold text-sidebar-primary">Explorar</span>
         )}
-        <div className="flex items-center gap-1">
-          {!collapsed && (
-            <button
-              onClick={() => setPinned(!pinned)}
-              className="p-1 rounded hover:bg-sidebar-accent transition-colors"
-              title={pinned ? "Libertar" : "Fixar"}
-            >
-              {pinned ? (
-                <PinOff className="h-3.5 w-3.5" />
-              ) : (
-                <Pin className="h-3.5 w-3.5" />
-              )}
-            </button>
+        <button
+          onClick={() => setState(collapsed ? "expanded" : "collapsed")}
+          className="p-1 rounded hover:bg-sidebar-accent transition-colors"
+        >
+          {collapsed ? (
+            <ChevronRight className="h-3.5 w-3.5" />
+          ) : (
+            <ChevronLeft className="h-3.5 w-3.5" />
           )}
-          <button
-            onClick={() =>
-              setState(collapsed ? "expanded" : "collapsed")
-            }
-            className="p-1 rounded hover:bg-sidebar-accent transition-colors"
-          >
-            {collapsed ? (
-              <ChevronRight className="h-3.5 w-3.5" />
-            ) : (
-              <ChevronLeft className="h-3.5 w-3.5" />
-            )}
-          </button>
-        </div>
+        </button>
       </div>
 
       {/* Links */}
       <nav className="flex-1 py-2 overflow-y-auto">
         {arcaLinks.map((link) => {
-          const active = location.pathname === link.to;
+          const active = location.pathname === link.to || location.pathname.startsWith(link.to + "/");
           return (
             <Link
               key={link.to}
@@ -121,18 +99,6 @@ export function ArcaSidebar() {
           </button>
         </div>
       )}
-
-      {/* Back to site */}
-      <div className="p-3 border-t border-sidebar-border">
-        <Link
-          to="/"
-          className={`text-xs text-sidebar-foreground/50 hover:text-sidebar-foreground transition-colors ${
-            collapsed ? "text-center block" : ""
-          }`}
-        >
-          {collapsed ? "←" : "← Voltar ao site"}
-        </Link>
-      </div>
     </aside>
   );
 }

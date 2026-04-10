@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Menu, X, Sun, Moon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
 
 const navLinks = [
   { label: "Associação", to: "/associacao" },
@@ -54,11 +54,6 @@ export function InstitutionalNavbar() {
           >
             {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
-          <Link to="/arca">
-            <Button size="sm" className="rounded-full hidden md:inline-flex">
-              Portal
-            </Button>
-          </Link>
           <button
             className="md:hidden p-2 text-foreground"
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -86,11 +81,6 @@ export function InstitutionalNavbar() {
                 {link.label}
               </Link>
             ))}
-            <Link to="/arca" onClick={() => setMobileOpen(false)}>
-              <Button size="sm" className="rounded-full w-full mt-2">
-                Portal
-              </Button>
-            </Link>
           </div>
         </div>
       )}
