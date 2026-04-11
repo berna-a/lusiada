@@ -7,7 +7,7 @@ export function GlobalLayout() {
   return (
     <div className="min-h-screen flex flex-col">
       <InstitutionalNavbar />
-      <div className="flex flex-1 pt-20">
+      <div className="flex flex-1">
         <ArcaSidebar />
         <main className="flex-1 p-6 md:p-10">
           <Outlet />
