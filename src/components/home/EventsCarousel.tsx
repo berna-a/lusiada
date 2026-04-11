@@ -12,9 +12,12 @@ const placeholderItems = [
 
 export function EventsCarousel() {
   return (
-    <section className="py-14 md:py-20 bg-background">
+    <section className="py-16 md:py-24 bg-background relative">
+      {/* Top fade from hero */}
+      <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-background/0 to-transparent pointer-events-none" />
+
       <div className="container mx-auto px-4">
-        <div className="text-center mb-10 space-y-2">
+        <div className="text-center mb-12 space-y-3">
           <h2 className="text-2xl md:text-3xl font-bold text-foreground font-display">Eventos e Publicações</h2>
           <p className="text-sm text-muted-foreground font-body">Acompanhe a actividade da Associação.</p>
         </div>
@@ -24,7 +27,7 @@ export function EventsCarousel() {
             <CarouselContent>
               {placeholderItems.map((item, i) => (
                 <CarouselItem key={i} className="md:basis-1/2 lg:basis-1/3">
-                  <Card className="h-full rounded-xl border-border/40 bg-card/80 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_-12px_hsl(var(--primary)/0.12),0_0_0_1px_hsl(var(--accent)/0.1)] hover:border-accent/20">
+                  <Card className="h-full rounded-xl border-border/50 bg-card backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_48px_-12px_hsl(var(--primary)/0.1),0_0_0_1px_hsl(var(--accent)/0.12)] hover:border-accent/20">
                     <CardHeader className="pb-2">
                       <div className="flex items-center justify-between mb-2">
                         <Badge variant="secondary" className="text-[11px] font-medium font-body rounded-full px-3 py-0.5">{item.type}</Badge>
@@ -33,14 +36,14 @@ export function EventsCarousel() {
                       <CardTitle className="text-base leading-snug font-display font-semibold">{item.title}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-muted-foreground/80 leading-relaxed font-body">{item.description}</p>
+                      <p className="text-sm text-muted-foreground leading-relaxed font-body">{item.description}</p>
                     </CardContent>
                   </Card>
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="rounded-full border-border/40 hover:border-accent/30 hover:shadow-[0_0_12px_-2px_hsl(var(--accent)/0.2)]" />
-            <CarouselNext className="rounded-full border-border/40 hover:border-accent/30 hover:shadow-[0_0_12px_-2px_hsl(var(--accent)/0.2)]" />
+            <CarouselPrevious className="rounded-full border-border/50 hover:border-accent/30 hover:shadow-[0_0_16px_-4px_hsl(var(--accent)/0.2)]" />
+            <CarouselNext className="rounded-full border-border/50 hover:border-accent/30 hover:shadow-[0_0_16px_-4px_hsl(var(--accent)/0.2)]" />
           </Carousel>
         </div>
       </div>
