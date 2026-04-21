@@ -65,9 +65,9 @@ export function Footer() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_40%_at_50%_100%,hsl(var(--electric)/0.05),transparent)]" />
 
       <div className="relative z-10 container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-x-6 gap-y-10">
           {/* Brand */}
-          <div className="md:col-span-2 space-y-4">
+          <div className="col-span-2 md:col-span-2 space-y-4">
             <h3 className="text-lg font-semibold font-display">Associação Lusíada</h3>
             <p className="text-xs text-primary-foreground/45 max-w-xs leading-relaxed font-body">
               Preservar, celebrar e transmitir a herança lusófona para as gerações futuras.
@@ -123,22 +123,10 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-4 border-t border-primary-foreground/8 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <div className="mt-12 pt-4 border-t border-primary-foreground/8 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
           <p className="text-[11px] text-primary-foreground/25 font-body">
             © {new Date().getFullYear()} Associação Lusíada. Todos os direitos reservados.
           </p>
-          <div className="flex items-center gap-4">
-            {socialLinks.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                aria-label={s.label}
-                className="text-primary-foreground/20 hover:text-accent transition-colors duration-200 sm:hidden"
-              >
-                {s.icon}
-              </a>
-            ))}
-          </div>
         </div>
       </div>
     </footer>

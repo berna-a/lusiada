@@ -22,7 +22,7 @@ export function EventsCarousel() {
           <p className="text-sm text-muted-foreground font-body">Acompanhe a actividade da Associação.</p>
         </div>
 
-        <div className="max-w-5xl mx-auto px-12">
+        <div className="max-w-5xl mx-auto px-4 sm:px-8 md:px-12">
           <Carousel opts={{ align: "start", loop: true }}>
             <CarouselContent>
               {placeholderItems.map((item, i) => (
