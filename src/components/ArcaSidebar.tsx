@@ -23,7 +23,7 @@ export function ArcaSidebar() {
 
   if (state === "pip") {
     return (
-      <div className="fixed left-0 top-1/2 -translate-y-1/2 z-40">
+      <div className="hidden md:block fixed left-0 top-1/2 -translate-y-1/2 z-40">
         <button
           onClick={() => setState("collapsed")}
           className="glass-nav text-foreground p-2.5 rounded-r-xl transition-all duration-300 hover:shadow-[0_0_20px_-4px_hsl(var(--accent)/0.2)]"
@@ -38,7 +38,7 @@ export function ArcaSidebar() {
 
   return (
     <aside
-      className={`sticky top-0 self-start h-screen border-r border-border/20 flex flex-col transition-all duration-300 shrink-0 overflow-hidden ${
+      className={`hidden md:flex sticky top-0 self-start h-screen border-r border-border/20 flex-col transition-all duration-300 shrink-0 overflow-hidden ${
         collapsed ? "w-14" : "w-56"
       }`}
       style={{

@@ -89,34 +89,34 @@ export default function ArcaPage() {
   return (
     <div className="min-h-screen">
       {/* ── 1. HERO ── */}
-      <section className="relative pt-32 pb-20 md:pt-44 md:pb-28 overflow-hidden">
+      <section className="relative pt-28 pb-16 md:pt-44 md:pb-28 overflow-hidden -mx-4 sm:-mx-6 md:mx-0 px-4 sm:px-6 md:px-0">
         {/* bg layers */}
         <div className="absolute inset-0 bg-gradient-to-b from-primary via-primary/95 to-background" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_60%_-10%,hsl(var(--electric)/0.10),transparent)]" />
         <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-background to-transparent" />
 
-        <div className="relative z-10 container mx-auto px-4">
-          <div className="max-w-2xl space-y-5">
+        <div className="relative z-10 container mx-auto md:px-4">
+          <div className="max-w-2xl space-y-4 md:space-y-5">
             <p className="text-[11px] uppercase tracking-[0.4em] text-accent/80 font-semibold font-body">
               Associação Lusíada
             </p>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-primary-foreground tracking-[-0.02em] leading-[0.95] font-display">
+            <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-7xl font-bold text-primary-foreground tracking-[-0.02em] leading-[0.95] font-display">
               Arca
             </h1>
-            <p className="text-lg md:text-xl text-primary-foreground/70 max-w-lg leading-relaxed font-display italic">
+            <p className="text-base sm:text-lg md:text-xl text-primary-foreground/70 max-w-lg leading-relaxed font-display italic">
               O arquivo vivo da memória nacional.
             </p>
             <p className="text-sm md:text-base text-primary-foreground/50 max-w-md leading-relaxed font-body font-light">
               A Arca Lusíada preserva, organiza e partilha o vasto património da lusofonia — dos grandes heróis aos lugares que contam a nossa história.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              <Button size="lg" variant="accent" asChild>
+              <Button size="lg" variant="accent" className="w-full sm:w-auto" asChild>
                 <a href="#explorar">Explorar o Arquivo</a>
               </Button>
               <Button
                 size="lg"
                 variant="outline"
-                className="border-primary-foreground/20 text-primary-foreground/90 hover:bg-primary-foreground/10 hover:border-primary-foreground/30 backdrop-blur-sm"
+                className="w-full sm:w-auto border-primary-foreground/20 text-primary-foreground/90 hover:bg-primary-foreground/10 hover:border-primary-foreground/30 backdrop-blur-sm"
                 asChild
               >
                 <Link to="/arca/panteao">Ver o Panteão</Link>
@@ -321,7 +321,7 @@ export default function ArcaPage() {
       {/* ── 6. CTA FINAL ── */}
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center glass-card rounded-2xl p-10 md:p-14 space-y-5">
+          <div className="max-w-3xl mx-auto text-center glass-card rounded-2xl p-6 sm:p-10 md:p-14 space-y-5">
             <h2 className="text-2xl md:text-3xl font-bold text-foreground font-display">
               A memória vive quando é partilhada
             </h2>
@@ -329,10 +329,10 @@ export default function ArcaPage() {
               A Arca Lusíada cresce com cada contribuição. Explora o arquivo, descobre histórias esquecidas e ajuda-nos a preservar o que importa.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
-              <Button size="lg" variant="accent" asChild>
+              <Button size="lg" variant="accent" className="w-full sm:w-auto" asChild>
                 <Link to="/arca/herois">Descobrir Heróis</Link>
               </Button>
-              <Button size="lg" variant="outline" asChild>
+              <Button size="lg" variant="outline" className="w-full sm:w-auto" asChild>
                 <Link to="/apoiar">Apoiar a Arca</Link>
               </Button>
             </div>
