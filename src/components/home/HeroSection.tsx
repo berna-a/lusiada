@@ -26,8 +26,9 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-r from-primary/55 via-transparent to-transparent" />
 
       {/* Content — overlays the image on desktop, normal flow on mobile */}
-      <div className="relative md:absolute md:inset-0 md:flex md:items-end z-10 container mx-auto px-4 pb-12 pt-24 md:pb-[6vw] md:pt-24">
-        <div className="max-w-2xl space-y-5 md:space-y-6">
+      <div className="relative md:absolute md:inset-0 md:flex md:items-end z-10">
+        <div className="container mx-auto px-4 pb-12 pt-24 md:pb-[6vw]">
+          <div className="max-w-2xl space-y-5 md:space-y-6">
           <p className="text-[10px] md:text-[11px] uppercase tracking-[0.35em] md:tracking-[0.4em] text-accent/90 font-semibold font-body">
             Associação Lusíada
           </p>
@@ -38,7 +39,7 @@ export function HeroSection() {
           <p className="text-sm sm:text-base md:text-lg text-primary-foreground/65 max-w-md leading-relaxed font-body font-light">
             Celebrar e transmitir o património lusófono para as gerações futuras.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 pt-1">
+            <div className="flex flex-col sm:flex-row gap-3 pt-1">
             <Button size="lg" variant="accent" className="w-full sm:w-auto" asChild>
               <Link to="/associacao">Conhecer a Associação</Link>
             </Button>
@@ -50,6 +51,7 @@ export function HeroSection() {
             >
               <Link to="/arca">Explorar a Arca</Link>
             </Button>
+          </div>
           </div>
         </div>
       </div>
