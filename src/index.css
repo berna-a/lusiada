@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -113,7 +113,7 @@
     font-family: 'Inter', system-ui, sans-serif;
   }
   h1, h2, h3, h4 {
-    font-family: 'Cormorant Garamond', 'Georgia', serif;
+    font-family: 'Cinzel', 'Georgia', serif;
   }
 }
 
@@ -285,7 +285,7 @@
   }
 
   .font-display {
-    font-family: 'Cormorant Garamond', 'Georgia', serif;
+    font-family: 'Cinzel', 'Georgia', serif;
   }
 
   .font-body {
