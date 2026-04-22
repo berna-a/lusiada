@@ -16,16 +16,12 @@ export function HeroSection() {
         }}
       />
 
-      {/* Cinematic overlays — lighter bottom for more image visibility */}
-      <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/50 to-primary/20" />
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/60 via-transparent to-transparent" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_80%_-10%,hsl(var(--electric)/0.06),transparent)]" />
+      {/* Cinematic overlays — readability without hiding image */}
+      <div className="absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/30 to-transparent md:from-primary/70 md:via-primary/15 md:to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/55 via-transparent to-transparent" />
 
-      {/* Soft bottom fade into next section */}
-      <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-background to-transparent" />
-
-      {/* Content — shifted up for elegance */}
-      <div className="relative z-10 container mx-auto px-4 pb-16 pt-28 md:pb-32 md:pt-48">
+      {/* Content */}
+      <div className="relative z-10 container mx-auto px-4 pb-12 pt-24 md:pb-16 md:pt-24">
         <div className="max-w-2xl space-y-5 md:space-y-6">
           <p className="text-[10px] md:text-[11px] uppercase tracking-[0.35em] md:tracking-[0.4em] text-accent/90 font-semibold font-body">
             Associação Lusíada
