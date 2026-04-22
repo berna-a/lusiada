@@ -35,13 +35,13 @@ export function InstitutionalNavbar() {
 
   return (
     <nav
-      className={`right-3 md:right-4 z-50 transition-all duration-300 ${
+      className={`left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-5xl transition-all duration-300 ${
         stuck
           ? "fixed top-[10px] animate-fade-in"
           : "absolute bottom-[10px]"
       }`}
     >
-      <div className="glass-nav rounded-full h-12 px-4 md:px-6 flex items-center justify-between gap-6 w-[calc(100vw-88px)] sm:w-auto sm:min-w-[520px] md:min-w-[640px] max-w-[calc(100vw-88px)]">
+      <div className="glass-nav rounded-full h-12 px-4 md:px-6 flex items-center justify-between">
         {/* Logo — "A." in repouso, expands to "Associação" on navbar hover */}
         <Link
           to="/"
