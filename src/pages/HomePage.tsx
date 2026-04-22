@@ -8,7 +8,7 @@ import { StatsSection } from "@/components/home/StatsSection";
 
 export default function HomePage() {
   return (
-    <div className="-m-4 sm:-m-6 md:-m-10 -mt-[4.5rem] md:-mt-[4.5rem]">
+    <div className="-m-4 sm:-m-6 md:-m-10">
       <HeroSection />
       <EventsCarousel />
       <AboutSection />
