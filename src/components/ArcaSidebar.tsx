@@ -18,6 +18,7 @@ const arcaLinks = [
 export function ArcaSidebar() {
   const location = useLocation();
   const [open, setOpen] = useState(false);
+  const [stuck, setStuck] = useState(false);
 
   // Close on route change
   useEffect(() => {
@@ -32,13 +33,28 @@ export function ArcaSidebar() {
     };
   }, [open]);
 
+  // Mirror the navbar's sticky behavior so hamburger stays side-by-side
+  useEffect(() => {
+    const onScroll = () => {
+      const trigger = window.innerHeight * 0.7;
+      setStuck(window.scrollY > trigger);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <>
       {/* Hamburger trigger — fixed top-left, floats over hero */}
       <button
         onClick={() => setOpen(true)}
         aria-label="Abrir menu de exploração"
-        className="glass-nav fixed top-3 md:top-4 left-3 md:left-4 z-50 h-12 w-12 rounded-full flex items-center justify-center text-foreground hover:text-accent transition-all duration-300 hover:shadow-[0_0_20px_-4px_hsl(var(--accent)/0.4)]"
+        className={`glass-nav left-3 md:left-4 z-50 h-12 w-12 rounded-full flex items-center justify-center text-foreground hover:text-accent transition-all duration-300 hover:shadow-[0_0_20px_-4px_hsl(var(--accent)/0.4)] ${
+          stuck
+            ? "fixed top-[10px] animate-fade-in"
+            : "absolute bottom-[10px]"
+        }`}
       >
         <Menu className="h-[18px] w-[18px]" />
       </button>
