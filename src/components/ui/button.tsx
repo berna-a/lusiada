@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "liquid-glass bg-primary text-white shadow-[0_2px_12px_-2px_hsl(var(--primary)/0.4),inset_0_1px_0_hsl(0_0%_100%/0.1)] hover:shadow-[0_4px_20px_-2px_hsl(var(--primary)/0.55),inset_0_1px_0_hsl(0_0%_100%/0.18)] hover:brightness-110",
+          "liquid-glass bg-primary text-white border border-[hsl(46_65%_52%)] shadow-[0_2px_12px_-2px_hsl(var(--primary)/0.4),inset_0_1px_0_hsl(0_0%_100%/0.1)] hover:shadow-[0_4px_20px_-2px_hsl(var(--primary)/0.55),inset_0_1px_0_hsl(0_0%_100%/0.18)] hover:brightness-110",
         destructive:
           "bg-destructive text-white hover:bg-destructive/90",
         outline:
@@ -20,7 +20,7 @@ const buttonVariants = cva(
         ghost: "text-white hover:bg-accent/10 hover:text-white",
         link: "text-white underline-offset-4 hover:underline",
         accent:
-          "liquid-glass bg-accent text-white font-semibold shadow-[0_2px_16px_-2px_hsl(var(--accent)/0.4),inset_0_1px_0_hsl(0_0%_100%/0.2)] hover:shadow-[0_4px_28px_-2px_hsl(var(--accent)/0.55),inset_0_1px_0_hsl(0_0%_100%/0.3)] hover:brightness-110",
+          "liquid-glass bg-accent text-white font-semibold border border-[hsl(46_65%_52%)] shadow-[0_2px_16px_-2px_hsl(var(--accent)/0.4),inset_0_1px_0_hsl(0_0%_100%/0.2)] hover:shadow-[0_4px_28px_-2px_hsl(var(--accent)/0.55),inset_0_1px_0_hsl(0_0%_100%/0.3)] hover:brightness-110",
       },
       size: {
         default: "h-10 px-5 py-2",
