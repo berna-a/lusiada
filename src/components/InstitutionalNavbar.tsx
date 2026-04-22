@@ -12,6 +12,7 @@ const navLinks = [
 export function InstitutionalNavbar() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [hovered, setHovered] = useState(false);
   const [dark, setDark] = useState(() =>
     document.documentElement.classList.contains("dark")
   );
@@ -21,11 +22,39 @@ export function InstitutionalNavbar() {
   }, [dark]);
 
   return (
-    <nav className="fixed top-3 md:top-4 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-5xl">
+    <nav
+      className="fixed top-3 md:top-4 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-5xl"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
       <div className="glass-nav rounded-full h-12 px-4 md:px-6 flex items-center justify-between">
-        {/* Logo */}
-        <Link to="/" className="font-semibold text-sm md:text-lg tracking-tight text-white font-display truncate">
-          Associação Lusíada
+        {/* Logo — "A." in repouso, expands to "Associação" on navbar hover */}
+        <Link
+          to="/"
+          aria-label="Associação Lusíada"
+          className="font-semibold text-sm md:text-lg tracking-tight text-white font-display flex items-baseline whitespace-nowrap"
+        >
+          <span aria-hidden="true">A</span>
+          <span
+            aria-hidden="true"
+            className="inline-grid overflow-hidden transition-[grid-template-columns] duration-500 ease-in-out"
+            style={{ gridTemplateColumns: hovered ? "1fr" : "0fr" }}
+          >
+            <span
+              className="min-w-0 overflow-hidden transition-opacity duration-300 ease-in-out"
+              style={{ opacity: hovered ? 1 : 0 }}
+            >
+              ssociação
+            </span>
+          </span>
+          <span
+            aria-hidden="true"
+            className="transition-opacity duration-200"
+            style={{ opacity: hovered ? 0 : 1 }}
+          >
+            .
+          </span>
+          <span aria-hidden="true">&nbsp;Lusíada</span>
         </Link>
 
         {/* Desktop links */}
