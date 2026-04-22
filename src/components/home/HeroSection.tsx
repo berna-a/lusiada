@@ -4,29 +4,31 @@ import heroBg from "@/assets/hero-azulejos.jpg";
 
 export function HeroSection() {
   return (
-    <section
-      className="relative w-full flex items-end overflow-hidden min-h-[88vh] md:min-h-0 md:aspect-[1832/1000]"
-    >
-      {/* Background image — full-bleed on mobile, fully visible (contain) on desktop */}
+    <section className="relative w-full overflow-hidden bg-primary">
+      {/* Mobile: full-bleed cropped background */}
       <div
-        className="absolute inset-0 bg-no-repeat bg-center bg-cover md:bg-contain"
-        style={{
-          backgroundImage: `url(${heroBg})`,
-          backgroundColor: "hsl(var(--primary))",
-        }}
+        className="md:hidden absolute inset-0 bg-no-repeat bg-center bg-cover"
+        style={{ backgroundImage: `url(${heroBg})` }}
       />
 
-      {/* Cinematic overlays — lighter bottom for more image visibility */}
-      <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/50 to-primary/20" />
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/60 via-transparent to-transparent" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_80%_-10%,hsl(var(--electric)/0.06),transparent)]" />
+      {/* Desktop: native image so section adapts to its full size, no cropping */}
+      <img
+        src={heroBg}
+        alt="Mural de azulejos da Associação Lusíada"
+        className="hidden md:block w-full h-auto select-none pointer-events-none"
+      />
 
-      {/* Soft bottom fade into next section */}
-      <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-background to-transparent" />
+      {/* Mobile spacer (image is background) */}
+      <div className="md:hidden min-h-[88vh]" aria-hidden />
 
-      {/* Content — shifted up for elegance */}
-      <div className="relative z-10 container mx-auto px-4 pb-16 pt-28 md:pb-32 md:pt-48">
-        <div className="max-w-2xl space-y-5 md:space-y-6">
+      {/* Cinematic overlays — readability without hiding image */}
+      <div className="absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/30 to-transparent md:from-primary/70 md:via-primary/15 md:to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/55 via-transparent to-transparent" />
+
+      {/* Content — overlays the image on desktop, normal flow on mobile */}
+      <div className="relative md:absolute md:inset-0 md:flex md:items-end z-10">
+        <div className="container mx-auto px-4 pb-12 pt-24 md:pb-[6vw]">
+          <div className="max-w-2xl space-y-5 md:space-y-6">
           <p className="text-[10px] md:text-[11px] uppercase tracking-[0.35em] md:tracking-[0.4em] text-accent/90 font-semibold font-body">
             Associação Lusíada
           </p>
@@ -37,7 +39,7 @@ export function HeroSection() {
           <p className="text-sm sm:text-base md:text-lg text-primary-foreground/65 max-w-md leading-relaxed font-body font-light">
             Celebrar e transmitir o património lusófono para as gerações futuras.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 pt-1">
+            <div className="flex flex-col sm:flex-row gap-3 pt-1">
             <Button size="lg" variant="accent" className="w-full sm:w-auto" asChild>
               <Link to="/associacao">Conhecer a Associação</Link>
             </Button>
@@ -49,6 +51,7 @@ export function HeroSection() {
             >
               <Link to="/arca">Explorar a Arca</Link>
             </Button>
+          </div>
           </div>
         </div>
       </div>

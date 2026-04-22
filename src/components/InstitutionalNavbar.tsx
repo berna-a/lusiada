@@ -22,7 +22,7 @@ export function InstitutionalNavbar() {
 
   return (
     <nav className="fixed top-3 md:top-4 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-5xl">
-      <div className="glass-nav rounded-full px-4 md:px-6 py-2.5 md:py-3 flex items-center justify-between">
+      <div className="glass-nav rounded-full h-12 px-4 md:px-6 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="font-semibold text-sm md:text-lg tracking-tight text-foreground font-display truncate">
           Associação Lusíada
