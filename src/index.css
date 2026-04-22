@@ -149,13 +149,13 @@
     padding: 1.5px;
     background: conic-gradient(
       from 140deg,
-      hsl(0 0% 100% / 0.05) 0deg,
-      hsl(var(--accent) / 0.55) 60deg,
-      hsl(0 0% 100% / 0.9) 120deg,
-      hsl(210 100% 85% / 0.7) 200deg,
-      hsl(0 0% 100% / 0.85) 280deg,
-      hsl(var(--accent) / 0.5) 340deg,
-      hsl(0 0% 100% / 0.05) 360deg
+      hsl(0 0% 100% / 0.03) 0deg,
+      hsl(var(--accent) / 0.22) 60deg,
+      hsl(0 0% 100% / 0.32) 120deg,
+      hsl(210 100% 85% / 0.25) 200deg,
+      hsl(0 0% 100% / 0.3) 280deg,
+      hsl(var(--accent) / 0.2) 340deg,
+      hsl(0 0% 100% / 0.03) 360deg
     );
     -webkit-mask:
       linear-gradient(#000 0 0) content-box,
@@ -163,7 +163,7 @@
     -webkit-mask-composite: xor;
             mask-composite: exclude;
     pointer-events: none;
-    opacity: 0.85;
+    opacity: 0.5;
     z-index: 1;
   }
 
@@ -212,13 +212,13 @@
     padding: 1.5px;
     background: conic-gradient(
       from 140deg,
-      hsl(0 0% 100% / 0.1) 0deg,
-      hsl(var(--accent) / 0.5) 70deg,
-      hsl(0 0% 100% / 0.95) 130deg,
-      hsl(210 100% 85% / 0.7) 210deg,
-      hsl(0 0% 100% / 0.9) 290deg,
-      hsl(var(--accent) / 0.45) 340deg,
-      hsl(0 0% 100% / 0.1) 360deg
+      hsl(0 0% 100% / 0.04) 0deg,
+      hsl(var(--accent) / 0.2) 70deg,
+      hsl(0 0% 100% / 0.35) 130deg,
+      hsl(210 100% 85% / 0.25) 210deg,
+      hsl(0 0% 100% / 0.32) 290deg,
+      hsl(var(--accent) / 0.18) 340deg,
+      hsl(0 0% 100% / 0.04) 360deg
     );
     -webkit-mask:
       linear-gradient(#000 0 0) content-box,
@@ -226,7 +226,7 @@
     -webkit-mask-composite: xor;
             mask-composite: exclude;
     pointer-events: none;
-    opacity: 0.75;
+    opacity: 0.45;
     transition: opacity 0.3s ease;
     z-index: 1;
   }
@@ -249,7 +249,7 @@
   }
 
   .liquid-glass:hover::before {
-    opacity: 1;
+    opacity: 0.7;
   }
 
   .liquid-glass:hover {
