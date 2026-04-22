@@ -22,34 +22,37 @@ export function InstitutionalNavbar() {
   }, [dark]);
 
   return (
-    <nav
-      className="fixed top-3 md:top-4 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-5xl"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
+    <nav className="fixed top-3 md:top-4 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-5xl">
       <div className="glass-nav rounded-full h-12 px-4 md:px-6 flex items-center justify-between">
         {/* Logo — "A." in repouso, expands to "Associação" on navbar hover */}
         <Link
           to="/"
           aria-label="Associação Lusíada"
-          className="font-semibold text-base md:text-2xl uppercase tracking-tight text-white font-display flex items-baseline whitespace-nowrap"
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          className="font-semibold text-base md:text-2xl uppercase tracking-[0.12em] text-white font-display flex items-baseline whitespace-nowrap"
         >
           <span aria-hidden="true">A</span>
           <span
             aria-hidden="true"
-            className="inline-grid overflow-hidden transition-[grid-template-columns] duration-500 ease-in-out"
+            className="inline-grid overflow-hidden transition-[grid-template-columns] duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
             style={{ gridTemplateColumns: hovered ? "1fr" : "0fr" }}
           >
             <span
-              className="min-w-0 overflow-hidden transition-opacity duration-300 ease-in-out"
-              style={{ opacity: hovered ? 1 : 0 }}
+              className="min-w-0 overflow-hidden transition-[opacity,filter,transform] duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+              style={{
+                opacity: hovered ? 1 : 0,
+                filter: hovered ? "blur(0px)" : "blur(4px)",
+                transform: hovered ? "translateX(0)" : "translateX(-4px)",
+                transitionDelay: hovered ? "150ms" : "0ms",
+              }}
             >
               ssociação
             </span>
           </span>
           <span
             aria-hidden="true"
-            className="transition-opacity duration-200"
+            className="transition-opacity duration-500 ease-out"
             style={{ opacity: hovered ? 0 : 1 }}
           >
             .
