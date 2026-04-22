@@ -32,7 +32,7 @@ export function InstitutionalNavbar() {
         <Link
           to="/"
           aria-label="Associação Lusíada"
-          className="font-semibold text-sm md:text-lg tracking-tight text-white font-display flex items-baseline whitespace-nowrap"
+          className="font-semibold text-base md:text-2xl uppercase tracking-tight text-white font-display flex items-baseline whitespace-nowrap"
         >
           <span aria-hidden="true">A</span>
           <span
