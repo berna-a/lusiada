@@ -4,11 +4,16 @@ import heroBg from "@/assets/hero-azulejos.jpg";
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[88vh] md:min-h-[92vh] flex items-end overflow-hidden">
-      {/* Background image — centered on mobile, right-anchored on desktop for editorial framing */}
+    <section
+      className="relative w-full flex items-end overflow-hidden min-h-[88vh] md:min-h-0 md:aspect-[1832/1000]"
+    >
+      {/* Background image — full-bleed on mobile, fully visible (contain) on desktop */}
       <div
-        className="absolute inset-0 bg-cover bg-no-repeat bg-center md:bg-[position:75%_center]"
-        style={{ backgroundImage: `url(${heroBg})` }}
+        className="absolute inset-0 bg-no-repeat bg-center bg-cover md:bg-contain"
+        style={{
+          backgroundImage: `url(${heroBg})`,
+          backgroundColor: "hsl(var(--primary))",
+        }}
       />
 
       {/* Cinematic overlays — lighter bottom for more image visibility */}
