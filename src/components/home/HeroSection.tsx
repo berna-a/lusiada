@@ -21,10 +21,6 @@ export function HeroSection() {
       {/* Mobile spacer (image is background) */}
       <div className="md:hidden min-h-[88vh]" aria-hidden />
 
-      {/* Cinematic overlays — readability without hiding image */}
-      <div className="absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/30 to-transparent md:from-primary/70 md:via-primary/15 md:to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/55 via-transparent to-transparent" />
-
       {/* Content — overlays the image on desktop, normal flow on mobile */}
       <div className="relative md:absolute md:inset-0 md:flex md:items-end z-10">
         <div className="container mx-auto px-4 pb-12 pt-24 md:pb-[6vw]">
