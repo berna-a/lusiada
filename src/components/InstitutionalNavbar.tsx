@@ -13,6 +13,7 @@ export function InstitutionalNavbar() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const [stuck, setStuck] = useState(false);
   const [dark, setDark] = useState(() =>
     document.documentElement.classList.contains("dark")
   );
@@ -21,8 +22,25 @@ export function InstitutionalNavbar() {
     document.documentElement.classList.toggle("dark", dark);
   }, [dark]);
 
+  useEffect(() => {
+    const onScroll = () => {
+      // Trigger sticky once user scrolls past most of the hero section
+      const trigger = window.innerHeight * 0.7;
+      setStuck(window.scrollY > trigger);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <nav className="fixed top-3 md:top-4 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-5xl">
+    <nav
+      className={`left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-5xl transition-all duration-300 ${
+        stuck
+          ? "fixed top-3 md:top-4 animate-fade-in"
+          : "absolute bottom-4 md:bottom-6"
+      }`}
+    >
       <div className="glass-nav rounded-full h-12 px-4 md:px-6 flex items-center justify-between">
         {/* Logo — "A." in repouso, expands to "Associação" on navbar hover */}
         <Link
