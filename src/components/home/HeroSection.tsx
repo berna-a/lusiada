@@ -4,17 +4,22 @@ import heroBg from "@/assets/hero-azulejos.jpg";
 
 export function HeroSection() {
   return (
-    <section
-      className="relative w-full flex items-end overflow-hidden min-h-[88vh] md:min-h-0 md:aspect-[1832/1000]"
-    >
-      {/* Background image — full-bleed on mobile, fully visible (contain) on desktop */}
+    <section className="relative w-full overflow-hidden bg-primary">
+      {/* Mobile: full-bleed cropped background */}
       <div
-        className="absolute inset-0 bg-no-repeat bg-center bg-cover md:bg-contain"
-        style={{
-          backgroundImage: `url(${heroBg})`,
-          backgroundColor: "hsl(var(--primary))",
-        }}
+        className="md:hidden absolute inset-0 bg-no-repeat bg-center bg-cover"
+        style={{ backgroundImage: `url(${heroBg})` }}
       />
+
+      {/* Desktop: native image so section adapts to its full size, no cropping */}
+      <img
+        src={heroBg}
+        alt="Mural de azulejos da Associação Lusíada"
+        className="hidden md:block w-full h-auto select-none pointer-events-none"
+      />
+
+      {/* Mobile spacer (image is background) */}
+      <div className="md:hidden min-h-[88vh]" aria-hidden />
 
       {/* Cinematic overlays — readability without hiding image */}
       <div className="absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/30 to-transparent md:from-primary/70 md:via-primary/15 md:to-transparent" />
