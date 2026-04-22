@@ -2,7 +2,7 @@ import heroBg from "@/assets/hero-azulejos.jpg";
 
 export function HeroSection() {
   return (
-    <section className="relative w-full overflow-hidden bg-primary md:pt-12">
+    <section className="relative w-full overflow-hidden bg-primary">
       {/* Mobile: full-bleed cropped background */}
       <div
         className="md:hidden absolute inset-0 bg-no-repeat bg-center bg-cover"
