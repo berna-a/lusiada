@@ -5,9 +5,9 @@ import heroBg from "@/assets/hero-azulejos.jpg";
 export function HeroSection() {
   return (
     <section className="relative min-h-[88vh] md:min-h-[92vh] flex items-end overflow-hidden">
-      {/* Background image */}
+      {/* Background image — centered on mobile, right-anchored on desktop for editorial framing */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 bg-cover bg-no-repeat bg-center md:bg-[position:75%_center]"
         style={{ backgroundImage: `url(${heroBg})` }}
       />
 
