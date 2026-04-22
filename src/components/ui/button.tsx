@@ -14,7 +14,7 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive text-white hover:bg-destructive/90",
         outline:
-          "liquid-glass border border-nav-glass-border bg-[hsl(var(--nav-glass))] text-white backdrop-blur-2xl backdrop-saturate-150 shadow-[0_8px_32px_-8px_hsl(220_40%_10%/0.2),inset_0_1px_0_hsl(var(--nav-glass-highlight))] hover:bg-accent/15 hover:border-accent/50 hover:text-white hover:shadow-[0_0_28px_-4px_hsl(var(--accent)/0.4),inset_0_1px_0_hsl(0_0%_100%/0.35)]",
+          "liquid-glass border border-nav-glass-border bg-[hsl(var(--nav-glass))] text-white [backdrop-filter:blur(28px)_saturate(3)_brightness(1.08)_contrast(1.05)] [-webkit-backdrop-filter:blur(28px)_saturate(3)_brightness(1.08)_contrast(1.05)] shadow-[0_8px_32px_-8px_hsl(220_40%_10%/0.2),inset_0_1px_0_hsl(var(--nav-glass-highlight))] hover:bg-accent/10 hover:border-accent/50 hover:text-white hover:shadow-[0_0_28px_-4px_hsl(var(--accent)/0.4),inset_0_1px_0_hsl(0_0%_100%/0.35)]",
         secondary:
           "liquid-glass bg-secondary text-white shadow-[inset_0_1px_0_hsl(0_0%_100%/0.15)] hover:bg-secondary/80 hover:shadow-[0_2px_12px_-2px_hsl(var(--electric)/0.25),inset_0_1px_0_hsl(0_0%_100%/0.22)]",
         ghost: "text-white hover:bg-accent/10 hover:text-white",
