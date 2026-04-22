@@ -14,7 +14,7 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
-          "border border-border bg-background/50 backdrop-blur-sm shadow-[inset_0_1px_0_hsl(0_0%_100%/0.06)] hover:bg-accent/10 hover:border-accent/40 hover:shadow-[0_0_16px_-4px_hsl(var(--electric)/0.25),inset_0_1px_0_hsl(0_0%_100%/0.08)] active:scale-[0.98]",
+          "border border-nav-glass-border bg-[hsl(var(--nav-glass))] backdrop-blur-2xl backdrop-saturate-150 shadow-[0_8px_32px_-8px_hsl(220_40%_10%/0.2),inset_0_1px_0_hsl(var(--nav-glass-highlight))] hover:bg-accent/15 hover:border-accent/50 hover:shadow-[0_0_24px_-4px_hsl(var(--accent)/0.35),inset_0_1px_0_hsl(0_0%_100%/0.3)] active:scale-[0.98]",
         secondary:
           "bg-secondary text-secondary-foreground shadow-[inset_0_1px_0_hsl(0_0%_100%/0.15)] hover:bg-secondary/80 hover:shadow-[0_2px_12px_-2px_hsl(var(--electric)/0.2),inset_0_1px_0_hsl(0_0%_100%/0.2)] active:scale-[0.98]",
         ghost: "hover:bg-accent/10 hover:text-accent-foreground",

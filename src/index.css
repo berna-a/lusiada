@@ -45,9 +45,9 @@
     --sidebar-border: 220 25% 18%;
     --sidebar-ring: 42 85% 52%;
 
-    --nav-glass: 220 20% 97% / 0.68;
-    --nav-glass-border: 220 20% 60% / 0.15;
-    --nav-glass-highlight: 0 0% 100% / 0.25;
+    --nav-glass: 220 20% 97% / 0.42;
+    --nav-glass-border: 220 20% 60% / 0.22;
+    --nav-glass-highlight: 0 0% 100% / 0.4;
 
     --surface-elevated: 220 15% 93%;
     --surface-sunken: 220 18% 88%;
@@ -93,9 +93,9 @@
     --sidebar-border: 222 22% 12%;
     --sidebar-ring: 42 85% 52%;
 
-    --nav-glass: 222 30% 8% / 0.75;
-    --nav-glass-border: 0 0% 100% / 0.06;
-    --nav-glass-highlight: 0 0% 100% / 0.04;
+    --nav-glass: 222 30% 8% / 0.38;
+    --nav-glass-border: 0 0% 100% / 0.1;
+    --nav-glass-highlight: 0 0% 100% / 0.08;
 
     --surface-elevated: 222 25% 11%;
     --surface-sunken: 222 30% 4%;
@@ -122,10 +122,12 @@
     background: hsl(var(--nav-glass));
     border: 1px solid hsl(var(--nav-glass-border));
     box-shadow:
-      0 8px 32px -8px hsl(220 40% 10% / 0.12),
-      inset 0 1px 0 hsl(var(--nav-glass-highlight));
-    backdrop-filter: blur(24px) saturate(1.6);
-    -webkit-backdrop-filter: blur(24px) saturate(1.6);
+      0 12px 48px -12px hsl(220 40% 10% / 0.25),
+      0 2px 8px -2px hsl(220 40% 10% / 0.12),
+      inset 0 1px 0 hsl(var(--nav-glass-highlight)),
+      inset 0 -1px 0 hsl(0 0% 0% / 0.04);
+    backdrop-filter: blur(40px) saturate(1.8);
+    -webkit-backdrop-filter: blur(40px) saturate(1.8);
   }
 
   .glass-card {
