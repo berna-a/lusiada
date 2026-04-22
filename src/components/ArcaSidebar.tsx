@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Archive, Landmark, Calendar, Sword, MapPin, BookOpen, FolderOpen,
-  ChevronLeft, ChevronRight,
+  Menu, X,
 } from "lucide-react";
 
 const arcaLinks = [
@@ -15,83 +15,97 @@ const arcaLinks = [
   { label: "Colecções", to: "/arca/coleccoes", icon: FolderOpen },
 ];
 
-type SidebarState = "expanded" | "collapsed" | "pip";
-
 export function ArcaSidebar() {
   const location = useLocation();
-  const [state, setState] = useState<SidebarState>("collapsed");
+  const [open, setOpen] = useState(false);
 
-  if (state === "pip") {
-    return (
-      <div className="hidden md:block fixed left-0 top-1/2 -translate-y-1/2 z-40">
-        <button
-          onClick={() => setState("collapsed")}
-          className="glass-nav text-foreground p-2.5 rounded-r-xl transition-all duration-300 hover:shadow-[0_0_20px_-4px_hsl(var(--accent)/0.2)]"
-        >
-          <ChevronRight className="h-4 w-4" />
-        </button>
-      </div>
-    );
-  }
+  // Close on route change
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
 
-  const collapsed = state === "collapsed";
+  // Lock body scroll when open
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   return (
-    <aside
-      className={`hidden md:flex sticky top-0 self-start h-screen border-r border-border/20 flex-col transition-all duration-300 shrink-0 overflow-hidden ${
-        collapsed ? "w-14" : "w-56"
-      }`}
-      style={{
-        background: "hsl(var(--sidebar-background))",
-        boxShadow: "inset -1px 0 0 hsl(0 0% 100% / 0.03), 4px 0 24px -4px hsl(220 40% 6% / 0.15)",
-      }}
-    >
-      {/* Header */}
-      <div className="p-3 pt-[4.5rem] flex items-center justify-between border-b border-sidebar-border/40">
-        {!collapsed && (
-          <span className="text-sm font-semibold text-sidebar-primary font-display tracking-wide">Explorar</span>
-        )}
-        <button
-          onClick={() => setState(collapsed ? "expanded" : "collapsed")}
-          className="p-1.5 rounded-lg hover:bg-sidebar-accent/60 transition-all duration-200"
-        >
-          {collapsed ? <ChevronRight className="h-3.5 w-3.5 text-sidebar-foreground/50" /> : <ChevronLeft className="h-3.5 w-3.5 text-sidebar-foreground/50" />}
-        </button>
-      </div>
+    <>
+      {/* Hamburger trigger — fixed top-left, floats over hero */}
+      <button
+        onClick={() => setOpen(true)}
+        aria-label="Abrir menu de exploração"
+        className="glass-nav fixed top-3 md:top-4 left-3 md:left-4 z-50 h-10 w-10 md:h-11 md:w-11 rounded-full flex items-center justify-center text-foreground hover:text-accent transition-all duration-300 hover:shadow-[0_0_20px_-4px_hsl(var(--accent)/0.4)]"
+      >
+        <Menu className="h-4 w-4 md:h-[18px] md:w-[18px]" />
+      </button>
 
-      {/* Links */}
-      <nav className="flex-1 py-4 overflow-y-auto">
-        {arcaLinks.map((link) => {
-          const active = location.pathname === link.to || location.pathname.startsWith(link.to + "/");
-          return (
-            <Link
-              key={link.to}
-              to={link.to}
-              title={link.label}
-              className={`flex items-center gap-3 px-3 py-2.5 mx-2 my-0.5 rounded-lg text-sm font-body transition-all duration-200 ${
-                active
-                  ? "bg-sidebar-primary/10 text-sidebar-primary font-medium"
-                  : "text-sidebar-foreground/40 hover:bg-sidebar-accent/40 hover:text-sidebar-foreground/70"
-              } ${collapsed ? "justify-center mx-1.5" : ""}`}
-            >
-              <link.icon className={`h-4 w-4 shrink-0 ${active ? "text-sidebar-primary" : ""}`} />
-              {!collapsed && <span>{link.label}</span>}
-            </Link>
-          );
-        })}
-      </nav>
+      {/* Backdrop */}
+      {open && (
+        <div
+          onClick={() => setOpen(false)}
+          className="fixed inset-0 z-[60] bg-background/40 backdrop-blur-sm animate-in fade-in duration-300"
+        />
+      )}
 
-      {/* Minimize */}
-      {!collapsed && (
-        <div className="p-3 border-t border-sidebar-border/40">
+      {/* Drawer panel */}
+      <aside
+        className={`fixed top-0 left-0 z-[70] h-screen w-[280px] sm:w-[320px] glass-nav border-r border-nav-glass-border flex flex-col transition-transform duration-500 ease-out ${
+          open ? "translate-x-0" : "-translate-x-full"
+        }`}
+        style={{
+          boxShadow: open
+            ? "8px 0 48px -8px hsl(220 40% 6% / 0.4), inset -1px 0 0 hsl(0 0% 100% / 0.06)"
+            : "none",
+        }}
+      >
+        {/* Header */}
+        <div className="px-5 pt-6 pb-5 flex items-center justify-between border-b border-border/20">
+          <span className="text-xs font-semibold text-accent font-body tracking-[0.3em] uppercase">
+            Explorar
+          </span>
           <button
-            onClick={() => setState("pip")}
-            className="w-full text-[11px] text-sidebar-foreground/25 hover:text-sidebar-foreground/50 font-body transition-all duration-200 tracking-wide uppercase"
+            onClick={() => setOpen(false)}
+            aria-label="Fechar menu"
+            className="h-8 w-8 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-all duration-200"
           >
-            Minimizar
+            <X className="h-4 w-4" />
           </button>
         </div>
-      )}
-    </aside>
+
+        {/* Links */}
+        <nav className="flex-1 py-4 overflow-y-auto">
+          {arcaLinks.map((link) => {
+            const active =
+              location.pathname === link.to ||
+              location.pathname.startsWith(link.to + "/");
+            return (
+              <Link
+                key={link.to}
+                to={link.to}
+                className={`flex items-center gap-3 px-4 py-3 mx-3 my-0.5 rounded-xl text-sm font-body transition-all duration-200 ${
+                  active
+                    ? "bg-accent/15 text-accent font-medium shadow-[inset_0_1px_0_hsl(0_0%_100%/0.06)]"
+                    : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
+                }`}
+              >
+                <link.icon className="h-4 w-4 shrink-0" />
+                <span>{link.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* Footer hint */}
+        <div className="px-5 py-4 border-t border-border/20">
+          <p className="text-[10px] text-muted-foreground/60 font-body tracking-wide uppercase">
+            Arca · Memória Lusíada
+          </p>
+        </div>
+      </aside>
+    </>
   );
 }
