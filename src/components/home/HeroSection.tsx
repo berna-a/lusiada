@@ -25,8 +25,8 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/30 to-transparent md:from-primary/70 md:via-primary/15 md:to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-r from-primary/55 via-transparent to-transparent" />
 
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 pb-12 pt-24 md:pb-16 md:pt-24">
+      {/* Content — overlays the image on desktop, normal flow on mobile */}
+      <div className="relative md:absolute md:inset-0 md:flex md:items-end z-10 container mx-auto px-4 pb-12 pt-24 md:pb-[6vw] md:pt-24">
         <div className="max-w-2xl space-y-5 md:space-y-6">
           <p className="text-[10px] md:text-[11px] uppercase tracking-[0.35em] md:tracking-[0.4em] text-accent/90 font-semibold font-body">
             Associação Lusíada
