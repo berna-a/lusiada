@@ -38,9 +38,9 @@ export function ArcaSidebar() {
       <button
         onClick={() => setOpen(true)}
         aria-label="Abrir menu de exploração"
-        className="glass-nav fixed top-3 md:top-4 left-3 md:left-4 z-50 h-10 w-10 md:h-11 md:w-11 rounded-full flex items-center justify-center text-foreground hover:text-accent transition-all duration-300 hover:shadow-[0_0_20px_-4px_hsl(var(--accent)/0.4)]"
+        className="glass-nav fixed top-3 md:top-4 left-3 md:left-4 z-50 h-12 w-12 rounded-full flex items-center justify-center text-foreground hover:text-accent transition-all duration-300 hover:shadow-[0_0_20px_-4px_hsl(var(--accent)/0.4)]"
       >
-        <Menu className="h-4 w-4 md:h-[18px] md:w-[18px]" />
+        <Menu className="h-[18px] w-[18px]" />
       </button>
 
       {/* Backdrop */}
