@@ -1,12 +1,15 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Menu, X, Library, Crown, MapPin, BookOpen, ChevronDown } from "lucide-react";
+import { Menu, X, Library, Crown, MapPin, BookOpen, ChevronDown, EyeOff, Eye } from "lucide-react";
 
 const navLinks = [
-  { label: "Associação", to: "/a-associacao" },
-  { label: "Programa", to: "/programa" },
   { label: "Apoiar", to: "/apoiar" },
-  { label: "Contactos", to: "/contactos" },
+];
+
+const sobreItems = [
+  { label: "Associação", subtitle: "Quem somos e a nossa missão", to: "/a-associacao" },
+  { label: "Programa", subtitle: "Linhas de acção e iniciativas", to: "/programa" },
+  { label: "Contactos", subtitle: "Fala connosco", to: "/contactos" },
 ];
 
 const arcaItems = [
