@@ -62,8 +62,8 @@ const App = () => (
             <Route path="/admin/definicoes" element={<AdminDefinicoesPage />} />
           </Route>
 
-          <Route path="*" element={<NotFound />} />
           <Route path="/supabase-test" element={<SupabaseTestPage />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
