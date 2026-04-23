@@ -63,28 +63,54 @@ export function InstitutionalNavbar() {
 
   return (
     <>
+      {/* Reveal button when navbar is collapsed */}
+      {collapsed && (
+        <button
+          type="button"
+          onClick={() => setCollapsed(false)}
+          aria-label="Mostrar menu"
+          className="fixed top-4 right-4 z-50 grid place-items-center h-10 w-10 rounded-full text-white/70 hover:text-white hover:bg-white/10 backdrop-blur-md transition-colors"
+        >
+          <Eye className="h-4 w-4" />
+        </button>
+      )}
+
       <nav
         aria-label="Navegação principal"
-        className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[96%] max-w-[1080px]"
-        onMouseLeave={() => setArcaOpen(false)}
+        className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[98%] max-w-[1280px] transition-all duration-300 ${
+          collapsed ? "opacity-0 -translate-y-8 pointer-events-none" : "opacity-100"
+        }`}
+        onMouseLeave={() => {
+          setArcaOpen(false);
+          setSobreOpen(false);
+        }}
       >
         <div
           className={`glass-nav-hero rounded-[28px] overflow-hidden transition-all duration-[250ms] ease-out ${
-            arcaOpen ? "pb-6" : ""
+            arcaOpen || sobreOpen ? "pb-6" : ""
           }`}
         >
-          <div className="h-[58px] pl-6 pr-3 md:pl-8 md:pr-3 flex items-center justify-between">
-            {/* Left — wordmark */}
-            <Link
-              to="/"
-              aria-label="Lusíada — Página inicial"
-              className="font-display text-[28px] tracking-[0.18em] text-white leading-none"
-            >
-              LUSÍADA
-            </Link>
-
-            {/* Center — desktop links */}
-            <div className="hidden lg:flex items-center gap-7 absolute left-1/2 -translate-x-1/2">
+          <div className="h-[58px] pl-4 pr-3 md:pl-6 md:pr-3 grid grid-cols-3 items-center">
+            {/* Left — Sobre dropdown + nav links */}
+            <div className="hidden lg:flex items-center gap-5 justify-self-start">
+              <button
+                type="button"
+                onMouseEnter={() => {
+                  setSobreOpen(true);
+                  setArcaOpen(false);
+                }}
+                onClick={() => setSobreOpen((v) => !v)}
+                aria-haspopup="true"
+                aria-expanded={sobreOpen}
+                className="inline-flex items-center gap-1 font-body text-[14px] text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+              >
+                Sobre
+                <ChevronDown
+                  className={`h-3.5 w-3.5 transition-transform duration-200 ${
+                    sobreOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
               {navLinks.map((l) => (
                 <Link
                   key={l.to}
@@ -100,20 +126,27 @@ export function InstitutionalNavbar() {
               ))}
             </div>
 
+            {/* Center — wordmark */}
+            <Link
+              to="/"
+              aria-label="Lusíada — Página inicial"
+              className="font-display text-[28px] tracking-[0.18em] text-white leading-none justify-self-center"
+            >
+              LUSÍADA
+            </Link>
+
             {/* Right — Arca dropdown + Junta-te CTA / Hamburger */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 justify-self-end">
               <button
                 type="button"
-                onMouseEnter={() => setArcaOpen(true)}
+                onMouseEnter={() => {
+                  setArcaOpen(true);
+                  setSobreOpen(false);
+                }}
                 onClick={() => setArcaOpen((v) => !v)}
                 aria-haspopup="true"
                 aria-expanded={arcaOpen}
-                className="arca-glow liquid-glass hidden sm:inline-flex items-center gap-1.5 rounded-full border-[1.5px] px-6 py-2.5 font-display text-[14px] uppercase tracking-[0.15em] text-white transition-colors"
-                style={{
-                  borderColor: "hsl(45 95% 65%)",
-                  boxShadow:
-                    "0 0 14px hsl(45 95% 65% / 0.55), 0 0 28px hsl(45 95% 60% / 0.3), inset 0 0 8px hsl(45 95% 80% / 0.25)",
-                }}
+                className="liquid-glass hidden sm:inline-flex items-center gap-1.5 rounded-full border border-white/20 hover:border-white/40 px-6 py-2.5 font-display text-[14px] uppercase tracking-[0.15em] text-white transition-colors"
               >
                 Arca
                 <ChevronDown
@@ -133,6 +166,15 @@ export function InstitutionalNavbar() {
               >
                 Junta-te
               </Link>
+              <button
+                type="button"
+                onClick={() => setCollapsed(true)}
+                aria-label="Ocultar menu"
+                title="Ocultar menu"
+                className="hidden sm:grid place-items-center h-9 w-9 rounded-full text-primary-foreground/60 hover:text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
+              >
+                <EyeOff className="h-4 w-4" />
+              </button>
               <button
                 type="button"
                 onClick={() => setMobileOpen((v) => !v)}
