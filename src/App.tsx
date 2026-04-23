@@ -27,6 +27,7 @@ import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 import AdminDefinicoesPage from "@/pages/admin/AdminDefinicoesPage";
 
 import NotFound from "@/pages/NotFound";
+import SupabaseTestPage from "@/pages/SupabaseTestPage";
 
 const queryClient = new QueryClient();
 
@@ -61,6 +62,7 @@ const App = () => (
             <Route path="/admin/definicoes" element={<AdminDefinicoesPage />} />
           </Route>
 
+          <Route path="/supabase-test" element={<SupabaseTestPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
