@@ -93,6 +93,16 @@ export function InstitutionalNavbar() {
               {link.label}
             </Link>
           ))}
+          <Link
+            to="/aderir"
+            className={`ml-2 px-4 py-1.5 rounded-full text-sm font-body tracking-wide transition-all duration-200 ${
+              location.pathname === "/aderir"
+                ? "bg-accent text-accent-foreground shadow-[0_2px_10px_-2px_hsl(var(--accent)/0.5)]"
+                : "bg-accent/90 text-accent-foreground hover:bg-accent shadow-[0_2px_8px_-2px_hsl(var(--accent)/0.4)]"
+            }`}
+          >
+            Aderir
+          </Link>
         </div>
 
         {/* Right side */}
@@ -130,6 +140,17 @@ export function InstitutionalNavbar() {
                 {link.label}
               </Link>
             ))}
+            <Link
+              to="/aderir"
+              onClick={() => setMobileOpen(false)}
+              className={`mt-2 px-4 py-2.5 rounded-xl text-sm font-body text-center transition-all duration-200 ${
+                location.pathname === "/aderir"
+                  ? "bg-accent text-accent-foreground"
+                  : "bg-accent/90 text-accent-foreground hover:bg-accent"
+              }`}
+            >
+              Aderir
+            </Link>
           </div>
         </div>
       )}
