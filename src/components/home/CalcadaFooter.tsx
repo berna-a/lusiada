@@ -22,11 +22,20 @@ export function CalcadaFooter() {
       className="bg-secondary py-16 px-6"
     >
       <div className="mx-auto max-w-[1200px]">
-        <div className="relative overflow-hidden rounded-3xl bg-primary text-primary-foreground p-8 sm:p-12 lg:p-20 premium-shadow-lg">
-          {/* Calçada pattern overlay */}
+        <div
+          className="relative overflow-hidden rounded-3xl p-8 sm:p-12 lg:p-20 premium-shadow-lg"
+          style={{ backgroundColor: "#0A3D62", color: "#F4F1EC" }}
+        >
+          {/* Calçada pattern overlay — hardcoded ivory dots, theme-independent */}
           <div
             aria-hidden="true"
-            className="absolute inset-0 calcada-pattern pointer-events-none"
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 12px 12px, rgba(244,241,236,0.06) 1.2px, transparent 1.6px), radial-gradient(circle at 36px 36px, rgba(244,241,236,0.05) 1px, transparent 1.4px)",
+              backgroundSize: "48px 48px, 48px 48px",
+              backgroundPosition: "0 0, 24px 24px",
+            }}
           />
 
           <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-10">
