@@ -22,17 +22,26 @@ export function CalcadaFooter() {
       className="bg-secondary py-16 px-6"
     >
       <div className="mx-auto max-w-[1200px]">
-        <div className="relative overflow-hidden rounded-3xl bg-primary text-primary-foreground p-8 sm:p-12 lg:p-20 premium-shadow-lg">
-          {/* Calçada pattern overlay */}
+        <div
+          className="relative overflow-hidden rounded-3xl p-8 sm:p-12 lg:p-20 premium-shadow-lg"
+          style={{ backgroundColor: "#0A3D62", color: "#F4F1EC" }}
+        >
+          {/* Calçada pattern overlay — hardcoded ivory dots, theme-independent */}
           <div
             aria-hidden="true"
-            className="absolute inset-0 calcada-pattern pointer-events-none"
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 12px 12px, rgba(244,241,236,0.06) 1.2px, transparent 1.6px), radial-gradient(circle at 36px 36px, rgba(244,241,236,0.05) 1px, transparent 1.4px)",
+              backgroundSize: "48px 48px, 48px 48px",
+              backgroundPosition: "0 0, 24px 24px",
+            }}
           />
 
           <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-10">
             {/* Column 1 */}
             <div>
-              <h4 className="font-display text-base tracking-[0.1em] text-primary-foreground mb-6">
+              <h4 className="font-display text-base tracking-[0.1em] mb-6" style={{ color: "#F4F1EC" }}>
                 ASSOCIAÇÃO
               </h4>
               <ul className="flex flex-col gap-1">
@@ -40,7 +49,8 @@ export function CalcadaFooter() {
                   <li key={l.to} style={{ lineHeight: 2.2 }}>
                     <Link
                       to={l.to}
-                      className="font-body text-[15px] text-primary-foreground/70 hover:text-primary-foreground transition-colors"
+                      className="font-body text-[15px] transition-colors hover:!text-[#F4F1EC]"
+                      style={{ color: "rgba(244,241,236,0.7)" }}
                     >
                       {l.label}
                     </Link>
@@ -51,7 +61,7 @@ export function CalcadaFooter() {
 
             {/* Column 2 */}
             <div>
-              <h4 className="font-display text-base tracking-[0.1em] text-primary-foreground mb-6">
+              <h4 className="font-display text-base tracking-[0.1em] mb-6" style={{ color: "#F4F1EC" }}>
                 PROGRAMA
               </h4>
               <ul className="flex flex-col gap-1">
@@ -59,7 +69,8 @@ export function CalcadaFooter() {
                   <li key={l.to} style={{ lineHeight: 2.2 }}>
                     <Link
                       to={l.to}
-                      className="font-body text-[15px] text-primary-foreground/70 hover:text-primary-foreground transition-colors"
+                      className="font-body text-[15px] transition-colors hover:!text-[#F4F1EC]"
+                      style={{ color: "rgba(244,241,236,0.7)" }}
                     >
                       {l.label}
                     </Link>
@@ -70,16 +81,16 @@ export function CalcadaFooter() {
 
             {/* Column 3 */}
             <div>
-              <h4 className="font-display text-base tracking-[0.1em] text-primary-foreground mb-6">
+              <h4 className="font-display text-base tracking-[0.1em] mb-6" style={{ color: "#F4F1EC" }}>
                 CONTACTO
               </h4>
-              <address className="not-italic font-body text-[15px] text-primary-foreground/70" style={{ lineHeight: 2 }}>
+              <address className="not-italic font-body text-[15px]" style={{ lineHeight: 2, color: "rgba(244,241,236,0.7)" }}>
                 <div>Associação Memória Lusíada</div>
                 <div>Lisboa, Portugal</div>
                 <div>
                   <a
                     href="mailto:geral@alusiada.pt"
-                    className="hover:text-primary-foreground hover:underline transition-colors"
+                    className="transition-colors hover:underline hover:!text-[#F4F1EC]"
                   >
                     geral@alusiada.pt
                   </a>
@@ -89,21 +100,24 @@ export function CalcadaFooter() {
                 <a
                   href="#"
                   aria-label="Instagram"
-                  className="text-primary-foreground/60 hover:text-primary-foreground transition-colors"
+                  className="transition-colors hover:!text-[#F4F1EC]"
+                  style={{ color: "rgba(244,241,236,0.6)" }}
                 >
                   <Instagram className="h-6 w-6" />
                 </a>
                 <a
                   href="#"
                   aria-label="YouTube"
-                  className="text-primary-foreground/60 hover:text-primary-foreground transition-colors"
+                  className="transition-colors hover:!text-[#F4F1EC]"
+                  style={{ color: "rgba(244,241,236,0.6)" }}
                 >
                   <Youtube className="h-6 w-6" />
                 </a>
                 <a
                   href="#"
                   aria-label="LinkedIn"
-                  className="text-primary-foreground/60 hover:text-primary-foreground transition-colors"
+                  className="transition-colors hover:!text-[#F4F1EC]"
+                  style={{ color: "rgba(244,241,236,0.6)" }}
                 >
                   <Linkedin className="h-6 w-6" />
                 </a>
