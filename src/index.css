@@ -300,16 +300,16 @@
     position: relative;
     background: linear-gradient(
       135deg,
-      hsl(0 0% 100% / 0.03) 0%,
-      hsl(0 0% 100% / 0.04) 50%,
-      hsl(0 0% 100% / 0.03) 100%
+      hsl(0 0% 100% / 0.01) 0%,
+      hsl(0 0% 100% / 0.013) 50%,
+      hsl(0 0% 100% / 0.01) 100%
     );
-    border: 1px solid hsl(0 0% 100% / 0.14);
+    border: 1px solid hsl(0 0% 100% / 0.08);
     box-shadow:
-      0 12px 48px -12px hsl(220 40% 10% / 0.35),
-      inset 0 1px 0 hsl(0 0% 100% / 0.22);
-    backdrop-filter: blur(22px) saturate(2.4);
-    -webkit-backdrop-filter: blur(22px) saturate(2.4);
+      0 12px 48px -12px hsl(220 40% 10% / 0.25),
+      inset 0 1px 0 hsl(0 0% 100% / 0.12);
+    backdrop-filter: blur(18px) saturate(1.8);
+    -webkit-backdrop-filter: blur(18px) saturate(1.8);
     overflow: hidden;
     isolation: isolate;
   }
