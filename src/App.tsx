@@ -27,6 +27,7 @@ import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 import AdminDefinicoesPage from "@/pages/admin/AdminDefinicoesPage";
 
 import NotFound from "@/pages/NotFound";
+import SupabaseTestPage from "@/pages/SupabaseTestPage";
 
 const queryClient = new QueryClient();
 
@@ -62,6 +63,7 @@ const App = () => (
           </Route>
 
           <Route path="*" element={<NotFound />} />
+          <Route path="/supabase-test" element={<SupabaseTestPage />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
