@@ -47,6 +47,10 @@ const App = () => (
             <Route path="/apoiar" element={<ApoiarPage />} />
             <Route path="/contactos" element={<ContactosPage />} />
             <Route path="/aderir" element={<AderirPage />} />
+            {/* Homepage navbar/footer aliases — point to existing pages */}
+            <Route path="/a-associacao" element={<AssociacaoPage />} />
+            <Route path="/contacto" element={<ContactosPage />} />
+            <Route path="/panteao" element={<PanteaoPage />} />
             <Route path="/arca" element={<ArcaPage />} />
             <Route path="/arca/panteao" element={<PanteaoPage />} />
             <Route path="/arca/calendario" element={<CalendarioPage />} />

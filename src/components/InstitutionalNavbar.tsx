@@ -1,159 +1,117 @@
 import { Link, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { Menu, X, Sun, Moon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
 
 const navLinks = [
-  { label: "Associação", to: "/associacao" },
-  { label: "Programa", to: "/programa" },
-  { label: "Apoiar", to: "/apoiar" },
-  { label: "Contactos", to: "/contactos" },
+  { label: "Panteão", to: "/panteao" },
+  { label: "Associação", to: "/a-associacao" },
+  { label: "Contacto", to: "/contacto" },
 ];
 
 export function InstitutionalNavbar() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [hovered, setHovered] = useState(false);
-  const [stuck, setStuck] = useState(false);
-  const [dark, setDark] = useState(() =>
-    document.documentElement.classList.contains("dark")
-  );
 
+  // Close mobile menu on route change
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", dark);
-  }, [dark]);
+    setMobileOpen(false);
+  }, [location.pathname]);
 
+  // Lock body scroll when mobile menu open
   useEffect(() => {
-    const onScroll = () => {
-      // Trigger sticky once user scrolls past most of the hero section
-      const trigger = window.innerHeight * 0.7;
-      setStuck(window.scrollY > trigger);
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
     };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [mobileOpen]);
 
   return (
-    <nav
-      className={`left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-5xl transition-all duration-300 ${
-        stuck
-          ? "fixed top-[10px] animate-fade-in"
-          : "absolute bottom-[10px]"
-      }`}
-    >
-      <div className="glass-nav rounded-full h-12 px-4 md:px-6 flex items-center justify-between">
-        {/* Logo — "A." in repouso, expands to "Associação" on navbar hover */}
-        <Link
-          to="/"
-          aria-label="Associação Lusíada"
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
-          className="font-semibold text-base md:text-2xl uppercase tracking-[0.12em] text-white font-display flex items-baseline whitespace-nowrap"
-        >
-          <span aria-hidden="true">A</span>
-          <span
-            aria-hidden="true"
-            className="inline-grid overflow-hidden transition-[grid-template-columns] duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
-            style={{ gridTemplateColumns: hovered ? "1fr" : "0fr" }}
-          >
-            <span
-              className="min-w-0 overflow-hidden transition-[opacity,filter,transform] duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
-              style={{
-                opacity: hovered ? 1 : 0,
-                filter: hovered ? "blur(0px)" : "blur(4px)",
-                transform: hovered ? "translateX(0)" : "translateX(-4px)",
-                transitionDelay: hovered ? "150ms" : "0ms",
-              }}
-            >
-              ssociação
-            </span>
-          </span>
-          <span
-            aria-hidden="true"
-            className="transition-opacity duration-500 ease-out"
-            style={{ opacity: hovered ? 0 : 1 }}
-          >
-            .
-          </span>
-          <span aria-hidden="true">&nbsp;Lusíada</span>
-        </Link>
-
-        {/* Desktop links */}
-        <div className="hidden md:flex items-center gap-1">
-          {navLinks.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              className={`px-4 py-1.5 rounded-full text-sm font-body transition-all duration-200 ${
-                location.pathname === link.to
-                  ? "bg-primary text-white shadow-[0_2px_8px_-2px_hsl(var(--primary)/0.3)]"
-                  : "text-white/70 hover:text-white hover:bg-white/10"
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+    <>
+      <nav
+        aria-label="Navegação principal"
+        className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-[800px]"
+      >
+        <div className="glass-nav-hero rounded-full h-12 pl-5 pr-2 md:pl-6 md:pr-2 flex items-center justify-between">
+          {/* Left — wordmark */}
           <Link
-            to="/aderir"
-            className={`ml-2 px-4 py-1.5 rounded-full text-sm font-body tracking-wide transition-all duration-200 ${
-              location.pathname === "/aderir"
-                ? "bg-accent text-accent-foreground shadow-[0_2px_10px_-2px_hsl(var(--accent)/0.5)]"
-                : "bg-accent/90 text-accent-foreground hover:bg-accent shadow-[0_2px_8px_-2px_hsl(var(--accent)/0.4)]"
-            }`}
+            to="/"
+            aria-label="Lusíada — Página inicial"
+            className="font-display text-[14px] tracking-[0.18em] text-accent"
           >
-            Aderir
+            LUSÍADA
           </Link>
-        </div>
 
-        {/* Right side */}
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setDark(!dark)}
-            className="p-2 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-all duration-200"
-          >
-            {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          </button>
-          <button
-            className="md:hidden p-2 text-white"
-            onClick={() => setMobileOpen(!mobileOpen)}
-          >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile menu */}
-      {mobileOpen && (
-        <div className="glass-nav mt-2 rounded-2xl p-4 md:hidden">
-          <div className="flex flex-col gap-1">
-            {navLinks.map((link) => (
+          {/* Center — desktop links */}
+          <div className="hidden md:flex items-center gap-7 absolute left-1/2 -translate-x-1/2">
+            {navLinks.map((l) => (
               <Link
-                key={link.to}
-                to={link.to}
-                onClick={() => setMobileOpen(false)}
-                className={`px-4 py-2.5 rounded-xl text-sm font-body transition-all duration-200 ${
-                  location.pathname === link.to
-                    ? "bg-primary text-white"
-                    : "text-white/70 hover:text-white hover:bg-white/10"
+                key={l.to}
+                to={l.to}
+                className={`font-body text-[14px] transition-colors ${
+                  location.pathname === l.to
+                    ? "text-primary-foreground"
+                    : "text-primary-foreground/80 hover:text-primary-foreground"
                 }`}
               >
-                {link.label}
+                {l.label}
+              </Link>
+            ))}
+          </div>
+
+          {/* Right — Aderir / Hamburger */}
+          <div className="flex items-center gap-2">
+            <Link
+              to="/aderir"
+              aria-label="Aderir à Associação Lusíada"
+              className="liquid-glass hidden sm:inline-flex items-center justify-center rounded-full px-5 py-1.5 font-display text-[13px] tracking-[0.12em] text-primary-foreground border border-accent/40 bg-accent/15 hover:bg-accent/25 transition-colors"
+            >
+              Aderir
+            </Link>
+            <button
+              type="button"
+              onClick={() => setMobileOpen((v) => !v)}
+              aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
+              aria-expanded={mobileOpen}
+              className="md:hidden grid place-items-center h-9 w-9 rounded-full text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
+            >
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Mobile full-screen overlay */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-40 md:hidden"
+          style={{
+            background:
+              "linear-gradient(160deg, hsl(var(--primary) / 0.92), hsl(var(--primary) / 0.96))",
+            backdropFilter: "blur(24px) saturate(1.4)",
+            WebkitBackdropFilter: "blur(24px) saturate(1.4)",
+          }}
+        >
+          <div className="h-full flex flex-col items-center justify-center gap-8">
+            {navLinks.map((l) => (
+              <Link
+                key={l.to}
+                to={l.to}
+                onClick={() => setMobileOpen(false)}
+                className="font-display text-3xl tracking-[0.1em] text-primary-foreground hover:text-accent transition-colors"
+              >
+                {l.label}
               </Link>
             ))}
             <Link
               to="/aderir"
               onClick={() => setMobileOpen(false)}
-              className={`mt-2 px-4 py-2.5 rounded-xl text-sm font-body text-center transition-all duration-200 ${
-                location.pathname === "/aderir"
-                  ? "bg-accent text-accent-foreground"
-                  : "bg-accent/90 text-accent-foreground hover:bg-accent"
-              }`}
+              className="liquid-glass mt-4 inline-flex items-center justify-center rounded-full border border-accent/60 bg-accent/20 px-8 py-3 font-display text-base tracking-[0.12em] text-primary-foreground"
             >
               Aderir
             </Link>
           </div>
         </div>
       )}
-    </nav>
+    </>
   );
 }
