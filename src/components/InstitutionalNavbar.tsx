@@ -6,7 +6,6 @@ const navLinks = [
   { label: "Associação", to: "/a-associacao" },
   { label: "Programa", to: "/programa" },
   { label: "Apoiar", to: "/apoiar" },
-  { label: "Aderir", to: "/aderir" },
   { label: "Contactos", to: "/contactos" },
 ];
 
