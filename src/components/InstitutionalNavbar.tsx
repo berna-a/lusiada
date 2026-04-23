@@ -67,7 +67,7 @@ export function InstitutionalNavbar() {
             arcaOpen ? "pb-6" : ""
           }`}
         >
-          <div className="h-16 pl-6 pr-3 md:pl-8 md:pr-3 flex items-center justify-between">
+          <div className="h-[58px] pl-6 pr-3 md:pl-8 md:pr-3 flex items-center justify-between">
             {/* Left — wordmark */}
             <Link
               to="/"
@@ -94,7 +94,7 @@ export function InstitutionalNavbar() {
               ))}
             </div>
 
-            {/* Right — Arca dropdown trigger / Hamburger */}
+            {/* Right — Arca dropdown + Junta-te CTA / Hamburger */}
             <div className="flex items-center gap-2">
               <button
                 type="button"
@@ -102,7 +102,12 @@ export function InstitutionalNavbar() {
                 onClick={() => setArcaOpen((v) => !v)}
                 aria-haspopup="true"
                 aria-expanded={arcaOpen}
-                className="liquid-glass hidden sm:inline-flex items-center gap-1.5 rounded-full border-[1.5px] border-accent px-6 py-2.5 font-display text-[14px] uppercase tracking-[0.15em] text-accent hover:bg-accent/10 transition-colors"
+                className="arca-glow liquid-glass hidden sm:inline-flex items-center gap-1.5 rounded-full border-[1.5px] px-6 py-2.5 font-display text-[14px] uppercase tracking-[0.15em] text-white transition-colors"
+                style={{
+                  borderColor: "hsl(45 95% 65%)",
+                  boxShadow:
+                    "0 0 14px hsl(45 95% 65% / 0.55), 0 0 28px hsl(45 95% 60% / 0.3), inset 0 0 8px hsl(45 95% 80% / 0.25)",
+                }}
               >
                 Arca
                 <ChevronDown
@@ -111,6 +116,17 @@ export function InstitutionalNavbar() {
                   }`}
                 />
               </button>
+              <Link
+                to="/aderir"
+                className="hidden sm:inline-flex items-center justify-center rounded-full px-6 py-2.5 font-display text-[14px] uppercase tracking-[0.15em] text-white transition-all hover:brightness-110"
+                style={{
+                  backgroundColor: "hsl(351 62% 34%)",
+                  boxShadow:
+                    "0 4px 14px hsl(351 62% 20% / 0.4), inset 0 1px 0 hsl(0 0% 100% / 0.18)",
+                }}
+              >
+                Junta-te
+              </Link>
               <button
                 type="button"
                 onClick={() => setMobileOpen((v) => !v)}
