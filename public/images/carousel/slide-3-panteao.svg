@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="marble" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A3D62"/>
+      <stop offset="55%" stop-color="#13344F"/>
+      <stop offset="100%" stop-color="#061F33"/>
+    </linearGradient>
+    <filter id="veins">
+      <feTurbulence type="turbulence" baseFrequency="0.012 0.04" numOctaves="3" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" scale="40"/>
+    </filter>
+    <filter id="ivory-veins">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="11"/>
+      <feColorMatrix values="0 0 0 0 0.95  0 0 0 0 0.92  0 0 0 0 0.85  0 0 0 0.6 0"/>
+    </filter>
+  </defs>
+  <rect width="800" height="600" fill="url(#marble)"/>
+  <g opacity="0.18">
+    <rect width="800" height="600" filter="url(#ivory-veins)"/>
+  </g>
+  <g stroke="#F4F1EC" stroke-opacity="0.12" stroke-width="0.7" fill="none" filter="url(#veins)">
+    <path d="M-20 80 Q 200 140 420 90 T 820 130"/>
+    <path d="M-20 200 Q 240 260 460 210 T 820 250"/>
+    <path d="M-20 340 Q 220 400 440 350 T 820 390"/>
+    <path d="M-20 480 Q 260 540 480 490 T 820 530"/>
+  </g>
+  <g stroke="#C89755" stroke-opacity="0.18" stroke-width="0.5" fill="none" filter="url(#veins)">
+    <path d="M-20 160 Q 200 220 420 170 T 820 210"/>
+    <path d="M-20 420 Q 240 480 460 430 T 820 470"/>
+  </g>
+</svg>

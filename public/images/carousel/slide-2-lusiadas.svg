@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="parch" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D9B077"/>
+      <stop offset="50%" stop-color="#A87C3E"/>
+      <stop offset="100%" stop-color="#6E4F26"/>
+    </linearGradient>
+    <radialGradient id="vignette" cx="50%" cy="50%" r="70%">
+      <stop offset="60%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.45"/>
+    </radialGradient>
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4"/>
+      <feColorMatrix values="0 0 0 0 0.55  0 0 0 0 0.4  0 0 0 0 0.2  0 0 0 0.35 0"/>
+      <feComposite in2="SourceGraphic" operator="in"/>
+    </filter>
+  </defs>
+  <rect width="800" height="600" fill="url(#parch)"/>
+  <rect width="800" height="600" filter="url(#noise)" opacity="0.7"/>
+  <g stroke="#3A2710" stroke-opacity="0.18" stroke-width="0.5" fill="none">
+    <path d="M0 120 Q 200 100 400 130 T 800 110"/>
+    <path d="M0 240 Q 200 220 400 250 T 800 230"/>
+    <path d="M0 360 Q 200 340 400 370 T 800 350"/>
+    <path d="M0 480 Q 200 460 400 490 T 800 470"/>
+  </g>
+  <rect width="800" height="600" fill="url(#vignette)"/>
+</svg>
