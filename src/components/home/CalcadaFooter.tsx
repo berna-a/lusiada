@@ -81,16 +81,16 @@ export function CalcadaFooter() {
 
             {/* Column 3 */}
             <div>
-              <h4 className="font-display text-base tracking-[0.1em] text-primary-foreground mb-6">
+              <h4 className="font-display text-base tracking-[0.1em] mb-6" style={{ color: "#F4F1EC" }}>
                 CONTACTO
               </h4>
-              <address className="not-italic font-body text-[15px] text-primary-foreground/70" style={{ lineHeight: 2 }}>
+              <address className="not-italic font-body text-[15px]" style={{ lineHeight: 2, color: "rgba(244,241,236,0.7)" }}>
                 <div>Associação Memória Lusíada</div>
                 <div>Lisboa, Portugal</div>
                 <div>
                   <a
                     href="mailto:geral@alusiada.pt"
-                    className="hover:text-primary-foreground hover:underline transition-colors"
+                    className="transition-colors hover:underline hover:!text-[#F4F1EC]"
                   >
                     geral@alusiada.pt
                   </a>
@@ -100,21 +100,24 @@ export function CalcadaFooter() {
                 <a
                   href="#"
                   aria-label="Instagram"
-                  className="text-primary-foreground/60 hover:text-primary-foreground transition-colors"
+                  className="transition-colors hover:!text-[#F4F1EC]"
+                  style={{ color: "rgba(244,241,236,0.6)" }}
                 >
                   <Instagram className="h-6 w-6" />
                 </a>
                 <a
                   href="#"
                   aria-label="YouTube"
-                  className="text-primary-foreground/60 hover:text-primary-foreground transition-colors"
+                  className="transition-colors hover:!text-[#F4F1EC]"
+                  style={{ color: "rgba(244,241,236,0.6)" }}
                 >
                   <Youtube className="h-6 w-6" />
                 </a>
                 <a
                   href="#"
                   aria-label="LinkedIn"
-                  className="text-primary-foreground/60 hover:text-primary-foreground transition-colors"
+                  className="transition-colors hover:!text-[#F4F1EC]"
+                  style={{ color: "rgba(244,241,236,0.6)" }}
                 >
                   <Linkedin className="h-6 w-6" />
                 </a>
