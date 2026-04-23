@@ -43,11 +43,14 @@ export function InstitutionalNavbar() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [arcaOpen, setArcaOpen] = useState(false);
+  const [sobreOpen, setSobreOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
 
   // Close mobile menu on route change
   useEffect(() => {
     setMobileOpen(false);
     setArcaOpen(false);
+    setSobreOpen(false);
   }, [location.pathname]);
 
   // Lock body scroll when mobile menu open
