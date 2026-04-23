@@ -112,14 +112,14 @@ export function CalcadaFooter() {
           </div>
         </div>
 
-        <div className="mt-8 text-center font-body text-xs text-primary-foreground/50">
+        <div className="mt-8 text-center font-body text-xs text-muted-foreground">
           <span>© 2026 Associação Memória Lusíada</span>
           <span className="mx-2">•</span>
-          <Link to="/privacidade" className="hover:text-primary-foreground transition-colors">
+          <Link to="/privacidade" className="hover:text-foreground transition-colors">
             Privacidade
           </Link>
           <span className="mx-2">•</span>
-          <Link to="/termos" className="hover:text-primary-foreground transition-colors">
+          <Link to="/termos" className="hover:text-foreground transition-colors">
             Termos
           </Link>
         </div>
