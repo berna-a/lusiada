@@ -4,21 +4,28 @@ export function HeroFullscreen() {
   return (
     <section
       id="hero"
-      className="relative w-full h-screen overflow-hidden"
+      className="relative w-full overflow-hidden"
       aria-label="Hero"
+      style={{
+        backgroundColor: "#061F33",
+        paddingTop: "24px",
+        height: "100vh",
+      }}
     >
-      <img
-        src={heroBg}
-        alt=""
-        aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-cover object-center select-none pointer-events-none"
-      />
+      <div className="absolute inset-0" style={{ paddingTop: "24px" }}>
+        <img
+          src={heroBg}
+          alt=""
+          aria-hidden="true"
+          className="w-full h-full object-contain object-center select-none pointer-events-none"
+        />
+      </div>
       {/* Bottom blend gradient */}
       <div
         className="absolute inset-x-0 bottom-0 h-[25vh] pointer-events-none"
         style={{
           background:
-            "linear-gradient(to bottom, hsl(var(--primary) / 0) 0%, hsl(var(--primary) / 0.5) 100%)",
+            "linear-gradient(to bottom, rgba(6,31,51,0) 0%, rgba(6,31,51,0.6) 100%)",
         }}
         aria-hidden="true"
       />

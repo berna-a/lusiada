@@ -83,7 +83,7 @@ export function EmFocoSection() {
         </div>
 
         <div
-          className="relative mt-12"
+          className="relative mt-12 mx-auto max-w-[1100px]"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
@@ -94,8 +94,8 @@ export function EmFocoSection() {
                   key={i}
                   className="min-w-0 shrink-0 grow-0 basis-full"
                 >
-                  <article className="grid md:grid-cols-2 gap-0 overflow-hidden rounded-2xl border border-primary-foreground/10 bg-transparent min-h-[400px]">
-                    <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[400px] overflow-hidden">
+                  <article className="grid md:grid-cols-2 gap-0 overflow-hidden rounded-2xl border border-primary-foreground/10 bg-transparent min-h-[440px]">
+                    <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[440px] overflow-hidden">
                       <img
                         src={s.image}
                         alt=""
