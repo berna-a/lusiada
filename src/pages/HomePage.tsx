@@ -1,21 +1,19 @@
-import { HeroSection } from "@/components/home/HeroSection";
-import { EventsCarousel } from "@/components/home/EventsCarousel";
-import { AboutSection } from "@/components/home/AboutSection";
-import { JoinSection } from "@/components/home/JoinSection";
-import { SupportSection } from "@/components/home/SupportSection";
-import { ExploreArcaSection } from "@/components/home/ExploreArcaSection";
-import { StatsSection } from "@/components/home/StatsSection";
+import { HeroFullscreen } from "@/components/home/HeroFullscreen";
+import { SobreSection } from "@/components/home/SobreSection";
+import { EmFocoSection } from "@/components/home/EmFocoSection";
+import { AdesaoSection } from "@/components/home/AdesaoSection";
+import { CalcadaFooter } from "@/components/home/CalcadaFooter";
 
 export default function HomePage() {
   return (
     <div className="-m-4 sm:-m-6 md:-m-10">
-      <HeroSection />
-      <EventsCarousel />
-      <AboutSection />
-      <JoinSection />
-      <SupportSection />
-      <ExploreArcaSection />
-      <StatsSection />
+      <HeroFullscreen />
+      <main>
+        <SobreSection />
+        <EmFocoSection />
+        <AdesaoSection />
+      </main>
+      <CalcadaFooter />
     </div>
   );
 }
