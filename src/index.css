@@ -115,6 +115,9 @@
   h1, h2, h3, h4 {
     font-family: 'Cinzel', 'Georgia', serif;
   }
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 @layer components {
@@ -290,5 +293,72 @@
 
   .font-body {
     font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  /* Ultra-transparent navbar variant for hero overlay */
+  .glass-nav-hero {
+    position: relative;
+    background: linear-gradient(
+      135deg,
+      hsl(0 0% 100% / 0.03) 0%,
+      hsl(0 0% 100% / 0.04) 50%,
+      hsl(0 0% 100% / 0.03) 100%
+    );
+    border: 1px solid hsl(0 0% 100% / 0.14);
+    box-shadow:
+      0 12px 48px -12px hsl(220 40% 10% / 0.35),
+      inset 0 1px 0 hsl(0 0% 100% / 0.22);
+    backdrop-filter: blur(22px) saturate(2.4);
+    -webkit-backdrop-filter: blur(22px) saturate(2.4);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .glass-nav-hero::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: conic-gradient(
+      from var(--angle, 140deg),
+      hsl(0 0% 100% / 0.04) 0deg,
+      hsl(var(--accent) / 0.55) 60deg,
+      hsl(45 90% 75% / 0.6) 110deg,
+      hsl(0 0% 100% / 0.32) 180deg,
+      hsl(45 90% 75% / 0.5) 250deg,
+      hsl(var(--accent) / 0.5) 310deg,
+      hsl(0 0% 100% / 0.04) 360deg
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+    animation: nav-sun-rotate 20s linear infinite;
+  }
+  .glass-nav-hero > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  @property --angle {
+    syntax: "<angle>";
+    initial-value: 140deg;
+    inherits: false;
+  }
+
+  @keyframes nav-sun-rotate {
+    from { --angle: 0deg; transform: rotate(0deg); }
+    to   { --angle: 360deg; transform: rotate(0deg); }
+  }
+
+  /* Calçada portuguesa pattern overlay (used inside footer card) */
+  .calcada-pattern {
+    background-image:
+      radial-gradient(circle at 12px 12px, hsl(var(--primary-foreground) / 0.06) 1.2px, transparent 1.6px),
+      radial-gradient(circle at 36px 36px, hsl(var(--primary-foreground) / 0.05) 1px, transparent 1.4px);
+    background-size: 48px 48px, 48px 48px;
+    background-position: 0 0, 24px 24px;
   }
 }
