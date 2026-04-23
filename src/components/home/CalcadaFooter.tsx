@@ -41,7 +41,7 @@ export function CalcadaFooter() {
           <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-10">
             {/* Column 1 */}
             <div>
-              <h4 className="font-display text-base tracking-[0.1em] text-primary-foreground mb-6">
+              <h4 className="font-display text-base tracking-[0.1em] mb-6" style={{ color: "#F4F1EC" }}>
                 ASSOCIAÇÃO
               </h4>
               <ul className="flex flex-col gap-1">
@@ -49,7 +49,8 @@ export function CalcadaFooter() {
                   <li key={l.to} style={{ lineHeight: 2.2 }}>
                     <Link
                       to={l.to}
-                      className="font-body text-[15px] text-primary-foreground/70 hover:text-primary-foreground transition-colors"
+                      className="font-body text-[15px] transition-colors hover:!text-[#F4F1EC]"
+                      style={{ color: "rgba(244,241,236,0.7)" }}
                     >
                       {l.label}
                     </Link>
@@ -60,7 +61,7 @@ export function CalcadaFooter() {
 
             {/* Column 2 */}
             <div>
-              <h4 className="font-display text-base tracking-[0.1em] text-primary-foreground mb-6">
+              <h4 className="font-display text-base tracking-[0.1em] mb-6" style={{ color: "#F4F1EC" }}>
                 PROGRAMA
               </h4>
               <ul className="flex flex-col gap-1">
@@ -68,7 +69,8 @@ export function CalcadaFooter() {
                   <li key={l.to} style={{ lineHeight: 2.2 }}>
                     <Link
                       to={l.to}
-                      className="font-body text-[15px] text-primary-foreground/70 hover:text-primary-foreground transition-colors"
+                      className="font-body text-[15px] transition-colors hover:!text-[#F4F1EC]"
+                      style={{ color: "rgba(244,241,236,0.7)" }}
                     >
                       {l.label}
                     </Link>
