@@ -12,6 +12,7 @@ import AssociacaoPage from "@/pages/AssociacaoPage";
 import ProgramaPage from "@/pages/ProgramaPage";
 import ApoiarPage from "@/pages/ApoiarPage";
 import ContactosPage from "@/pages/ContactosPage";
+import AderirPage from "@/pages/AderirPage";
 
 import ArcaPage from "@/pages/arca/ArcaPage";
 import PanteaoPage from "@/pages/arca/PanteaoPage";
@@ -45,6 +46,7 @@ const App = () => (
             <Route path="/programa" element={<ProgramaPage />} />
             <Route path="/apoiar" element={<ApoiarPage />} />
             <Route path="/contactos" element={<ContactosPage />} />
+            <Route path="/aderir" element={<AderirPage />} />
             <Route path="/arca" element={<ArcaPage />} />
             <Route path="/arca/panteao" element={<PanteaoPage />} />
             <Route path="/arca/calendario" element={<CalendarioPage />} />
