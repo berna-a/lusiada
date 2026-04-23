@@ -4,25 +4,16 @@ export function SobreSection() {
   return (
     <section
       id="sobre"
-      className="bg-background py-20 sm:py-24 lg:py-32"
+      className="bg-background py-24 sm:py-32 lg:py-40"
     >
       <div className="mx-auto max-w-[900px] px-6">
-        <p className="font-body text-[12px] uppercase tracking-[0.2em] text-muted-foreground">
+        <p className="font-body text-[12px] uppercase tracking-[0.2em] text-muted-foreground text-center">
           A Lusíada
         </p>
 
-        <h2 className="mt-4 font-display text-[32px] sm:text-[44px] lg:text-[56px] leading-[1.1] text-primary">
+        <h2 className="mt-6 font-display text-[36px] sm:text-[56px] lg:text-[72px] leading-[1.1] text-primary text-center">
           Uma Associação consagrada à memória viva de Portugal
         </h2>
-
-        <p className="mt-8 font-body text-base sm:text-lg leading-[1.7] text-foreground">
-          A Associação Lusíada existe para guardar, iluminar e transmitir
-          aquilo que Portugal tem de mais duradouro: a sua língua, a sua
-          literatura, o seu imaginário civilizacional. Fazemo-lo através
-          da celebração anual das figuras que nos deram forma — começando
-          por Luís Vaz de Camões — e da publicação de edições, ensaios e
-          encontros que mantêm viva essa herança.
-        </p>
 
         <div className="mt-12 flex justify-center">
           <span

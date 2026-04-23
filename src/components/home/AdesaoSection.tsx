@@ -27,7 +27,7 @@ export function AdesaoSection() {
           <Link
             to="/aderir"
             aria-label="Aderir à Associação Lusíada"
-            className="liquid-glass premium-shadow inline-flex items-center justify-center rounded-full bg-primary px-10 py-[18px] font-display text-base text-primary-foreground hover:bg-primary/90 transition-colors"
+            className="liquid-glass premium-shadow inline-flex items-center justify-center rounded-full bg-primary px-12 py-[22px] font-display text-[18px] text-primary-foreground hover:bg-primary/90 hover:shadow-[0_0_36px_-4px_hsl(var(--accent)/0.6),inset_0_0_24px_-4px_hsl(var(--accent)/0.25)] transition-all"
           >
             Aderir à Lusíada
           </Link>
