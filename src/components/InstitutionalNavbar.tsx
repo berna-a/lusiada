@@ -220,6 +220,35 @@ export function InstitutionalNavbar() {
               </div>
             </div>
           </div>
+
+          {/* Sobre dropdown panel — grows from same bubble */}
+          <div
+            className={`grid transition-all duration-[250ms] ease-out ${
+              sobreOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+            }`}
+          >
+            <div className="overflow-hidden">
+              <div className="px-6 pt-2 pb-2">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {sobreItems.map(({ label, subtitle, to }) => (
+                    <Link
+                      key={to}
+                      to={to}
+                      onClick={() => setSobreOpen(false)}
+                      className="group flex flex-col rounded-2xl p-4 hover:bg-accent/5 transition-colors"
+                    >
+                      <span className="font-display text-[15px] tracking-[0.1em] text-accent">
+                        {label}
+                      </span>
+                      <span className="font-body text-[12px] text-primary-foreground/60 leading-snug mt-0.5">
+                        {subtitle}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </nav>
 
