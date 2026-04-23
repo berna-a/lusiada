@@ -197,6 +197,14 @@ export function InstitutionalNavbar() {
                 {l.label}
               </Link>
             ))}
+            <Link
+              to="/aderir"
+              onClick={() => setMobileOpen(false)}
+              className="mt-2 inline-flex items-center justify-center rounded-full px-8 py-3 font-display text-base uppercase tracking-[0.15em] text-white"
+              style={{ backgroundColor: "hsl(351 62% 34%)" }}
+            >
+              Junta-te
+            </Link>
             <div className="mt-4 w-full max-w-xs flex flex-col gap-3 px-6">
               <p className="text-center font-body text-[11px] uppercase tracking-[0.2em] text-accent">
                 Arca
