@@ -57,14 +57,13 @@ const obrasItems = [
 export function InstitutionalNavbar() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [arcaOpen, setArcaOpen] = useState(false);
+  const [obrasOpen, setObrasOpen] = useState(false);
   const [sobreOpen, setSobreOpen] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
 
   // Close mobile menu on route change
   useEffect(() => {
     setMobileOpen(false);
-    setArcaOpen(false);
+    setObrasOpen(false);
     setSobreOpen(false);
   }, [location.pathname]);
 
