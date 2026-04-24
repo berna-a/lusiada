@@ -102,7 +102,7 @@ export function InstitutionalNavbar() {
                 onClick={() => setSobreOpen((v) => !v)}
                 aria-haspopup="true"
                 aria-expanded={sobreOpen}
-                className="inline-flex items-center gap-1 font-body text-[14px] text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                className="inline-flex items-center gap-1 font-display uppercase tracking-[0.15em] text-[14px] text-primary-foreground/80 hover:text-primary-foreground transition-colors"
               >
                 Sobre
                 <ChevronDown
@@ -115,7 +115,7 @@ export function InstitutionalNavbar() {
                 <Link
                   key={l.to}
                   to={l.to}
-                  className={`font-body text-[14px] transition-colors ${
+                  className={`font-display uppercase tracking-[0.15em] text-[14px] transition-colors ${
                     location.pathname === l.to
                       ? "text-primary-foreground"
                       : "text-primary-foreground/80 hover:text-primary-foreground"
