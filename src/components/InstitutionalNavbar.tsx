@@ -102,7 +102,7 @@ export function InstitutionalNavbar() {
                 onClick={() => setSobreOpen((v) => !v)}
                 aria-haspopup="true"
                 aria-expanded={sobreOpen}
-                className="inline-flex items-center gap-1 font-body text-[14px] text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                className="inline-flex items-center gap-1 font-display uppercase tracking-[0.15em] text-[14px] text-primary-foreground/80 hover:text-primary-foreground transition-colors"
               >
                 Sobre
                 <ChevronDown
@@ -111,19 +111,24 @@ export function InstitutionalNavbar() {
                   }`}
                 />
               </button>
-              {navLinks.map((l) => (
-                <Link
-                  key={l.to}
-                  to={l.to}
-                  className={`font-body text-[14px] transition-colors ${
-                    location.pathname === l.to
-                      ? "text-primary-foreground"
-                      : "text-primary-foreground/80 hover:text-primary-foreground"
+              <button
+                type="button"
+                onMouseEnter={() => {
+                  setArcaOpen(true);
+                  setSobreOpen(false);
+                }}
+                onClick={() => setArcaOpen((v) => !v)}
+                aria-haspopup="true"
+                aria-expanded={arcaOpen}
+                className="inline-flex items-center gap-1 font-display uppercase tracking-[0.15em] text-[14px] text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+              >
+                Arca
+                <ChevronDown
+                  className={`h-3.5 w-3.5 transition-transform duration-200 ${
+                    arcaOpen ? "rotate-180" : ""
                   }`}
-                >
-                  {l.label}
-                </Link>
-              ))}
+                />
+              </button>
             </div>
 
             {/* Center — wordmark */}
@@ -137,24 +142,19 @@ export function InstitutionalNavbar() {
 
             {/* Right — Arca dropdown + Junta-te CTA / Hamburger */}
             <div className="flex items-center gap-2 justify-self-end">
-              <button
-                type="button"
-                onMouseEnter={() => {
-                  setArcaOpen(true);
-                  setSobreOpen(false);
-                }}
-                onClick={() => setArcaOpen((v) => !v)}
-                aria-haspopup="true"
-                aria-expanded={arcaOpen}
-                className="liquid-glass hidden sm:inline-flex items-center gap-1.5 rounded-full border border-white/20 hover:border-white/40 px-6 py-2.5 font-display text-[14px] uppercase tracking-[0.15em] text-white transition-colors"
-              >
-                Arca
-                <ChevronDown
-                  className={`h-3.5 w-3.5 transition-transform duration-200 ${
-                    arcaOpen ? "rotate-180" : ""
+              {navLinks.map((l) => (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  className={`hidden lg:inline-flex font-display uppercase tracking-[0.15em] text-[14px] px-2 transition-colors ${
+                    location.pathname === l.to
+                      ? "text-primary-foreground"
+                      : "text-primary-foreground/80 hover:text-primary-foreground"
                   }`}
-                />
-              </button>
+                >
+                  {l.label}
+                </Link>
+              ))}
               <Link
                 to="/aderir"
                 className="hidden sm:inline-flex items-center justify-center rounded-full px-6 py-2.5 font-display text-[14px] uppercase tracking-[0.15em] text-white transition-all hover:brightness-110"
