@@ -77,31 +77,17 @@ export function InstitutionalNavbar() {
 
   return (
     <>
-      {/* Reveal button when navbar is collapsed */}
-      {collapsed && (
-        <button
-          type="button"
-          onClick={() => setCollapsed(false)}
-          aria-label="Mostrar menu"
-          className="fixed top-4 right-4 z-50 grid place-items-center h-10 w-10 rounded-full text-white/70 hover:text-white hover:bg-white/10 backdrop-blur-md transition-colors"
-        >
-          <Eye className="h-4 w-4" />
-        </button>
-      )}
-
       <nav
         aria-label="Navegação principal"
-        className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[98%] max-w-[1280px] transition-all duration-300 ${
-          collapsed ? "opacity-0 -translate-y-8 pointer-events-none" : "opacity-100"
-        }`}
+        className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[98%] max-w-[1280px] transition-all duration-300 opacity-100"
         onMouseLeave={() => {
-          setArcaOpen(false);
+          setObrasOpen(false);
           setSobreOpen(false);
         }}
       >
         <div
           className={`glass-nav-hero rounded-[28px] overflow-hidden transition-all duration-[250ms] ease-out ${
-            arcaOpen || sobreOpen ? "pb-6" : ""
+            obrasOpen || sobreOpen ? "pb-6" : ""
           }`}
         >
           <div className="h-[58px] pl-4 pr-3 md:pl-6 md:pr-3 grid grid-cols-3 items-center">
@@ -111,7 +97,7 @@ export function InstitutionalNavbar() {
                 type="button"
                 onMouseEnter={() => {
                   setSobreOpen(true);
-                  setArcaOpen(false);
+                  setObrasOpen(false);
                 }}
                 onClick={() => setSobreOpen((v) => !v)}
                 aria-haspopup="true"
@@ -128,21 +114,35 @@ export function InstitutionalNavbar() {
               <button
                 type="button"
                 onMouseEnter={() => {
-                  setArcaOpen(true);
+                  setObrasOpen(true);
                   setSobreOpen(false);
                 }}
-                onClick={() => setArcaOpen((v) => !v)}
+                onClick={() => setObrasOpen((v) => !v)}
                 aria-haspopup="true"
-                aria-expanded={arcaOpen}
+                aria-expanded={obrasOpen}
                 className="inline-flex items-center gap-1 font-display uppercase tracking-[0.15em] text-[14px] text-primary-foreground/80 hover:text-primary-foreground transition-colors"
               >
-                Arca
+                Obras
                 <ChevronDown
                   className={`h-3.5 w-3.5 transition-transform duration-200 ${
-                    arcaOpen ? "rotate-180" : ""
+                    obrasOpen ? "rotate-180" : ""
                   }`}
                 />
               </button>
+              <Link
+                to="/panteao"
+                onMouseEnter={() => {
+                  setObrasOpen(false);
+                  setSobreOpen(false);
+                }}
+                className={`inline-flex items-center font-display uppercase tracking-[0.15em] text-[14px] transition-colors ${
+                  location.pathname === "/panteao"
+                    ? "text-primary-foreground"
+                    : "text-primary-foreground/80 hover:text-primary-foreground"
+                }`}
+              >
+                Panteão
+              </Link>
             </div>
 
             {/* Center — wordmark */}
