@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Menu, X, Library, Crown, MapPin, BookOpen, ChevronDown, EyeOff, Eye } from "lucide-react";
+import { Menu, X, Library, MapPin, BookOpen, ChevronDown, ScrollText, Feather, Fish } from "lucide-react";
 
 const navLinks = [
   { label: "Apoiar", to: "/apoiar" },
@@ -20,12 +20,6 @@ const arcaItems = [
     to: "/arca/coleccoes",
   },
   {
-    icon: Crown,
-    label: "Panteão",
-    subtitle: "Figuras tutelares da memória",
-    to: "/panteao",
-  },
-  {
     icon: MapPin,
     label: "Lugares",
     subtitle: "Geografia da alma portuguesa",
@@ -36,6 +30,27 @@ const arcaItems = [
     label: "Memórias",
     subtitle: "Arquivo vivo da comunidade",
     to: "/arca/memorias",
+  },
+];
+
+const obrasItems = [
+  {
+    icon: ScrollText,
+    label: "Os Lusíadas",
+    subtitle: "Luís de Camões",
+    to: "/obras/os-lusiadas",
+  },
+  {
+    icon: Feather,
+    label: "A Mensagem",
+    subtitle: "Fernando Pessoa",
+    to: "/obras/a-mensagem",
+  },
+  {
+    icon: Fish,
+    label: "Sermão de Santo António aos Peixes",
+    subtitle: "Padre António Vieira",
+    to: "/obras/sermao-de-santo-antonio",
   },
 ];
 
