@@ -269,7 +269,7 @@ export function InstitutionalNavbar() {
           }}
         >
           <div className="h-full flex flex-col items-center justify-center gap-6 overflow-y-auto py-24">
-            {[...sobreItems, ...navLinks].map((l) => (
+            {[...sobreItems, { label: "Panteão", to: "/panteao" }, ...navLinks].map((l) => (
               <Link
                 key={l.to}
                 to={l.to}
@@ -289,9 +289,9 @@ export function InstitutionalNavbar() {
             </Link>
             <div className="mt-4 w-full max-w-xs flex flex-col gap-3 px-6">
               <p className="text-center font-body text-[11px] uppercase tracking-[0.2em] text-accent">
-                Arca
+                Obras
               </p>
-              {arcaItems.map(({ icon: Icon, label, to }) => (
+              {obrasItems.map(({ icon: Icon, label, to }) => (
                 <Link
                   key={to}
                   to={to}
