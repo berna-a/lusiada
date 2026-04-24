@@ -29,6 +29,7 @@ import AdminDefinicoesPage from "@/pages/admin/AdminDefinicoesPage";
 
 import NotFound from "@/pages/NotFound";
 import SupabaseTestPage from "@/pages/SupabaseTestPage";
+import { PlaceholderPage } from "@/components/PlaceholderPage";
 
 const queryClient = new QueryClient();
 
@@ -60,6 +61,10 @@ const App = () => (
             <Route path="/arca/lugares/:id" element={<LugarPage />} />
             <Route path="/arca/memorias" element={<MemoriasPage />} />
             <Route path="/arca/coleccoes" element={<ColeccoesPage />} />
+            {/* Obras — páginas dedicadas a livros */}
+            <Route path="/obras/os-lusiadas" element={<PlaceholderPage title="Os Lusíadas" description="Página dedicada à obra de Luís de Camões." />} />
+            <Route path="/obras/a-mensagem" element={<PlaceholderPage title="A Mensagem" description="Página dedicada à obra de Fernando Pessoa." />} />
+            <Route path="/obras/sermao-de-santo-antonio" element={<PlaceholderPage title="Sermão de Santo António aos Peixes" description="Página dedicada à obra do Padre António Vieira." />} />
           </Route>
 
           {/* Admin layout */}
