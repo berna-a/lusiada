@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Menu, X, Library, Crown, MapPin, BookOpen, ChevronDown, EyeOff, Eye } from "lucide-react";
+import { Menu, X, ChevronDown, ScrollText, Feather, Fish } from "lucide-react";
 
 const navLinks = [
   { label: "Apoiar", to: "/apoiar" },
@@ -12,44 +12,37 @@ const sobreItems = [
   { label: "Contactos", subtitle: "Fala connosco", to: "/contactos" },
 ];
 
-const arcaItems = [
+const obrasItems = [
   {
-    icon: Library,
-    label: "Colecções",
-    subtitle: "Edições e obras da Lusíada",
-    to: "/arca/coleccoes",
+    icon: ScrollText,
+    label: "Os Lusíadas",
+    subtitle: "Luís de Camões",
+    to: "/obras/os-lusiadas",
   },
   {
-    icon: Crown,
-    label: "Panteão",
-    subtitle: "Figuras tutelares da memória",
-    to: "/panteao",
+    icon: Feather,
+    label: "A Mensagem",
+    subtitle: "Fernando Pessoa",
+    to: "/obras/a-mensagem",
   },
   {
-    icon: MapPin,
-    label: "Lugares",
-    subtitle: "Geografia da alma portuguesa",
-    to: "/arca/lugares",
-  },
-  {
-    icon: BookOpen,
-    label: "Memórias",
-    subtitle: "Arquivo vivo da comunidade",
-    to: "/arca/memorias",
+    icon: Fish,
+    label: "Sermão de Santo António aos Peixes",
+    subtitle: "Padre António Vieira",
+    to: "/obras/sermao-de-santo-antonio",
   },
 ];
 
 export function InstitutionalNavbar() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [arcaOpen, setArcaOpen] = useState(false);
+  const [obrasOpen, setObrasOpen] = useState(false);
   const [sobreOpen, setSobreOpen] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
 
   // Close mobile menu on route change
   useEffect(() => {
     setMobileOpen(false);
-    setArcaOpen(false);
+    setObrasOpen(false);
     setSobreOpen(false);
   }, [location.pathname]);
 
@@ -63,31 +56,17 @@ export function InstitutionalNavbar() {
 
   return (
     <>
-      {/* Reveal button when navbar is collapsed */}
-      {collapsed && (
-        <button
-          type="button"
-          onClick={() => setCollapsed(false)}
-          aria-label="Mostrar menu"
-          className="fixed top-4 right-4 z-50 grid place-items-center h-10 w-10 rounded-full text-white/70 hover:text-white hover:bg-white/10 backdrop-blur-md transition-colors"
-        >
-          <Eye className="h-4 w-4" />
-        </button>
-      )}
-
       <nav
         aria-label="Navegação principal"
-        className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[98%] max-w-[1280px] transition-all duration-300 ${
-          collapsed ? "opacity-0 -translate-y-8 pointer-events-none" : "opacity-100"
-        }`}
+        className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[98%] max-w-[1280px] transition-all duration-300 opacity-100"
         onMouseLeave={() => {
-          setArcaOpen(false);
+          setObrasOpen(false);
           setSobreOpen(false);
         }}
       >
         <div
           className={`glass-nav-hero rounded-[28px] overflow-hidden transition-all duration-[250ms] ease-out ${
-            arcaOpen || sobreOpen ? "pb-6" : ""
+            obrasOpen || sobreOpen ? "pb-6" : ""
           }`}
         >
           <div className="h-[58px] pl-4 pr-3 md:pl-6 md:pr-3 grid grid-cols-3 items-center">
@@ -97,7 +76,7 @@ export function InstitutionalNavbar() {
                 type="button"
                 onMouseEnter={() => {
                   setSobreOpen(true);
-                  setArcaOpen(false);
+                  setObrasOpen(false);
                 }}
                 onClick={() => setSobreOpen((v) => !v)}
                 aria-haspopup="true"
@@ -114,21 +93,35 @@ export function InstitutionalNavbar() {
               <button
                 type="button"
                 onMouseEnter={() => {
-                  setArcaOpen(true);
+                  setObrasOpen(true);
                   setSobreOpen(false);
                 }}
-                onClick={() => setArcaOpen((v) => !v)}
+                onClick={() => setObrasOpen((v) => !v)}
                 aria-haspopup="true"
-                aria-expanded={arcaOpen}
+                aria-expanded={obrasOpen}
                 className="inline-flex items-center gap-1 font-display uppercase tracking-[0.15em] text-[14px] text-primary-foreground/80 hover:text-primary-foreground transition-colors"
               >
-                Arca
+                Obras
                 <ChevronDown
                   className={`h-3.5 w-3.5 transition-transform duration-200 ${
-                    arcaOpen ? "rotate-180" : ""
+                    obrasOpen ? "rotate-180" : ""
                   }`}
                 />
               </button>
+              <Link
+                to="/panteao"
+                onMouseEnter={() => {
+                  setObrasOpen(false);
+                  setSobreOpen(false);
+                }}
+                className={`inline-flex items-center font-display uppercase tracking-[0.15em] text-[14px] transition-colors ${
+                  location.pathname === "/panteao"
+                    ? "text-primary-foreground"
+                    : "text-primary-foreground/80 hover:text-primary-foreground"
+                }`}
+              >
+                Panteão
+              </Link>
             </div>
 
             {/* Center — wordmark */}
@@ -141,7 +134,7 @@ export function InstitutionalNavbar() {
             </Link>
 
             {/* Right — Arca dropdown + Junta-te CTA / Hamburger */}
-            <div className="flex items-center gap-2 justify-self-end">
+            <div className="flex items-center gap-6 justify-self-end">
               {navLinks.map((l) => (
                 <Link
                   key={l.to}
@@ -168,15 +161,6 @@ export function InstitutionalNavbar() {
               </Link>
               <button
                 type="button"
-                onClick={() => setCollapsed(true)}
-                aria-label="Ocultar menu"
-                title="Ocultar menu"
-                className="hidden sm:grid place-items-center h-9 w-9 rounded-full text-primary-foreground/60 hover:text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
-              >
-                <EyeOff className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
                 onClick={() => setMobileOpen((v) => !v)}
                 aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
                 aria-expanded={mobileOpen}
@@ -187,20 +171,20 @@ export function InstitutionalNavbar() {
             </div>
           </div>
 
-          {/* Arca dropdown panel — grows from same bubble */}
+          {/* Obras dropdown panel — grows from same bubble */}
           <div
             className={`grid transition-all duration-[250ms] ease-out ${
-              arcaOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+              obrasOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
             }`}
           >
             <div className="overflow-hidden">
               <div className="px-6 pt-2 pb-2">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
-                  {arcaItems.map(({ icon: Icon, label, subtitle, to }) => (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {obrasItems.map(({ icon: Icon, label, subtitle, to }) => (
                     <Link
                       key={to}
                       to={to}
-                      onClick={() => setArcaOpen(false)}
+                      onClick={() => setObrasOpen(false)}
                       className="group flex items-start gap-3 rounded-2xl p-4 hover:bg-accent/5 transition-colors"
                     >
                       <div className="grid place-items-center h-10 w-10 shrink-0 rounded-full border border-accent/30 bg-accent/5 text-accent group-hover:bg-accent/15 group-hover:border-accent/60 transition-colors">
@@ -264,7 +248,7 @@ export function InstitutionalNavbar() {
           }}
         >
           <div className="h-full flex flex-col items-center justify-center gap-6 overflow-y-auto py-24">
-            {[...sobreItems, ...navLinks].map((l) => (
+            {[...sobreItems, { label: "Panteão", to: "/panteao" }, ...navLinks].map((l) => (
               <Link
                 key={l.to}
                 to={l.to}
@@ -284,9 +268,9 @@ export function InstitutionalNavbar() {
             </Link>
             <div className="mt-4 w-full max-w-xs flex flex-col gap-3 px-6">
               <p className="text-center font-body text-[11px] uppercase tracking-[0.2em] text-accent">
-                Arca
+                Obras
               </p>
-              {arcaItems.map(({ icon: Icon, label, to }) => (
+              {obrasItems.map(({ icon: Icon, label, to }) => (
                 <Link
                   key={to}
                   to={to}
