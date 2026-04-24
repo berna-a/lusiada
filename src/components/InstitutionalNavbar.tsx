@@ -155,7 +155,7 @@ export function InstitutionalNavbar() {
             </Link>
 
             {/* Right — Arca dropdown + Junta-te CTA / Hamburger */}
-            <div className="flex items-center gap-2 justify-self-end">
+            <div className="flex items-center gap-6 justify-self-end">
               {navLinks.map((l) => (
                 <Link
                   key={l.to}
@@ -182,15 +182,6 @@ export function InstitutionalNavbar() {
               </Link>
               <button
                 type="button"
-                onClick={() => setCollapsed(true)}
-                aria-label="Ocultar menu"
-                title="Ocultar menu"
-                className="hidden sm:grid place-items-center h-9 w-9 rounded-full text-primary-foreground/60 hover:text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
-              >
-                <EyeOff className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
                 onClick={() => setMobileOpen((v) => !v)}
                 aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
                 aria-expanded={mobileOpen}
@@ -201,20 +192,20 @@ export function InstitutionalNavbar() {
             </div>
           </div>
 
-          {/* Arca dropdown panel — grows from same bubble */}
+          {/* Obras dropdown panel — grows from same bubble */}
           <div
             className={`grid transition-all duration-[250ms] ease-out ${
-              arcaOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+              obrasOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
             }`}
           >
             <div className="overflow-hidden">
               <div className="px-6 pt-2 pb-2">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
-                  {arcaItems.map(({ icon: Icon, label, subtitle, to }) => (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {obrasItems.map(({ icon: Icon, label, subtitle, to }) => (
                     <Link
                       key={to}
                       to={to}
-                      onClick={() => setArcaOpen(false)}
+                      onClick={() => setObrasOpen(false)}
                       className="group flex items-start gap-3 rounded-2xl p-4 hover:bg-accent/5 transition-colors"
                     >
                       <div className="grid place-items-center h-10 w-10 shrink-0 rounded-full border border-accent/30 bg-accent/5 text-accent group-hover:bg-accent/15 group-hover:border-accent/60 transition-colors">
