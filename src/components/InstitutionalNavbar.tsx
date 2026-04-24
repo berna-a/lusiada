@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Menu, X, Library, MapPin, BookOpen, ChevronDown, ScrollText, Feather, Fish } from "lucide-react";
+import { Menu, X, ChevronDown, ScrollText, Feather, Fish } from "lucide-react";
 
 const navLinks = [
   { label: "Apoiar", to: "/apoiar" },
@@ -10,27 +10,6 @@ const sobreItems = [
   { label: "Associação", subtitle: "Quem somos e a nossa missão", to: "/a-associacao" },
   { label: "Programa", subtitle: "Linhas de acção e iniciativas", to: "/programa" },
   { label: "Contactos", subtitle: "Fala connosco", to: "/contactos" },
-];
-
-const arcaItems = [
-  {
-    icon: Library,
-    label: "Colecções",
-    subtitle: "Edições e obras da Lusíada",
-    to: "/arca/coleccoes",
-  },
-  {
-    icon: MapPin,
-    label: "Lugares",
-    subtitle: "Geografia da alma portuguesa",
-    to: "/arca/lugares",
-  },
-  {
-    icon: BookOpen,
-    label: "Memórias",
-    subtitle: "Arquivo vivo da comunidade",
-    to: "/arca/memorias",
-  },
 ];
 
 const obrasItems = [
