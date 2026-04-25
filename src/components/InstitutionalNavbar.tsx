@@ -38,6 +38,36 @@ export function InstitutionalNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [obrasOpen, setObrasOpen] = useState(false);
   const [sobreOpen, setSobreOpen] = useState(false);
+  const [onLight, setOnLight] = useState(false);
+
+  // Detect when navbar overlays a light/white background.
+  // On the homepage there is a dark hero; once we scroll past it, switch to "light bg" mode.
+  // On every other route the background is light from the top, so stay in "light bg" mode.
+  useEffect(() => {
+    const isHome = location.pathname === "/";
+    if (!isHome) {
+      setOnLight(true);
+      return;
+    }
+    const onScroll = () => {
+      const threshold = window.innerHeight * 0.7;
+      setOnLight(window.scrollY > threshold);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [location.pathname]);
+
+  // Tailwind classes for adaptive text color
+  const linkBase = onLight
+    ? "text-primary/80 hover:text-primary"
+    : "text-primary-foreground/80 hover:text-primary-foreground";
+  const linkActive = onLight ? "text-primary" : "text-primary-foreground";
+  const wordmarkColor = onLight ? "text-primary" : "text-white";
+  const hamburgerColor = onLight
+    ? "text-primary hover:bg-primary/10"
+    : "text-primary-foreground hover:bg-primary-foreground/10";
+  const dropdownSubtitle = onLight ? "text-primary/60" : "text-primary-foreground/60";
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -81,7 +111,7 @@ export function InstitutionalNavbar() {
                 onClick={() => setSobreOpen((v) => !v)}
                 aria-haspopup="true"
                 aria-expanded={sobreOpen}
-                className="inline-flex items-center gap-1 font-display uppercase tracking-[0.15em] text-[14px] text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                className={`inline-flex items-center gap-1 font-display uppercase tracking-[0.15em] text-[14px] transition-colors ${linkBase}`}
               >
                 Sobre
                 <ChevronDown
@@ -99,7 +129,7 @@ export function InstitutionalNavbar() {
                 onClick={() => setObrasOpen((v) => !v)}
                 aria-haspopup="true"
                 aria-expanded={obrasOpen}
-                className="inline-flex items-center gap-1 font-display uppercase tracking-[0.15em] text-[14px] text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                className={`inline-flex items-center gap-1 font-display uppercase tracking-[0.15em] text-[14px] transition-colors ${linkBase}`}
               >
                 Obras
                 <ChevronDown
@@ -115,9 +145,7 @@ export function InstitutionalNavbar() {
                   setSobreOpen(false);
                 }}
                 className={`inline-flex items-center font-display uppercase tracking-[0.15em] text-[14px] transition-colors ${
-                  location.pathname === "/panteao"
-                    ? "text-primary-foreground"
-                    : "text-primary-foreground/80 hover:text-primary-foreground"
+                  location.pathname === "/panteao" ? linkActive : linkBase
                 }`}
               >
                 Panteão
@@ -128,7 +156,7 @@ export function InstitutionalNavbar() {
             <Link
               to="/"
               aria-label="Lusíada — Página inicial"
-              className="font-display text-[28px] tracking-[0.18em] text-white leading-none justify-self-center"
+              className={`font-display text-[28px] tracking-[0.18em] leading-none justify-self-center transition-colors ${wordmarkColor}`}
             >
               LUSÍADA
             </Link>
@@ -140,9 +168,7 @@ export function InstitutionalNavbar() {
                   key={l.to}
                   to={l.to}
                   className={`hidden lg:inline-flex font-display uppercase tracking-[0.15em] text-[14px] px-2 transition-colors ${
-                    location.pathname === l.to
-                      ? "text-primary-foreground"
-                      : "text-primary-foreground/80 hover:text-primary-foreground"
+                    location.pathname === l.to ? linkActive : linkBase
                   }`}
                 >
                   {l.label}
@@ -164,7 +190,7 @@ export function InstitutionalNavbar() {
                 onClick={() => setMobileOpen((v) => !v)}
                 aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
                 aria-expanded={mobileOpen}
-                className="lg:hidden grid place-items-center h-10 w-10 rounded-full text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
+                className={`lg:hidden grid place-items-center h-10 w-10 rounded-full transition-colors ${hamburgerColor}`}
               >
                 {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>
@@ -194,7 +220,7 @@ export function InstitutionalNavbar() {
                         <span className="font-display text-[15px] tracking-[0.1em] text-accent group-hover:text-accent">
                           {label}
                         </span>
-                        <span className="font-body text-[12px] text-primary-foreground/60 leading-snug mt-0.5">
+                        <span className={`font-body text-[12px] leading-snug mt-0.5 ${dropdownSubtitle}`}>
                           {subtitle}
                         </span>
                       </div>
@@ -224,7 +250,7 @@ export function InstitutionalNavbar() {
                       <span className="font-display text-[15px] tracking-[0.1em] text-accent">
                         {label}
                       </span>
-                      <span className="font-body text-[12px] text-primary-foreground/60 leading-snug mt-0.5">
+                      <span className={`font-body text-[12px] leading-snug mt-0.5 ${dropdownSubtitle}`}>
                         {subtitle}
                       </span>
                     </Link>
