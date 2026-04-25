@@ -4,6 +4,7 @@ export function HeroFullscreen() {
   return (
     <section
       id="hero"
+      data-nav-theme="dark"
       className="relative w-full overflow-hidden"
       aria-label="Hero"
       style={{

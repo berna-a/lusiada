@@ -38,24 +38,34 @@ export function InstitutionalNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [obrasOpen, setObrasOpen] = useState(false);
   const [sobreOpen, setSobreOpen] = useState(false);
-  const [onLight, setOnLight] = useState(false);
+  const [onLight, setOnLight] = useState(true);
 
-  // Detect when navbar overlays a light/white background.
-  // On the homepage there is a dark hero; once we scroll past it, switch to "light bg" mode.
-  // On every other route the background is light from the top, so stay in "light bg" mode.
+  // Adaptive nav theme: any section marked with `data-nav-theme="dark"`
+  // that intersects the top of the viewport (where the navbar sits) flips
+  // the navbar back to light text. Everything else uses the dark-on-light variant.
   useEffect(() => {
-    const isHome = location.pathname === "/";
-    if (!isHome) {
-      setOnLight(true);
-      return;
-    }
-    const onScroll = () => {
-      const threshold = window.innerHeight * 0.7;
-      setOnLight(window.scrollY > threshold);
+    const navHeight = 80; // nav top offset + height
+    const compute = () => {
+      const elements = document.querySelectorAll<HTMLElement>('[data-nav-theme="dark"]');
+      let overDark = false;
+      elements.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= navHeight && rect.bottom >= navHeight) {
+          overDark = true;
+        }
+      });
+      setOnLight(!overDark);
     };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    compute();
+    window.addEventListener("scroll", compute, { passive: true });
+    window.addEventListener("resize", compute);
+    // Re-evaluate after route change once DOM settles
+    const t = window.setTimeout(compute, 50);
+    return () => {
+      window.removeEventListener("scroll", compute);
+      window.removeEventListener("resize", compute);
+      window.clearTimeout(t);
+    };
   }, [location.pathname]);
 
   // Tailwind classes for adaptive text color
