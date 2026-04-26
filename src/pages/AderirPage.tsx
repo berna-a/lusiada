@@ -217,7 +217,7 @@ export default function AderirPage() {
             {/* Como descobriu */}
             <div className="space-y-2">
               <Label htmlFor="how_did_you_find_us" className="font-body text-sm">
-                Como nos descobriu? <span className="text-muted-foreground font-normal">(opcional)</span>
+                Como nos descobriste? <span className="text-muted-foreground font-normal">(opcional)</span>
               </Label>
               <Select
                 onValueChange={(v) =>
