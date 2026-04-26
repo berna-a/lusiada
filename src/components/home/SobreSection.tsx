@@ -8,11 +8,13 @@ export function SobreSection() {
     >
       <div className="mx-auto max-w-[900px] px-6">
         <p className="font-body text-[12px] uppercase tracking-[0.2em] text-muted-foreground text-center">
-          A Lusíada
+          Associação Lusíada
         </p>
 
         <h2 className="mt-6 font-display text-[36px] sm:text-[56px] lg:text-[72px] leading-[1.1] text-primary text-center">
-          Uma Associação consagrada à memória viva de Portugal
+          Uma Associação consagrada
+          <br />
+          à memória viva de Portugal
         </h2>
 
         <div className="mt-12 flex justify-center">
