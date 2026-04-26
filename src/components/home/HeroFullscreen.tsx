@@ -17,7 +17,7 @@ export function HeroFullscreen() {
           src={heroBg}
           alt=""
           aria-hidden="true"
-          className="w-full h-full object-cover object-top select-none pointer-events-none"
+          className="w-full h-full object-contain object-center select-none pointer-events-none"
         />
       </div>
       {/* Bottom blend gradient */}
