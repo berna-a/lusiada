@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
+import { SiteControlPanel } from "@/components/SiteControlPanel";
 
 type DropdownItem = { label: string; subtitle?: string; to: string };
 type MenuKey = "arca" | "programa" | "sobre";
@@ -149,6 +150,7 @@ export function InstitutionalNavbar() {
               >
                 Junta-te
               </Link>
+              <SiteControlPanel onLight={onLight} />
               <button
                 type="button"
                 onClick={() => setMobileOpen((v) => !v)}

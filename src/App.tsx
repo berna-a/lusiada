@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 
 import { GlobalLayout } from "@/layouts/GlobalLayout";
 import { AdminLayout } from "@/layouts/AdminLayout";
+import { SitePreferencesProvider } from "@/contexts/SitePreferencesContext";
 
 import HomePage from "@/pages/HomePage";
 import AssociacaoPage from "@/pages/AssociacaoPage";
@@ -35,6 +36,7 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
+    <SitePreferencesProvider>
     <TooltipProvider>
       <Toaster />
       <Sonner />
@@ -78,6 +80,7 @@ const App = () => (
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
+    </SitePreferencesProvider>
   </QueryClientProvider>
 );
 
