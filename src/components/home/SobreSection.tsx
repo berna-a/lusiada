@@ -11,7 +11,7 @@ export function SobreSection() {
           Associação Lusíada
         </p>
 
-        <h2 className="mt-6 font-display text-[36px] sm:text-[56px] lg:text-[72px] leading-[1.1] text-primary text-center">
+        <h2 className="mt-6 font-display text-[28px] sm:text-[44px] lg:text-[56px] leading-[1.15] text-primary text-center">
           Uma Associação consagrada
           <br />
           à memória viva de Portugal
