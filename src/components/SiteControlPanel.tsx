@@ -4,7 +4,7 @@ import {
   Sun,
   Moon,
   Sparkles,
-  SlidersHorizontal,
+  Settings2,
   Music2,
   VolumeX,
   Type,
@@ -78,11 +78,10 @@ export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
     };
   }, [open]);
 
-  // Trigger adapts to navbar light/dark — interior of panel is always deep blue (primary).
-  const triggerText = onLight ? "text-primary" : "text-primary-foreground";
-  const triggerBg = onLight
-    ? "bg-primary/10 hover:bg-primary/15 border-primary/15"
-    : "bg-primary-foreground/15 hover:bg-primary-foreground/20 border-primary-foreground/20";
+  // Trigger adapts to navbar light/dark — no background, just the icon.
+  const triggerColor = onLight
+    ? "text-primary/80 hover:text-primary"
+    : "text-primary-foreground/80 hover:text-primary-foreground";
 
   // Panel interior — fixed deep-blue (primary) palette, iOS-style soft tints.
   const titleColor = "text-primary";
@@ -95,20 +94,16 @@ export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
 
   return (
     <>
-      {/* iOS-style pill trigger */}
+      {/* Icon-only trigger — two horizontal toggles (iOS-style controls glyph) */}
       <button
         ref={triggerRef}
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-label="Painel de controlo"
         aria-expanded={open}
-        className={`hidden sm:inline-flex items-center justify-center h-10 px-3 rounded-full border backdrop-blur-md transition-all ${triggerBg} ${triggerText}`}
-        style={{
-          boxShadow:
-            "0 2px 8px hsl(220 40% 10% / 0.08), inset 0 1px 0 hsl(0 0% 100% / 0.25)",
-        }}
+        className={`hidden sm:inline-flex items-center justify-center h-10 w-10 transition-colors ${triggerColor}`}
       >
-        <SlidersHorizontal className="h-[16px] w-[16px]" />
+        <Settings2 className="h-[20px] w-[20px]" />
       </button>
 
       {open &&
@@ -130,7 +125,7 @@ export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
                 >
                   PAINEL DE CONTROLO
                 </span>
-                <SlidersHorizontal className={`h-3.5 w-3.5 ${subtleColor}`} />
+                <Settings2 className={`h-3.5 w-3.5 ${subtleColor}`} />
               </div>
 
               {/* Top row — Theme + Music tiles */}
