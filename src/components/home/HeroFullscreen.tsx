@@ -10,10 +10,10 @@ export function HeroFullscreen() {
       style={{
         backgroundColor: "#061F33",
         aspectRatio: "1824 / 1007",
-        paddingTop: "30px",
+        paddingTop: "50px",
       }}
     >
-      <div className="absolute inset-x-0 bottom-0 top-[30px]">
+      <div className="absolute inset-x-0 bottom-0 top-[50px]">
         <img
           src={heroBg}
           alt=""
