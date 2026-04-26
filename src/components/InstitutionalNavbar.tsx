@@ -148,7 +148,10 @@ export function InstitutionalNavbar() {
               >
                 Junta-te
               </Link>
-              <SiteControlPanel onLight={onLight} />
+              {/* Painel de controlo temporariamente oculto — preservado para futura activação */}
+              <div className="hidden">
+                <SiteControlPanel onLight={onLight} />
+              </div>
               <button
                 type="button"
                 onClick={() => setMobileOpen((v) => !v)}
