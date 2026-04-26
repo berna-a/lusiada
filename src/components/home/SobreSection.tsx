@@ -6,7 +6,7 @@ export function SobreSection() {
       id="sobre"
       className="bg-background py-24 sm:py-32 lg:py-40"
     >
-      <div className="mx-auto max-w-[900px] px-6">
+      <div className="mx-auto max-w-[1200px] px-6">
         <p className="font-body text-[12px] uppercase tracking-[0.2em] text-muted-foreground text-center">
           Associação Lusíada
         </p>
