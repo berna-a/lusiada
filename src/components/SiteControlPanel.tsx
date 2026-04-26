@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import {
   useSitePreferences,
-  type ThemeMode,
   type Orthography,
   type MotionLevel,
   type TextSize,
@@ -24,8 +23,9 @@ interface SiteControlPanelProps {
 }
 
 /**
- * Apple-Control-Center-style settings panel.
- * Discreet trigger placed next to the "Junta-te" CTA in the navbar.
+ * Settings panel — matches the navbar's glass-nav-hero treatment exactly:
+ * same conic-gradient border, same backdrop blur, same rounded-[28px] bubble,
+ * same Cinzel uppercase tracking, same adaptive light/dark text colours.
  */
 export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
   const [open, setOpen] = useState(false);
@@ -34,7 +34,6 @@ export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const prefs = useSitePreferences();
 
-  // Position panel under the trigger
   useEffect(() => {
     if (!open) return;
     const reposition = () => {
@@ -55,7 +54,6 @@ export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
     };
   }, [open]);
 
-  // Close on outside click / Escape
   useEffect(() => {
     if (!open) return;
     const handleClick = (e: MouseEvent) => {
@@ -80,9 +78,21 @@ export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
     };
   }, [open]);
 
+  // Adaptive palette — mirrors InstitutionalNavbar.tsx
   const triggerColor = onLight
     ? "text-primary/80 hover:text-primary hover:bg-primary/10"
     : "text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10";
+  const titleColor = onLight ? "text-primary" : "text-primary-foreground";
+  const labelColor = onLight ? "text-primary/80" : "text-primary-foreground/80";
+  const subtleColor = onLight ? "text-primary/60" : "text-primary-foreground/60";
+  const tileBase = onLight
+    ? "bg-primary/5 hover:bg-primary/10 text-primary"
+    : "bg-primary-foreground/5 hover:bg-primary-foreground/10 text-primary-foreground";
+  const segmentBase = onLight
+    ? "text-primary/70 hover:text-primary hover:bg-primary/5"
+    : "text-primary-foreground/70 hover:text-primary-foreground hover:bg-primary-foreground/5";
+  const segmentTrack = onLight ? "bg-primary/5" : "bg-primary-foreground/5";
+  const sectionTrack = onLight ? "bg-primary/5" : "bg-primary-foreground/5";
 
   return (
     <>
@@ -107,70 +117,95 @@ export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
             className="fixed z-[60] w-[340px] max-w-[calc(100vw-2rem)] animate-scale-in origin-top-right"
             style={{ top: coords.top, right: coords.right }}
           >
-            <div
-              className="rounded-[24px] p-3 shadow-2xl border"
-              style={{
-                background:
-                  "linear-gradient(180deg, hsl(var(--background) / 0.85), hsl(var(--background) / 0.78))",
-                borderColor: "hsl(var(--border) / 0.6)",
-                backdropFilter: "blur(28px) saturate(1.6)",
-                WebkitBackdropFilter: "blur(28px) saturate(1.6)",
-                boxShadow:
-                  "0 20px 60px -10px hsl(0 0% 0% / 0.25), inset 0 1px 0 hsl(0 0% 100% / 0.4)",
-              }}
-            >
-              {/* Top row: Theme + Music tiles */}
+            {/* Same shell as the navbar: glass-nav-hero + rounded-[28px] */}
+            <div className="glass-nav-hero rounded-[28px] p-4">
+              {/* Header strip */}
+              <div className="flex items-center justify-between px-1 pb-3">
+                <span
+                  className={`font-display uppercase tracking-[0.18em] text-[12px] ${titleColor}`}
+                >
+                  PAINEL DE CONTROLO
+                </span>
+                <SlidersHorizontal className={`h-3.5 w-3.5 ${subtleColor}`} />
+              </div>
+
+              {/* Top row — Theme + Music tiles */}
               <div className="grid grid-cols-2 gap-2">
                 <Tile
                   active={prefs.theme === "dark"}
                   onClick={() => prefs.setTheme(prefs.theme === "dark" ? "light" : "dark")}
-                  icon={prefs.theme === "dark" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-                  label="Tema"
-                  value={prefs.theme === "dark" ? "Escuro" : "Claro"}
+                  icon={
+                    prefs.theme === "dark" ? (
+                      <Moon className="h-5 w-5" />
+                    ) : (
+                      <Sun className="h-5 w-5" />
+                    )
+                  }
+                  label="TEMA"
+                  value={prefs.theme === "dark" ? "ESCURO" : "CLARO"}
+                  baseClass={tileBase}
+                  subtleClass={subtleColor}
                 />
                 <Tile
                   active={prefs.music}
                   onClick={() => prefs.setMusic(!prefs.music)}
-                  icon={prefs.music ? <Music2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
-                  label="Música"
-                  value={prefs.music ? "Ligada" : "Desligada"}
+                  icon={
+                    prefs.music ? <Music2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />
+                  }
+                  label="MÚSICA"
+                  value={prefs.music ? "LIGADA" : "DESLIGADA"}
+                  baseClass={tileBase}
+                  subtleClass={subtleColor}
                   comingSoon
                 />
               </div>
 
-              {/* Orthography */}
               <Section
-                icon={<Languages className="h-4 w-4" />}
-                title="Ortografia"
+                icon={<Languages className="h-3.5 w-3.5" />}
+                title="ORTOGRAFIA"
+                labelColor={labelColor}
+                subtleColor={subtleColor}
+                trackClass={sectionTrack}
               >
                 <SegmentedGroup<Orthography>
                   value={prefs.orthography}
                   onChange={prefs.setOrthography}
                   options={[
-                    { value: "atual", label: "Português" },
-                    { value: "antigo", label: "Antigo Acordo" },
-                    { value: "etimologico", label: "Portuguez" },
+                    { value: "atual", label: "PORTUGUÊS" },
+                    { value: "antigo", label: "ANTIGO" },
+                    { value: "etimologico", label: "PORTUGUEZ" },
                   ]}
+                  segmentBase={segmentBase}
+                  trackClass={segmentTrack}
                 />
               </Section>
 
-              {/* Animations */}
               <Section
-                icon={<Sparkles className="h-4 w-4" />}
-                title="Animações"
+                icon={<Sparkles className="h-3.5 w-3.5" />}
+                title="ANIMAÇÕES"
+                labelColor={labelColor}
+                subtleColor={subtleColor}
+                trackClass={sectionTrack}
               >
                 <SegmentedGroup<MotionLevel>
                   value={prefs.motion}
                   onChange={prefs.setMotion}
                   options={[
-                    { value: "reduzido", label: "Menos" },
-                    { value: "normal", label: "Mais" },
+                    { value: "reduzido", label: "MENOS" },
+                    { value: "normal", label: "MAIS" },
                   ]}
+                  segmentBase={segmentBase}
+                  trackClass={segmentTrack}
                 />
               </Section>
 
-              {/* Text size */}
-              <Section icon={<Type className="h-4 w-4" />} title="Tamanho do texto">
+              <Section
+                icon={<Type className="h-3.5 w-3.5" />}
+                title="TAMANHO DO TEXTO"
+                labelColor={labelColor}
+                subtleColor={subtleColor}
+                trackClass={sectionTrack}
+              >
                 <SegmentedGroup<TextSize>
                   value={prefs.textSize}
                   onChange={prefs.setTextSize}
@@ -179,11 +214,15 @@ export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
                     { value: "normal", label: "A" },
                     { value: "grande", label: "A+" },
                   ]}
+                  segmentBase={segmentBase}
+                  trackClass={segmentTrack}
                 />
               </Section>
 
-              <p className="mt-3 px-2 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-                As tuas preferências ficam guardadas neste dispositivo.
+              <p
+                className={`mt-3 px-1 font-display text-[9px] uppercase tracking-[0.2em] ${subtleColor}`}
+              >
+                AS TUAS PREFERÊNCIAS FICAM GUARDADAS NESTE DISPOSITIVO
               </p>
             </div>
           </div>,
@@ -201,6 +240,8 @@ function Tile({
   icon,
   label,
   value,
+  baseClass,
+  subtleClass,
   comingSoon,
 }: {
   active: boolean;
@@ -208,6 +249,8 @@ function Tile({
   icon: React.ReactNode;
   label: string;
   value: string;
+  baseClass: string;
+  subtleClass: string;
   comingSoon?: boolean;
 }) {
   return (
@@ -215,27 +258,34 @@ function Tile({
       type="button"
       onClick={onClick}
       className={`relative flex items-start gap-3 rounded-2xl p-3 text-left transition-all ${
-        active
-          ? "bg-accent text-accent-foreground shadow-inner"
-          : "bg-foreground/5 hover:bg-foreground/10 text-foreground"
+        active ? "bg-accent text-accent-foreground shadow-inner" : baseClass
       }`}
     >
       <div
         className={`grid place-items-center h-9 w-9 rounded-full shrink-0 ${
-          active ? "bg-accent-foreground/15" : "bg-foreground/10"
+          active ? "bg-accent-foreground/15" : "bg-current/10"
         }`}
+        style={!active ? { backgroundColor: "currentColor", opacity: 1 } : undefined}
       >
-        {icon}
+        <span style={!active ? { color: "hsl(var(--background))", opacity: 1 } : undefined}>
+          {icon}
+        </span>
       </div>
       <div className="flex flex-col min-w-0">
-        <span className="font-display uppercase tracking-[0.12em] text-[10px] opacity-75">
+        <span className="font-display uppercase tracking-[0.15em] text-[9px] opacity-70">
           {label}
         </span>
-        <span className="font-body text-[13px] leading-tight mt-0.5 truncate">{value}</span>
+        <span className="font-display uppercase tracking-[0.12em] text-[12px] leading-tight mt-0.5 truncate">
+          {value}
+        </span>
       </div>
       {comingSoon && (
-        <span className="absolute top-2 right-2 text-[8px] uppercase tracking-[0.15em] opacity-60">
-          v2
+        <span
+          className={`absolute top-2 right-2 font-display text-[8px] uppercase tracking-[0.2em] ${
+            active ? "text-accent-foreground/70" : subtleClass
+          }`}
+        >
+          V2
         </span>
       )}
     </button>
@@ -246,16 +296,22 @@ function Section({
   icon,
   title,
   children,
+  labelColor,
+  subtleColor,
+  trackClass,
 }: {
   icon: React.ReactNode;
   title: string;
   children: React.ReactNode;
+  labelColor: string;
+  subtleColor: string;
+  trackClass: string;
 }) {
   return (
-    <div className="mt-2 rounded-2xl bg-foreground/5 p-3">
-      <div className="flex items-center gap-2 px-1 mb-2 text-foreground/80">
-        <span className="text-foreground/60">{icon}</span>
-        <span className="font-display uppercase tracking-[0.15em] text-[10px]">{title}</span>
+    <div className={`mt-2 rounded-2xl p-3 ${trackClass}`}>
+      <div className={`flex items-center gap-2 px-1 mb-2 ${labelColor}`}>
+        <span className={subtleColor}>{icon}</span>
+        <span className="font-display uppercase tracking-[0.18em] text-[10px]">{title}</span>
       </div>
       {children}
     </div>
@@ -266,15 +322,19 @@ function SegmentedGroup<T extends string>({
   value,
   onChange,
   options,
+  segmentBase,
+  trackClass,
 }: {
   value: T;
   onChange: (v: T) => void;
   options: { value: T; label: string }[];
+  segmentBase: string;
+  trackClass: string;
 }) {
   return (
     <div
       role="radiogroup"
-      className="grid gap-1 rounded-xl bg-background/60 p-1"
+      className={`grid gap-1 rounded-xl p-1 ${trackClass}`}
       style={{ gridTemplateColumns: `repeat(${options.length}, minmax(0, 1fr))` }}
     >
       {options.map((opt) => {
@@ -286,10 +346,8 @@ function SegmentedGroup<T extends string>({
             role="radio"
             aria-checked={active}
             onClick={() => onChange(opt.value)}
-            className={`flex items-center justify-center gap-1 rounded-lg px-2 py-1.5 font-body text-[12px] transition-all ${
-              active
-                ? "bg-accent text-accent-foreground shadow-sm"
-                : "text-foreground/70 hover:text-foreground hover:bg-foreground/5"
+            className={`flex items-center justify-center gap-1 rounded-lg px-2 py-1.5 font-display uppercase tracking-[0.12em] text-[10px] transition-all ${
+              active ? "bg-accent text-accent-foreground shadow-sm" : segmentBase
             }`}
           >
             {active && <Check className="h-3 w-3" />}
