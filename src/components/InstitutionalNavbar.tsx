@@ -1,50 +1,45 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Menu, X, ChevronDown, ScrollText, Feather, Fish } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 
-const navLinks = [
-  { label: "Apoiar", to: "/apoiar" },
-];
+type DropdownItem = { label: string; subtitle?: string; to: string };
+type MenuKey = "arca" | "programa" | "sobre";
 
-const sobreItems = [
-  { label: "Associação", subtitle: "Quem somos e a nossa missão", to: "/a-associacao" },
-  { label: "Programa", subtitle: "Linhas de acção e iniciativas", to: "/programa" },
-  { label: "Contactos", subtitle: "Fala connosco", to: "/contactos" },
-];
-
-const obrasItems = [
-  {
-    icon: ScrollText,
-    label: "Os Lusíadas",
-    subtitle: "Luís de Camões",
-    to: "/obras/os-lusiadas",
+const menus: Record<MenuKey, { label: string; items: DropdownItem[] }> = {
+  arca: {
+    label: "Arca",
+    items: [
+      { label: "Obras", subtitle: "Cânone literário lusíada", to: "/arca/obras" },
+      { label: "Lugares", subtitle: "Lugares de memória", to: "/arca/lugares" },
+      { label: "Panteão", subtitle: "Heróis e figuras maiores", to: "/arca/panteao" },
+    ],
   },
-  {
-    icon: Feather,
-    label: "A Mensagem",
-    subtitle: "Fernando Pessoa",
-    to: "/obras/a-mensagem",
+  programa: {
+    label: "Programa",
+    items: [
+      { label: "Agenda", subtitle: "Próximos eventos", to: "/programa/agenda" },
+      { label: "Iniciativas", subtitle: "Linhas de acção", to: "/programa/iniciativas" },
+      { label: "Blogue", subtitle: "Crónicas e ensaios", to: "/programa/blogue" },
+    ],
   },
-  {
-    icon: Fish,
-    label: "Sermão de Santo António aos Peixes",
-    subtitle: "Padre António Vieira",
-    to: "/obras/sermao-de-santo-antonio",
+  sobre: {
+    label: "Sobre",
+    items: [
+      { label: "Associação", subtitle: "Quem somos", to: "/sobre/associacao" },
+      { label: "Manifesto", subtitle: "A nossa declaração", to: "/sobre/manifesto" },
+      { label: "Objectivos", subtitle: "Aquilo a que nos propomos", to: "/sobre/objectivos" },
+    ],
   },
-];
+};
 
 export function InstitutionalNavbar() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [obrasOpen, setObrasOpen] = useState(false);
-  const [sobreOpen, setSobreOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState<MenuKey | null>(null);
   const [onLight, setOnLight] = useState(true);
 
-  // Adaptive nav theme: any section marked with `data-nav-theme="dark"`
-  // that intersects the top of the viewport (where the navbar sits) flips
-  // the navbar back to light text. Everything else uses the dark-on-light variant.
   useEffect(() => {
-    const navHeight = 80; // nav top offset + height
+    const navHeight = 80;
     const compute = () => {
       const elements = document.querySelectorAll<HTMLElement>('[data-nav-theme="dark"]');
       let overDark = false;
@@ -59,7 +54,6 @@ export function InstitutionalNavbar() {
     compute();
     window.addEventListener("scroll", compute, { passive: true });
     window.addEventListener("resize", compute);
-    // Re-evaluate after route change once DOM settles
     const t = window.setTimeout(compute, 50);
     return () => {
       window.removeEventListener("scroll", compute);
@@ -68,25 +62,20 @@ export function InstitutionalNavbar() {
     };
   }, [location.pathname]);
 
-  // Tailwind classes for adaptive text color
   const linkBase = onLight
     ? "text-primary/80 hover:text-primary"
     : "text-primary-foreground/80 hover:text-primary-foreground";
-  const linkActive = onLight ? "text-primary" : "text-primary-foreground";
   const wordmarkColor = onLight ? "text-primary" : "text-white";
   const hamburgerColor = onLight
     ? "text-primary hover:bg-primary/10"
     : "text-primary-foreground hover:bg-primary-foreground/10";
   const dropdownSubtitle = onLight ? "text-primary/60" : "text-primary-foreground/60";
 
-  // Close mobile menu on route change
   useEffect(() => {
     setMobileOpen(false);
-    setObrasOpen(false);
-    setSobreOpen(false);
+    setOpenMenu(null);
   }, [location.pathname]);
 
-  // Lock body scroll when mobile menu open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => {
@@ -94,72 +83,45 @@ export function InstitutionalNavbar() {
     };
   }, [mobileOpen]);
 
+  const renderTrigger = (key: MenuKey) => {
+    const isOpen = openMenu === key;
+    return (
+      <button
+        key={key}
+        type="button"
+        onMouseEnter={() => setOpenMenu(key)}
+        onClick={() => setOpenMenu((v) => (v === key ? null : key))}
+        aria-haspopup="true"
+        aria-expanded={isOpen}
+        className={`inline-flex items-center gap-1 font-display uppercase tracking-[0.15em] text-[14px] transition-colors ${linkBase}`}
+      >
+        {menus[key].label}
+        <ChevronDown
+          className={`h-3.5 w-3.5 transition-transform duration-200 ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+    );
+  };
+
   return (
     <>
       <nav
         aria-label="Navegação principal"
         className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[83%] max-w-[1088px] transition-all duration-300 opacity-100"
-        onMouseLeave={() => {
-          setObrasOpen(false);
-          setSobreOpen(false);
-        }}
+        onMouseLeave={() => setOpenMenu(null)}
       >
         <div
           className={`glass-nav-hero rounded-[28px] overflow-hidden transition-all duration-[250ms] ease-out ${
-            obrasOpen || sobreOpen ? "pb-6" : ""
+            openMenu ? "pb-6" : ""
           }`}
         >
           <div className="h-[58px] pl-4 pr-3 md:pl-6 md:pr-3 grid grid-cols-3 items-center">
-            {/* Left — Sobre dropdown + nav links */}
+            {/* Left — Arca + Programa */}
             <div className="hidden lg:flex items-center gap-5 justify-self-start">
-              <button
-                type="button"
-                onMouseEnter={() => {
-                  setSobreOpen(true);
-                  setObrasOpen(false);
-                }}
-                onClick={() => setSobreOpen((v) => !v)}
-                aria-haspopup="true"
-                aria-expanded={sobreOpen}
-                className={`inline-flex items-center gap-1 font-display uppercase tracking-[0.15em] text-[14px] transition-colors ${linkBase}`}
-              >
-                Sobre
-                <ChevronDown
-                  className={`h-3.5 w-3.5 transition-transform duration-200 ${
-                    sobreOpen ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-              <button
-                type="button"
-                onMouseEnter={() => {
-                  setObrasOpen(true);
-                  setSobreOpen(false);
-                }}
-                onClick={() => setObrasOpen((v) => !v)}
-                aria-haspopup="true"
-                aria-expanded={obrasOpen}
-                className={`inline-flex items-center gap-1 font-display uppercase tracking-[0.15em] text-[14px] transition-colors ${linkBase}`}
-              >
-                Obras
-                <ChevronDown
-                  className={`h-3.5 w-3.5 transition-transform duration-200 ${
-                    obrasOpen ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-              <Link
-                to="/panteao"
-                onMouseEnter={() => {
-                  setObrasOpen(false);
-                  setSobreOpen(false);
-                }}
-                className={`inline-flex items-center font-display uppercase tracking-[0.15em] text-[14px] transition-colors ${
-                  location.pathname === "/panteao" ? linkActive : linkBase
-                }`}
-              >
-                Panteão
-              </Link>
+              {renderTrigger("arca")}
+              {renderTrigger("programa")}
             </div>
 
             {/* Center — wordmark */}
@@ -171,19 +133,11 @@ export function InstitutionalNavbar() {
               LUSÍADA
             </Link>
 
-            {/* Right — Arca dropdown + Junta-te CTA / Hamburger */}
+            {/* Right — Sobre + Junta-te CTA / Hamburger */}
             <div className="flex items-center gap-6 justify-self-end">
-              {navLinks.map((l) => (
-                <Link
-                  key={l.to}
-                  to={l.to}
-                  className={`hidden lg:inline-flex font-display uppercase tracking-[0.15em] text-[14px] px-2 transition-colors ${
-                    location.pathname === l.to ? linkActive : linkBase
-                  }`}
-                >
-                  {l.label}
-                </Link>
-              ))}
+              <div className="hidden lg:flex items-center gap-5">
+                {renderTrigger("sobre")}
+              </div>
               <Link
                 to="/aderir"
                 className="hidden sm:inline-flex items-center justify-center rounded-full px-6 py-2.5 font-display text-[14px] uppercase tracking-[0.15em] text-white transition-all hover:brightness-110"
@@ -207,68 +161,39 @@ export function InstitutionalNavbar() {
             </div>
           </div>
 
-          {/* Obras dropdown panel — grows from same bubble */}
-          <div
-            className={`grid transition-all duration-[250ms] ease-out ${
-              obrasOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-            }`}
-          >
-            <div className="overflow-hidden">
-              <div className="px-6 pt-2 pb-2">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  {obrasItems.map(({ icon: Icon, label, subtitle, to }) => (
-                    <Link
-                      key={to}
-                      to={to}
-                      onClick={() => setObrasOpen(false)}
-                      className="group flex items-start gap-3 rounded-2xl p-4 hover:bg-accent/5 transition-colors"
-                    >
-                      <div className="grid place-items-center h-10 w-10 shrink-0 rounded-full border border-accent/30 bg-accent/5 text-accent group-hover:bg-accent/15 group-hover:border-accent/60 transition-colors">
-                        <Icon className="h-4 w-4" />
-                      </div>
-                      <div className="flex flex-col min-w-0">
-                        <span className="font-display text-[15px] tracking-[0.1em] text-accent group-hover:text-accent">
+          {/* Dropdown panel — shared bubble */}
+          {(Object.keys(menus) as MenuKey[]).map((key) => (
+            <div
+              key={key}
+              className={`grid transition-all duration-[250ms] ease-out ${
+                openMenu === key ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+              }`}
+            >
+              <div className="overflow-hidden">
+                <div className="px-6 pt-2 pb-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    {menus[key].items.map(({ label, subtitle, to }) => (
+                      <Link
+                        key={to}
+                        to={to}
+                        onClick={() => setOpenMenu(null)}
+                        className="group flex flex-col rounded-2xl p-4 hover:bg-accent/5 transition-colors"
+                      >
+                        <span className="font-display text-[15px] tracking-[0.1em] text-accent">
                           {label}
                         </span>
-                        <span className={`font-body text-[12px] leading-snug mt-0.5 ${dropdownSubtitle}`}>
-                          {subtitle}
-                        </span>
-                      </div>
-                    </Link>
-                  ))}
+                        {subtitle && (
+                          <span className={`font-body text-[12px] leading-snug mt-0.5 ${dropdownSubtitle}`}>
+                            {subtitle}
+                          </span>
+                        )}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Sobre dropdown panel — grows from same bubble */}
-          <div
-            className={`grid transition-all duration-[250ms] ease-out ${
-              sobreOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-            }`}
-          >
-            <div className="overflow-hidden">
-              <div className="px-6 pt-2 pb-2">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  {sobreItems.map(({ label, subtitle, to }) => (
-                    <Link
-                      key={to}
-                      to={to}
-                      onClick={() => setSobreOpen(false)}
-                      className="group flex flex-col rounded-2xl p-4 hover:bg-accent/5 transition-colors"
-                    >
-                      <span className="font-display text-[15px] tracking-[0.1em] text-accent">
-                        {label}
-                      </span>
-                      <span className={`font-body text-[12px] leading-snug mt-0.5 ${dropdownSubtitle}`}>
-                        {subtitle}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </nav>
 
@@ -283,16 +208,23 @@ export function InstitutionalNavbar() {
             WebkitBackdropFilter: "blur(24px) saturate(1.4)",
           }}
         >
-          <div className="h-full flex flex-col items-center justify-center gap-6 overflow-y-auto py-24">
-            {[...sobreItems, { label: "Panteão", to: "/panteao" }, ...navLinks].map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
-                onClick={() => setMobileOpen(false)}
-                className="font-display text-2xl tracking-[0.1em] text-primary-foreground hover:text-accent transition-colors"
-              >
-                {l.label}
-              </Link>
+          <div className="h-full flex flex-col items-center justify-center gap-8 overflow-y-auto py-24 px-6">
+            {(Object.keys(menus) as MenuKey[]).map((key) => (
+              <div key={key} className="w-full max-w-xs flex flex-col items-center gap-3">
+                <p className="font-display text-[11px] uppercase tracking-[0.25em] text-accent">
+                  {menus[key].label}
+                </p>
+                {menus[key].items.map(({ label, to }) => (
+                  <Link
+                    key={to}
+                    to={to}
+                    onClick={() => setMobileOpen(false)}
+                    className="font-display text-lg tracking-[0.1em] text-primary-foreground hover:text-accent transition-colors"
+                  >
+                    {label}
+                  </Link>
+                ))}
+              </div>
             ))}
             <Link
               to="/aderir"
@@ -302,22 +234,6 @@ export function InstitutionalNavbar() {
             >
               Junta-te
             </Link>
-            <div className="mt-4 w-full max-w-xs flex flex-col gap-3 px-6">
-              <p className="text-center font-body text-[11px] uppercase tracking-[0.2em] text-accent">
-                Obras
-              </p>
-              {obrasItems.map(({ icon: Icon, label, to }) => (
-                <Link
-                  key={to}
-                  to={to}
-                  onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-3 rounded-full border border-accent/30 bg-accent/5 px-5 py-3 font-display text-sm tracking-[0.1em] text-primary-foreground hover:bg-accent/15 transition-colors"
-                >
-                  <Icon className="h-4 w-4 text-accent" />
-                  {label}
-                </Link>
-              ))}
-            </div>
           </div>
         </div>
       )}
