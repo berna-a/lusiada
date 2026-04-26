@@ -9,16 +9,15 @@ export function HeroFullscreen() {
       aria-label="Hero"
       style={{
         backgroundColor: "#061F33",
-        paddingTop: "24px",
         height: "100vh",
       }}
     >
-      <div className="absolute inset-0" style={{ paddingTop: "24px" }}>
+      <div className="absolute inset-0">
         <img
           src={heroBg}
           alt=""
           aria-hidden="true"
-          className="w-full h-full object-contain object-center select-none pointer-events-none"
+          className="w-full h-full object-cover object-center select-none pointer-events-none"
         />
       </div>
       {/* Bottom blend gradient */}
