@@ -9,7 +9,7 @@ export function HeroFullscreen() {
       aria-label="Hero"
       style={{
         backgroundColor: "#061F33",
-        height: "100vh",
+        aspectRatio: "1824 / 1007",
       }}
     >
       <div className="absolute inset-0">
@@ -17,7 +17,7 @@ export function HeroFullscreen() {
           src={heroBg}
           alt=""
           aria-hidden="true"
-          className="w-full h-full object-cover object-center select-none pointer-events-none"
+          className="w-full h-full object-cover object-top select-none pointer-events-none"
         />
       </div>
       {/* Bottom blend gradient */}
