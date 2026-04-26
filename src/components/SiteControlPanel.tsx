@@ -263,13 +263,10 @@ function Tile({
     >
       <div
         className={`grid place-items-center h-9 w-9 rounded-full shrink-0 ${
-          active ? "bg-accent-foreground/15" : "bg-current/10"
+          active ? "bg-accent-foreground/15" : "bg-foreground/10"
         }`}
-        style={!active ? { backgroundColor: "currentColor", opacity: 1 } : undefined}
       >
-        <span style={!active ? { color: "hsl(var(--background))", opacity: 1 } : undefined}>
-          {icon}
-        </span>
+        {icon}
       </div>
       <div className="flex flex-col min-w-0">
         <span className="font-display uppercase tracking-[0.15em] text-[9px] opacity-70">
