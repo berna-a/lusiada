@@ -98,7 +98,7 @@ export function InstitutionalNavbar() {
     <>
       <nav
         aria-label="Navegação principal"
-        className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[98%] max-w-[1280px] transition-all duration-300 opacity-100"
+        className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[83%] max-w-[1088px] transition-all duration-300 opacity-100"
         onMouseLeave={() => {
           setObrasOpen(false);
           setSobreOpen(false);
