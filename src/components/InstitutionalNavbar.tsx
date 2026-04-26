@@ -119,10 +119,11 @@ export function InstitutionalNavbar() {
           }`}
         >
           <div className="h-[58px] pl-4 pr-3 md:pl-6 md:pr-3 grid grid-cols-3 items-center">
-            {/* Left — Arca + Programa */}
+            {/* Left — Arca + Programa + Sobre */}
             <div className="hidden lg:flex items-center gap-5 justify-self-start">
               {renderTrigger("arca")}
               {renderTrigger("programa")}
+              {renderTrigger("sobre")}
             </div>
 
             {/* Center — wordmark */}
@@ -134,11 +135,8 @@ export function InstitutionalNavbar() {
               LUSÍADA
             </Link>
 
-            {/* Right — Sobre + Junta-te CTA / Hamburger */}
-            <div className="flex items-center gap-6 justify-self-end">
-              <div className="hidden lg:flex items-center gap-5">
-                {renderTrigger("sobre")}
-              </div>
+            {/* Right — Junta-te CTA + control panel + Hamburger */}
+            <div className="flex items-center gap-2 justify-self-end">
               <Link
                 to="/aderir"
                 className="hidden sm:inline-flex items-center justify-center rounded-full px-6 py-2.5 font-display text-[14px] uppercase tracking-[0.15em] text-white transition-all hover:brightness-110"
@@ -156,7 +154,7 @@ export function InstitutionalNavbar() {
                 onClick={() => setMobileOpen((v) => !v)}
                 aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
                 aria-expanded={mobileOpen}
-                className={`lg:hidden grid place-items-center h-10 w-10 rounded-full transition-colors ${hamburgerColor}`}
+                className={`lg:hidden ml-2 grid place-items-center h-10 w-10 rounded-full transition-colors ${hamburgerColor}`}
               >
                 {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>
