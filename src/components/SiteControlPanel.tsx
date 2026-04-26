@@ -78,33 +78,37 @@ export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
     };
   }, [open]);
 
-  // Adaptive palette — mirrors InstitutionalNavbar.tsx
-  const triggerColor = onLight
-    ? "text-primary/80 hover:text-primary hover:bg-primary/10"
-    : "text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10";
-  const titleColor = onLight ? "text-primary" : "text-primary-foreground";
-  const labelColor = onLight ? "text-primary/80" : "text-primary-foreground/80";
-  const subtleColor = onLight ? "text-primary/60" : "text-primary-foreground/60";
-  const tileBase = onLight
-    ? "bg-primary/5 hover:bg-primary/10 text-primary"
-    : "bg-primary-foreground/5 hover:bg-primary-foreground/10 text-primary-foreground";
-  const segmentBase = onLight
-    ? "text-primary/70 hover:text-primary hover:bg-primary/5"
-    : "text-primary-foreground/70 hover:text-primary-foreground hover:bg-primary-foreground/5";
-  const segmentTrack = onLight ? "bg-primary/5" : "bg-primary-foreground/5";
-  const sectionTrack = onLight ? "bg-primary/5" : "bg-primary-foreground/5";
+  // Trigger adapts to navbar light/dark — interior of panel is always deep blue (primary).
+  const triggerText = onLight ? "text-primary" : "text-primary-foreground";
+  const triggerBg = onLight
+    ? "bg-primary/10 hover:bg-primary/15 border-primary/15"
+    : "bg-primary-foreground/15 hover:bg-primary-foreground/20 border-primary-foreground/20";
+
+  // Panel interior — fixed deep-blue (primary) palette, iOS-style soft tints.
+  const titleColor = "text-primary";
+  const labelColor = "text-primary/85";
+  const subtleColor = "text-primary/55";
+  const tileBase = "bg-primary/5 hover:bg-primary/10 text-primary";
+  const segmentBase = "text-primary/70 hover:text-primary hover:bg-primary/5";
+  const segmentTrack = "bg-primary/5";
+  const sectionTrack = "bg-primary/5";
 
   return (
     <>
+      {/* iOS-style pill trigger */}
       <button
         ref={triggerRef}
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-label="Painel de controlo"
         aria-expanded={open}
-        className={`hidden sm:grid place-items-center h-10 w-10 rounded-full transition-colors ${triggerColor}`}
+        className={`hidden sm:inline-flex items-center justify-center h-10 px-3 rounded-full border backdrop-blur-md transition-all ${triggerBg} ${triggerText}`}
+        style={{
+          boxShadow:
+            "0 2px 8px hsl(220 40% 10% / 0.08), inset 0 1px 0 hsl(0 0% 100% / 0.25)",
+        }}
       >
-        <SlidersHorizontal className="h-[18px] w-[18px]" />
+        <SlidersHorizontal className="h-[16px] w-[16px]" />
       </button>
 
       {open &&
