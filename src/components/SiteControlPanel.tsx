@@ -125,7 +125,7 @@ export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
                 >
                   PAINEL DE CONTROLO
                 </span>
-                <SlidersHorizontal className={`h-3.5 w-3.5 ${subtleColor}`} />
+                <Settings2 className={`h-3.5 w-3.5 ${subtleColor}`} />
               </div>
 
               {/* Top row — Theme + Music tiles */}
