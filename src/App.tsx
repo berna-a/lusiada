@@ -14,6 +14,7 @@ import ProgramaPage from "@/pages/ProgramaPage";
 import ApoiarPage from "@/pages/ApoiarPage";
 import ContactosPage from "@/pages/ContactosPage";
 import AderirPage from "@/pages/AderirPage";
+import ManifestoPage from "@/pages/sobre/ManifestoPage";
 
 import ArcaPage from "@/pages/arca/ArcaPage";
 import PanteaoPage from "@/pages/arca/PanteaoPage";
@@ -50,6 +51,7 @@ const App = () => (
             <Route path="/apoiar" element={<ApoiarPage />} />
             <Route path="/contactos" element={<ContactosPage />} />
             <Route path="/aderir" element={<AderirPage />} />
+            <Route path="/sobre/manifesto" element={<ManifestoPage />} />
             {/* Homepage navbar/footer aliases — point to existing pages */}
             <Route path="/a-associacao" element={<AssociacaoPage />} />
             <Route path="/contacto" element={<ContactosPage />} />
