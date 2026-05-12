@@ -212,6 +212,7 @@ function Keyword({ line, onActivate }: { line: Line; onActivate: (key: string) =
           fontFamily: "'Cinzel', serif",
           fontSize: "clamp(2.4rem,5vw,3.6rem)",
           fontWeight: 400,
+          wordSpacing: line.key === "memoria" ? "-0.35em" : undefined,
         }}
       >
         {line.keyword}
