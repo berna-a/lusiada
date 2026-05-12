@@ -66,7 +66,7 @@ export function MemoriaVivaSection() {
               /* ── PHRASE LAYOUT ───────────────────────── */
               <motion.div
                 key="phrase"
-                className="w-fit"
+                className="mx-auto w-fit"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -152,7 +152,7 @@ export function MemoriaVivaSection() {
 
 function PhraseLayout({ onActivate }: { onActivate: (key: string) => void }) {
   return (
-    <div className="flex flex-col gap-3 md:gap-5 items-start">
+    <div className="flex flex-col gap-3 md:gap-5 items-end">
       {LINES.map((line) => (
         <div key={line.key} className="flex items-baseline gap-x-[0.4em]">
           {line.prefix && (
