@@ -67,6 +67,7 @@ export function MemoriaVivaSection() {
               <motion.div
                 key="phrase"
                 className="mx-auto w-fit"
+                style={{ transform: "translateX(-25px)" }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
