@@ -67,10 +67,9 @@ export function MemoriaVivaSection() {
               <motion.div
                 key="phrase"
                 className="mx-auto w-fit"
-                style={{ marginLeft: "calc(auto - 25px)", marginRight: "calc(auto + 25px)" }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+                initial={{ opacity: 0, x: -25 }}
+                animate={{ opacity: 1, x: -25 }}
+                exit={{ opacity: 0, x: -25 }}
                 transition={{ duration: 0.35 }}
               >
                 <PhraseLayout onActivate={setActive} />
