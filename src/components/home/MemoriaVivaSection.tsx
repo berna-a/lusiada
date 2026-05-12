@@ -154,7 +154,7 @@ function PhraseLayout({ onActivate }: { onActivate: (key: string) => void }) {
   return (
     <div className="flex flex-col gap-3 md:gap-5 items-end">
       {LINES.map((line) => (
-        <div key={line.key} className="flex items-baseline gap-x-[0.4em]">
+        <div key={line.key} className="flex items-baseline gap-x-[1.2em]">
           {line.prefix && (
             <span
               className="tracking-[0.08em]"
