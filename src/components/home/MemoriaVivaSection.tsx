@@ -160,6 +160,7 @@ function PhraseLayout({ onActivate }: { onActivate: (key: string) => void }) {
               className="tracking-[0.08em]"
               style={{
                 color: COBALT,
+                opacity: 0.9,
                 fontFamily: "'Cinzel', serif",
                 fontSize: "clamp(2.4rem,5vw,3.6rem)",
                 fontWeight: 400,
