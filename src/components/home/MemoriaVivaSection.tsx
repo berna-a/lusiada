@@ -1,21 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 
-type Token = {
-  text: string;
-  key?: string; // present => keyword
-  indent?: boolean;
-  break?: boolean; // line break after
-};
+type Line = { prefix: string; keyword: string; key: string };
 
-const TOKENS: Token[] = [
-  { text: "UMA" },
-  { text: "ASSOCIAÇÃO", key: "associacao", break: true },
-  { text: "CONSAGRADA", key: "consagrada", indent: true, break: true },
-  { text: "À" },
-  { text: "MEMÓRIA VIVA", key: "memoria", break: true },
-  { text: "DE" },
-  { text: "PORTUGAL", key: "portugal" },
+const LINES: Line[] = [
+  { prefix: "UMA", keyword: "ASSOCIAÇÃO", key: "associacao" },
+  { prefix: "", keyword: "CONSAGRADA", key: "consagrada" },
+  { prefix: "À", keyword: "MEMÓRIA VIVA", key: "memoria" },
+  { prefix: "DE", keyword: "PORTUGAL", key: "portugal" },
 ];
 
 const DEFINITIONS: Record<string, { title: string; body: string }> = {
@@ -38,6 +30,7 @@ const DEFINITIONS: Record<string, { title: string; body: string }> = {
 };
 
 const COBALT = "#0047AB";
+const GOLD = "#C9A24B";
 
 export function MemoriaVivaSection() {
   const [active, setActive] = useState<string | null>(null);
@@ -58,7 +51,7 @@ export function MemoriaVivaSection() {
   }, []);
 
   const isActive = active !== null;
-  const keywords = TOKENS.filter((t) => t.key);
+  const keywords = LINES;
 
   return (
     <section
@@ -73,7 +66,7 @@ export function MemoriaVivaSection() {
               /* ── PHRASE LAYOUT ───────────────────────── */
               <motion.div
                 key="phrase"
-                className="mx-auto max-w-5xl"
+                className="mx-auto w-fit"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -90,24 +83,25 @@ export function MemoriaVivaSection() {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.4, delay: 0.05 }}
               >
-                <nav className="flex flex-col gap-4 md:gap-5">
+                <nav className="flex flex-col gap-4 md:gap-5 items-end">
                   {keywords.map((t) => {
                     const selected = active === t.key;
                     return (
                       <motion.button
                         layoutId={`kw-${t.key}`}
                         key={t.key}
-                        onClick={() => setActive(t.key!)}
-                        className="text-left tracking-[0.08em] leading-none transition-opacity"
+                        onClick={() => setActive(t.key)}
+                        className="text-right tracking-[0.08em] leading-none transition-colors"
                         style={{
-                          color: COBALT,
-                          opacity: selected ? 1 : 0.45,
-                          fontSize: selected ? "clamp(1.6rem,3vw,2.2rem)" : "clamp(1.2rem,2.2vw,1.6rem)",
-                          fontWeight: selected ? 700 : 500,
+                          color: selected ? GOLD : COBALT,
+                          opacity: selected ? 1 : 0.55,
+                          fontFamily: "'Cinzel', serif",
+                          fontSize: "clamp(2.4rem,5vw,3.6rem)",
+                          fontWeight: 400,
                         }}
-                        whileHover={{ opacity: 0.85, x: 4 }}
+                        whileHover={{ color: GOLD, opacity: 1 }}
                       >
-                        {t.text}
+                        {t.keyword}
                       </motion.button>
                     );
                   })}
@@ -157,59 +151,40 @@ export function MemoriaVivaSection() {
 /* ──────────────────────────── Phrase layout ──────────────────────────── */
 
 function PhraseLayout({ onActivate }: { onActivate: (key: string) => void }) {
-  // Build lines based on `break` flag
-  const lines: Token[][] = [];
-  let current: Token[] = [];
-  for (const t of TOKENS) {
-    current.push(t);
-    if (t.break) {
-      lines.push(current);
-      current = [];
-    }
-  }
-  if (current.length) lines.push(current);
-
   return (
-    <div className="flex flex-col gap-3 md:gap-5 text-center md:text-left">
-      {lines.map((line, i) => {
-        const indented = line.some((t) => t.indent);
-        return (
-          <div
-            key={i}
-            className={`flex flex-wrap items-baseline gap-x-4 md:gap-x-6 ${
-              indented ? "justify-center md:justify-start md:pl-[18%]" : "justify-center md:justify-start"
-            }`}
+    <div
+      className="grid gap-y-3 md:gap-y-5 items-baseline"
+      style={{ gridTemplateColumns: "auto auto", columnGap: "clamp(1rem, 2vw, 2rem)" }}
+    >
+      {LINES.map((line) => (
+        <div key={line.key} className="contents">
+          <span
+            className="text-right tracking-[0.08em]"
+            style={{
+              color: COBALT,
+              opacity: 0.45,
+              fontFamily: "'Cinzel', serif",
+              fontSize: "clamp(2.4rem,5vw,3.6rem)",
+              fontWeight: 400,
+              lineHeight: 1,
+            }}
           >
-            {line.map((t, j) =>
-              t.key ? (
-                <Keyword key={j} token={t} onActivate={onActivate} />
-              ) : (
-                <span
-                  key={j}
-                  className="text-neutral-400 tracking-[0.08em]"
-                  style={{
-                    fontSize: "clamp(1.5rem,3.2vw,2.4rem)",
-                    fontWeight: 400,
-                  }}
-                >
-                  {t.text}
-                </span>
-              )
-            )}
-          </div>
-        );
-      })}
+            {line.prefix}
+          </span>
+          <Keyword line={line} onActivate={onActivate} />
+        </div>
+      ))}
     </div>
   );
 }
 
-function Keyword({ token, onActivate }: { token: Token; onActivate: (key: string) => void }) {
+function Keyword({ line, onActivate }: { line: Line; onActivate: (key: string) => void }) {
   const [hover, setHover] = useState(false);
-  const def = DEFINITIONS[token.key!];
+  const def = DEFINITIONS[line.key];
 
   return (
     <span
-      className="relative inline-block"
+      className="relative inline-block text-left"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
@@ -230,18 +205,18 @@ function Keyword({ token, onActivate }: { token: Token; onActivate: (key: string
       </AnimatePresence>
 
       <motion.button
-        layoutId={`kw-${token.key}`}
-        onClick={() => onActivate(token.key!)}
-        animate={{ y: hover ? -6 : 0 }}
+        layoutId={`kw-${line.key}`}
+        onClick={() => onActivate(line.key)}
+        animate={{ y: hover ? -6 : 0, color: hover ? GOLD : COBALT }}
         transition={{ type: "spring", stiffness: 280, damping: 22 }}
         className="relative tracking-[0.08em] leading-none cursor-pointer"
         style={{
-          color: COBALT,
-          fontSize: "clamp(1.6rem,3.6vw,2.8rem)",
-          fontWeight: 600,
+          fontFamily: "'Cinzel', serif",
+          fontSize: "clamp(2.4rem,5vw,3.6rem)",
+          fontWeight: 400,
         }}
       >
-        {token.text}
+        {line.keyword}
       </motion.button>
     </span>
   );
