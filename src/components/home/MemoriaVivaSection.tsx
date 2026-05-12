@@ -66,7 +66,7 @@ export function MemoriaVivaSection() {
               /* ── PHRASE LAYOUT ───────────────────────── */
               <motion.div
                 key="phrase"
-                className="mx-auto w-fit"
+                className="w-fit"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
