@@ -30,7 +30,7 @@ const DEFINITIONS: Record<string, { title: string; body: string }> = {
 };
 
 const COBALT = "#0047AB";
-const GOLD = "#C9A24B";
+const GOLD = "#F2C744";
 
 export function MemoriaVivaSection() {
   const [active, setActive] = useState<string | null>(null);
@@ -91,10 +91,10 @@ export function MemoriaVivaSection() {
                         layoutId={`kw-${t.key}`}
                         key={t.key}
                         onClick={() => setActive(t.key)}
-                        className="text-right tracking-[0.08em] leading-none transition-colors"
+                        className="text-left tracking-[0.08em] leading-none transition-colors"
                         style={{
                           color: selected ? GOLD : COBALT,
-                          opacity: selected ? 1 : 0.55,
+                          opacity: selected ? 1 : 0.7,
                           fontFamily: "'Cinzel', serif",
                           fontSize: "clamp(2.4rem,5vw,3.6rem)",
                           fontWeight: 400,
@@ -152,25 +152,23 @@ export function MemoriaVivaSection() {
 
 function PhraseLayout({ onActivate }: { onActivate: (key: string) => void }) {
   return (
-    <div
-      className="grid gap-y-3 md:gap-y-5 items-baseline"
-      style={{ gridTemplateColumns: "auto auto", columnGap: "clamp(1rem, 2vw, 2rem)" }}
-    >
+    <div className="flex flex-col gap-3 md:gap-5 items-start">
       {LINES.map((line) => (
-        <div key={line.key} className="contents">
-          <span
-            className="text-right tracking-[0.08em]"
-            style={{
-              color: COBALT,
-              opacity: 0.45,
-              fontFamily: "'Cinzel', serif",
-              fontSize: "clamp(2.4rem,5vw,3.6rem)",
-              fontWeight: 400,
-              lineHeight: 1,
-            }}
-          >
-            {line.prefix}
-          </span>
+        <div key={line.key} className="flex items-baseline gap-x-[0.4em]">
+          {line.prefix && (
+            <span
+              className="tracking-[0.08em]"
+              style={{
+                color: COBALT,
+                fontFamily: "'Cinzel', serif",
+                fontSize: "clamp(2.4rem,5vw,3.6rem)",
+                fontWeight: 400,
+                lineHeight: 1,
+              }}
+            >
+              {line.prefix}
+            </span>
+          )}
           <Keyword line={line} onActivate={onActivate} />
         </div>
       ))}
