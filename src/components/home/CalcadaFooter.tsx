@@ -3,7 +3,7 @@ import { Instagram, Youtube, Linkedin } from "lucide-react";
 
 const associacaoLinks = [
   { label: "A Associação", to: "/a-associacao" },
-  { label: "Estatutos", to: "/estatutos" },
+  { label: "Manifesto", to: "/sobre/manifesto" },
   { label: "Contacto", to: "/contacto" },
   { label: "Aderir", to: "/aderir" },
 ];
@@ -11,8 +11,8 @@ const associacaoLinks = [
 const programaLinks = [
   { label: "Panteão", to: "/panteao" },
   { label: "Os Lusíadas Manuscritos", to: "/programa" },
-  { label: "Encontros", to: "/encontros" },
-  { label: "Doar", to: "/doar" },
+  { label: "Apoiar", to: "/apoiar" },
+  { label: "Arca", to: "/arca" },
 ];
 
 export function CalcadaFooter() {
@@ -86,13 +86,15 @@ export function CalcadaFooter() {
               </h4>
               <address className="not-italic font-body text-[15px]" style={{ lineHeight: 2, color: "rgba(244,241,236,0.7)" }}>
                 <div>Associação Memória Lusíada</div>
-                <div>Lisboa, Portugal</div>
-                <div>
+                <div>Largo da Freiria 6</div>
+                <div>3000-196 Coimbra</div>
+                <div>NIF 518 533 301</div>
+                <div className="mt-2">
                   <a
-                    href="mailto:geral@alusiada.pt"
+                    href="mailto:admin@alusiada.pt"
                     className="transition-colors hover:underline hover:!text-[#F4F1EC]"
                   >
-                    geral@alusiada.pt
+                    admin@alusiada.pt
                   </a>
                 </div>
               </address>

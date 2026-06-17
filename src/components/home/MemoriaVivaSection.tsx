@@ -77,7 +77,7 @@ export function MemoriaVivaSection() {
     >
       <div className="container mx-auto px-6 md:px-10">
         {/* ── FIXED STANZA ───────────────────────── */}
-        <div className="mx-auto w-fit" style={{ transform: "translateX(-75px)" }}>
+        <div className="mx-auto w-fit translate-x-0 md:-translate-x-[75px]">
           <div className="flex flex-col gap-3 md:gap-5 items-end">
             {LINES.map((line) => (
               <div key={line.key} className="flex items-baseline gap-x-[1.2em]">
@@ -88,7 +88,7 @@ export function MemoriaVivaSection() {
                       color: COBALT,
                       opacity: 0.9,
                       fontFamily: "'Cinzel', serif",
-                      fontSize: "clamp(2.4rem,5vw,3.6rem)",
+                      fontSize: "clamp(1.6rem,7vw,3.6rem)",
                       fontWeight: 50,
                       lineHeight: 1,
                     }}
@@ -103,7 +103,7 @@ export function MemoriaVivaSection() {
                   className="relative tracking-[0.08em] leading-none cursor-pointer transition-all duration-300"
                   style={{
                     fontFamily: "'Cinzel', serif",
-                    fontSize: "clamp(2.4rem,5vw,3.6rem)",
+                    fontSize: "clamp(1.6rem,7vw,3.6rem)",
                     fontWeight: 400,
                     wordSpacing: line.key === "memoria" ? "-0.35em" : undefined,
                     ...(focusedKey === line.key ? goldStyle : { color: COBALT }),

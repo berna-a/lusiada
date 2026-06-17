@@ -3,8 +3,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Loader2 } from "lucide-react";
+import { useMutation } from "convex/react";
 
-import { supabase } from "@/lib/supabase/client";
+import { api } from "../../convex/_generated/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -64,6 +65,7 @@ type FormValues = z.infer<typeof schema>;
 export default function AderirPage() {
   const [submittedName, setSubmittedName] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const createMember = useMutation(api.members.create);
 
   const {
     register,
@@ -81,33 +83,30 @@ export default function AderirPage() {
   const onSubmit = async (values: FormValues) => {
     setSubmitError(null);
 
-    const { error } = await supabase.from("members").insert({
-      full_name: values.full_name,
-      email: values.email.toLowerCase(),
-      district: values.district,
-      city: values.city?.trim() ? values.city.trim() : null,
-      how_did_you_find_us: values.how_did_you_find_us ?? null,
-      motivation: values.motivation?.trim() ? values.motivation.trim() : null,
-      newsletter_consent: values.newsletter_consent,
-      country: "PT",
-      status: "active",
-    });
+    try {
+      const result = await createMember({
+        full_name: values.full_name.trim(),
+        email: values.email.toLowerCase(),
+        district: values.district,
+        city: values.city?.trim() ? values.city.trim() : null,
+        how_did_you_find_us: values.how_did_you_find_us ?? null,
+        motivation: values.motivation?.trim() ? values.motivation.trim() : null,
+        newsletter_consent: values.newsletter_consent,
+      });
 
-    if (error) {
-      // Postgres unique violation = 23505
-      if (error.code === "23505" || /duplicate|unique/i.test(error.message)) {
+      if (result.duplicate) {
         setSubmitError(
           "Este correio electrónico já consta dos nossos registos. Já é membro da Associação Lusíada."
         );
-      } else {
-        setSubmitError(
-          "Não foi possível concluir a adesão. Por favor, tente novamente em instantes."
-        );
+        return;
       }
-      return;
-    }
 
-    setSubmittedName(values.full_name.trim().split(/\s+/)[0]);
+      setSubmittedName(values.full_name.trim().split(/\s+/)[0]);
+    } catch {
+      setSubmitError(
+        "Não foi possível concluir a adesão. Por favor, tente novamente em instantes."
+      );
+    }
   };
 
   return (

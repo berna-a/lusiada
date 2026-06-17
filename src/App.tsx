@@ -30,7 +30,6 @@ import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 import AdminDefinicoesPage from "@/pages/admin/AdminDefinicoesPage";
 
 import NotFound from "@/pages/NotFound";
-import SupabaseTestPage from "@/pages/SupabaseTestPage";
 import { PlaceholderPage } from "@/components/PlaceholderPage";
 
 const queryClient = new QueryClient();
@@ -69,6 +68,18 @@ const App = () => (
             <Route path="/obras/os-lusiadas" element={<PlaceholderPage title="Os Lusíadas" description="Página dedicada à obra de Luís de Camões." />} />
             <Route path="/obras/a-mensagem" element={<PlaceholderPage title="A Mensagem" description="Página dedicada à obra de Fernando Pessoa." />} />
             <Route path="/obras/sermao-de-santo-antonio" element={<PlaceholderPage title="Sermão de Santo António aos Peixes" description="Página dedicada à obra do Padre António Vieira." />} />
+
+            {/* Destinos de navegação — placeholders enquanto o conteúdo é preparado */}
+            <Route path="/arca/obras" element={<PlaceholderPage title="Obras" description="O cânone literário lusíada." />} />
+            <Route path="/programa/agenda" element={<PlaceholderPage title="Agenda" description="Próximos eventos da Associação." />} />
+            <Route path="/programa/iniciativas" element={<PlaceholderPage title="Iniciativas" description="As nossas linhas de acção." />} />
+            <Route path="/programa/blogue" element={<PlaceholderPage title="Blogue" description="Crónicas e ensaios." />} />
+            <Route path="/sobre/associacao" element={<AssociacaoPage />} />
+            <Route path="/sobre/objectivos" element={<PlaceholderPage title="Objectivos" description="Aquilo a que nos propomos." />} />
+            <Route path="/estatutos" element={<PlaceholderPage title="Estatutos" description="Os estatutos da Associação Memória Lusíada." />} />
+            <Route path="/encontros" element={<PlaceholderPage title="Encontros" description="Os encontros e tertúlias da Associação." />} />
+            <Route path="/privacidade" element={<PlaceholderPage title="Política de Privacidade" description="Em preparação." />} />
+            <Route path="/termos" element={<PlaceholderPage title="Termos e Condições" description="Em preparação." />} />
           </Route>
 
           {/* Admin layout */}
@@ -77,7 +88,6 @@ const App = () => (
             <Route path="/admin/definicoes" element={<AdminDefinicoesPage />} />
           </Route>
 
-          <Route path="/supabase-test" element={<SupabaseTestPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

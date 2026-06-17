@@ -7,7 +7,7 @@ import { CalcadaFooter } from "@/components/home/CalcadaFooter";
 
 export default function HomePage() {
   return (
-    <div className="-m-4 sm:-m-6 md:-m-10">
+    <div>
       <HeroFullscreen />
       <main>
         <MemoriaVivaSection />

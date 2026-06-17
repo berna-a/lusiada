@@ -118,7 +118,7 @@ export function InstitutionalNavbar() {
             openMenu ? "pb-6" : ""
           }`}
         >
-          <div className="h-[58px] pl-4 pr-3 md:pl-6 md:pr-3 grid grid-cols-3 items-center">
+          <div className="h-[58px] pl-4 pr-3 md:pl-6 md:pr-3 flex items-center justify-between lg:grid lg:grid-cols-3">
             {/* Left — Arca + Programa + Sobre */}
             <div className="hidden lg:flex items-center gap-5 justify-self-start">
               {renderTrigger("arca")}

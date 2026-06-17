@@ -114,18 +114,23 @@ export function Footer() {
           {/* Contact */}
           <div>
             <h4 className="font-medium text-primary-foreground/60 mb-3 text-xs uppercase tracking-[0.2em] font-body">Contacto</h4>
-            <div className="flex flex-col gap-1.5 text-xs text-primary-foreground/35 font-body">
-              <span>info@associacaolusíada.pt</span>
+            <address className="not-italic flex flex-col gap-1.5 text-xs text-primary-foreground/35 font-body leading-relaxed">
+              <span>Largo da Freiria 6</span>
+              <span>3000-196 Coimbra</span>
+              <span>NIF 518 533 301</span>
+              <a href="mailto:admin@alusiada.pt" className="hover:text-accent transition-colors duration-200">
+                admin@alusiada.pt
+              </a>
               <Link to="/contactos" className="hover:text-accent transition-colors duration-200">
                 Formulário de contacto →
               </Link>
-            </div>
+            </address>
           </div>
         </div>
 
         <div className="mt-12 pt-4 border-t border-primary-foreground/8 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
           <p className="text-[11px] text-primary-foreground/25 font-body">
-            © {new Date().getFullYear()} Associação Lusíada. Todos os direitos reservados.
+            © {new Date().getFullYear()} Associação Memória Lusíada. Todos os direitos reservados.
           </p>
         </div>
       </div>
