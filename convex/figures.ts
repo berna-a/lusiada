@@ -69,7 +69,7 @@ export const seedCamoes = mutation({
       epithet: "O Príncipe dos Poetas",
       category: "Poeta",
       era: "Século XVI",
-      birth_year: "1524",
+      birth_year: "1525",
       death_year: "1580",
       attributes: ["Poeta", "Soldado", "Patrono da Lusíada"],
       display_order: 1,
@@ -95,7 +95,7 @@ export const seedCamoes = mutation({
         block_type: "text",
         title: "Vida",
         content:
-          "Luiz Vaz de Camões nasceu por volta de 1524, provavelmente em Lisboa, no seio de uma família de pequena nobreza. Recebeu formação humanística sólida — conhecia os clássicos latinos, a mitologia e a história — e cedo se revelou poeta de talento raro. A sua vida foi de aventura e infortúnio: cortesão caído em desgraça, soldado em Ceuta onde perdeu o olho direito, viajante por todo o Oriente português, de Goa a Macau. Naufragou na foz do rio Mekong, onde, conta a tradição, salvou a nado o manuscrito da sua obra maior. Regressou a Lisboa pobre e doente, mas trazendo consigo o poema que haveria de imortalizar a língua portuguesa.",
+          "Luiz Vaz de Camões terá nascido a 23 de Janeiro de 1525, em Lisboa, durante um eclipse solar — data sustentada por documentos da época e hoje tida por provável, ainda que a historiografia mais corrente aponte cerca de 1524. Veio ao mundo no seio de uma família de pequena nobreza. Recebeu formação humanística sólida — conhecia os clássicos latinos, a mitologia e a história — e cedo se revelou poeta de talento raro. A sua vida foi de aventura e infortúnio: cortesão caído em desgraça, soldado em Ceuta onde perdeu o olho direito, viajante por todo o Oriente português, de Goa a Macau. Naufragou na foz do rio Mekong, onde, conta a tradição, salvou a nado o manuscrito da sua obra maior. Regressou a Lisboa pobre e doente, mas trazendo consigo o poema que haveria de imortalizar a língua portuguesa.",
         display_order: 2,
       },
       {
