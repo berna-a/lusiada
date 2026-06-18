@@ -20,7 +20,6 @@ import ObjectivosPage from "@/pages/sobre/ObjectivosPage";
 import ArcaPage from "@/pages/arca/ArcaPage";
 import PanteaoPage from "@/pages/arca/PanteaoPage";
 import CalendarioPage from "@/pages/arca/CalendarioPage";
-import HeroisPage from "@/pages/arca/HeroisPage";
 import HeroiPage from "@/pages/arca/HeroiPage";
 import LugaresPage from "@/pages/arca/LugaresPage";
 import LugarPage from "@/pages/arca/LugarPage";
@@ -59,7 +58,7 @@ const App = () => (
             <Route path="/arca" element={<ArcaPage />} />
             <Route path="/arca/panteao" element={<PanteaoPage />} />
             <Route path="/arca/calendario" element={<CalendarioPage />} />
-            <Route path="/arca/herois" element={<HeroisPage />} />
+            <Route path="/arca/herois" element={<PanteaoPage />} />
             <Route path="/arca/herois/:id" element={<HeroiPage />} />
             <Route path="/arca/lugares" element={<LugaresPage />} />
             <Route path="/arca/lugares/:id" element={<LugarPage />} />
