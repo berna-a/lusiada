@@ -36,21 +36,35 @@ export const getBySlug = query({
 });
 
 /**
- * Seed idempotente do nosso patrono, Luís Vaz de Camões.
- * Corre com: npx convex run figures:seedCamoes
+ * Seed (reset idempotente) do nosso patrono, Luiz Vaz de Camões.
+ * Remove versões anteriores e respectivos blocos antes de inserir, deixando
+ * sempre um único Camões correcto. Corre com: npx convex run figures:seedCamoes
  */
 export const seedCamoes = mutation({
   args: {},
   handler: async (ctx) => {
-    const slug = "luis-vaz-de-camoes";
-    const existing = await ctx.db
-      .query("figures")
-      .withIndex("by_slug", (q) => q.eq("slug", slug))
-      .first();
-    if (existing) return { skipped: true as const, id: existing._id };
+    const slug = "luiz-vaz-de-camoes";
+
+    // Limpar quaisquer versões anteriores (slug actual ou grafia antiga).
+    for (const s of [slug, "luis-vaz-de-camoes"]) {
+      const prev = await ctx.db
+        .query("figures")
+        .withIndex("by_slug", (q) => q.eq("slug", s))
+        .first();
+      if (prev) {
+        const prevBlocks = await ctx.db
+          .query("figure_content_blocks")
+          .withIndex("by_figure", (q) => q.eq("figure_id", prev._id))
+          .collect();
+        for (const blk of prevBlocks) {
+          await ctx.db.delete(blk._id);
+        }
+        await ctx.db.delete(prev._id);
+      }
+    }
 
     const figureId = await ctx.db.insert("figures", {
-      name: "Luís Vaz de Camões",
+      name: "Luiz Vaz de Camões",
       slug,
       epithet: "O Príncipe dos Poetas",
       category: "Poeta",
@@ -81,7 +95,7 @@ export const seedCamoes = mutation({
         block_type: "text",
         title: "Vida",
         content:
-          "Luís Vaz de Camões nasceu por volta de 1524, provavelmente em Lisboa, no seio de uma família de pequena nobreza. Recebeu formação humanística sólida — conhecia os clássicos latinos, a mitologia e a história — e cedo se revelou poeta de talento raro. A sua vida foi de aventura e infortúnio: cortesão caído em desgraça, soldado em Ceuta onde perdeu o olho direito, viajante por todo o Oriente português, de Goa a Macau. Naufragou na foz do rio Mekong, onde, conta a tradição, salvou a nado o manuscrito da sua obra maior. Regressou a Lisboa pobre e doente, mas trazendo consigo o poema que haveria de imortalizar a língua portuguesa.",
+          "Luiz Vaz de Camões nasceu por volta de 1524, provavelmente em Lisboa, no seio de uma família de pequena nobreza. Recebeu formação humanística sólida — conhecia os clássicos latinos, a mitologia e a história — e cedo se revelou poeta de talento raro. A sua vida foi de aventura e infortúnio: cortesão caído em desgraça, soldado em Ceuta onde perdeu o olho direito, viajante por todo o Oriente português, de Goa a Macau. Naufragou na foz do rio Mekong, onde, conta a tradição, salvou a nado o manuscrito da sua obra maior. Regressou a Lisboa pobre e doente, mas trazendo consigo o poema que haveria de imortalizar a língua portuguesa.",
         display_order: 2,
       },
       {
@@ -111,6 +125,6 @@ export const seedCamoes = mutation({
       });
     }
 
-    return { skipped: false as const, id: figureId };
+    return { id: figureId };
   },
 });
