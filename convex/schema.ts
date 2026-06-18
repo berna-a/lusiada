@@ -37,6 +37,9 @@ export default defineSchema({
     death_year: v.optional(v.union(v.string(), v.null())),
     portrait_url: v.optional(v.union(v.string(), v.null())),
     hero_image_url: v.optional(v.union(v.string(), v.null())),
+    // URL de um modelo 3D (.glb/.gltf) para a estátua no Panteão. Se ausente,
+    // usa-se a estátua estilizada por defeito.
+    model_url: v.optional(v.union(v.string(), v.null())),
     attributes: v.optional(v.array(v.string())),
     display_order: v.optional(v.number()),
     is_published: v.optional(v.boolean()),

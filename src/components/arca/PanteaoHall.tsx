@@ -28,7 +28,10 @@ export function PanteaoHall({ figures }: { figures: Doc<"figures">[] }) {
             </div>
           }
         >
-          <Scene onSelect={() => navigate(fichaUrl)} />
+          <Scene
+            modelUrl={central.model_url}
+            onSelect={() => navigate(fichaUrl)}
+          />
         </Suspense>
       </div>
 

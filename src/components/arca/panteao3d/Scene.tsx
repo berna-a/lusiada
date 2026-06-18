@@ -1,6 +1,8 @@
 import { MeshReflectorMaterial, OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
+import { Suspense } from "react";
 import { StatueMesh } from "./StatueMesh";
+import { StatueModel } from "./StatueModel";
 
 const COLUMNS: [number, number, number][] = [
   [-3.6, 2.4, -2.2],
@@ -9,7 +11,9 @@ const COLUMNS: [number, number, number][] = [
   [4.2, 2.4, 1.4],
 ];
 
-export default function Scene({ onSelect }: { onSelect: () => void }) {
+type SceneProps = { onSelect: () => void; modelUrl?: string | null };
+
+export default function Scene({ onSelect, modelUrl }: SceneProps) {
   // Câmara responsiva: em ecrãs verticais (mobile) recua para a figura caber.
   const portrait =
     typeof window !== "undefined" && window.innerHeight > window.innerWidth;
@@ -69,7 +73,13 @@ export default function Scene({ onSelect }: { onSelect: () => void }) {
         </mesh>
       ))}
 
-      <StatueMesh onSelect={onSelect} />
+      {modelUrl ? (
+        <Suspense fallback={<StatueMesh onSelect={onSelect} />}>
+          <StatueModel onSelect={onSelect} url={modelUrl} />
+        </Suspense>
+      ) : (
+        <StatueMesh onSelect={onSelect} />
+      )}
 
       <OrbitControls
         autoRotate
