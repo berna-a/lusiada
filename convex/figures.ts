@@ -71,6 +71,7 @@ export const seedCamoes = mutation({
       era: "Século XVI",
       birth_year: "1525",
       death_year: "1580",
+      model_url: "/assets/camoes.glb",
       attributes: ["Poeta", "Soldado", "Patrono da Lusíada"],
       display_order: 1,
       is_published: true,

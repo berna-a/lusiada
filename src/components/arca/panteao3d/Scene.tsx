@@ -25,17 +25,23 @@ export default function Scene({ onSelect, modelUrl }: SceneProps) {
       <color args={["#070f1c"]} attach="background" />
       <fog args={["#070f1c", 7, 19]} attach="fog" />
 
-      <ambientLight intensity={0.4} />
+      <hemisphereLight
+        args={["#dce8ff", "#1a2740", 1.1]}
+        position={[0, 6, 0]}
+      />
+      <ambientLight intensity={0.7} />
       <spotLight
         angle={0.6}
         castShadow
         color="#fff1da"
         decay={0}
-        intensity={2.4}
+        intensity={3}
         penumbra={0.9}
         position={[0, 7.5, 4]}
         shadow-mapSize={[1024, 1024]}
       />
+      {/* Preenchimento frontal para a estátua não ficar escura */}
+      <directionalLight color="#ffffff" intensity={1.1} position={[0, 3, 6]} />
       <directionalLight
         color="#5d79ff"
         intensity={0.6}
@@ -59,11 +65,13 @@ export default function Scene({ onSelect, modelUrl }: SceneProps) {
         />
       </mesh>
 
-      {/* Pedestal */}
-      <mesh castShadow position={[0, -0.3, 0]} receiveShadow>
-        <cylinderGeometry args={[1, 1.16, 0.6, 48]} />
-        <meshStandardMaterial color="#cabfa6" roughness={0.6} />
-      </mesh>
+      {/* Pedestal — só para a estátua estilizada (os modelos trazem base própria) */}
+      {!modelUrl && (
+        <mesh castShadow position={[0, -0.3, 0]} receiveShadow>
+          <cylinderGeometry args={[1, 1.16, 0.6, 48]} />
+          <meshStandardMaterial color="#cabfa6" roughness={0.6} />
+        </mesh>
+      )}
 
       {/* Colunas */}
       {COLUMNS.map(([x, y, z]) => (

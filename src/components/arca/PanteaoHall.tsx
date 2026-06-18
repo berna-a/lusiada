@@ -69,6 +69,18 @@ export function PanteaoHall({ figures }: { figures: Doc<"figures">[] }) {
           Ver ficha <ChevronRight className="h-3.5 w-3.5" />
         </Link>
       </div>
+
+      {/* Atribuição do modelo 3D (CC BY 4.0) */}
+      {central.model_url && (
+        <a
+          className="pointer-events-auto absolute right-3 bottom-3 z-10 font-body text-[#f4f1ec]/35 text-[10px] tracking-wide transition-colors hover:text-[#f4f1ec]/70"
+          href="https://www.meshy.ai"
+          rel="noreferrer"
+          target="_blank"
+        >
+          Estátua 3D · Meshy AI (CC BY 4.0)
+        </a>
+      )}
     </section>
   );
 }
