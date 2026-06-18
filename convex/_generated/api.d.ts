@@ -9,6 +9,7 @@
  */
 
 import type * as contact from "../contact.js";
+import type * as figures from "../figures.js";
 import type * as members from "../members.js";
 
 import type {
@@ -19,6 +20,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   contact: typeof contact;
+  figures: typeof figures;
   members: typeof members;
 }>;
 
