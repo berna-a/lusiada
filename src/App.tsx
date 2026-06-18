@@ -15,6 +15,7 @@ import ApoiarPage from "@/pages/ApoiarPage";
 import ContactosPage from "@/pages/ContactosPage";
 import AderirPage from "@/pages/AderirPage";
 import ManifestoPage from "@/pages/sobre/ManifestoPage";
+import ObjectivosPage from "@/pages/sobre/ObjectivosPage";
 
 import ArcaPage from "@/pages/arca/ArcaPage";
 import PanteaoPage from "@/pages/arca/PanteaoPage";
@@ -75,7 +76,7 @@ const App = () => (
             <Route path="/programa/iniciativas" element={<PlaceholderPage title="Iniciativas" description="As nossas linhas de acção." />} />
             <Route path="/programa/blogue" element={<PlaceholderPage title="Blogue" description="Crónicas e ensaios." />} />
             <Route path="/sobre/associacao" element={<AssociacaoPage />} />
-            <Route path="/sobre/objectivos" element={<PlaceholderPage title="Objectivos" description="Aquilo a que nos propomos." />} />
+            <Route path="/sobre/objectivos" element={<ObjectivosPage />} />
             <Route path="/estatutos" element={<PlaceholderPage title="Estatutos" description="Os estatutos da Associação Memória Lusíada." />} />
             <Route path="/encontros" element={<PlaceholderPage title="Encontros" description="Os encontros e tertúlias da Associação." />} />
             <Route path="/privacidade" element={<PlaceholderPage title="Política de Privacidade" description="Em preparação." />} />

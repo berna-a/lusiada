@@ -1,7 +1,7 @@
-import { Link, useParams } from "react-router-dom";
 import { useQuery } from "convex/react";
 import { ArrowLeft, Loader2 } from "lucide-react";
-
+import { Link, useParams } from "react-router-dom";
+import { JoinCTA } from "@/components/JoinCTA";
 import { api } from "../../../convex/_generated/api";
 
 export default function HeroiPage() {
@@ -21,16 +21,19 @@ export default function HeroiPage() {
   if (data === null) {
     return (
       <main
-        data-nav-theme="light"
         className="mx-auto max-w-[760px] px-6 pt-40 pb-32 text-center"
+        data-nav-theme="light"
       >
-        <h1 className="font-display text-[32px] text-primary">Figura em preparação</h1>
-        <p className="mt-4 font-body text-[16px] leading-relaxed text-foreground/75">
-          Esta ficha ainda não foi publicada. Volte em breve — o Panteão está a crescer.
+        <h1 className="font-display text-[32px] text-primary">
+          Figura em preparação
+        </h1>
+        <p className="mt-4 font-body text-[16px] text-foreground/75 leading-relaxed">
+          Esta ficha ainda não foi publicada. Volte em breve — o Panteão está a
+          crescer.
         </p>
         <Link
+          className="mt-8 inline-flex items-center gap-2 font-body text-[14px] text-accent transition-all hover:gap-3"
           to="/arca/panteao"
-          className="mt-8 inline-flex items-center gap-2 font-body text-[14px] text-accent hover:gap-3 transition-all"
         >
           <ArrowLeft className="h-4 w-4" /> Voltar ao Panteão
         </Link>
@@ -39,17 +42,19 @@ export default function HeroiPage() {
   }
 
   const { figure, blocks } = data;
-  const datas = [figure.birth_year, figure.death_year].filter(Boolean).join(" — ");
+  const datas = [figure.birth_year, figure.death_year]
+    .filter(Boolean)
+    .join(" — ");
 
   return (
     <article
-      data-nav-theme="light"
       className="mx-auto max-w-[760px] px-6 pt-32 pb-24 sm:pt-40 sm:pb-32"
+      data-nav-theme="light"
     >
       {/* Voltar */}
       <Link
+        className="inline-flex items-center gap-2 font-body text-[13px] text-muted-foreground uppercase tracking-[0.15em] transition-colors hover:text-accent"
         to="/arca/panteao"
-        className="inline-flex items-center gap-2 font-body text-[13px] uppercase tracking-[0.15em] text-muted-foreground hover:text-accent transition-colors"
       >
         <ArrowLeft className="h-4 w-4" /> Panteão
       </Link>
@@ -58,26 +63,26 @@ export default function HeroiPage() {
       <header className="mt-10 text-center">
         {figure.hero_image_url && (
           <img
-            src={figure.hero_image_url}
             alt={figure.name}
             className="mx-auto mb-8 h-40 w-40 rounded-full border border-accent/30 object-cover"
+            src={figure.hero_image_url}
           />
         )}
         {figure.category && (
-          <p className="font-body text-[12px] uppercase tracking-[0.25em] text-muted-foreground">
+          <p className="font-body text-[12px] text-muted-foreground uppercase tracking-[0.25em]">
             {figure.category}
           </p>
         )}
-        <h1 className="mt-4 font-display text-[40px] sm:text-[52px] leading-[1.1] text-primary">
+        <h1 className="mt-4 font-display text-[40px] text-primary leading-[1.1] sm:text-[52px]">
           {figure.name}
         </h1>
         {figure.epithet && (
-          <p className="mt-3 font-display text-[20px] italic text-accent">
+          <p className="mt-3 font-display text-[20px] text-accent italic">
             {figure.epithet}
           </p>
         )}
         {datas && (
-          <p className="mt-3 font-body text-[14px] tracking-wide text-muted-foreground">
+          <p className="mt-3 font-body text-[14px] text-muted-foreground tracking-wide">
             {datas}
           </p>
         )}
@@ -91,12 +96,12 @@ export default function HeroiPage() {
         {blocks.map((b) => {
           if (b.block_type === "quote") {
             return (
-              <figure key={b._id} className="text-center">
-                <blockquote className="font-display text-[22px] sm:text-[26px] italic leading-[1.5] text-primary whitespace-pre-line">
+              <figure className="text-center" key={b._id}>
+                <blockquote className="whitespace-pre-line font-display text-[22px] text-primary italic leading-[1.5] sm:text-[26px]">
                   {b.content}
                 </blockquote>
                 {b.attribution && (
-                  <figcaption className="mt-4 font-body text-[13px] uppercase tracking-[0.2em] text-muted-foreground">
+                  <figcaption className="mt-4 font-body text-[13px] text-muted-foreground uppercase tracking-[0.2em]">
                     {b.attribution}
                   </figcaption>
                 )}
@@ -106,11 +111,11 @@ export default function HeroiPage() {
           return (
             <section key={b._id}>
               {b.title && (
-                <h2 className="font-display text-[13px] uppercase tracking-[0.3em] text-accent">
+                <h2 className="font-display text-[13px] text-accent uppercase tracking-[0.3em]">
                   {b.title}
                 </h2>
               )}
-              <p className="mt-4 font-body text-[17px] leading-[1.85] text-foreground/90 whitespace-pre-line">
+              <p className="mt-4 whitespace-pre-line font-body text-[17px] text-foreground/90 leading-[1.85]">
                 {b.content}
               </p>
             </section>
@@ -119,18 +124,8 @@ export default function HeroiPage() {
       </div>
 
       {/* CTA */}
-      <div className="mt-16 flex justify-center">
-        <Link
-          to="/aderir"
-          className="inline-flex items-center justify-center rounded-full px-10 py-4 font-display text-[15px] uppercase tracking-[0.2em] text-white transition-all hover:brightness-110"
-          style={{
-            backgroundColor: "hsl(351 62% 34%)",
-            boxShadow:
-              "0 6px 20px hsl(351 62% 20% / 0.45), inset 0 1px 0 hsl(0 0% 100% / 0.18)",
-          }}
-        >
-          Junta-te
-        </Link>
+      <div className="mt-16">
+        <JoinCTA />
       </div>
     </article>
   );

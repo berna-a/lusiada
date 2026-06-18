@@ -1,15 +1,15 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "convex/react";
+import { Loader2, Mail, MapPin } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loader2, Mail, MapPin } from "lucide-react";
-import { useMutation } from "convex/react";
-
-import { api } from "../../convex/_generated/api";
+import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { api } from "../../convex/_generated/api";
 
 const schema = z.object({
   name: z
@@ -62,25 +62,14 @@ export default function ContactosPage() {
 
   return (
     <main
-      data-nav-theme="light"
       className="mx-auto max-w-[860px] px-6 pt-32 pb-24 sm:pt-40 sm:pb-32"
+      data-nav-theme="light"
     >
-      {/* Header */}
-      <header className="text-center">
-        <p className="font-body text-[12px] uppercase tracking-[0.25em] text-muted-foreground">
-          Contacto
-        </p>
-        <h1 className="mt-4 font-display text-[40px] sm:text-[56px] leading-[1.1] text-primary">
-          Fale connosco
-        </h1>
-        <div className="mt-8 flex justify-center">
-          <span aria-hidden="true" className="block h-px w-[60px] bg-accent" />
-        </div>
-        <p className="mx-auto mt-8 max-w-xl font-body text-[17px] leading-relaxed text-foreground/80">
-          Tem uma questão, uma proposta ou quer saber como colaborar? Escreva-nos —
-          respondemos a todas as mensagens.
-        </p>
-      </header>
+      <PageHeader
+        eyebrow="Contacto"
+        intro="Tem uma questão, uma proposta ou quer saber como colaborar? Escreva-nos — respondemos a todas as mensagens."
+        title="Fale connosco"
+      />
 
       <div className="mt-16 grid gap-12 md:grid-cols-[1fr_1.4fr]">
         {/* Coordenadas */}
@@ -90,12 +79,12 @@ export default function ContactosPage() {
               <Mail className="h-5 w-5" />
             </span>
             <div>
-              <h2 className="font-display text-[14px] uppercase tracking-[0.2em] text-primary">
+              <h2 className="font-display text-[14px] text-primary uppercase tracking-[0.2em]">
                 Correio
               </h2>
               <a
+                className="mt-1 block font-body text-[15px] text-foreground/75 transition-colors hover:text-accent"
                 href="mailto:admin@alusiada.pt"
-                className="mt-1 block font-body text-[15px] text-foreground/75 hover:text-accent transition-colors"
               >
                 admin@alusiada.pt
               </a>
@@ -107,10 +96,10 @@ export default function ContactosPage() {
               <MapPin className="h-5 w-5" />
             </span>
             <div>
-              <h2 className="font-display text-[14px] uppercase tracking-[0.2em] text-primary">
+              <h2 className="font-display text-[14px] text-primary uppercase tracking-[0.2em]">
                 Sede
               </h2>
-              <address className="mt-1 not-italic font-body text-[15px] leading-relaxed text-foreground/75">
+              <address className="mt-1 font-body text-[15px] text-foreground/75 not-italic leading-relaxed">
                 Associação Memória Lusíada
                 <br />
                 Largo da Freiria 6
@@ -125,8 +114,8 @@ export default function ContactosPage() {
 
         {/* Formulário */}
         {submitted ? (
-          <section className="rounded-2xl border border-border bg-card p-10 text-center premium-shadow">
-            <h2 className="font-display text-2xl md:text-3xl font-semibold text-foreground">
+          <section className="premium-shadow rounded-2xl border border-border bg-card p-10 text-center">
+            <h2 className="font-display font-semibold text-2xl text-foreground md:text-3xl">
               Mensagem enviada.
             </h2>
             <p className="mt-5 font-body text-base text-foreground/80 leading-relaxed">
@@ -135,58 +124,79 @@ export default function ContactosPage() {
           </section>
         ) : (
           <form
-            onSubmit={handleSubmit(onSubmit)}
+            className="premium-shadow space-y-6 rounded-2xl border border-border bg-card p-8 md:p-10"
             noValidate
-            className="rounded-2xl border border-border bg-card p-8 md:p-10 premium-shadow space-y-6"
+            onSubmit={handleSubmit(onSubmit)}
           >
             <div className="space-y-2">
-              <Label htmlFor="name" className="font-body text-sm">
+              <Label className="font-body text-sm" htmlFor="name">
                 Nome
               </Label>
-              <Input id="name" type="text" autoComplete="name" aria-invalid={!!errors.name} {...register("name")} />
+              <Input
+                aria-invalid={!!errors.name}
+                autoComplete="name"
+                id="name"
+                type="text"
+                {...register("name")}
+              />
               {errors.name && (
-                <p className="text-xs text-destructive font-body">{errors.name.message}</p>
+                <p className="font-body text-destructive text-xs">
+                  {errors.name.message}
+                </p>
               )}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="font-body text-sm">
+              <Label className="font-body text-sm" htmlFor="email">
                 Correio electrónico
               </Label>
-              <Input id="email" type="email" autoComplete="email" aria-invalid={!!errors.email} {...register("email")} />
+              <Input
+                aria-invalid={!!errors.email}
+                autoComplete="email"
+                id="email"
+                type="email"
+                {...register("email")}
+              />
               {errors.email && (
-                <p className="text-xs text-destructive font-body">{errors.email.message}</p>
+                <p className="font-body text-destructive text-xs">
+                  {errors.email.message}
+                </p>
               )}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="subject" className="font-body text-sm">
-                Assunto <span className="text-muted-foreground font-normal">(opcional)</span>
+              <Label className="font-body text-sm" htmlFor="subject">
+                Assunto{" "}
+                <span className="font-normal text-muted-foreground">
+                  (opcional)
+                </span>
               </Label>
               <Input id="subject" type="text" {...register("subject")} />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="message" className="font-body text-sm">
+              <Label className="font-body text-sm" htmlFor="message">
                 Mensagem
               </Label>
               <Textarea
-                id="message"
-                rows={5}
-                maxLength={2000}
                 aria-invalid={!!errors.message}
+                id="message"
+                maxLength={2000}
                 placeholder="A sua mensagem…"
+                rows={5}
                 {...register("message")}
               />
               {errors.message && (
-                <p className="text-xs text-destructive font-body">{errors.message.message}</p>
+                <p className="font-body text-destructive text-xs">
+                  {errors.message.message}
+                </p>
               )}
             </div>
 
             {submitError && (
               <div
+                className="rounded-md border border-destructive/40 bg-destructive/5 p-4 font-body text-destructive text-sm"
                 role="alert"
-                className="rounded-md border border-destructive/40 bg-destructive/5 p-4 font-body text-sm text-destructive"
               >
                 {submitError}
               </div>
@@ -194,14 +204,13 @@ export default function ContactosPage() {
 
             <div className="pt-2">
               <Button
-                type="submit"
+                className="h-12 w-full rounded-md bg-primary font-body text-primary-foreground tracking-wide hover:bg-primary/90"
                 disabled={isSubmitting}
-                className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-body tracking-wide rounded-md h-12"
+                type="submit"
               >
                 {isSubmitting ? (
                   <>
-                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                    A enviar…
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />A enviar…
                   </>
                 ) : (
                   "Enviar mensagem"
