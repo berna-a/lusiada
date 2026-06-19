@@ -54,7 +54,7 @@ export function AdminLayout() {
         </p>
         <Button
           className="mt-8 w-full"
-          onClick={() => signIn("google")}
+          onClick={() => signIn("google", { redirectTo: "/admin" })}
           variant="accent"
         >
           Entrar com Google

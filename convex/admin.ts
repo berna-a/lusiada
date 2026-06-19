@@ -51,7 +51,14 @@ export const addAdmin = mutation({
 export const seedAdmins = internalMutation({
   args: {},
   handler: async (ctx) => {
-    const emails = ["bernardo@abreu.me", "admin@alusiada.pt"];
+    // Nota: o Google OAuth devolve sempre o email PRINCIPAL no login. Como
+    // `admin@alusiada.pt` é alias de `bernardo@alusiada.pt`, é este último que
+    // tem de constar para o login funcionar.
+    const emails = [
+      "bernardo@abreu.me",
+      "bernardo@alusiada.pt",
+      "admin@alusiada.pt",
+    ];
     for (const email of emails) {
       const exists = await ctx.db
         .query("admins")
