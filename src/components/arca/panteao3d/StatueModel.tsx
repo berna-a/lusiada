@@ -13,6 +13,8 @@ const MARBLE = new MeshStandardMaterial({
   color: "#e9e2d4",
   roughness: 0.5,
   metalness: 0,
+  emissive: "#caa24a",
+  emissiveIntensity: 0,
 });
 
 /**
@@ -59,9 +61,11 @@ export function StatueModel({
   const enter = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
     document.body.style.cursor = "pointer";
+    MARBLE.emissiveIntensity = 0.14;
   };
   const leave = () => {
     document.body.style.cursor = "auto";
+    MARBLE.emissiveIntensity = 0;
   };
 
   return (
