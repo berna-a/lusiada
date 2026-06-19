@@ -29,6 +29,20 @@ export const listApproved = query({
   },
 });
 
+/** Número de memórias aprovadas de um herói (para o painel do Panteão). */
+export const countApproved = query({
+  args: { figureId: v.id("figures") },
+  handler: async (ctx, { figureId }) => {
+    const items = await ctx.db
+      .query("contributions")
+      .withIndex("by_figure_status", (q) =>
+        q.eq("figure_id", figureId).eq("status", "approved")
+      )
+      .collect();
+    return items.length;
+  },
+});
+
 /** Gera um URL de upload para a imagem. Requer sessão iniciada. */
 export const generateUploadUrl = mutation({
   args: {},

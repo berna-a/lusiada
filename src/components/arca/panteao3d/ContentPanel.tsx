@@ -1,5 +1,11 @@
 import { useQuery } from "convex/react";
-import { ArrowUpRight, ChevronLeft, ChevronRight, X } from "lucide-react";
+import {
+  ArrowUpRight,
+  ChevronLeft,
+  ChevronRight,
+  MessageSquareQuote,
+  X,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import { api } from "../../../../convex/_generated/api";
 
@@ -33,6 +39,10 @@ export function ContentPanel({
   const isLoading = Boolean(slot.slug) && data === undefined;
   const figure = data?.figure;
   const blocks = data?.blocks ?? [];
+  const memCount = useQuery(
+    api.contributions.countApproved,
+    figure?._id ? { figureId: figure._id } : "skip"
+  );
   const dates = figure
     ? [figure.birth_year, figure.death_year].filter(Boolean).join(" — ")
     : "";
@@ -154,6 +164,27 @@ export function ContentPanel({
             to={`/arca/herois/${slot.slug}`}
           >
             Página completa <ArrowUpRight className="h-3.5 w-3.5" />
+          </Link>
+        )}
+
+        {slot.slug && (
+          <Link
+            className="group mt-6 block rounded-xl border border-accent/15 bg-[#f4f1ec]/[0.03] p-5 transition-colors hover:border-accent/35"
+            to={`/arca/herois/${slot.slug}`}
+          >
+            <span className="flex items-center gap-2 font-body text-[11px] text-accent/80 uppercase tracking-[0.25em]">
+              <MessageSquareQuote className="h-3.5 w-3.5" /> Arca viva
+            </span>
+            <p className="mt-2 font-body text-[14px] text-[#f4f1ec]/70 leading-relaxed">
+              {memCount === undefined
+                ? "Memórias da comunidade…"
+                : memCount > 0
+                  ? `${memCount} ${memCount === 1 ? "memória partilhada" : "memórias partilhadas"} por quem mantém este legado vivo.`
+                  : "Ainda sem memórias. Seja o primeiro a partilhar a sua."}
+            </p>
+            <span className="mt-3 inline-flex items-center gap-1 font-body text-[12px] text-accent uppercase tracking-[0.2em] transition-all group-hover:gap-2">
+              Ver e partilhar <ArrowUpRight className="h-3.5 w-3.5" />
+            </span>
           </Link>
         )}
       </div>
