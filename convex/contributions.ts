@@ -1,7 +1,7 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { getCurrentUser, requireAdmin } from "./permissions";
+import { getCurrentUser, isMemberEmail, requireAdmin } from "./permissions";
 
 const MAX_BODY = 4000;
 const MIN_BODY = 2;
@@ -18,13 +18,47 @@ export const listApproved = query({
       .order("desc")
       .collect();
     return Promise.all(
-      items.map(async (c) => ({
-        _id: c._id,
-        createdAt: c._creationTime,
-        authorName: c.author_name ?? null,
-        body: c.body,
-        imageUrl: c.image_id ? await ctx.storage.getUrl(c.image_id) : null,
-      }))
+      items.map(async (c) => {
+        const author = await ctx.db.get(c.author_id);
+        return {
+          _id: c._id,
+          createdAt: c._creationTime,
+          authorName: c.author_name ?? null,
+          authorIsMember: await isMemberEmail(ctx, author?.email),
+          body: c.body,
+          imageUrl: c.image_id ? await ctx.storage.getUrl(c.image_id) : null,
+        };
+      })
+    );
+  },
+});
+
+/** As memórias submetidas pelo próprio utilizador (qualquer estado). */
+export const mine = query({
+  args: {},
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      return [];
+    }
+    const items = await ctx.db
+      .query("contributions")
+      .withIndex("by_author", (q) => q.eq("author_id", userId))
+      .order("desc")
+      .collect();
+    return Promise.all(
+      items.map(async (c) => {
+        const figure = await ctx.db.get(c.figure_id);
+        return {
+          _id: c._id,
+          createdAt: c._creationTime,
+          status: c.status,
+          body: c.body,
+          imageUrl: c.image_id ? await ctx.storage.getUrl(c.image_id) : null,
+          figureName: figure?.name ?? "—",
+          figureSlug: figure?.slug ?? null,
+        };
+      })
     );
   },
 });

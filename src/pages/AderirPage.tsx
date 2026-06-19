@@ -1,15 +1,13 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useAuthActions } from "@convex-dev/auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useConvexAuth, useMutation, useQuery } from "convex/react";
+import { CheckCircle2, Clock, Loader2 } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import { z } from "zod";
-import { Loader2 } from "lucide-react";
-import { useMutation } from "convex/react";
-
-import { api } from "../../convex/_generated/api";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -18,12 +16,31 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { api } from "../../convex/_generated/api";
 
 const DISTRITOS = [
-  "Aveiro", "Beja", "Braga", "Bragança", "Castelo Branco", "Coimbra",
-  "Évora", "Faro", "Guarda", "Leiria", "Lisboa", "Portalegre", "Porto",
-  "Santarém", "Setúbal", "Viana do Castelo", "Vila Real", "Viseu",
-  "Açores", "Madeira", "Estrangeiro",
+  "Aveiro",
+  "Beja",
+  "Braga",
+  "Bragança",
+  "Castelo Branco",
+  "Coimbra",
+  "Évora",
+  "Faro",
+  "Guarda",
+  "Leiria",
+  "Lisboa",
+  "Portalegre",
+  "Porto",
+  "Santarém",
+  "Setúbal",
+  "Viana do Castelo",
+  "Vila Real",
+  "Viseu",
+  "Açores",
+  "Madeira",
+  "Estrangeiro",
 ] as const;
 
 const ORIGENS = [
@@ -41,11 +58,6 @@ const schema = z.object({
     .trim()
     .min(3, { message: "Indique o seu nome completo (mínimo 3 caracteres)." })
     .max(120, { message: "O nome deve ter menos de 120 caracteres." }),
-  email: z
-    .string()
-    .trim()
-    .email({ message: "Indique um endereço de correio electrónico válido." })
-    .max(255),
   district: z.enum(DISTRITOS, {
     errorMap: () => ({ message: "Seleccione o seu distrito." }),
   }),
@@ -62,244 +74,317 @@ const schema = z.object({
 
 type FormValues = z.infer<typeof schema>;
 
-export default function AderirPage() {
-  const [submittedName, setSubmittedName] = useState<string | null>(null);
-  const [submitError, setSubmitError] = useState<string | null>(null);
-  const createMember = useMutation(api.members.create);
+function Shell({ children }: { children: React.ReactNode }) {
+  return (
+    <main
+      className="min-h-screen bg-background pt-32 pb-24"
+      data-nav-theme="light"
+    >
+      <article className="container mx-auto max-w-2xl px-6">
+        <header className="mb-12 text-center">
+          <p className="mb-4 font-body text-muted-foreground text-xs uppercase tracking-[0.3em]">
+            Adesão
+          </p>
+          <h1 className="font-display font-semibold text-4xl text-foreground tracking-tight md:text-5xl">
+            Tornar-se Sócio
+          </h1>
+          <p className="mx-auto mt-6 max-w-xl font-body text-base text-muted-foreground leading-relaxed">
+            Ser sócio da Associação Memória Lusíada é um compromisso com a
+            preservação da nossa herança. A adesão implica o pagamento de uma
+            quota e a aprovação da Direcção.
+          </p>
+        </header>
+        {children}
+      </article>
+    </main>
+  );
+}
 
+function Card({ children }: { children: React.ReactNode }) {
+  return (
+    <section className="premium-shadow rounded-2xl border border-border bg-card p-8 text-center md:p-12">
+      {children}
+    </section>
+  );
+}
+
+export default function AderirPage() {
+  const { isLoading, isAuthenticated } = useConvexAuth();
+  const { signIn } = useAuthActions();
+  const membership = useQuery(api.memberships.myMembership);
+
+  if (isLoading || (isAuthenticated && membership === undefined)) {
+    return (
+      <Shell>
+        <div className="flex justify-center py-10">
+          <Loader2 className="h-6 w-6 animate-spin text-accent" />
+        </div>
+      </Shell>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <Shell>
+        <Card>
+          <p className="font-body text-base text-foreground/80 leading-relaxed">
+            Para aderir, inicie sessão com a sua conta Google. Assim a sua
+            adesão fica ligada ao seu perfil.
+          </p>
+          <Button
+            className="mt-8"
+            onClick={() => signIn("google", { redirectTo: "/aderir" })}
+            variant="accent"
+          >
+            Entrar com Google
+          </Button>
+          <p className="mt-6 font-body text-muted-foreground text-sm">
+            Só quer explorar e contribuir para a Arca?{" "}
+            <Link className="text-accent hover:underline" to="/arca">
+              Não precisa de ser sócio.
+            </Link>
+          </p>
+        </Card>
+      </Shell>
+    );
+  }
+
+  if (membership?.level === "member") {
+    return (
+      <Shell>
+        <Card>
+          <CheckCircle2 className="mx-auto h-10 w-10 text-accent" />
+          <h2 className="mt-4 font-display font-semibold text-3xl text-foreground">
+            Já é sócio. Obrigado.
+          </h2>
+          <p className="mt-4 font-body text-base text-foreground/80 leading-relaxed">
+            A sua adesão está ativa. Bem-vindo à Associação Memória Lusíada.
+          </p>
+          <Button asChild className="mt-8" variant="accent">
+            <Link to="/conta">A minha conta</Link>
+          </Button>
+        </Card>
+      </Shell>
+    );
+  }
+
+  if (membership?.level === "pending") {
+    return (
+      <Shell>
+        <Card>
+          <Clock className="mx-auto h-10 w-10 text-accent" />
+          <h2 className="mt-4 font-display font-semibold text-3xl text-foreground">
+            Adesão em análise
+          </h2>
+          <p className="mt-4 font-body text-base text-foreground/80 leading-relaxed">
+            Recebemos o seu pedido de adesão. A Direcção irá analisá-lo e
+            entraremos em contacto com as indicações para o pagamento da quota.
+          </p>
+          <Button asChild className="mt-8" variant="outline">
+            <Link to="/conta">A minha conta</Link>
+          </Button>
+        </Card>
+      </Shell>
+    );
+  }
+
+  return (
+    <Shell>
+      <AdesaoForm defaultName={membership?.user?.name ?? ""} />
+    </Shell>
+  );
+}
+
+function AdesaoForm({ defaultName }: { defaultName: string }) {
+  const request = useMutation(api.memberships.requestMembership);
   const {
     register,
     handleSubmit,
     setValue,
     watch,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { newsletter_consent: true },
+    defaultValues: { full_name: defaultName, newsletter_consent: true },
   });
-
   const newsletter = watch("newsletter_consent");
 
   const onSubmit = async (values: FormValues) => {
-    setSubmitError(null);
-
     try {
-      const result = await createMember({
+      await request({
         full_name: values.full_name.trim(),
-        email: values.email.toLowerCase(),
         district: values.district,
-        city: values.city?.trim() ? values.city.trim() : null,
-        how_did_you_find_us: values.how_did_you_find_us ?? null,
-        motivation: values.motivation?.trim() ? values.motivation.trim() : null,
+        city: values.city?.trim() || undefined,
+        how_did_you_find_us: values.how_did_you_find_us ?? undefined,
+        motivation: values.motivation?.trim() || undefined,
         newsletter_consent: values.newsletter_consent,
       });
-
-      if (result.duplicate) {
-        setSubmitError(
-          "Este correio electrónico já consta dos nossos registos. Já é membro da Associação Lusíada."
-        );
-        return;
-      }
-
-      setSubmittedName(values.full_name.trim().split(/\s+/)[0]);
-    } catch {
-      setSubmitError(
-        "Não foi possível concluir a adesão. Por favor, tente novamente em instantes."
-      );
+    } catch (e) {
+      setError("root", {
+        message:
+          e instanceof Error
+            ? e.message
+            : "Não foi possível enviar o pedido. Tente novamente.",
+      });
     }
   };
 
   return (
-    <main className="min-h-screen bg-background pt-32 pb-24">
-      <article className="container mx-auto max-w-2xl px-6">
-        <header className="mb-12 text-center">
-          <p className="font-body text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
-            Adesão
+    <form
+      className="premium-shadow space-y-6 rounded-2xl border border-border bg-card p-8 md:p-10"
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <div className="space-y-2">
+        <Label className="font-body text-sm" htmlFor="full_name">
+          Nome completo
+        </Label>
+        <Input
+          aria-invalid={!!errors.full_name}
+          autoComplete="name"
+          id="full_name"
+          type="text"
+          {...register("full_name")}
+        />
+        {errors.full_name && (
+          <p className="font-body text-destructive text-xs">
+            {errors.full_name.message}
           </p>
-          <h1 className="font-display text-4xl md:text-5xl font-semibold text-foreground tracking-tight">
-            Aderir à Associação Lusíada
-          </h1>
-          <p className="mt-6 font-body text-base text-muted-foreground leading-relaxed max-w-xl mx-auto">
-            A adesão é livre e gratuita. A Associação sustenta-se de doações.
-          </p>
-        </header>
-
-        {submittedName ? (
-          <section className="rounded-2xl border border-border bg-card p-10 md:p-14 text-center premium-shadow">
-            <h2 className="font-display text-3xl md:text-4xl font-semibold text-foreground">
-              Bem-vindo(a), {submittedName}.
-            </h2>
-            <p className="mt-6 font-body text-base text-foreground/80 leading-relaxed">
-              A sua adesão à Associação Lusíada foi confirmada.
-            </p>
-            <p className="mt-3 font-body text-sm text-muted-foreground leading-relaxed">
-              Em breve receberá uma mensagem de boas-vindas no seu correio electrónico.
-            </p>
-          </section>
-        ) : (
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            noValidate
-            className="rounded-2xl border border-border bg-card p-8 md:p-10 premium-shadow space-y-6"
-          >
-            {/* Nome */}
-            <div className="space-y-2">
-              <Label htmlFor="full_name" className="font-body text-sm">
-                Nome completo
-              </Label>
-              <Input
-                id="full_name"
-                type="text"
-                autoComplete="name"
-                aria-invalid={!!errors.full_name}
-                {...register("full_name")}
-              />
-              {errors.full_name && (
-                <p className="text-xs text-destructive font-body">{errors.full_name.message}</p>
-              )}
-            </div>
-
-            {/* Email */}
-            <div className="space-y-2">
-              <Label htmlFor="email" className="font-body text-sm">
-                Correio electrónico
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                autoComplete="email"
-                aria-invalid={!!errors.email}
-                {...register("email")}
-              />
-              {errors.email && (
-                <p className="text-xs text-destructive font-body">{errors.email.message}</p>
-              )}
-            </div>
-
-            {/* Distrito */}
-            <div className="space-y-2">
-              <Label htmlFor="district" className="font-body text-sm">
-                Distrito
-              </Label>
-              <Select
-                onValueChange={(v) => setValue("district", v as FormValues["district"], { shouldValidate: true })}
-              >
-                <SelectTrigger id="district" aria-invalid={!!errors.district}>
-                  <SelectValue placeholder="Seleccione o distrito" />
-                </SelectTrigger>
-                <SelectContent>
-                  {DISTRITOS.map((d) => (
-                    <SelectItem key={d} value={d}>
-                      {d}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.district && (
-                <p className="text-xs text-destructive font-body">{errors.district.message}</p>
-              )}
-            </div>
-
-            {/* Cidade */}
-            <div className="space-y-2">
-              <Label htmlFor="city" className="font-body text-sm">
-                Cidade <span className="text-muted-foreground font-normal">(opcional)</span>
-              </Label>
-              <Input
-                id="city"
-                type="text"
-                autoComplete="address-level2"
-                {...register("city")}
-              />
-            </div>
-
-            {/* Como descobriu */}
-            <div className="space-y-2">
-              <Label htmlFor="how_did_you_find_us" className="font-body text-sm">
-                Como nos descobriste? <span className="text-muted-foreground font-normal">(opcional)</span>
-              </Label>
-              <Select
-                onValueChange={(v) =>
-                  setValue("how_did_you_find_us", v as FormValues["how_did_you_find_us"], {
-                    shouldValidate: true,
-                  })
-                }
-              >
-                <SelectTrigger id="how_did_you_find_us">
-                  <SelectValue placeholder="Seleccione uma opção" />
-                </SelectTrigger>
-                <SelectContent>
-                  {ORIGENS.map((o) => (
-                    <SelectItem key={o} value={o}>
-                      {o}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Motivação */}
-            <div className="space-y-2">
-              <Label htmlFor="motivation" className="font-body text-sm">
-                Motivação para aderir <span className="text-muted-foreground font-normal">(opcional)</span>
-              </Label>
-              <Textarea
-                id="motivation"
-                rows={4}
-                maxLength={1000}
-                placeholder="O que o leva a aderir à Associação Lusíada?"
-                {...register("motivation")}
-              />
-              {errors.motivation && (
-                <p className="text-xs text-destructive font-body">{errors.motivation.message}</p>
-              )}
-            </div>
-
-            {/* Newsletter */}
-            <div className="flex items-start gap-3 pt-2">
-              <Checkbox
-                id="newsletter_consent"
-                checked={newsletter}
-                onCheckedChange={(c) => setValue("newsletter_consent", c === true)}
-                className="mt-0.5"
-              />
-              <Label
-                htmlFor="newsletter_consent"
-                className="font-body text-sm text-foreground/80 leading-relaxed cursor-pointer"
-              >
-                Aceito receber comunicações da Associação por correio electrónico
-              </Label>
-            </div>
-
-            {/* Submit error */}
-            {submitError && (
-              <div
-                role="alert"
-                className="rounded-md border border-destructive/40 bg-destructive/5 p-4 font-body text-sm text-destructive"
-              >
-                {submitError}
-              </div>
-            )}
-
-            <div className="pt-2">
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-body tracking-wide rounded-md h-12"
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                    A confirmar…
-                  </>
-                ) : (
-                  "Confirmar adesão"
-                )}
-              </Button>
-            </div>
-          </form>
         )}
-      </article>
-    </main>
+      </div>
+
+      <div className="space-y-2">
+        <Label className="font-body text-sm" htmlFor="district">
+          Distrito
+        </Label>
+        <Select
+          onValueChange={(v) =>
+            setValue("district", v as FormValues["district"], {
+              shouldValidate: true,
+            })
+          }
+        >
+          <SelectTrigger aria-invalid={!!errors.district} id="district">
+            <SelectValue placeholder="Seleccione o distrito" />
+          </SelectTrigger>
+          <SelectContent>
+            {DISTRITOS.map((d) => (
+              <SelectItem key={d} value={d}>
+                {d}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        {errors.district && (
+          <p className="font-body text-destructive text-xs">
+            {errors.district.message}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label className="font-body text-sm" htmlFor="city">
+          Cidade{" "}
+          <span className="font-normal text-muted-foreground">(opcional)</span>
+        </Label>
+        <Input
+          autoComplete="address-level2"
+          id="city"
+          type="text"
+          {...register("city")}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label className="font-body text-sm" htmlFor="how_did_you_find_us">
+          Como nos descobriu?{" "}
+          <span className="font-normal text-muted-foreground">(opcional)</span>
+        </Label>
+        <Select
+          onValueChange={(v) =>
+            setValue(
+              "how_did_you_find_us",
+              v as FormValues["how_did_you_find_us"],
+              { shouldValidate: true }
+            )
+          }
+        >
+          <SelectTrigger id="how_did_you_find_us">
+            <SelectValue placeholder="Seleccione uma opção" />
+          </SelectTrigger>
+          <SelectContent>
+            {ORIGENS.map((o) => (
+              <SelectItem key={o} value={o}>
+                {o}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="space-y-2">
+        <Label className="font-body text-sm" htmlFor="motivation">
+          Motivação para aderir{" "}
+          <span className="font-normal text-muted-foreground">(opcional)</span>
+        </Label>
+        <Textarea
+          id="motivation"
+          maxLength={1000}
+          placeholder="O que o leva a aderir à Associação Memória Lusíada?"
+          rows={4}
+          {...register("motivation")}
+        />
+        {errors.motivation && (
+          <p className="font-body text-destructive text-xs">
+            {errors.motivation.message}
+          </p>
+        )}
+      </div>
+
+      <div className="flex items-start gap-3 pt-2">
+        <Checkbox
+          checked={newsletter}
+          className="mt-0.5"
+          id="newsletter_consent"
+          onCheckedChange={(c) => setValue("newsletter_consent", c === true)}
+        />
+        <Label
+          className="cursor-pointer font-body text-foreground/80 text-sm leading-relaxed"
+          htmlFor="newsletter_consent"
+        >
+          Aceito receber comunicações da Associação por correio electrónico
+        </Label>
+      </div>
+
+      {errors.root && (
+        <div
+          className="rounded-md border border-destructive/40 bg-destructive/5 p-4 font-body text-destructive text-sm"
+          role="alert"
+        >
+          {errors.root.message}
+        </div>
+      )}
+
+      <div className="pt-2">
+        <Button
+          className="h-12 w-full"
+          disabled={isSubmitting}
+          type="submit"
+          variant="accent"
+        >
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> A enviar…
+            </>
+          ) : (
+            "Enviar pedido de adesão"
+          )}
+        </Button>
+        <p className="mt-3 text-center font-body text-muted-foreground text-xs">
+          O pedido fica sujeito a aprovação e ao pagamento da quota.
+        </p>
+      </div>
+    </form>
   );
 }

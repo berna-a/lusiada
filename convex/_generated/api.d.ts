@@ -15,6 +15,7 @@ import type * as contributions from "../contributions.js";
 import type * as figures from "../figures.js";
 import type * as http from "../http.js";
 import type * as members from "../members.js";
+import type * as memberships from "../memberships.js";
 import type * as permissions from "../permissions.js";
 
 import type {
@@ -31,6 +32,7 @@ declare const fullApi: ApiFromModules<{
   figures: typeof figures;
   http: typeof http;
   members: typeof members;
+  memberships: typeof memberships;
   permissions: typeof permissions;
 }>;
 

@@ -7,6 +7,7 @@ import {
   Loader2,
   LogOut,
   Settings,
+  Users,
 } from "lucide-react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,7 @@ import { api } from "../../convex/_generated/api";
 
 const adminLinks = [
   { label: "Heróis", to: "/admin", icon: LayoutDashboard },
+  { label: "Sócios", to: "/admin/socios", icon: Users },
   { label: "Moderação", to: "/admin/moderacao", icon: Inbox },
   { label: "Definições", to: "/admin/definicoes", icon: Settings },
 ];
@@ -34,6 +36,11 @@ export function AdminLayout() {
   const { signIn, signOut } = useAuthActions();
   const me = useQuery(api.admin.me);
   const pendingCount = useQuery(api.contributions.adminPendingCount);
+  const pendingMembers = useQuery(api.memberships.adminPendingMembersCount);
+  const badges: Record<string, number | undefined> = {
+    "/admin/moderacao": pendingCount,
+    "/admin/socios": pendingMembers,
+  };
 
   if (isLoading) {
     return (
@@ -113,6 +120,7 @@ export function AdminLayout() {
         <nav className="flex-1 py-2">
           {adminLinks.map((link) => {
             const active = location.pathname === link.to;
+            const badge = badges[link.to];
             return (
               <Link
                 className={`flex items-center gap-3 px-4 py-2 text-sm transition-colors ${
@@ -125,13 +133,11 @@ export function AdminLayout() {
               >
                 <link.icon className="h-4 w-4" />
                 <span>{link.label}</span>
-                {link.to === "/admin/moderacao" &&
-                  typeof pendingCount === "number" &&
-                  pendingCount > 0 && (
-                    <span className="ml-auto grid h-5 min-w-5 place-items-center rounded-full bg-accent px-1.5 font-body text-[11px] text-accent-foreground">
-                      {pendingCount}
-                    </span>
-                  )}
+                {typeof badge === "number" && badge > 0 && (
+                  <span className="ml-auto grid h-5 min-w-5 place-items-center rounded-full bg-accent px-1.5 font-body text-[11px] text-accent-foreground">
+                    {badge}
+                  </span>
+                )}
               </Link>
             );
           })}

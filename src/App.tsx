@@ -14,6 +14,8 @@ import ProgramaPage from "@/pages/ProgramaPage";
 import ApoiarPage from "@/pages/ApoiarPage";
 import ContactosPage from "@/pages/ContactosPage";
 import AderirPage from "@/pages/AderirPage";
+import MinhaContaPage from "@/pages/MinhaContaPage";
+import MembrosPage from "@/pages/MembrosPage";
 import ManifestoPage from "@/pages/sobre/ManifestoPage";
 import ObjectivosPage from "@/pages/sobre/ObjectivosPage";
 
@@ -29,6 +31,7 @@ import ColeccoesPage from "@/pages/arca/ColeccoesPage";
 import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 import AdminDefinicoesPage from "@/pages/admin/AdminDefinicoesPage";
 import AdminModeracaoPage from "@/pages/admin/AdminModeracaoPage";
+import AdminSociosPage from "@/pages/admin/AdminSociosPage";
 
 import NotFound from "@/pages/NotFound";
 import { PlaceholderPage } from "@/components/PlaceholderPage";
@@ -51,6 +54,8 @@ const App = () => (
             <Route path="/apoiar" element={<ApoiarPage />} />
             <Route path="/contactos" element={<ContactosPage />} />
             <Route path="/aderir" element={<AderirPage />} />
+            <Route path="/conta" element={<MinhaContaPage />} />
+            <Route path="/membros" element={<MembrosPage />} />
             <Route path="/sobre/manifesto" element={<ManifestoPage />} />
             {/* Homepage navbar/footer aliases — point to existing pages */}
             <Route path="/a-associacao" element={<AssociacaoPage />} />
@@ -86,6 +91,7 @@ const App = () => (
           {/* Admin layout */}
           <Route element={<AdminLayout />}>
             <Route path="/admin" element={<AdminDashboardPage />} />
+            <Route path="/admin/socios" element={<AdminSociosPage />} />
             <Route path="/admin/moderacao" element={<AdminModeracaoPage />} />
             <Route path="/admin/definicoes" element={<AdminDefinicoesPage />} />
           </Route>

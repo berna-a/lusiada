@@ -72,8 +72,14 @@ export function CommunityFeed({ figureId, figureName }: CommunityFeedProps) {
                   src={m.imageUrl}
                 />
               )}
-              <p className="mt-4 font-body text-[12px] text-muted-foreground uppercase tracking-[0.15em]">
-                {m.authorName ?? "Anónimo"} · {formatDate(m.createdAt)}
+              <p className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 font-body text-[12px] text-muted-foreground uppercase tracking-[0.15em]">
+                <span>{m.authorName ?? "Anónimo"}</span>
+                {m.authorIsMember && (
+                  <span className="rounded-full border border-accent/40 px-2 py-0.5 text-[10px] text-accent tracking-[0.1em]">
+                    Sócio
+                  </span>
+                )}
+                <span>· {formatDate(m.createdAt)}</span>
               </p>
             </li>
           ))}

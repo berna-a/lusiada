@@ -19,10 +19,12 @@ export default defineSchema({
     name: v.optional(v.string()),
   }).index("by_email", ["email"]),
 
-  // Membros (adesões)
+  // Membros (adesões). status: "pending" | "active" | "rejected".
+  // user_id liga a adesão à conta (login Google); quota_paid confirma a quota.
   members: defineTable({
     full_name: v.string(),
     email: v.string(),
+    user_id: v.optional(v.union(v.id("users"), v.null())),
     district: v.optional(v.string()),
     city: v.optional(v.union(v.string(), v.null())),
     how_did_you_find_us: v.optional(v.union(v.string(), v.null())),
@@ -31,10 +33,13 @@ export default defineSchema({
     events_consent: v.optional(v.boolean()),
     country: v.optional(v.string()),
     status: v.optional(v.string()),
+    quota_paid: v.optional(v.boolean()),
     phone: v.optional(v.union(v.string(), v.null())),
     birth_year: v.optional(v.union(v.number(), v.null())),
     email_verified: v.optional(v.boolean()),
-  }).index("by_email", ["email"]),
+  })
+    .index("by_email", ["email"])
+    .index("by_status", ["status"]),
 
   // Figuras / Heróis (Panteão)
   figures: defineTable({
@@ -128,7 +133,8 @@ export default defineSchema({
     ),
   })
     .index("by_figure_status", ["figure_id", "status"])
-    .index("by_status", ["status"]),
+    .index("by_status", ["status"])
+    .index("by_author", ["author_id"]),
 
   // Doações
   donations: defineTable({
