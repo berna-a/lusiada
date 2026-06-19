@@ -1,31 +1,28 @@
 import { MeshReflectorMaterial } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Suspense, useRef } from "react";
+import { type RefObject, Suspense, useRef } from "react";
 import { Vector3 } from "three";
 import { Column } from "./Column";
 import { Dust } from "./Dust";
+import { SPACING, xAt } from "./layout";
 import { StatueModel } from "./StatueModel";
 
-const SPACING = 4.3;
-
-function xAt(i: number, n: number) {
-  return (i - (n - 1) / 2) * SPACING;
-}
-
-/** Câmara guiada: deriva na galeria e foca a estátua selecionada (easing). */
+/** Câmara guiada: percorre a galeria (pan do utilizador) e foca a selecionada. */
 function CameraRig({
   selected,
   count,
   portrait,
+  panRef,
 }: {
   selected: number | null;
   count: number;
   portrait: boolean;
+  panRef: RefObject<number>;
 }) {
   const look = useRef(new Vector3(0, 1.5, 0));
 
   useFrame((state, dt) => {
-    const cam = state.camera;
+    const lookAt = look.current;
     let tx: number;
     let ty: number;
     let tz: number;
@@ -34,11 +31,11 @@ function CameraRig({
     let lz: number;
 
     if (selected === null) {
-      const drift = Math.sin(state.clock.elapsedTime * 0.11) * 2.4;
-      tx = drift;
+      const px = panRef.current;
+      tx = px;
       ty = 2.2;
-      tz = portrait ? 15 : 10.5;
-      lx = drift * 0.4;
+      tz = portrait ? 14.5 : 10.5;
+      lx = px;
       ly = 1.5;
       lz = 0;
     } else {
@@ -60,14 +57,15 @@ function CameraRig({
       }
     }
 
+    const camera = state.camera;
     const a = 1 - Math.exp(-3.4 * dt);
-    cam.position.x += (tx - cam.position.x) * a;
-    cam.position.y += (ty - cam.position.y) * a;
-    cam.position.z += (tz - cam.position.z) * a;
-    look.current.x += (lx - look.current.x) * a;
-    look.current.y += (ly - look.current.y) * a;
-    look.current.z += (lz - look.current.z) * a;
-    cam.lookAt(look.current);
+    camera.position.x += (tx - camera.position.x) * a;
+    camera.position.y += (ty - camera.position.y) * a;
+    camera.position.z += (tz - camera.position.z) * a;
+    lookAt.x += (lx - lookAt.x) * a;
+    lookAt.y += (ly - lookAt.y) * a;
+    lookAt.z += (lz - lookAt.z) * a;
+    camera.lookAt(lookAt);
   });
 
   return null;
@@ -78,6 +76,7 @@ type SceneProps = {
   count: number;
   selected: number | null;
   onSelect: (i: number | null) => void;
+  panRef: RefObject<number>;
 };
 
 export default function Scene({
@@ -85,6 +84,7 @@ export default function Scene({
   count,
   selected,
   onSelect,
+  panRef,
 }: SceneProps) {
   const portrait =
     typeof window !== "undefined" && window.innerHeight > window.innerWidth;
@@ -182,7 +182,12 @@ export default function Scene({
 
       <Dust />
 
-      <CameraRig count={count} portrait={portrait} selected={selected} />
+      <CameraRig
+        count={count}
+        panRef={panRef}
+        portrait={portrait}
+        selected={selected}
+      />
     </Canvas>
   );
 }
