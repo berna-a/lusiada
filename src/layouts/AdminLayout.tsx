@@ -2,6 +2,7 @@ import { useAuthActions } from "@convex-dev/auth/react";
 import { useConvexAuth, useQuery } from "convex/react";
 import {
   ChevronLeft,
+  Inbox,
   LayoutDashboard,
   Loader2,
   LogOut,
@@ -13,6 +14,7 @@ import { api } from "../../convex/_generated/api";
 
 const adminLinks = [
   { label: "Heróis", to: "/admin", icon: LayoutDashboard },
+  { label: "Moderação", to: "/admin/moderacao", icon: Inbox },
   { label: "Definições", to: "/admin/definicoes", icon: Settings },
 ];
 
@@ -31,6 +33,7 @@ export function AdminLayout() {
   const { isLoading, isAuthenticated } = useConvexAuth();
   const { signIn, signOut } = useAuthActions();
   const me = useQuery(api.admin.me);
+  const pendingCount = useQuery(api.contributions.adminPendingCount);
 
   if (isLoading) {
     return (
@@ -122,6 +125,13 @@ export function AdminLayout() {
               >
                 <link.icon className="h-4 w-4" />
                 <span>{link.label}</span>
+                {link.to === "/admin/moderacao" &&
+                  typeof pendingCount === "number" &&
+                  pendingCount > 0 && (
+                    <span className="ml-auto grid h-5 min-w-5 place-items-center rounded-full bg-accent px-1.5 font-body text-[11px] text-accent-foreground">
+                      {pendingCount}
+                    </span>
+                  )}
               </Link>
             );
           })}

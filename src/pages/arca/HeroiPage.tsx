@@ -1,6 +1,7 @@
 import { useQuery } from "convex/react";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
+import { CommunityFeed } from "@/components/arca/CommunityFeed";
 import { JoinCTA } from "@/components/JoinCTA";
 import { api } from "../../../convex/_generated/api";
 
@@ -122,6 +123,9 @@ export default function HeroiPage() {
           );
         })}
       </div>
+
+      {/* Feed da comunidade */}
+      <CommunityFeed figureId={figure._id} figureName={figure.name} />
 
       {/* CTA */}
       <div className="mt-16">

@@ -28,6 +28,7 @@ import ColeccoesPage from "@/pages/arca/ColeccoesPage";
 
 import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 import AdminDefinicoesPage from "@/pages/admin/AdminDefinicoesPage";
+import AdminModeracaoPage from "@/pages/admin/AdminModeracaoPage";
 
 import NotFound from "@/pages/NotFound";
 import { PlaceholderPage } from "@/components/PlaceholderPage";
@@ -85,6 +86,7 @@ const App = () => (
           {/* Admin layout */}
           <Route element={<AdminLayout />}>
             <Route path="/admin" element={<AdminDashboardPage />} />
+            <Route path="/admin/moderacao" element={<AdminModeracaoPage />} />
             <Route path="/admin/definicoes" element={<AdminDefinicoesPage />} />
           </Route>
 

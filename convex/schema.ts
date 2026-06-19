@@ -113,6 +113,23 @@ export default defineSchema({
     is_public: v.optional(v.boolean()),
   }).index("by_status", ["status"]),
 
+  // Contributos da comunidade ao Panteão — memórias/poemas por herói.
+  // Submetidos por utilizadores autenticados, publicados após aprovação.
+  contributions: defineTable({
+    figure_id: v.id("figures"),
+    author_id: v.id("users"),
+    author_name: v.optional(v.union(v.string(), v.null())),
+    body: v.string(),
+    image_id: v.optional(v.union(v.id("_storage"), v.null())),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("approved"),
+      v.literal("rejected")
+    ),
+  })
+    .index("by_figure_status", ["figure_id", "status"])
+    .index("by_status", ["status"]),
+
   // Doações
   donations: defineTable({
     donor_email: v.string(),
