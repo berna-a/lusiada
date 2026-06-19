@@ -1,3 +1,4 @@
+import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
@@ -9,6 +10,15 @@ import { v } from "convex/values";
  * `id` / `created_at` deixam de ser necessárias.
  */
 export default defineSchema({
+  // Tabelas de autenticação (Convex Auth)
+  ...authTables,
+
+  // Lista de administradores autorizados (por email)
+  admins: defineTable({
+    email: v.string(),
+    name: v.optional(v.string()),
+  }).index("by_email", ["email"]),
+
   // Membros (adesões)
   members: defineTable({
     full_name: v.string(),

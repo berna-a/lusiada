@@ -1,5 +1,6 @@
-import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
+import { mutation, query } from "./_generated/server";
+import { isAdmin, requireAdmin } from "./permissions";
 
 /** Lista as figuras publicadas, ordenadas por display_order. */
 export const list = query({
@@ -127,5 +128,66 @@ export const seedCamoes = mutation({
     }
 
     return { id: figureId };
+  },
+});
+
+/* ──────────────── Admin ──────────────── */
+
+/** Lista TODAS as figuras (incl. não publicadas) — só para administradores. */
+export const adminList = query({
+  args: {},
+  handler: async (ctx) => {
+    if (!(await isAdmin(ctx))) {
+      return [];
+    }
+    const figures = await ctx.db.query("figures").collect();
+    return figures.sort(
+      (a, b) => (a.display_order ?? 999) - (b.display_order ?? 999)
+    );
+  },
+});
+
+/** Cria uma nova figura (herói). Apenas administradores. */
+export const adminCreate = mutation({
+  args: {
+    name: v.string(),
+    slug: v.string(),
+    epithet: v.optional(v.string()),
+    category: v.optional(v.string()),
+    era: v.optional(v.string()),
+    birth_year: v.optional(v.string()),
+    death_year: v.optional(v.string()),
+    is_published: v.optional(v.boolean()),
+  },
+  handler: async (ctx, args) => {
+    await requireAdmin(ctx);
+    const slug = args.slug.trim().toLowerCase();
+    const existing = await ctx.db
+      .query("figures")
+      .withIndex("by_slug", (q) => q.eq("slug", slug))
+      .first();
+    if (existing) {
+      throw new Error("Já existe uma figura com este identificador (slug).");
+    }
+    const id = await ctx.db.insert("figures", {
+      name: args.name.trim(),
+      slug,
+      epithet: args.epithet ?? null,
+      category: args.category ?? null,
+      era: args.era ?? null,
+      birth_year: args.birth_year ?? null,
+      death_year: args.death_year ?? null,
+      is_published: args.is_published ?? false,
+    });
+    return { id };
+  },
+});
+
+/** Publica/despublica uma figura. Apenas administradores. */
+export const adminSetPublished = mutation({
+  args: { id: v.id("figures"), is_published: v.boolean() },
+  handler: async (ctx, args) => {
+    await requireAdmin(ctx);
+    await ctx.db.patch(args.id, { is_published: args.is_published });
   },
 });
