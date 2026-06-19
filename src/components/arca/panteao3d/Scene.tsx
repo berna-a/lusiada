@@ -1,168 +1,188 @@
-import { MeshReflectorMaterial, OrbitControls } from "@react-three/drei";
+import { MeshReflectorMaterial } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Suspense, useRef, useState } from "react";
-import { StatueMesh } from "./StatueMesh";
+import { Suspense, useRef } from "react";
+import { Vector3 } from "three";
+import { Column } from "./Column";
+import { Dust } from "./Dust";
 import { StatueModel } from "./StatueModel";
 
-const COLUMNS: [number, number, number][] = [
-  [-3.6, 2.4, -2.2],
-  [3.6, 2.4, -2.2],
-  [-4.2, 2.4, 1.4],
-  [4.2, 2.4, 1.4],
-];
+const SPACING = 4.3;
 
-const TARGET_Y = 1.55;
+function xAt(i: number, n: number) {
+  return (i - (n - 1) / 2) * SPACING;
+}
 
-/** Entrada cinematográfica: a câmara avança do fundo da sala até à estátua. */
-function IntroDolly({
-  restY,
-  restZ,
-  startY,
-  startZ,
-  onDone,
+/** Câmara guiada: deriva na galeria e foca a estátua selecionada (easing). */
+function CameraRig({
+  selected,
+  count,
+  portrait,
 }: {
-  restY: number;
-  restZ: number;
-  startY: number;
-  startZ: number;
-  onDone: () => void;
+  selected: number | null;
+  count: number;
+  portrait: boolean;
 }) {
-  const progress = useRef(0);
-  const done = useRef(false);
+  const look = useRef(new Vector3(0, 1.5, 0));
 
-  useFrame((state, delta) => {
-    if (done.current) {
-      return;
-    }
-    progress.current = Math.min(1, progress.current + delta / 2.6);
-    const e = 1 - (1 - progress.current) ** 3; // easeOutCubic
+  useFrame((state, dt) => {
     const cam = state.camera;
-    cam.position.set(
-      0,
-      startY + (restY - startY) * e,
-      startZ + (restZ - startZ) * e
-    );
-    cam.lookAt(0, TARGET_Y, 0);
-    if (progress.current >= 1) {
-      done.current = true;
-      onDone();
+    let tx: number;
+    let ty: number;
+    let tz: number;
+    let lx: number;
+    let ly: number;
+    let lz: number;
+
+    if (selected === null) {
+      const drift = Math.sin(state.clock.elapsedTime * 0.11) * 2.4;
+      tx = drift;
+      ty = 2.2;
+      tz = portrait ? 15 : 10.5;
+      lx = drift * 0.4;
+      ly = 1.5;
+      lz = 0;
+    } else {
+      const xs = xAt(selected, count);
+      if (portrait) {
+        tx = xs;
+        ty = 1.75;
+        tz = 7.6;
+        lx = xs;
+        ly = 2.05;
+        lz = 0;
+      } else {
+        tx = xs + 1.7;
+        ty = 1.7;
+        tz = 5.4;
+        lx = xs + 1.7;
+        ly = 1.5;
+        lz = 0;
+      }
     }
+
+    const a = 1 - Math.exp(-3.4 * dt);
+    cam.position.x += (tx - cam.position.x) * a;
+    cam.position.y += (ty - cam.position.y) * a;
+    cam.position.z += (tz - cam.position.z) * a;
+    look.current.x += (lx - look.current.x) * a;
+    look.current.y += (ly - look.current.y) * a;
+    look.current.z += (lz - look.current.z) * a;
+    cam.lookAt(look.current);
   });
 
   return null;
 }
 
-type SceneProps = { onSelect: () => void; modelUrl?: string | null };
+type SceneProps = {
+  modelUrl: string;
+  count: number;
+  selected: number | null;
+  onSelect: (i: number | null) => void;
+};
 
-export default function Scene({ onSelect, modelUrl }: SceneProps) {
-  // Câmara responsiva: em ecrãs verticais (mobile) recua para a figura caber.
+export default function Scene({
+  modelUrl,
+  count,
+  selected,
+  onSelect,
+}: SceneProps) {
   const portrait =
     typeof window !== "undefined" && window.innerHeight > window.innerWidth;
-  const restZ = portrait ? 10.5 : 7.4;
-  const fov = portrait ? 42 : 38;
-  const startZ = restZ + 4;
-  const startY = 0.85;
+  const fov = portrait ? 46 : 40;
 
-  const [ready, setReady] = useState(false);
+  const indices = Array.from({ length: count }, (_, i) => i);
 
   return (
     <Canvas
-      camera={{ position: [0, startY, startZ], fov }}
+      camera={{ position: [0, 1.4, 22], fov }}
       dpr={[1, 2]}
+      onPointerMissed={() => onSelect(null)}
       shadows
     >
       <color args={["#070f1c"]} attach="background" />
-      <fog args={["#070f1c", 8, 22]} attach="fog" />
+      <fog args={["#070f1c", 10, 30]} attach="fog" />
 
       <hemisphereLight
-        args={["#dce8ff", "#16223a", 0.9]}
-        position={[0, 6, 0]}
+        args={["#dce8ff", "#16223a", 0.85]}
+        position={[0, 8, 0]}
       />
-      <ambientLight intensity={0.55} />
-      {/* Luz-chave quente, de cima */}
+      <ambientLight intensity={0.5} />
       <spotLight
-        angle={0.55}
+        angle={0.7}
         castShadow
         color="#fff1da"
         decay={0}
-        intensity={3.2}
+        intensity={2.8}
         penumbra={0.95}
-        position={[0, 8, 4]}
+        position={[0, 9, 6]}
         shadow-mapSize={[1024, 1024]}
       />
-      {/* Preenchimento frontal */}
-      <directionalLight color="#ffffff" intensity={0.9} position={[0, 3, 6]} />
-      {/* Contraluz fria atrás da estátua, para a destacar do fundo */}
-      <directionalLight color="#7da0ff" intensity={1.4} position={[0, 5, -6]} />
-      <directionalLight
-        color="#3f5da8"
-        intensity={0.5}
-        position={[-5, 4, -4]}
-      />
+      <directionalLight color="#ffffff" intensity={0.7} position={[0, 4, 8]} />
+      <directionalLight color="#7da0ff" intensity={1.5} position={[0, 6, -8]} />
 
-      {/* Chão de mármore reflexivo (PBR) */}
+      {/* Parede de fundo */}
+      <mesh position={[0, 4, -7.5]}>
+        <planeGeometry args={[60, 16]} />
+        <meshStandardMaterial color="#141d30" roughness={1} />
+      </mesh>
+
+      {/* Arquitrave sobre a colunata */}
+      <mesh castShadow position={[0, 7.7, -2.6]}>
+        <boxGeometry args={[count * SPACING + 4, 0.6, 1.2]} />
+        <meshStandardMaterial color="#26334a" roughness={0.85} />
+      </mesh>
+
+      {/* Chão de mármore reflexivo */}
       <mesh position={[0, 0, 0]} receiveShadow rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[60, 60]} />
+        <planeGeometry args={[80, 80]} />
         <MeshReflectorMaterial
-          blur={[320, 100]}
+          blur={[340, 110]}
           color="#0b1828"
           depthScale={1.1}
           maxDepthThreshold={1.2}
           metalness={0.6}
           minDepthThreshold={0.4}
           mixBlur={1}
-          mixStrength={48}
+          mixStrength={50}
           resolution={512}
           roughness={0.85}
         />
       </mesh>
 
-      {/* Pedestal — só para a estátua estilizada (os modelos trazem base própria) */}
-      {!modelUrl && (
-        <mesh castShadow position={[0, -0.3, 0]} receiveShadow>
-          <cylinderGeometry args={[1, 1.16, 0.6, 48]} />
-          <meshStandardMaterial color="#cabfa6" roughness={0.6} />
-        </mesh>
-      )}
+      {/* Colunata + estátuas */}
+      {indices.map((i) => {
+        const x = xAt(i, count);
+        return (
+          <group key={i}>
+            <Column position={[x, 0, -2.6]} />
+            {/* Plinto da estátua */}
+            <mesh castShadow position={[x, -0.16, 0]} receiveShadow>
+              <cylinderGeometry args={[1.2, 1.35, 0.32, 40]} />
+              <meshStandardMaterial color="#3a4256" roughness={0.7} />
+            </mesh>
+            <group position={[x, 0, 0]}>
+              <Suspense fallback={null}>
+                <StatueModel
+                  dimmed={selected !== null && selected !== i}
+                  onSelect={() => onSelect(i)}
+                  url={modelUrl}
+                />
+              </Suspense>
+            </group>
+          </group>
+        );
+      })}
 
-      {/* Colunas */}
-      {COLUMNS.map(([x, y, z]) => (
-        <mesh castShadow key={`${x}:${z}`} position={[x, y, z]}>
-          <cylinderGeometry args={[0.4, 0.42, 7.2, 24]} />
-          <meshStandardMaterial color="#5f5848" roughness={0.8} />
-        </mesh>
-      ))}
-
-      {modelUrl ? (
-        <Suspense fallback={null}>
-          <StatueModel onSelect={onSelect} url={modelUrl} />
-        </Suspense>
-      ) : (
-        <StatueMesh onSelect={onSelect} />
-      )}
-
-      {!ready && (
-        <IntroDolly
-          onDone={() => setReady(true)}
-          restY={1.7}
-          restZ={restZ}
-          startY={startY}
-          startZ={startZ}
-        />
-      )}
-      <OrbitControls
-        autoRotate={ready}
-        autoRotateSpeed={0.3}
-        enableDamping
-        enabled={ready}
-        enablePan={false}
-        makeDefault
-        maxDistance={12}
-        maxPolarAngle={1.52}
-        minDistance={4.5}
-        minPolarAngle={1.05}
-        target={[0, TARGET_Y, 0]}
+      {/* Colunas de extremidade (profundidade) */}
+      <Column height={8} position={[xAt(0, count) - SPACING, 0, -5.5]} />
+      <Column
+        height={8}
+        position={[xAt(count - 1, count) + SPACING, 0, -5.5]}
       />
+
+      <Dust />
+
+      <CameraRig count={count} portrait={portrait} selected={selected} />
     </Canvas>
   );
 }

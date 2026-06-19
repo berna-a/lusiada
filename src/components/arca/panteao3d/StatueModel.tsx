@@ -3,47 +3,52 @@ import type { ThreeEvent } from "@react-three/fiber";
 import { useMemo } from "react";
 import { Box3, Mesh, MeshStandardMaterial, Vector3 } from "three";
 
-// Altura-alvo da estátua (unidades da cena). O modelo é escalado para esta
-// altura e assenta com a base em y=0, independentemente do tamanho nativo.
+// Altura-alvo da estátua (unidades da cena). Escalada para esta altura, com a
+// base em y=0, independentemente do tamanho nativo do modelo.
 const TARGET_HEIGHT = 3.2;
 
-// Mármore uniforme — aplicado por cima do material do modelo para dar o look
-// de estátua e garantir visibilidade sem mapa de ambiente (IBL).
-const MARBLE = new MeshStandardMaterial({
-  color: "#e9e2d4",
-  roughness: 0.5,
-  metalness: 0,
-  emissive: "#caa24a",
-  emissiveIntensity: 0,
-});
-
 /**
- * Estátua a partir de um modelo 3D (.glb/.gltf): clonado (evita o bug de reuso
- * da cache do GLTF), convertido a mármore, auto-centrado e auto-escalado para
- * assentar no pedestal. Usado quando a figura tem `model_url`.
+ * Estátua a partir de um modelo 3D (.glb/.gltf): clonada (evita o bug de reuso
+ * da cache do GLTF), convertida a mármore com material próprio (para brilho de
+ * hover individual), auto-centrada e auto-escalada para assentar no pedestal.
  */
 export function StatueModel({
   url,
   onSelect,
+  dimmed = false,
 }: {
   url: string;
   onSelect: () => void;
+  dimmed?: boolean;
 }) {
   const { scene } = useGLTF(url);
+
+  const material = useMemo(
+    () =>
+      new MeshStandardMaterial({
+        color: "#e9e2d4",
+        roughness: 0.5,
+        metalness: 0,
+        emissive: "#caa24a",
+        emissiveIntensity: 0,
+      }),
+    []
+  );
 
   const model = useMemo(() => {
     const clone = scene.clone(true);
     clone.traverse((obj) => {
       if (obj instanceof Mesh) {
-        obj.material = MARBLE;
+        obj.material = material;
         obj.castShadow = true;
       }
     });
     return clone;
-  }, [scene]);
+  }, [scene, material]);
 
-  // Medir sobre o `scene` original (matrizes do loader já válidas); o clone
-  // tem a mesma geometria/transformações.
+  // Esmaecer as estátuas não selecionadas.
+  material.color.set(dimmed ? "#7e8596" : "#e9e2d4");
+
   const box = new Box3().setFromObject(scene);
   const size = box.getSize(new Vector3());
   const center = box.getCenter(new Vector3());
@@ -61,11 +66,11 @@ export function StatueModel({
   const enter = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
     document.body.style.cursor = "pointer";
-    MARBLE.emissiveIntensity = 0.14;
+    material.emissiveIntensity = 0.14;
   };
   const leave = () => {
     document.body.style.cursor = "auto";
-    MARBLE.emissiveIntensity = 0;
+    material.emissiveIntensity = 0;
   };
 
   return (
