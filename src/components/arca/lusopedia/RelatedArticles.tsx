@@ -12,17 +12,19 @@ export function RelatedArticles({
   currentSlug: string;
   tags: string[];
 }) {
-  const articles = useQuery(api.articles.list, { category });
+  const articles = useQuery(api.articles.list, {});
   if (!articles) {
     return null;
   }
   const tagSet = new Set(tags);
   const related = articles
     .filter((a) => a.slug !== currentSlug)
-    .map((a) => ({
-      a,
-      score: (a.tags ?? []).filter((t) => tagSet.has(t)).length,
-    }))
+    .map((a) => {
+      const shared = (a.tags ?? []).filter((t) => tagSet.has(t)).length;
+      const sameCategory = a.category === category ? 1 : 0;
+      return { a, score: shared * 10 + sameCategory };
+    })
+    .filter((x) => x.score > 0)
     .sort((x, y) => y.score - x.score)
     .slice(0, 3)
     .map((x) => x.a);
