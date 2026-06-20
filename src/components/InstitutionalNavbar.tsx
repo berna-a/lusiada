@@ -10,9 +10,10 @@ const menus: Record<MenuKey, { label: string; items: DropdownItem[] }> = {
   arca: {
     label: "Arca",
     items: [
+      { label: "Panteão", subtitle: "Heróis e figuras maiores", to: "/arca/panteao" },
+      { label: "Lusopédia", subtitle: "A enciclopédia da lusofonia", to: "/arca/lusopedia" },
       { label: "Obras", subtitle: "Cânone literário lusíada", to: "/arca/obras" },
       { label: "Lugares", subtitle: "Lugares de memória", to: "/arca/lugares" },
-      { label: "Panteão", subtitle: "Heróis e figuras maiores", to: "/arca/panteao" },
     ],
   },
   programa: {

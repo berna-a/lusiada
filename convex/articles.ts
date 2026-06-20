@@ -121,6 +121,19 @@ export const getBySlug = query({
   },
 });
 
+/** Artigo da Lusopédia ligado a um herói do Panteão (por pantheon_slug). */
+export const byPantheonSlug = query({
+  args: { slug: v.string() },
+  handler: async (ctx, { slug }) => {
+    const published = await ctx.db
+      .query("articles")
+      .withIndex("by_status", (q) => q.eq("status", "published"))
+      .collect();
+    const found = published.find((a) => a.pantheon_slug === slug);
+    return found ? { slug: found.slug, title: found.title } : null;
+  },
+});
+
 /** Gera URL de upload para imagens do artigo. Requer sessão. */
 export const generateUploadUrl = mutation({
   args: {},

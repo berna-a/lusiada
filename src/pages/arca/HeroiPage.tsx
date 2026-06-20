@@ -1,5 +1,5 @@
 import { useQuery } from "convex/react";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft, BookMarked, Loader2 } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { CommunityFeed } from "@/components/arca/CommunityFeed";
 import { JoinCTA } from "@/components/JoinCTA";
@@ -8,6 +8,10 @@ import { api } from "../../../convex/_generated/api";
 export default function HeroiPage() {
   const { id } = useParams();
   const data = useQuery(api.figures.getBySlug, id ? { slug: id } : "skip");
+  const lusopedia = useQuery(
+    api.articles.byPantheonSlug,
+    id ? { slug: id } : "skip"
+  );
 
   // Loading
   if (data === undefined) {
@@ -86,6 +90,16 @@ export default function HeroiPage() {
           <p className="mt-3 font-body text-[14px] text-muted-foreground tracking-wide">
             {datas}
           </p>
+        )}
+        {lusopedia && (
+          <div className="mt-6 flex justify-center">
+            <Link
+              className="inline-flex items-center gap-1.5 rounded-full border border-accent/30 px-4 py-1.5 font-body text-[13px] text-accent transition-colors hover:bg-accent/10"
+              to={`/arca/lusopedia/${lusopedia.slug}`}
+            >
+              <BookMarked className="h-3.5 w-3.5" /> Ler na Lusopédia
+            </Link>
+          </div>
         )}
         <div className="mt-8 flex justify-center">
           <span aria-hidden="true" className="block h-px w-[60px] bg-accent" />
