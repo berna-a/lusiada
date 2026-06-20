@@ -20,6 +20,7 @@ import type * as members from "../members.js";
 import type * as memberships from "../memberships.js";
 import type * as permissions from "../permissions.js";
 import type * as seedLusopedia from "../seedLusopedia.js";
+import type * as seedLusopedia2 from "../seedLusopedia2.js";
 import type * as stripe from "../stripe.js";
 
 import type {
@@ -41,6 +42,7 @@ declare const fullApi: ApiFromModules<{
   memberships: typeof memberships;
   permissions: typeof permissions;
   seedLusopedia: typeof seedLusopedia;
+  seedLusopedia2: typeof seedLusopedia2;
   stripe: typeof stripe;
 }>;
 
