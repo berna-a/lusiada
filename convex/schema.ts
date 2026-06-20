@@ -214,6 +214,7 @@ export default defineSchema({
     body: v.string(),
     upvotes: v.number(),
     is_removed: v.optional(v.boolean()),
+    is_promoted: v.optional(v.boolean()),
     report_count: v.optional(v.number()),
   }).index("by_article", ["article_id"]),
 

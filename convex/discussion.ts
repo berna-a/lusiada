@@ -36,6 +36,7 @@ export const listPosts = query({
           upvotes: p.upvotes,
           hasUpvoted: Boolean(mineVote),
           isMine: userId ? p.author_id === userId : false,
+          isPromoted: Boolean(p.is_promoted),
         };
       })
     );
@@ -190,5 +191,36 @@ export const adminKeepPost = mutation({
   handler: async (ctx, { postId }) => {
     await requireAdmin(ctx);
     await ctx.db.patch(postId, { report_count: 0 });
+  },
+});
+
+function escapeHtml(s: string) {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\n/g, "<br>");
+}
+
+/**
+ * Promove um contributo a conteúdo oficial: anexa-o ao corpo do artigo (com
+ * atribuição) e marca-o como promovido. Apenas administradores.
+ */
+export const promoteToArticle = mutation({
+  args: { postId: v.id("article_posts") },
+  handler: async (ctx, { postId }) => {
+    await requireAdmin(ctx);
+    const post = await ctx.db.get(postId);
+    if (!post) {
+      return;
+    }
+    const article = await ctx.db.get(post.article_id);
+    if (!article) {
+      return;
+    }
+    const author = post.author_name ?? "Comunidade";
+    const block = `<blockquote><p>${escapeHtml(post.body)}</p><p><em>— ${escapeHtml(author)}, contributo da comunidade</em></p></blockquote>`;
+    await ctx.db.patch(post.article_id, { body: `${article.body}\n${block}` });
+    await ctx.db.patch(postId, { is_promoted: true });
   },
 });

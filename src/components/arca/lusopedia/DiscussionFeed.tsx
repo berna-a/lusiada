@@ -1,6 +1,6 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useConvexAuth, useMutation, useQuery } from "convex/react";
-import { ChevronUp, Flag, Loader2, Trash2 } from "lucide-react";
+import { Check, ChevronUp, Flag, Loader2, Sparkles, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { api } from "../../../../convex/_generated/api";
@@ -22,6 +22,8 @@ export function DiscussionFeed({ articleId }: { articleId: Id<"articles"> }) {
   const toggleUpvote = useMutation(api.discussion.toggleUpvote);
   const removeOwn = useMutation(api.discussion.removeOwn);
   const report = useMutation(api.discussion.report);
+  const promote = useMutation(api.discussion.promoteToArticle);
+  const me = useQuery(api.admin.me);
 
   const [body, setBody] = useState("");
   const [sending, setSending] = useState(false);
@@ -126,27 +128,45 @@ export function DiscussionFeed({ articleId }: { articleId: Id<"articles"> }) {
                 <p className="whitespace-pre-line font-body text-[15px] text-foreground/85 leading-relaxed">
                   {p.body}
                 </p>
-                <div className="mt-3 flex items-center justify-between">
-                  <span className="font-body text-[12px] text-muted-foreground uppercase tracking-[0.12em]">
-                    {p.authorName ?? "Anónimo"} · {formatDate(p.createdAt)}
+                <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+                  <span className="flex items-center gap-2 font-body text-[12px] text-muted-foreground uppercase tracking-[0.12em]">
+                    <span>
+                      {p.authorName ?? "Anónimo"} · {formatDate(p.createdAt)}
+                    </span>
+                    {p.isPromoted && (
+                      <span className="inline-flex items-center gap-1 rounded-full border border-accent/40 px-2 py-0.5 text-[10px] text-accent tracking-[0.1em]">
+                        <Check className="h-3 w-3" /> No artigo
+                      </span>
+                    )}
                   </span>
-                  {p.isMine ? (
-                    <button
-                      className="inline-flex items-center gap-1 font-body text-[12px] text-muted-foreground hover:text-destructive"
-                      onClick={() => removeOwn({ postId: p._id })}
-                      type="button"
-                    >
-                      <Trash2 className="h-3.5 w-3.5" /> Remover
-                    </button>
-                  ) : (
-                    <button
-                      className="inline-flex items-center gap-1 font-body text-[12px] text-muted-foreground hover:text-foreground"
-                      onClick={() => report({ postId: p._id })}
-                      type="button"
-                    >
-                      <Flag className="h-3.5 w-3.5" /> Denunciar
-                    </button>
-                  )}
+                  <div className="flex items-center gap-3">
+                    {me?.isAdmin && !p.isPromoted && (
+                      <button
+                        className="inline-flex items-center gap-1 font-body text-[12px] text-accent hover:underline"
+                        onClick={() => promote({ postId: p._id })}
+                        type="button"
+                      >
+                        <Sparkles className="h-3.5 w-3.5" /> Promover ao artigo
+                      </button>
+                    )}
+                    {p.isMine ? (
+                      <button
+                        className="inline-flex items-center gap-1 font-body text-[12px] text-muted-foreground hover:text-destructive"
+                        onClick={() => removeOwn({ postId: p._id })}
+                        type="button"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" /> Remover
+                      </button>
+                    ) : (
+                      <button
+                        className="inline-flex items-center gap-1 font-body text-[12px] text-muted-foreground hover:text-foreground"
+                        onClick={() => report({ postId: p._id })}
+                        type="button"
+                      >
+                        <Flag className="h-3.5 w-3.5" /> Denunciar
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             </li>
