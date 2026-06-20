@@ -21,6 +21,10 @@ import ObjectivosPage from "@/pages/sobre/ObjectivosPage";
 
 import ArcaPage from "@/pages/arca/ArcaPage";
 import PanteaoPage from "@/pages/arca/PanteaoPage";
+import LusopediaPage from "@/pages/arca/LusopediaPage";
+import ArtigoPage from "@/pages/arca/ArtigoPage";
+import NovoArtigoPage from "@/pages/arca/NovoArtigoPage";
+import EditarArtigoPage from "@/pages/arca/EditarArtigoPage";
 import CalendarioPage from "@/pages/arca/CalendarioPage";
 import HeroiPage from "@/pages/arca/HeroiPage";
 import LugaresPage from "@/pages/arca/LugaresPage";
@@ -32,6 +36,7 @@ import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 import AdminDefinicoesPage from "@/pages/admin/AdminDefinicoesPage";
 import AdminModeracaoPage from "@/pages/admin/AdminModeracaoPage";
 import AdminSociosPage from "@/pages/admin/AdminSociosPage";
+import AdminLusopediaPage from "@/pages/admin/AdminLusopediaPage";
 
 import NotFound from "@/pages/NotFound";
 import { PlaceholderPage } from "@/components/PlaceholderPage";
@@ -66,6 +71,10 @@ const App = () => (
             <Route path="/arca/calendario" element={<CalendarioPage />} />
             <Route path="/arca/herois" element={<PanteaoPage />} />
             <Route path="/arca/herois/:id" element={<HeroiPage />} />
+            <Route path="/arca/lusopedia" element={<LusopediaPage />} />
+            <Route path="/arca/lusopedia/novo" element={<NovoArtigoPage />} />
+            <Route path="/arca/lusopedia/:slug" element={<ArtigoPage />} />
+            <Route path="/arca/lusopedia/:slug/editar" element={<EditarArtigoPage />} />
             <Route path="/arca/lugares" element={<LugaresPage />} />
             <Route path="/arca/lugares/:id" element={<LugarPage />} />
             <Route path="/arca/memorias" element={<MemoriasPage />} />
@@ -92,6 +101,7 @@ const App = () => (
           <Route element={<AdminLayout />}>
             <Route path="/admin" element={<AdminDashboardPage />} />
             <Route path="/admin/socios" element={<AdminSociosPage />} />
+            <Route path="/admin/lusopedia" element={<AdminLusopediaPage />} />
             <Route path="/admin/moderacao" element={<AdminModeracaoPage />} />
             <Route path="/admin/definicoes" element={<AdminDefinicoesPage />} />
           </Route>

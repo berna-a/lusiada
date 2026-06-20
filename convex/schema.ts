@@ -141,6 +141,97 @@ export default defineSchema({
     .index("by_status", ["status"])
     .index("by_author", ["author_id"]),
 
+  // Lusópedia — artigos (enciclopédia da lusofonia).
+  // status: "pending" (proposto) | "published" | "rejected".
+  articles: defineTable({
+    title: v.string(),
+    slug: v.string(),
+    category: v.string(),
+    tags: v.optional(v.array(v.string())),
+    summary: v.optional(v.union(v.string(), v.null())),
+    body: v.string(), // HTML do editor visual (esquema controlado)
+    cover_image_id: v.optional(v.union(v.id("_storage"), v.null())),
+    infobox: v.optional(
+      v.array(v.object({ label: v.string(), value: v.string() }))
+    ),
+    sources: v.optional(
+      v.array(
+        v.object({
+          label: v.string(),
+          url: v.optional(v.union(v.string(), v.null())),
+        })
+      )
+    ),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("published"),
+      v.literal("rejected")
+    ),
+    author_id: v.optional(v.union(v.id("users"), v.null())),
+    // Liga o artigo a um herói do Panteão (integração faseada).
+    pantheon_slug: v.optional(v.union(v.string(), v.null())),
+  })
+    .index("by_slug", ["slug"])
+    .index("by_status", ["status"])
+    .index("by_category_status", ["category", "status"]),
+
+  // Edições propostas a artigos publicados (pendentes de aprovação).
+  article_revisions: defineTable({
+    article_id: v.id("articles"),
+    author_id: v.optional(v.union(v.id("users"), v.null())),
+    note: v.optional(v.union(v.string(), v.null())),
+    title: v.string(),
+    category: v.string(),
+    tags: v.optional(v.array(v.string())),
+    summary: v.optional(v.union(v.string(), v.null())),
+    body: v.string(),
+    cover_image_id: v.optional(v.union(v.id("_storage"), v.null())),
+    infobox: v.optional(
+      v.array(v.object({ label: v.string(), value: v.string() }))
+    ),
+    sources: v.optional(
+      v.array(
+        v.object({
+          label: v.string(),
+          url: v.optional(v.union(v.string(), v.null())),
+        })
+      )
+    ),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("approved"),
+      v.literal("rejected")
+    ),
+  })
+    .index("by_status", ["status"])
+    .index("by_article", ["article_id"]),
+
+  // Discussão por artigo — contributos planos (estilo Quora), ao vivo.
+  article_posts: defineTable({
+    article_id: v.id("articles"),
+    author_id: v.id("users"),
+    author_name: v.optional(v.union(v.string(), v.null())),
+    body: v.string(),
+    upvotes: v.number(),
+    is_removed: v.optional(v.boolean()),
+    report_count: v.optional(v.number()),
+  }).index("by_article", ["article_id"]),
+
+  // Votos (upvote único por utilizador por contributo).
+  article_post_votes: defineTable({
+    post_id: v.id("article_posts"),
+    user_id: v.id("users"),
+  })
+    .index("by_post_user", ["post_id", "user_id"])
+    .index("by_user", ["user_id"]),
+
+  // Denúncias de contributos (para moderação).
+  article_post_reports: defineTable({
+    post_id: v.id("article_posts"),
+    user_id: v.id("users"),
+    reason: v.optional(v.union(v.string(), v.null())),
+  }).index("by_post", ["post_id"]),
+
   // Doações
   donations: defineTable({
     donor_email: v.string(),

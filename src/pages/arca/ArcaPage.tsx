@@ -40,11 +40,11 @@ const ENTRADAS = [
     to: "/arca/coleccoes",
   },
   {
-    title: "Lusopédia",
-    desc: "A enciclopédia viva da lusofonia. Em breve.",
+    title: "Lusópedia",
+    desc: "A enciclopédia viva da lusofonia.",
     icon: BookMarked,
-    to: "#",
-    coming: true,
+    to: "/arca/lusopedia",
+    coming: false,
   },
 ];
 
