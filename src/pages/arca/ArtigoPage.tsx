@@ -1,14 +1,31 @@
 import { useQuery } from "convex/react";
 import { ArrowLeft, Loader2, Pencil } from "lucide-react";
+import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
+import { buildArticleContent } from "@/components/arca/lusopedia/articleContent";
+import { CiteButton } from "@/components/arca/lusopedia/CiteButton";
 import { DiscussionFeed } from "@/components/arca/lusopedia/DiscussionFeed";
+import { RelatedArticles } from "@/components/arca/lusopedia/RelatedArticles";
+import { TableOfContents } from "@/components/arca/lusopedia/TableOfContents";
 import { Seo } from "@/components/Seo";
 import { Button } from "@/components/ui/button";
 import { api } from "../../../convex/_generated/api";
 
+function formatDate(ms: number) {
+  return new Date(ms).toLocaleDateString("pt-PT", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
 export default function ArtigoPage() {
   const { slug } = useParams();
   const article = useQuery(api.articles.getBySlug, slug ? { slug } : "skip");
+  const content = useMemo(
+    () => buildArticleContent(article?.body ?? ""),
+    [article?.body]
+  );
 
   if (article === undefined) {
     return (
@@ -120,11 +137,27 @@ export default function ArtigoPage() {
               {article.summary}
             </p>
           )}
+          <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 font-body text-[13px] text-muted-foreground">
+            <span>
+              Por{" "}
+              <span className="text-foreground/80">
+                Associação Memória Lusíada
+              </span>
+            </span>
+            <span aria-hidden="true">·</span>
+            <span>Publicado a {formatDate(article._creationTime)}</span>
+            <span aria-hidden="true">·</span>
+            <CiteButton
+              title={article.title}
+              url={itemUrl}
+              year={new Date(article._creationTime).getFullYear()}
+            />
+          </div>
           <div className="mt-8 h-px w-16 bg-accent/40" />
           {/* biome-ignore lint/security/noDangerouslySetInnerHtml: conteúdo moderado (aprovado por admin) e gerado pelo editor com esquema controlado */}
           <div
-            className="prose prose-stone mt-8 max-w-none font-body text-foreground/85"
-            dangerouslySetInnerHTML={{ __html: article.body }}
+            className="prose prose-stone mt-8 max-w-none font-body text-foreground/85 [&_h2]:scroll-mt-28 [&_h3]:scroll-mt-28"
+            dangerouslySetInnerHTML={{ __html: content.html }}
           />
 
           {sources.length > 0 && (
@@ -170,43 +203,63 @@ export default function ArtigoPage() {
           )}
         </article>
 
-        {/* Ficha lateral */}
-        {(article.coverUrl || infobox.length > 0) && (
+        {/* Coluna lateral: índice + ficha */}
+        {(content.toc.length >= 2 ||
+          article.coverUrl ||
+          infobox.length > 0 ||
+          article.pantheon_slug) && (
           <aside className="lg:pt-2">
-            <div className="rounded-2xl border border-border bg-card p-5 lg:sticky lg:top-28">
-              {article.coverUrl && (
-                <img
-                  alt={article.title}
-                  className="mb-4 w-full rounded-xl object-cover"
-                  src={article.coverUrl}
-                />
+            <div className="space-y-4 lg:sticky lg:top-28">
+              {content.toc.length >= 2 && (
+                <div className="rounded-2xl border border-border bg-card p-5">
+                  <TableOfContents items={content.toc} />
+                </div>
               )}
-              {infobox.length > 0 && (
-                <dl className="space-y-2.5">
-                  {infobox.map((row, i) => (
-                    <div key={i}>
-                      <dt className="font-body text-[11px] text-muted-foreground uppercase tracking-[0.12em]">
-                        {row.label}
-                      </dt>
-                      <dd className="font-body text-[15px] text-foreground/85">
-                        {row.value}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-              )}
-              {article.pantheon_slug && (
-                <Link
-                  className="mt-4 inline-flex font-body text-[13px] text-accent hover:underline"
-                  to={`/arca/herois/${article.pantheon_slug}`}
-                >
-                  Ver no Panteão →
-                </Link>
+              {(article.coverUrl ||
+                infobox.length > 0 ||
+                article.pantheon_slug) && (
+                <div className="rounded-2xl border border-border bg-card p-5">
+                  {article.coverUrl && (
+                    <img
+                      alt={article.title}
+                      className="mb-4 w-full rounded-xl object-cover"
+                      src={article.coverUrl}
+                    />
+                  )}
+                  {infobox.length > 0 && (
+                    <dl className="space-y-2.5">
+                      {infobox.map((row, i) => (
+                        <div key={i}>
+                          <dt className="font-body text-[11px] text-muted-foreground uppercase tracking-[0.12em]">
+                            {row.label}
+                          </dt>
+                          <dd className="font-body text-[15px] text-foreground/85">
+                            {row.value}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  )}
+                  {article.pantheon_slug && (
+                    <Link
+                      className="mt-4 inline-flex font-body text-[13px] text-accent hover:underline"
+                      to={`/arca/herois/${article.pantheon_slug}`}
+                    >
+                      Ver no Panteão →
+                    </Link>
+                  )}
+                </div>
               )}
             </div>
           </aside>
         )}
       </div>
+
+      <RelatedArticles
+        category={article.category}
+        currentSlug={article.slug}
+        tags={tags}
+      />
 
       <DiscussionFeed articleId={article._id} />
     </main>
