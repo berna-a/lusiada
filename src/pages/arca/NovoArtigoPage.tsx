@@ -31,7 +31,7 @@ export default function NovoArtigoPage() {
       >
         <h1 className="font-display text-3xl text-primary">Novo artigo</h1>
         <p className="mt-4 font-body text-foreground/70 leading-relaxed">
-          Inicie sessão para escrever um artigo na Lusópedia.
+          Inicie sessão para escrever um artigo na Lusopédia.
         </p>
         <Button
           className="mt-8"
@@ -60,7 +60,7 @@ export default function NovoArtigoPage() {
         className="font-body text-[13px] text-muted-foreground uppercase tracking-[0.15em] hover:text-accent"
         to="/arca/lusopedia"
       >
-        ← Lusópedia
+        ← Lusopédia
       </Link>
       <h1 className="mt-6 mb-2 font-display text-[36px] text-primary">
         Novo artigo

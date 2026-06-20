@@ -25,7 +25,7 @@ export default function LusopediaPage() {
           Arca · Memória Lusíada
         </p>
         <h1 className="mt-3 font-display text-[44px] text-primary leading-[1] sm:text-[56px]">
-          Lusópedia
+          Lusopédia
         </h1>
         <p className="mx-auto mt-4 max-w-xl font-body text-[16px] text-foreground/65 leading-relaxed">
           A enciclopédia viva da lusofonia — escrita, discutida e votada pela

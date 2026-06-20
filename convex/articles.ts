@@ -355,7 +355,7 @@ export const adminUpsert = mutation({
   },
 });
 
-/** Seed: artigo da Lusópedia para Luiz Vaz de Camões (ligado ao Panteão). */
+/** Seed: artigo da Lusopédia para Luiz Vaz de Camões (ligado ao Panteão). */
 export const seedCamoes = internalMutation({
   args: {},
   handler: async (ctx) => {

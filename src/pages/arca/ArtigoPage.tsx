@@ -33,7 +33,7 @@ export default function ArtigoPage() {
           className="mt-8 inline-flex items-center gap-2 font-body text-accent transition-all hover:gap-3"
           to="/arca/lusopedia"
         >
-          <ArrowLeft className="h-4 w-4" /> Voltar à Lusópedia
+          <ArrowLeft className="h-4 w-4" /> Voltar à Lusopédia
         </Link>
       </main>
     );
@@ -53,7 +53,7 @@ export default function ArtigoPage() {
           className="inline-flex items-center gap-2 font-body text-[13px] text-muted-foreground uppercase tracking-[0.15em] transition-colors hover:text-accent"
           to="/arca/lusopedia"
         >
-          <ArrowLeft className="h-4 w-4" /> Lusópedia
+          <ArrowLeft className="h-4 w-4" /> Lusopédia
         </Link>
         <Button asChild size="sm" variant="outline">
           <Link to={`/arca/lusopedia/${article.slug}/editar`}>

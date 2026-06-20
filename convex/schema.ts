@@ -141,7 +141,7 @@ export default defineSchema({
     .index("by_status", ["status"])
     .index("by_author", ["author_id"]),
 
-  // Lusópedia — artigos (enciclopédia da lusofonia).
+  // Lusopédia — artigos (enciclopédia da lusofonia).
   // status: "pending" (proposto) | "published" | "rejected".
   articles: defineTable({
     title: v.string(),

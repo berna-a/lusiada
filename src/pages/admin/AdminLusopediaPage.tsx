@@ -16,7 +16,7 @@ export default function AdminLusopediaPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-10">
       <header>
-        <h1 className="font-display text-3xl text-primary">Lusópedia</h1>
+        <h1 className="font-display text-3xl text-primary">Lusopédia</h1>
         <p className="mt-1 font-body text-muted-foreground text-sm">
           Aprove artigos e edições e modere a discussão.
         </p>

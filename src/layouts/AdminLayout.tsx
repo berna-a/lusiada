@@ -17,7 +17,7 @@ import { api } from "../../convex/_generated/api";
 const adminLinks = [
   { label: "Heróis", to: "/admin", icon: LayoutDashboard },
   { label: "Sócios", to: "/admin/socios", icon: Users },
-  { label: "Lusópedia", to: "/admin/lusopedia", icon: BookMarked },
+  { label: "Lusopédia", to: "/admin/lusopedia", icon: BookMarked },
   { label: "Moderação", to: "/admin/moderacao", icon: Inbox },
   { label: "Definições", to: "/admin/definicoes", icon: Settings },
 ];
