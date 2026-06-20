@@ -1,7 +1,12 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import type { MutationCtx, QueryCtx } from "./_generated/server";
-import { mutation, query } from "./_generated/server";
+import {
+  internalMutation,
+  internalQuery,
+  mutation,
+  query,
+} from "./_generated/server";
 import { getCurrentUser, isAdmin, requireAdmin } from "./permissions";
 
 function memberByEmail(ctx: QueryCtx | MutationCtx, email: string) {
@@ -28,9 +33,11 @@ export const myMembership = query({
     const level =
       status === "active"
         ? ("member" as const)
-        : status === "pending"
-          ? ("pending" as const)
-          : ("adepto" as const);
+        : status === "approved"
+          ? ("approved" as const)
+          : status === "pending"
+            ? ("pending" as const)
+            : ("adepto" as const);
     return {
       level,
       user: {
@@ -110,7 +117,12 @@ export const requestMembership = mutation({
 export const adminListMembers = query({
   args: {
     status: v.optional(
-      v.union(v.literal("pending"), v.literal("active"), v.literal("rejected"))
+      v.union(
+        v.literal("pending"),
+        v.literal("approved"),
+        v.literal("active"),
+        v.literal("rejected")
+      )
     ),
   },
   handler: async (ctx, { status }) => {
@@ -155,6 +167,7 @@ export const adminSetMemberStatus = mutation({
     id: v.id("members"),
     status: v.union(
       v.literal("pending"),
+      v.literal("approved"),
       v.literal("active"),
       v.literal("rejected")
     ),
@@ -170,5 +183,72 @@ export const adminSetQuotaPaid = mutation({
   handler: async (ctx, args) => {
     await requireAdmin(ctx);
     await ctx.db.patch(args.id, { quota_paid: args.quota_paid });
+  },
+});
+
+/* ──────────────── Stripe (interno) ──────────────── */
+
+/** Membro do utilizador autenticado — para a ação de checkout. */
+export const memberForUser = internalQuery({
+  args: { userId: v.id("users") },
+  handler: async (ctx, { userId }) => {
+    const user = await ctx.db.get(userId);
+    const email = user?.email?.toLowerCase();
+    if (!email) {
+      return null;
+    }
+    const member = await memberByEmail(ctx, email);
+    if (!member) {
+      return null;
+    }
+    return {
+      memberId: member._id,
+      email,
+      fullName: member.full_name,
+      status: member.status ?? null,
+      stripeCustomerId: member.stripe_customer_id ?? null,
+    };
+  },
+});
+
+/** Marca a quota como paga e ativa o sócio (chamado pelo webhook Stripe). */
+export const markPaid = internalMutation({
+  args: {
+    memberId: v.string(),
+    customerId: v.optional(v.string()),
+    subscriptionId: v.optional(v.string()),
+    subscriptionStatus: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const id = ctx.db.normalizeId("members", args.memberId);
+    if (!id) {
+      return;
+    }
+    await ctx.db.patch(id, {
+      status: "active",
+      quota_paid: true,
+      stripe_customer_id: args.customerId ?? null,
+      stripe_subscription_id: args.subscriptionId ?? null,
+      subscription_status: args.subscriptionStatus ?? "active",
+    });
+  },
+});
+
+/** Subscrição terminada/cancelada — sócio deixa de estar ativo. */
+export const markUnpaid = internalMutation({
+  args: {
+    memberId: v.string(),
+    subscriptionStatus: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const id = ctx.db.normalizeId("members", args.memberId);
+    if (!id) {
+      return;
+    }
+    await ctx.db.patch(id, {
+      status: "approved",
+      quota_paid: false,
+      subscription_status: args.subscriptionStatus ?? "canceled",
+    });
   },
 });

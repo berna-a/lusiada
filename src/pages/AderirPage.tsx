@@ -188,6 +188,25 @@ export default function AderirPage() {
     );
   }
 
+  if (membership?.level === "approved") {
+    return (
+      <Shell>
+        <Card>
+          <CheckCircle2 className="mx-auto h-10 w-10 text-accent" />
+          <h2 className="mt-4 font-display font-semibold text-3xl text-foreground">
+            Adesão aprovada!
+          </h2>
+          <p className="mt-4 font-body text-base text-foreground/80 leading-relaxed">
+            Falta apenas pagar a quota para se tornar sócio de pleno direito.
+          </p>
+          <Button asChild className="mt-8" variant="accent">
+            <Link to="/conta">Pagar a quota</Link>
+          </Button>
+        </Card>
+      </Shell>
+    );
+  }
+
   return (
     <Shell>
       <AdesaoForm defaultName={membership?.user?.name ?? ""} />

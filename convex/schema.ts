@@ -32,8 +32,13 @@ export default defineSchema({
     newsletter_consent: v.boolean(),
     events_consent: v.optional(v.boolean()),
     country: v.optional(v.string()),
+    // status: "pending" | "approved" (elegível, a aguardar pagamento) |
+    // "active" (sócio pago) | "rejected".
     status: v.optional(v.string()),
     quota_paid: v.optional(v.boolean()),
+    stripe_customer_id: v.optional(v.union(v.string(), v.null())),
+    stripe_subscription_id: v.optional(v.union(v.string(), v.null())),
+    subscription_status: v.optional(v.union(v.string(), v.null())),
     phone: v.optional(v.union(v.string(), v.null())),
     birth_year: v.optional(v.union(v.number(), v.null())),
     email_verified: v.optional(v.boolean()),

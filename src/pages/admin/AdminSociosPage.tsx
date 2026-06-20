@@ -4,10 +4,11 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { api } from "../../../convex/_generated/api";
 
-type Status = "pending" | "active" | "rejected";
+type Status = "pending" | "approved" | "active" | "rejected";
 
 const TABS: { value: Status; label: string }[] = [
   { value: "pending", label: "Pendentes" },
+  { value: "approved", label: "A pagar" },
   { value: "active", label: "Sócios" },
   { value: "rejected", label: "Rejeitados" },
 ];
@@ -86,16 +87,34 @@ export default function AdminSociosPage() {
             )}
 
             <div className="mt-4 flex flex-wrap items-center gap-2">
-              {m.status !== "active" && (
+              {m.status === "pending" && (
+                <Button
+                  onClick={() => setStatus({ id: m._id, status: "approved" })}
+                  size="sm"
+                  variant="accent"
+                >
+                  <Check className="mr-1.5 h-3.5 w-3.5" /> Aprovar elegibilidade
+                </Button>
+              )}
+              {m.status === "approved" && (
                 <Button
                   onClick={() => setStatus({ id: m._id, status: "active" })}
                   size="sm"
                   variant="accent"
                 >
-                  <Check className="mr-1.5 h-3.5 w-3.5" /> Aprovar
+                  <Check className="mr-1.5 h-3.5 w-3.5" /> Ativar manualmente
                 </Button>
               )}
-              {m.status !== "rejected" && (
+              {m.status === "active" && (
+                <Button
+                  onClick={() => setStatus({ id: m._id, status: "approved" })}
+                  size="sm"
+                  variant="outline"
+                >
+                  Suspender
+                </Button>
+              )}
+              {m.status !== "rejected" && m.status !== "active" && (
                 <Button
                   onClick={() => setStatus({ id: m._id, status: "rejected" })}
                   size="sm"
