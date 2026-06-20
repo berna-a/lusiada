@@ -3,6 +3,7 @@ import { BookMarked, Loader2, Plus, Search } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { CATEGORIES } from "@/components/arca/lusopedia/constants";
+import { Seo } from "@/components/Seo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { api } from "../../../convex/_generated/api";
@@ -20,6 +21,18 @@ export default function LusopediaPage() {
       className="mx-auto max-w-5xl px-6 pt-32 pb-24 sm:pt-40"
       data-nav-theme="light"
     >
+      <Seo
+        description="A enciclopédia viva da lusofonia — conceitos, história, pessoas, lugares e obras do Povo Português, escritos e debatidos pela comunidade."
+        jsonLd={{
+          "@type": "CollectionPage",
+          name: "Lusopédia",
+          description: "A enciclopédia da lusofonia da Associação Memória Lusíada.",
+          inLanguage: "pt-PT",
+          isPartOf: { "@type": "WebSite", name: "Lusopédia", url: "https://www.alusiada.pt/arca/lusopedia" },
+        }}
+        path="/arca/lusopedia"
+        title="Lusopédia — A enciclopédia da lusofonia"
+      />
       <header className="text-center">
         <p className="font-body text-[12px] text-accent uppercase tracking-[0.3em]">
           Arca · Memória Lusíada

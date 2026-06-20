@@ -2,6 +2,7 @@ import { useQuery } from "convex/react";
 import { ArrowLeft, Loader2, Pencil } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { DiscussionFeed } from "@/components/arca/lusopedia/DiscussionFeed";
+import { Seo } from "@/components/Seo";
 import { Button } from "@/components/ui/button";
 import { api } from "../../../convex/_generated/api";
 
@@ -43,11 +44,48 @@ export default function ArtigoPage() {
   const sources = article.sources ?? [];
   const tags = article.tags ?? [];
 
+  const path = `/arca/lusopedia/${article.slug}`;
+  const itemUrl = `https://www.alusiada.pt${path}`;
+  const publishedAt = new Date(article._creationTime).toISOString();
+  const articleLd = {
+    "@type": "Article",
+    headline: article.title,
+    description: article.summary ?? undefined,
+    inLanguage: "pt-PT",
+    datePublished: publishedAt,
+    dateModified: publishedAt,
+    articleSection: article.category,
+    keywords: tags.join(", ") || undefined,
+    image: article.coverUrl ?? undefined,
+    author: { "@type": "Organization", name: "Associação Memória Lusíada" },
+    publisher: { "@type": "Organization", name: "Associação Memória Lusíada" },
+    mainEntityOfPage: itemUrl,
+  };
+  const breadcrumbLd = {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Arca", item: "https://www.alusiada.pt/arca" },
+      { "@type": "ListItem", position: 2, name: "Lusopédia", item: "https://www.alusiada.pt/arca/lusopedia" },
+      { "@type": "ListItem", position: 3, name: article.title, item: itemUrl },
+    ],
+  };
+
   return (
     <main
       className="mx-auto max-w-5xl px-6 pt-32 pb-24 sm:pt-40"
       data-nav-theme="light"
     >
+      <Seo
+        description={article.summary}
+        image={article.coverUrl}
+        jsonLd={[articleLd, breadcrumbLd]}
+        path={path}
+        title={`${article.title} — Lusopédia`}
+        type="article"
+      />
+      {article.status !== "published" && (
+        <meta content="noindex" name="robots" />
+      )}
       <div className="flex items-center justify-between">
         <Link
           className="inline-flex items-center gap-2 font-body text-[13px] text-muted-foreground uppercase tracking-[0.15em] transition-colors hover:text-accent"
