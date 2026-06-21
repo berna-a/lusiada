@@ -39,7 +39,10 @@ const SEEDS: Seed[] = [
 <h2>A viagem</h2>
 <p>Seguindo a rota aberta por ${lk("vasco-da-gama", "Vasco da Gama")}, a sua frota desviou-se para ocidente e encontrou a costa brasileira, dentro do hemisfério que cabia a Portugal pelo ${lk("tratado-de-tordesilhas", "Tratado de Tordesilhas")}.</p>
 <h2>Memória</h2>
-<p>A carta de Pero Vaz de Caminha, escrivão da armada, é a "certidão de nascimento" do Brasil e um dos primeiros retratos da nova terra.</p>
+<p>A carta de Pero Vaz de Caminha, escrivão da armada, é a "certidão de nascimento" do Brasil e um dos primeiros retratos da nova terra, de uma beleza deslumbrada:</p>
+<blockquote>«…em tal maneira é graciosa que, querendo-a aproveitar, dar-se-á nela tudo.»<br/>— Pero Vaz de Caminha, 1500</blockquote>
+<h2>Porque importa</h2>
+<p>O acaso — ou o cálculo — de Cabral deu a Portugal o maior dos seus territórios e ao mundo um novo gigante. O Brasil foi o maior projecto da expansão portugueza e é hoje a maior nação de ${lk("lingua-portugueza", "língua portugueza")}.</p>
 `.trim(),
   },
   {
@@ -61,6 +64,8 @@ const SEEDS: Seed[] = [
 <p>No seu reinado, Bartolomeu Dias dobrou o Cabo da Boa Esperança (1488), abrindo a porta que ${lk("vasco-da-gama", "Vasco da Gama")} viria a atravessar. Foi também ele quem negociou com Castela o ${lk("tratado-de-tordesilhas", "Tratado de Tordesilhas")}.</p>
 <h2>Legado</h2>
 <p>Visionário e implacável, deixou o país preparado para a era áurea que se seguiria sob D. Manuel I.</p>
+<h2>Porque importa</h2>
+<p>Governou com uma perspectiva de séculos: foi ele quem desenhou, em silêncio, o caminho marítimo para a Índia que ${lk("vasco-da-gama", "Vasco da Gama")} concretizaria. Sem o seu rigor implacável, não haveria era áurea dos Descobrimentos.</p>
 `.trim(),
   },
   {
@@ -82,6 +87,8 @@ const SEEDS: Seed[] = [
 <p>Estratega genial e homem de fé, comandou as armas de D. João I e nunca perdeu uma batalha. Retirou-se depois para o Carmo, como frade.</p>
 <h2>Santo</h2>
 <p>Venerado durante séculos, foi canonizado em 2009 como São Nuno de Santa Maria — santo e soldado, raro exemplo de ambas as glórias.</p>
+<h2>Porque importa</h2>
+<p>A sua acção salvou a independência de Portugal num momento em que tudo parecia perdido. É a prova de que a fé e a coragem de um só homem podem mudar o destino de uma nação.</p>
 `.trim(),
   },
   {
@@ -103,6 +110,8 @@ const SEEDS: Seed[] = [
 <p>Em palcos de todo o mundo, cantou a ${lk("saudade", "saudade")} e o destino, levando a alma portugueza a línguas e públicos que nunca a tinham ouvido.</p>
 <h2>Memória nacional</h2>
 <p>À sua morte, em 1999, Portugal decretou luto nacional. Repousa no Panteão Nacional, entre os maiores da pátria.</p>
+<h2>Porque importa</h2>
+<p>Amália fez de cada espectáculo uma comunhão e da voz portugueza um bem universal. É, com Camões e ${lk("fernando-pessoa", "Pessoa")}, um dos rostos por que o mundo reconhece a alma de Portugal.</p>
 `.trim(),
   },
   {
@@ -124,6 +133,8 @@ const SEEDS: Seed[] = [
 <p>Após o ${lk("terramoto-de-1755", "Terramoto de 1755")}, dirigiu a reconstrução de ${lk("lisboa", "Lisboa")} com um plano racional e à prova de sismos — a célebre Baixa Pombalina. "Enterrar os mortos e cuidar dos vivos", terá dito.</p>
 <h2>Reformas</h2>
 <p>Modernizou o ensino, o comércio e o Estado, e expulsou os Jesuítas. Figura controversa, mas decisiva na história moderna do país.</p>
+<h2>Porque importa</h2>
+<p>Foi o arquitecto do Estado moderno portuguez: da tragédia do ${lk("terramoto-de-1755", "terramoto")} ergueu uma cidade nova e um país mais forte. Adorado e odiado, ninguém marcou tanto o século XVIII portuguez.</p>
 `.trim(),
   },
   {
@@ -145,6 +156,8 @@ const SEEDS: Seed[] = [
 <p>Foi daqui que partiram as naus da ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}. Em Belém guarda dois símbolos maiores: o ${lk("mosteiro-dos-jeronimos", "Mosteiro dos Jerónimos")} e a ${lk("torre-de-belem", "Torre de Belém")}.</p>
 <h2>Alma</h2>
 <p>Nos seus bairros nasceu o ${lk("fado", "fado")}. Reconstruída após o ${lk("terramoto-de-1755", "terramoto de 1755")}, é hoje uma capital de luz, azulejo e memória.</p>
+<h2>Porque importa</h2>
+<p>Lisboa é o coração de Portugal e a porta por onde a nação saiu para o mundo. A sua luz sobre o Tejo é, dizem os poetas, um espectáculo único — a cidade onde a memória da pátria se faz pedra, água e ${lk("saudade", "saudade")}.</p>
 `.trim(),
   },
   {
@@ -166,6 +179,8 @@ const SEEDS: Seed[] = [
 <p>Ganhou a alcunha de "Invicta" pela resistência no Cerco de 1832. Trabalhadora e orgulhosa, é tida como a cidade que "trabalha" no imaginário nacional.</p>
 <h2>O vinho</h2>
 <p>Nas caves de Gaia repousa o Vinho do Porto, néctar exportado há séculos e um dos grandes embaixadores da ${lk("lingua-portugueza", "cultura portugueza")} no mundo.</p>
+<h2>Porque importa</h2>
+<p>Da actividade incansável das suas gentes nasceu o nome do país e parte do seu carácter: trabalhador, leal e teimoso. O Porto é a outra alma de Portugal — a do Norte que ajudou a construir a nação.</p>
 `.trim(),
   },
   {
@@ -187,6 +202,8 @@ const SEEDS: Seed[] = [
 <p>A Universidade, com a sua Biblioteca Joanina, é Património Mundial. Das suas repúblicas e capas negras nasceu o ${lk("fado", "fado de Coimbra")}, cantado por homens, à guitarra.</p>
 <h2>Berço de reis</h2>
 <p>Aqui nasceram vários reis e firmou-se a ${lk("lingua-portugueza", "língua portugueza")} como língua de cultura e de ciência.</p>
+<h2>Porque importa</h2>
+<p>Coimbra guarda o saber colectivo de sete séculos: foi aqui que a língua portugueza se fez ciência e que se formaram gerações que governaram a nação e o império. É a capital eterna da inteligência portugueza.</p>
 `.trim(),
   },
   {
@@ -208,6 +225,8 @@ const SEEDS: Seed[] = [
 <p>Obra-prima do estilo manuelino, irmã do ${lk("mosteiro-dos-jeronimos", "Mosteiro dos Jerónimos")}, ostenta cordas, escudos e a esfera armilar — símbolos da ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}.</p>
 <h2>Símbolo</h2>
 <p>Classificada Património Mundial em 1983, é hoje uma das imagens mais reconhecíveis do país.</p>
+<h2>Porque importa</h2>
+<p>A sua arquitectura rendilhada foi o último adeus e a primeira saudação das naus portuguezas. Mais do que uma fortaleza, é o símbolo do momento em que Portugal abriu o mundo ao mundo.</p>
 `.trim(),
   },
   {
@@ -229,6 +248,8 @@ const SEEDS: Seed[] = [
 <p>O exército portuguez, em clara inferioridade, venceu graças à táctica de ${lk("nuno-alvares-pereira", "Nuno Álvares Pereira")} e à coragem dos homens de D. João I.</p>
 <h2>Memória</h2>
 <p>Em agradecimento, ergueu-se o Mosteiro da Batalha, panteão da dinastia de Avis e monumento à liberdade nacional.</p>
+<h2>Porque importa</h2>
+<p>Aljubarrota é a batalha que fez Portugal sobreviver. Sem ela, o reino teria sido absorvido por Castela e a história da Europa seria outra. É o dia em que um pequeno povo decidiu, contra tudo, continuar a ser nação.</p>
 `.trim(),
   },
   {
@@ -250,6 +271,8 @@ const SEEDS: Seed[] = [
 <p>A tragédia chocou a Europa e marcou o pensamento iluminista, levando filósofos como Voltaire a interrogar-se sobre o sentido do mal e da Providência.</p>
 <h2>Renascer</h2>
 <p>A reconstrução, dirigida pelo ${lk("marques-de-pombal", "Marquês de Pombal")}, deu origem à Baixa Pombalina, pioneira da engenharia antissísmica.</p>
+<h2>Porque importa</h2>
+<p>O terramoto mudou a perspectiva do homem europeu sobre a natureza, a fé e a razão, e fez de ${lk("lisboa", "Lisboa")} um laboratório da modernidade. Da maior catástrofe nasceu a primeira cidade pensada para resistir.</p>
 `.trim(),
   },
   {
@@ -271,6 +294,8 @@ const SEEDS: Seed[] = [
 <p>A canção "Grândola, Vila Morena" foi o sinal para o avanço. Nas ruas de ${lk("lisboa", "Lisboa")}, o povo recebeu os militares com cravos vermelhos nos canos das espingardas.</p>
 <h2>Liberdade</h2>
 <p>Abriu caminho à democracia e à descolonização. O 25 de Abril é hoje celebrado como o Dia da Liberdade.</p>
+<h2>Porque importa</h2>
+<p>A acção de um punhado de capitães devolveu a um povo inteiro a liberdade, a democracia e a paz. O 25 de Abril é a data fundadora do Portugal contemporâneo — e a prova de que se pode mudar um país quase sem sangue.</p>
 `.trim(),
   },
   {
@@ -292,6 +317,8 @@ const SEEDS: Seed[] = [
 <p>Onde ${lk("os-lusiadas", "Os Lusíadas")} cantam a gesta concreta da ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}, <em>Mensagem</em> canta o seu sentido espiritual — "Valeu a pena? Tudo vale a pena / Se a alma não é pequena."</p>
 <h2>O Encoberto</h2>
 <p>A obra anuncia um Quinto Império feito de cultura e de espírito, prolongando o sonho portuguez para o futuro.</p>
+<h2>Porque importa</h2>
+<p><em>Mensagem</em> é mais do que poesia: é um projecto espiritual para a nação. ${lk("fernando-pessoa", "Pessoa")} deu a Portugal um futuro feito de mito — a promessa de que o melhor da pátria ainda está por vir.</p>
 `.trim(),
   },
   {
@@ -312,6 +339,8 @@ const SEEDS: Seed[] = [
 <p>A Comunidade dos Países de Língua Portuguesa (CPLP), fundada em 1996, reúne nações da Europa, África, América e Ásia em torno de uma herança comum.</p>
 <h2>Raiz histórica</h2>
 <p>É fruto da ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}, que levou a língua e a cultura portuguezas pelo mundo, e mantém-se viva na criação literária, musical e humana de todos esses povos.</p>
+<h2>Porque importa</h2>
+<p>A lusofonia é o maior projecto cultural do mundo de língua portugueza: 260 milhões de pessoas que, em quatro continentes, se entendem na mesma língua. É a herança viva da expansão — e o horizonte da Associação Memória Lusíada.</p>
 `.trim(),
   },
   {
@@ -332,6 +361,8 @@ const SEEDS: Seed[] = [
 <p>De herança mourisca, ganhou em Portugal vida própria. Nos painéis azuis e brancos contam-se batalhas, santos e cenas do quotidiano — uma autêntica narrativa em parede.</p>
 <h2>Cidade revestida</h2>
 <p>Em ${lk("lisboa", "Lisboa")} e por todo o país, o azulejo dá cor e luz às ruas, sendo hoje um dos traços mais reconhecíveis da paisagem portugueza.</p>
+<h2>Porque importa</h2>
+<p>Casado com a arquitectura, o azulejo é a pele de Portugal: conta a história nas paredes e dá às cidades uma luz que não há em mais lado nenhum. É arte popular e erudita ao mesmo tempo — verdadeiramente nacional.</p>
 `.trim(),
   },
 ];
