@@ -4,7 +4,7 @@
 // Conteúdo + meta + JSON-LD (DefinedTerm) para capturar as pesquisas de dúvidas
 // ortográficas e apresentar o Portuguez como solução.
 
-import divergencias from "../src/lib/grafia/divergencias.json";
+import divergencias from "../src/lib/grafia/divergencias.json" with { type: "json" };
 
 const BASE = "https://www.alusiada.pt";
 const DEFAULT_IMAGE =
