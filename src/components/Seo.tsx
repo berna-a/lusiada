@@ -62,6 +62,12 @@ export function Seo({
     "@graph": [ORG, ...graph],
   });
   const desc = description ?? "";
+  // og:image/twitter:image exigem URL absoluto (partilhas sociais).
+  const absImage = image
+    ? image.startsWith("http")
+      ? image
+      : `${SITE}${image}`
+    : null;
 
   useEffect(() => {
     document.title = title;
@@ -73,16 +79,16 @@ export function Seo({
     upsertMeta(
       "name",
       "twitter:card",
-      image ? "summary_large_image" : "summary"
+      absImage ? "summary_large_image" : "summary"
     );
     if (desc) {
       upsertMeta("name", "description", desc);
       upsertMeta("property", "og:description", desc);
       upsertMeta("name", "twitter:description", desc);
     }
-    if (image) {
-      upsertMeta("property", "og:image", image);
-      upsertMeta("name", "twitter:image", image);
+    if (absImage) {
+      upsertMeta("property", "og:image", absImage);
+      upsertMeta("name", "twitter:image", absImage);
     }
 
     let script = document.head.querySelector<HTMLScriptElement>(
@@ -95,7 +101,7 @@ export function Seo({
       document.head.appendChild(script);
     }
     script.textContent = ld;
-  }, [title, url, type, image, desc, ld]);
+  }, [title, url, type, absImage, desc, ld]);
 
   return null;
 }

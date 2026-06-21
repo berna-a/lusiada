@@ -56,7 +56,8 @@ function buildHead({ title, description, path, image, type, jsonLd }) {
     "@context": "https://schema.org",
     "@graph": [ORG, ...graph],
   });
-  const img = image || DEFAULT_IMAGE;
+  const rawImg = image || DEFAULT_IMAGE;
+  const img = rawImg.startsWith("http") ? rawImg : `${BASE}${rawImg}`;
   const desc = description || "";
   return [
     `<title>${esc(title)}</title>`,
