@@ -3,6 +3,7 @@ import { ArrowLeft, Loader2, Pencil } from "lucide-react";
 import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { buildArticleContent } from "@/components/arca/lusopedia/articleContent";
+import { autolinkDicionario } from "@/lib/grafia/autolink";
 import { CiteButton } from "@/components/arca/lusopedia/CiteButton";
 import { DiscussionFeed } from "@/components/arca/lusopedia/DiscussionFeed";
 import { GrafiaSelector } from "@/components/arca/lusopedia/GrafiaSelector";
@@ -26,7 +27,7 @@ export default function ArtigoPage() {
   const article = useQuery(api.articles.getBySlug, slug ? { slug } : "skip");
   const { convert, grafia, ready } = useGrafia();
   const content = useMemo(
-    () => buildArticleContent(convert(article?.body ?? "")),
+    () => buildArticleContent(autolinkDicionario(convert(article?.body ?? ""))),
     // `grafia`/`ready` entram nas deps para reconverter ao mudar de grafia.
     // biome-ignore lint/correctness/useExhaustiveDependencies: convert depende de grafia+ready
     [article?.body, grafia, ready]
@@ -173,7 +174,7 @@ export default function ArtigoPage() {
           <div className="mt-8 h-px w-16 bg-accent/40" />
           {/* biome-ignore lint/security/noDangerouslySetInnerHtml: conteúdo moderado (aprovado por admin) e gerado pelo editor com esquema controlado */}
           <div
-            className="mt-8 max-w-none font-body text-[17px] text-foreground/85 leading-[1.8] [&_a]:text-accent [&_a]:underline [&_a]:decoration-accent/40 [&_a]:underline-offset-2 hover:[&_a]:decoration-accent [&_blockquote]:my-7 [&_blockquote]:border-accent/40 [&_blockquote]:border-l-2 [&_blockquote]:pl-5 [&_blockquote]:font-display [&_blockquote]:text-[18px] [&_blockquote]:text-foreground/70 [&_h2]:mt-12 [&_h2]:mb-4 [&_h2]:scroll-mt-28 [&_h2]:text-[23px] [&_h2]:text-primary [&_h2]:tracking-[0.06em] [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:scroll-mt-28 [&_h3]:text-[19px] [&_h3]:text-primary [&_li]:my-1 [&_p]:my-5 [&_ul]:my-5 [&_ul]:list-disc [&_ul]:pl-6"
+            className="mt-8 max-w-none font-body text-[17px] text-foreground/85 leading-[1.8] [&_a]:text-accent [&_a]:underline [&_a]:decoration-accent/40 [&_a]:underline-offset-2 hover:[&_a]:decoration-accent [&_.grafia-termo]:text-foreground/80 [&_.grafia-termo]:decoration-dotted [&_.grafia-termo]:decoration-muted-foreground/40 hover:[&_.grafia-termo]:text-accent [&_blockquote]:my-7 [&_blockquote]:border-accent/40 [&_blockquote]:border-l-2 [&_blockquote]:pl-5 [&_blockquote]:font-display [&_blockquote]:text-[18px] [&_blockquote]:text-foreground/70 [&_h2]:mt-12 [&_h2]:mb-4 [&_h2]:scroll-mt-28 [&_h2]:text-[23px] [&_h2]:text-primary [&_h2]:tracking-[0.06em] [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:scroll-mt-28 [&_h3]:text-[19px] [&_h3]:text-primary [&_li]:my-1 [&_p]:my-5 [&_ul]:my-5 [&_ul]:list-disc [&_ul]:pl-6"
             dangerouslySetInnerHTML={{ __html: content.html }}
           />
 

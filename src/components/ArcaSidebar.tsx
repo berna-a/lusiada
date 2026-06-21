@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
-  Archive, Landmark, BookMarked, Calendar, Sword, MapPin, BookOpen, FolderOpen,
+  Archive, Landmark, BookMarked, BookA, Calendar, Sword, MapPin, BookOpen, FolderOpen,
   Menu, X,
 } from "lucide-react";
 
@@ -9,6 +9,7 @@ const arcaLinks = [
   { label: "Arca", to: "/arca", icon: Archive },
   { label: "Panteão", to: "/arca/panteao", icon: Landmark },
   { label: "Lusopédia", to: "/arca/lusopedia", icon: BookMarked },
+  { label: "Dicionário", to: "/dicionario", icon: BookA },
   { label: "Calendário", to: "/arca/calendario", icon: Calendar },
   { label: "Heróis", to: "/arca/herois", icon: Sword },
   { label: "Lugares", to: "/arca/lugares", icon: MapPin },

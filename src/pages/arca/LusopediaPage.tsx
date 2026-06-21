@@ -44,6 +44,12 @@ export default function LusopediaPage() {
           A enciclopédia viva da lusofonia — escrita, discutida e votada pela
           comunidade.
         </p>
+        <Link
+          className="mt-4 inline-flex items-center gap-1.5 font-body text-[14px] text-accent transition-all hover:gap-2.5"
+          to="/dicionario"
+        >
+          Dúvidas de grafia? Veja o Dicionário →
+        </Link>
       </header>
 
       {/* Pesquisa + ação */}
