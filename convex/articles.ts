@@ -98,6 +98,7 @@ export const list = query({
         summary: a.summary ?? null,
         tags: a.tags ?? [],
         coverUrl: await coverUrlOf(ctx, a),
+        createdAt: a._creationTime,
       }))
     );
   },

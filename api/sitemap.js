@@ -28,8 +28,14 @@ const DICIONARIO_SLUGS = [
   "olfato", "teto", "tato", "coletivo", "letivo", "afeto",
 ];
 
+function isoDate(ms) {
+  return new Date(ms).toISOString().split("T")[0];
+}
+
 export default async function handler(_req, res) {
-  let articlePaths = [];
+  const today = isoDate(Date.now());
+  // entradas: { path, lastmod }
+  let articles = [];
   const convexUrl = process.env.VITE_CONVEX_URL;
   if (convexUrl) {
     try {
@@ -40,18 +46,27 @@ export default async function handler(_req, res) {
       });
       const data = await r.json();
       const items = Array.isArray(data) ? data : (data?.value ?? []);
-      articlePaths = items
+      articles = items
         .filter((a) => a && a.slug)
-        .map((a) => `/arca/lusopedia/${a.slug}`);
+        .map((a) => ({
+          path: `/arca/lusopedia/${a.slug}`,
+          lastmod: a.createdAt ? isoDate(a.createdAt) : today,
+        }));
     } catch {
-      articlePaths = [];
+      articles = [];
     }
   }
 
-  const dicionarioPaths = DICIONARIO_SLUGS.map((s) => `/dicionario/${s}`);
-  const paths = [...STATIC_PATHS, ...articlePaths, ...dicionarioPaths];
-  const urls = paths
-    .map((p) => `  <url><loc>${BASE}${p}</loc></url>`)
+  const entries = [
+    ...STATIC_PATHS.map((p) => ({ path: p, lastmod: today })),
+    ...articles,
+    ...DICIONARIO_SLUGS.map((s) => ({ path: `/dicionario/${s}`, lastmod: today })),
+  ];
+  const urls = entries
+    .map(
+      (e) =>
+        `  <url><loc>${BASE}${e.path}</loc><lastmod>${e.lastmod}</lastmod></url>`
+    )
     .join("\n");
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
