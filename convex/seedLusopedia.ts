@@ -11,6 +11,7 @@ type Seed = {
   sources: { label: string; url?: string | null }[];
   body: string;
   pantheonSlug?: string;
+  aliases?: string[];
 };
 
 /** Liga interna a outro artigo da Lusopédia. */
@@ -171,6 +172,7 @@ const SEEDS: Seed[] = [
     summary:
       "A língua de cerca de 260 milhões de pessoas em quatro continentes.",
     tags: ["língua", "lusofonia", "CPLP"],
+    aliases: ["Língua Portuguesa", "português"],
     infobox: [
       { label: "Falantes", value: "~260 milhões" },
       { label: "Origem", value: "Latim · galego-portuguez" },
@@ -323,6 +325,7 @@ export const seedFoundation = internalMutation({
         cover_image_id: null,
         cover_image_url: `/lusopedia/${s.slug}.webp`,
         image_credit: "Wikimedia Commons",
+        aliases: s.aliases,
         infobox: s.infobox,
         sources: s.sources,
         status: "published" as const,

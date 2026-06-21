@@ -112,15 +112,17 @@ function renderArticle(shell, article) {
   const url = BASE + path;
   const published = new Date(article._creationTime).toISOString();
   const tags = article.tags || [];
+  const aliases = article.aliases || [];
   const articleLd = {
     "@type": "Article",
     headline: article.title,
+    alternateName: aliases.length > 0 ? aliases : undefined,
     description: article.summary || undefined,
     inLanguage: "pt-PT",
     datePublished: published,
     dateModified: published,
     articleSection: article.category,
-    keywords: tags.join(", ") || undefined,
+    keywords: [...tags, ...aliases].join(", ") || undefined,
     image: article.coverUrl || undefined,
     author: { "@type": "Organization", name: "Associação Memória Lusíada" },
     publisher: { "@type": "Organization", name: "Associação Memória Lusíada" },
@@ -147,11 +149,15 @@ function renderArticle(shell, article) {
     type: "article",
     jsonLd: [articleLd, breadcrumbLd],
   });
+  const aliasLine =
+    aliases.length > 0
+      ? `<p>Grafia tradicional: ${esc(aliases.join(" · "))}</p>`
+      : "";
   const body = `<main><article><p>${esc(article.category)}</p><h1>${esc(
     article.title
   )}</h1>${
     article.summary ? `<p>${esc(article.summary)}</p>` : ""
-  }${article.body || ""}</article></main>`;
+  }${aliasLine}${article.body || ""}</article></main>`;
   return compose(shell, head, body);
 }
 

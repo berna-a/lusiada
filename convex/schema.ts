@@ -154,6 +154,9 @@ export default defineSchema({
     // Capa por URL (ex.: imagem de domínio público alojada em /public).
     cover_image_url: v.optional(v.union(v.string(), v.null())),
     image_credit: v.optional(v.union(v.string(), v.null())),
+    // Grafias alternativas (ex.: ortografia oficial) — para descoberta nas
+    // pesquisas de quem usa a grafia antiga. Mostradas e em alternateName.
+    aliases: v.optional(v.array(v.string())),
     infobox: v.optional(
       v.array(v.object({ label: v.string(), value: v.string() }))
     ),

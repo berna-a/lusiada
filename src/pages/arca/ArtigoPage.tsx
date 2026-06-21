@@ -60,6 +60,7 @@ export default function ArtigoPage() {
   const infobox = article.infobox ?? [];
   const sources = article.sources ?? [];
   const tags = article.tags ?? [];
+  const aliases = article.aliases ?? [];
 
   const path = `/arca/lusopedia/${article.slug}`;
   const itemUrl = `https://www.alusiada.pt${path}`;
@@ -67,12 +68,13 @@ export default function ArtigoPage() {
   const articleLd = {
     "@type": "Article",
     headline: article.title,
+    alternateName: aliases.length > 0 ? aliases : undefined,
     description: article.summary ?? undefined,
     inLanguage: "pt-PT",
     datePublished: publishedAt,
     dateModified: publishedAt,
     articleSection: article.category,
-    keywords: tags.join(", ") || undefined,
+    keywords: [...tags, ...aliases].join(", ") || undefined,
     image: article.coverUrl ?? undefined,
     author: { "@type": "Organization", name: "Associação Memória Lusíada" },
     publisher: { "@type": "Organization", name: "Associação Memória Lusíada" },
@@ -137,6 +139,12 @@ export default function ArtigoPage() {
               {article.summary}
             </p>
           )}
+          {aliases.length > 0 && (
+            <p className="mt-3 font-body text-[13px] text-muted-foreground">
+              Grafia tradicional:{" "}
+              <span className="text-foreground/70">{aliases.join(" · ")}</span>
+            </p>
+          )}
           <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 font-body text-[13px] text-muted-foreground">
             <span>
               Por{" "}
@@ -156,7 +164,7 @@ export default function ArtigoPage() {
           <div className="mt-8 h-px w-16 bg-accent/40" />
           {/* biome-ignore lint/security/noDangerouslySetInnerHtml: conteúdo moderado (aprovado por admin) e gerado pelo editor com esquema controlado */}
           <div
-            className="prose prose-stone mt-8 max-w-none font-body text-foreground/85 [&_h2]:scroll-mt-28 [&_h3]:scroll-mt-28"
+            className="mt-8 max-w-none font-body text-[17px] text-foreground/85 leading-[1.8] [&_a]:text-accent [&_a]:underline [&_a]:decoration-accent/40 [&_a]:underline-offset-2 hover:[&_a]:decoration-accent [&_blockquote]:my-7 [&_blockquote]:border-accent/40 [&_blockquote]:border-l-2 [&_blockquote]:pl-5 [&_blockquote]:font-display [&_blockquote]:text-[18px] [&_blockquote]:text-foreground/70 [&_h2]:mt-12 [&_h2]:mb-4 [&_h2]:scroll-mt-28 [&_h2]:text-[23px] [&_h2]:text-primary [&_h2]:tracking-[0.06em] [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:scroll-mt-28 [&_h3]:text-[19px] [&_h3]:text-primary [&_li]:my-1 [&_p]:my-5 [&_ul]:my-5 [&_ul]:list-disc [&_ul]:pl-6"
             dangerouslySetInnerHTML={{ __html: content.html }}
           />
 

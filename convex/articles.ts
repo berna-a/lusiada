@@ -399,6 +399,7 @@ export const seedCamoes = internalMutation({
       cover_image_id: null,
       cover_image_url: "/lusopedia/luiz-vaz-de-camoes.webp",
       image_credit: "Wikimedia Commons",
+      aliases: ["Luís Vaz de Camões", "Luís de Camões"],
       infobox: [
         { label: "Nascimento", value: "c. 1525, Lisboa" },
         { label: "Morte", value: "10 de Junho de 1580" },

@@ -10,6 +10,7 @@ type Seed = {
   sources: { label: string; url?: string | null }[];
   body: string;
   pantheonSlug?: string;
+  aliases?: string[];
 };
 
 /** Liga interna a outro artigo da Lusopédia. */
@@ -354,6 +355,7 @@ export const seedFoundation2 = internalMutation({
         cover_image_id: null,
         cover_image_url: `/lusopedia/${s.slug}.webp`,
         image_credit: "Wikimedia Commons",
+        aliases: s.aliases,
         infobox: s.infobox,
         sources: s.sources,
         status: "published" as const,
