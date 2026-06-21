@@ -6,6 +6,7 @@ const STATIC_PATHS = [
   "/arca",
   "/arca/lusopedia",
   "/arca/panteao",
+  "/dicionario",
   "/associacao",
   "/sobre/manifesto",
   "/sobre/objectivos",
@@ -13,6 +14,18 @@ const STATIC_PATHS = [
   "/apoiar",
   "/aderir",
   "/contactos",
+];
+
+// Palavras de alta procura do dicionário (subconjunto curado — evita despejar
+// milhares de páginas quase-iguais no Google).
+const DICIONARIO_SLUGS = [
+  "acao", "acoes", "objetivo", "objeto", "direcao", "diretor", "otimo",
+  "exato", "correto", "ator", "atriz", "atividade", "atual", "atualidade",
+  "fator", "colecao", "selecao", "protecao", "projeto",
+  "rececao", "excecao", "arquiteto", "arquitetura", "perspetiva", "respetivo",
+  "ativo", "adocao", "batismo", "dialeto", "eletricidade", "eletrico",
+  "reacao", "fratura", "infecao", "inspecao", "espetaculo", "espetador",
+  "olfato", "teto", "tato", "coletivo", "letivo", "afeto",
 ];
 
 export default async function handler(_req, res) {
@@ -35,7 +48,8 @@ export default async function handler(_req, res) {
     }
   }
 
-  const paths = [...STATIC_PATHS, ...articlePaths];
+  const dicionarioPaths = DICIONARIO_SLUGS.map((s) => `/dicionario/${s}`);
+  const paths = [...STATIC_PATHS, ...articlePaths, ...dicionarioPaths];
   const urls = paths
     .map((p) => `  <url><loc>${BASE}${p}</loc></url>`)
     .join("\n");

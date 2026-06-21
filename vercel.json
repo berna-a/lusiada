@@ -8,6 +8,8 @@
     { "source": "/arca/lusopedia", "destination": "/api/lusopedia" },
     { "source": "/arca/lusopedia/novo", "destination": "/index.html" },
     { "source": "/arca/lusopedia/:slug", "destination": "/api/lusopedia?slug=:slug" },
+    { "source": "/dicionario", "destination": "/api/dicionario" },
+    { "source": "/dicionario/:slug", "destination": "/api/dicionario?slug=:slug" },
     { "source": "/((?!.*\\.).*)", "destination": "/index.html" }
   ]
 }

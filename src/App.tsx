@@ -31,6 +31,8 @@ import LugaresPage from "@/pages/arca/LugaresPage";
 import LugarPage from "@/pages/arca/LugarPage";
 import MemoriasPage from "@/pages/arca/MemoriasPage";
 import ColeccoesPage from "@/pages/arca/ColeccoesPage";
+import DicionarioPage from "@/pages/dicionario/DicionarioPage";
+import PalavraPage from "@/pages/dicionario/PalavraPage";
 
 import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 import AdminDefinicoesPage from "@/pages/admin/AdminDefinicoesPage";
@@ -75,6 +77,8 @@ const App = () => (
             <Route path="/arca/lusopedia/novo" element={<NovoArtigoPage />} />
             <Route path="/arca/lusopedia/:slug" element={<ArtigoPage />} />
             <Route path="/arca/lusopedia/:slug/editar" element={<EditarArtigoPage />} />
+            <Route path="/dicionario" element={<DicionarioPage />} />
+            <Route path="/dicionario/:slug" element={<PalavraPage />} />
             <Route path="/arca/lugares" element={<LugaresPage />} />
             <Route path="/arca/lugares/:id" element={<LugarPage />} />
             <Route path="/arca/memorias" element={<MemoriasPage />} />
