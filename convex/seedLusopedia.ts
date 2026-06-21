@@ -38,11 +38,13 @@ const SEEDS: Seed[] = [
       { label: "Tratado de Zamora (1143)", url: null },
     ],
     body: `
-<p>Afonso Henriques (c. 1109–1185), dito <em>o Conquistador</em>, foi o primeiro Rei de Portugal e o fundador da nação. Filho do conde D. Henrique de Borgonha e de D. Teresa de Leão, transformou o Condado Portucalense num reino independente.</p>
+<p>Afonso Henriques (c. 1109–1185), dito <em>o Conquistador</em>, foi o primeiro Rei de Portugal e o fundador da nação. Filho do conde D. Henrique de Borgonha e de D. Teresa de Leão, herdou um condado e legou um reino.</p>
 <h2>A independência</h2>
-<p>Em 1128, na Batalha de São Mamede, venceu as forças da mãe e firmou o seu poder. A vitória sobre os mouros na Batalha de Ourique, em 1139, deu-lhe o título de rei. Pelo Tratado de Zamora, em 1143, o reino de Leão reconheceu Portugal, e em 1179 a Santa Sé confirmou a sua soberania.</p>
-<h2>Legado</h2>
-<p>A conquista de Lisboa, em 1147, com o auxílio de cruzados, alargou o reino para sul e abriu o caminho que, séculos depois, levaria à ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}. Afonso Henriques é, na memória portugueza, o pai da pátria.</p>
+<p>Em 1128, na Batalha de São Mamede, venceu as forças da própria mãe e tomou as rédeas do governo. A vitória sobre os mouros na Batalha de Ourique (1139) — onde a tradição diz ter-lhe aparecido Cristo — deu-lhe o título de rei. Pelo Tratado de Zamora (1143), Leão reconheceu Portugal, e em 1179 a bula <em>Manifestis Probatum</em> selou, em Roma, a soberania do novo reino.</p>
+<h2>A conquista de Lisboa</h2>
+<p>Em 1147, com o auxílio de cruzados a caminho da Terra Santa, conquistou ${lk("lisboa", "Lisboa")} aos mouros, alargando o reino para sul e firmando a sua capital futura.</p>
+<h2>Porque importa</h2>
+<p>Toda a sua acção foi a de um guerreiro tenaz que, contra reis e impérios, fez nascer Portugal — um dos mais antigos Estados da Europa com fronteiras quase inalteradas. Por isso é, na memória portugueza, o <em>pai da pátria</em>, e dele parte a estrada que séculos depois levaria à ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}.</p>
 `.trim(),
   },
   {
@@ -62,11 +64,13 @@ const SEEDS: Seed[] = [
       { label: "Crónica de Guiné, Gomes Eanes de Zurara", url: null },
     ],
     body: `
-<p>O Infante D. Henrique (1394–1460), filho do rei D. João I, é a figura tutelar do início da ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}. Em torno da sua corte, em Sagres, reuniu pilotos, cartógrafos e construtores que aperfeiçoaram a arte de navegar.</p>
+<p>O Infante D. Henrique (1394–1460), filho do rei D. João I, é a figura tutelar do início da ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}. Em torno de si, no Algarve, reuniu pilotos, cartógrafos e construtores que aperfeiçoaram a arte de navegar e o navio que a tornou possível: a caravela.</p>
 <h2>A conquista de Ceuta</h2>
-<p>A tomada de Ceuta, em 1415, marcou o primeiro passo da expansão portugueza em África. A partir daí, o Infante patrocinou viagens sucessivas pela costa africana.</p>
+<p>A tomada de Ceuta, em 1415 — onde o jovem Infante foi armado cavaleiro —, marcou o primeiro passo da expansão portugueza em África e despertou nele o objectivo de uma vida: ir mais além.</p>
 <h2>O impulso atlântico</h2>
-<p>Sob o seu patrocínio, os portuguezes povoaram a Madeira e os Açores e dobraram o Cabo Bojador (1434), vencendo o medo do "mar tenebroso". Abriu assim a rota que ${lk("vasco-da-gama", "Vasco da Gama")} havia de completar até à Índia.</p>
+<p>Sob o seu patrocínio, os portuguezes povoaram a Madeira e os Açores e, em 1434, Gil Eanes dobrou o temido Cabo Bojador, vencendo o medo do "mar tenebroso" que detinha a Europa havia séculos.</p>
+<h2>Porque importa</h2>
+<p>Sem fama de grandes batalhas, o Infante mudou o mundo com uma ideia: a de que o mar não era um fim, mas um caminho. Abriu a rota que ${lk("vasco-da-gama", "Vasco da Gama")} havia de completar até à Índia, e fez de um reino da periferia o pioneiro da era global.</p>
 `.trim(),
   },
   {
@@ -86,11 +90,13 @@ const SEEDS: Seed[] = [
       { label: "Roteiro da Primeira Viagem de Vasco da Gama", url: null },
     ],
     body: `
-<p>Vasco da Gama (c. 1469–1524) comandou a primeira armada a chegar à Índia por mar, unindo a Europa ao Oriente sem passar pelo Mediterrâneo. Foi o coroar de décadas de esforço iniciadas pelo ${lk("infante-dom-henrique", "Infante D. Henrique")}.</p>
+<p>Vasco da Gama (c. 1469–1524) comandou a primeira armada a chegar à Índia por mar, unindo a Europa ao Oriente sem passar pelo Mediterrâneo nem pelas mãos de venezianos e turcos. Foi o coroar de décadas de esforço iniciadas pelo ${lk("infante-dom-henrique", "Infante D. Henrique")}.</p>
 <h2>A viagem</h2>
-<p>Partiu de Lisboa em Julho de 1497, dobrou o Cabo da Boa Esperança e chegou a Calecute em Maio de 1498. O regresso confirmou que Portugal abrira uma nova rota do comércio mundial.</p>
+<p>Partiu de Belém em Julho de 1497 com quatro navios, dobrou o Cabo da Boa Esperança e, após meses de mar aberto, chegou a Calecute em Maio de 1498. À chegada, ao serem interrogados, os portuguezes terão respondido que vinham buscar "cristãos e especiarias" — a fé e o comércio, os dois motores da expansão.</p>
 <h2>Memória</h2>
-<p>A sua gesta tornou-se o fio condutor de ${lk("os-lusiadas", "Os Lusíadas")}, a epopeia de ${lk("luiz-vaz-de-camoes", "Luiz Vaz de Camões")}. Está sepultado no ${lk("mosteiro-dos-jeronimos", "Mosteiro dos Jerónimos")}, em Lisboa.</p>
+<p>A sua gesta abriu uma nova perspectiva ao comércio mundial e tornou-se o fio condutor d'${lk("os-lusiadas", "Os Lusíadas")}, a epopeia de ${lk("luiz-vaz-de-camoes", "Luiz Vaz de Camões")}. Está sepultado no ${lk("mosteiro-dos-jeronimos", "Mosteiro dos Jerónimos")}, frente ao rio de onde partiu.</p>
+<h2>Porque importa</h2>
+<p>Com Gama, o mundo deixou de ter limites conhecidos: começou aquilo a que hoje chamamos globalização. Um pequeno reino à beira-mar tornou-se, por uma só viagem, senhor de uma rota que mudou a economia do planeta.</p>
 `.trim(),
   },
   {
@@ -242,11 +248,13 @@ const SEEDS: Seed[] = [
       { label: "UNESCO — Património Mundial", url: null },
     ],
     body: `
-<p>O Mosteiro dos Jerónimos, em Belém, é a obra-prima do estilo manuelino e um dos grandes monumentos de Portugal. A sua construção começou em 1501, por ordem de D. Manuel I.</p>
+<p>O Mosteiro dos Jerónimos, em Belém, é a obra-prima da arquitectura manuelina e um dos maiores monumentos de Portugal. A sua construção começou em 1501, por ordem de D. Manuel I, financiada pelo ouro e pelas especiarias que as naus traziam do Oriente.</p>
 <h2>Memória da expansão</h2>
-<p>Foi erguido junto ao local de onde partiu ${lk("vasco-da-gama", "Vasco da Gama")} para a Índia, celebrando a ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}. A pedra ostenta cordas, esferas armilares e motivos do mar.</p>
+<p>Foi erguido junto ao local de onde partiu ${lk("vasco-da-gama", "Vasco da Gama")} para a Índia, como acção de graças pela viagem e casa de oração dos navegadores. A pedra ostenta cordas, nós, esferas armilares e seres do mar — toda a ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")} esculpida em calcário.</p>
 <h2>Panteão</h2>
 <p>Guarda os túmulos de Vasco da Gama e de ${lk("luiz-vaz-de-camoes", "Luiz Vaz de Camões")}, reunindo na mesma casa o herói e o poeta da nação.</p>
+<h2>Porque importa</h2>
+<p>Classificado Património Mundial pela UNESCO em 1983, é o monumento onde Portugal celebrou, em pedra, o seu momento mais alto. Visitá-lo é entrar na própria memória da expansão.</p>
 `.trim(),
   },
   {
@@ -264,11 +272,13 @@ const SEEDS: Seed[] = [
     ],
     sources: [{ label: "Câmara Municipal de Lisboa", url: null }],
     body: `
-<p>O Padrão dos Descobrimentos ergue-se na margem do Tejo, em Belém, em forma de caravela. Foi inaugurado em 1960, nas comemorações dos 500 anos da morte do ${lk("infante-dom-henrique", "Infante D. Henrique")}.</p>
+<p>O Padrão dos Descobrimentos ergue-se na margem do Tejo, em Belém, em forma de caravela de velas enfunadas. Foi inaugurado em 1960, nas comemorações dos 500 anos da morte do ${lk("infante-dom-henrique", "Infante D. Henrique")}, segundo projecto do arquitecto Cottinelli Telmo e do escultor Leopoldo de Almeida.</p>
 <h2>As figuras</h2>
-<p>Na proa, o Infante segura uma caravela; atrás dele desfilam 33 figuras maiores da ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")} — navegadores, reis, cartógrafos e poetas.</p>
+<p>Na proa, o Infante segura uma caravela; atrás dele desfilam 33 figuras maiores da ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")} — ${lk("vasco-da-gama", "Vasco da Gama")}, Pedro Álvares Cabral, ${lk("luiz-vaz-de-camoes", "Camões")}, reis, missionários e cartógrafos —, todos voltados para o mar.</p>
 <h2>A rosa-dos-ventos</h2>
-<p>Diante do monumento, no chão, uma vasta rosa-dos-ventos com um mapa-múndi assinala as rotas e as datas da expansão portugueza pelo mundo.</p>
+<p>Diante do monumento, oferecida pela África do Sul, uma vasta rosa-dos-ventos com um mapa-múndi assinala no chão as rotas e as datas da expansão portugueza pelo mundo.</p>
+<h2>Porque importa</h2>
+<p>É o monumento moderno da memória dos Descobrimentos — o lugar onde Portugal, virado para o Tejo e para o Atlântico, continua a olhar o horizonte que um dia desvendou.</p>
 `.trim(),
   },
   {
@@ -288,11 +298,13 @@ const SEEDS: Seed[] = [
       { label: "Crónica de Guiné, Gomes Eanes de Zurara", url: null },
     ],
     body: `
-<p>A Era dos Descobrimentos foi o período em que Portugal, e depois a Europa, se lançou ao mar e ligou pela primeira vez os continentes. Começou com a conquista de Ceuta, em 1415.</p>
+<p>A Era dos Descobrimentos foi o período em que Portugal, e depois a Europa, se lançou ao mar e ligou pela primeira vez todos os continentes. Começou com a conquista de Ceuta, em 1415, e fez de um reino pobre da periferia o centro de um império global.</p>
 <h2>O avanço</h2>
-<p>Sob o impulso do ${lk("infante-dom-henrique", "Infante D. Henrique")}, os navegadores desceram a costa de África; ${lk("vasco-da-gama", "Vasco da Gama")} chegou à Índia em 1498 e Pedro Álvares Cabral ao Brasil em 1500.</p>
+<p>Sob o impulso do ${lk("infante-dom-henrique", "Infante D. Henrique")}, os navegadores desceram, ano após ano, a costa de África, com o objectivo de chegar à Índia. ${lk("vasco-da-gama", "Vasco da Gama")} alcançou-a em 1498; Pedro Álvares Cabral aportou ao Brasil em 1500; e, em poucas décadas, os portuguezes chegaram à China e ao Japão.</p>
 <h2>Um mundo novo</h2>
-<p>A partilha do globo foi acordada no ${lk("tratado-de-tordesilhas", "Tratado de Tordesilhas")}. Esta gesta inspirou ${lk("os-lusiadas", "Os Lusíadas")} e fez da ${lk("lingua-portugueza", "língua portugueza")} uma língua mundial.</p>
+<p>A partilha do globo foi acordada com Castela no ${lk("tratado-de-tordesilhas", "Tratado de Tordesilhas")}. Nasceram a cartografia moderna, o comércio à escala planetária e o primeiro encontro — nem sempre pacífico — entre todos os povos da Terra.</p>
+<h2>Porque importa</h2>
+<p>Foi a maior gesta colectiva do Povo Portuguez e um dos princípios do mundo moderno. Inspirou ${lk("os-lusiadas", "Os Lusíadas")} e levou a ${lk("lingua-portugueza", "língua portugueza")} aos quatro cantos do mundo.</p>
 `.trim(),
   },
   {
@@ -310,11 +322,13 @@ const SEEDS: Seed[] = [
     ],
     sources: [{ label: "Tratado de Tordesilhas (1494)", url: null }],
     body: `
-<p>O Tratado de Tordesilhas, assinado em 1494, dividiu o mundo por descobrir entre Portugal e a Coroa de Castela, traçando um meridiano a 370 léguas a oeste das ilhas de Cabo Verde.</p>
+<p>O Tratado de Tordesilhas, assinado em 1494, dividiu o mundo por descobrir entre Portugal e a Coroa de Castela, traçando um meridiano a 370 léguas a oeste das ilhas de Cabo Verde. Tinha por objectivo evitar a guerra entre as duas potências da ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}.</p>
 <h2>A partilha do globo</h2>
-<p>As terras a oriente da linha caberiam a Portugal; as a ocidente, a Castela. O tratado, mediado pelo Papa, foi um dos primeiros grandes acordos diplomáticos à escala planetária.</p>
+<p>As terras a oriente da linha caberiam a Portugal; as a ocidente, a Castela. Foi um dos primeiros grandes acordos diplomáticos à escala planetária — dois reinos ibéricos a repartir, no papel, um mundo que ainda mal conheciam.</p>
 <h2>Consequências</h2>
-<p>Foi com base nesta linha que Portugal assegurou, anos depois, a posse do Brasil, no quadro da ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}.</p>
+<p>Foi graças a esta linha que Portugal assegurou, seis anos depois, a posse do Brasil, quando a armada de ${lk("pedro-alvares-cabral", "Pedro Álvares Cabral")} lá aportou. O tratado moldou para sempre o mapa da América do Sul — e a fronteira da ${lk("lingua-portugueza", "língua portugueza")} no continente.</p>
+<h2>Porque importa</h2>
+<p>Tordesilhas é a prova de uma audácia sem precedentes: dois pequenos reinos a dividir o planeta entre si. Está na origem do Brasil portuguez e do mundo lusófono que hoje conhecemos.</p>
 `.trim(),
   },
 ];
