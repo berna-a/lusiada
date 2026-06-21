@@ -57,7 +57,10 @@ export function convertGrafia(
       }
       return segment.replace(WORD, (word) => {
         const entry = source.get(word.toLowerCase());
-        return entry ? matchCase(word, entry[to]) : word;
+        if (!entry) {
+          return word;
+        }
+        return entry.caseExact ? entry[to] : matchCase(word, entry[to]);
       });
     })
     .join("");

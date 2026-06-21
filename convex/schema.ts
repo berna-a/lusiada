@@ -239,6 +239,20 @@ export default defineSchema({
     reason: v.optional(v.union(v.string(), v.null())),
   }).index("by_post", ["post_id"]),
 
+  // Léxico de grafias — dicionário relacional Portuguez ↔ AO90 ↔ pré-AO90.
+  // Master editável (futura base do laboratório da ARCA). Exportado para o
+  // bundle do motor de conversão. status: "approved" | "proposed".
+  lexicon: defineTable({
+    pz: v.string(),
+    ao: v.string(),
+    pre: v.string(),
+    kind: v.string(), // "z" | "consoante" | "acento" | "mes" | "nome"
+    case_exact: v.optional(v.boolean()),
+    status: v.optional(v.string()),
+  })
+    .index("by_pz", ["pz"])
+    .index("by_status", ["status"]),
+
   // Doações
   donations: defineTable({
     donor_email: v.string(),
