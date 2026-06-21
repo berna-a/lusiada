@@ -3,19 +3,42 @@
 // Pega num texto/HTML em Portuguez (a forma canónica) e devolve-o noutra grafia,
 // trocando apenas as palavras que constam do léxico. Preserva tags HTML,
 // pontuação, espaços e o padrão de maiúsculas de cada palavra.
+//
+// Fontes do léxico:
+//  • divergencias.json — eixo consoante/maiúsculas AO90 ↔ pré-AO90 (~7,5k pares).
+//  • LEXICON (lexicon.ts) — camada Portuguez (z, nomes, acentos), editável.
 
-import { type Grafia, LEXICON, type LexEntry } from "./lexicon";
+import divergencias from "./divergencias.json";
+import { type Grafia, LEXICON } from "./lexicon";
 
-/** Mapa por grafia de origem: forma minúscula → entrada do léxico. */
-const MAPS: Record<Grafia, Map<string, LexEntry>> = {
+type Entry = { pz: string; ao: string; pre: string; caseExact?: boolean };
+
+const MAPS: Record<Grafia, Map<string, Entry>> = {
   pz: new Map(),
   ao: new Map(),
   pre: new Map(),
 };
-for (const entry of LEXICON) {
+
+function register(entry: Entry) {
   MAPS.pz.set(entry.pz.toLowerCase(), entry);
   MAPS.ao.set(entry.ao.toLowerCase(), entry);
   MAPS.pre.set(entry.pre.toLowerCase(), entry);
+}
+
+// Eixo consoante AO90: Portuguez e pré-AO usam a forma antiga (chave); AO90 a nova.
+const data = divergencias as {
+  general: Record<string, string>;
+  case_change: Record<string, string>;
+};
+for (const [old, novo] of Object.entries(data.general)) {
+  register({ pz: old, ao: novo, pre: old });
+}
+for (const [old, novo] of Object.entries(data.case_change)) {
+  register({ pz: old, ao: novo, pre: old, caseExact: true });
+}
+// Camada Portuguez (sobrepõe-se, é a nossa decisão autoritária).
+for (const entry of LEXICON) {
+  register(entry);
 }
 
 /** Aplica o padrão de maiúsculas de `source` à palavra `target`. */
@@ -29,16 +52,14 @@ function matchCase(source: string, target: string) {
   return target;
 }
 
-// Divide em tags HTML (preservadas) e texto. Captura o separador.
 const TAG_SPLIT = /(<[^>]+>)/;
-// Palavras: letras unicode + apóstrofos/hífenes internos.
 const WORD = /[\p{L}][\p{L}­'-]*/gu;
 
 /**
  * Converte um texto/HTML de uma grafia para outra.
  * @param text conteúdo (texto simples ou HTML)
- * @param from grafia de origem (por omissão "pz")
  * @param to grafia de destino
+ * @param from grafia de origem (por omissão "pz")
  */
 export function convertGrafia(
   text: string,
@@ -53,7 +74,7 @@ export function convertGrafia(
     .split(TAG_SPLIT)
     .map((segment) => {
       if (segment.startsWith("<") && segment.endsWith(">")) {
-        return segment; // tag HTML — não tocar
+        return segment;
       }
       return segment.replace(WORD, (word) => {
         const entry = source.get(word.toLowerCase());
@@ -72,3 +93,6 @@ export const GRAFIA_LABELS: Record<Grafia, string> = {
   ao: "Português (AO 1990)",
   pre: "Português (pré-acordo)",
 };
+
+/** Número de divergências carregadas (diagnóstico). */
+export const LEXICON_SIZE = MAPS.pz.size;

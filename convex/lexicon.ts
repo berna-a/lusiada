@@ -26,6 +26,18 @@ export const count = query({
   handler: async (ctx) => (await ctx.db.query("lexicon").collect()).length,
 });
 
+/** Esvazia a tabela (para re-semear de forma limpa). */
+export const clearLexicon = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    const rows = await ctx.db.query("lexicon").collect();
+    for (const r of rows) {
+      await ctx.db.delete(r._id);
+    }
+    return { deleted: rows.length };
+  },
+});
+
 /**
  * Semeia/atualiza a tabela `lexicon` a partir do léxico do motor de conversão.
  * Idempotente por `pz`. A médio prazo a direção inverte-se: a tabela passa a
