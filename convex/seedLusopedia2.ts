@@ -34,7 +34,7 @@ const SEEDS: Seed[] = [
       { label: "Carta de Pero Vaz de Caminha (1500)", url: null },
     ],
     body: `
-<p>Pedro Álvares Cabral (c. 1467–1520) comandou a segunda armada portuguesa à Índia e, a 22 de Abril de 1500, aportou às terras a que chamou Vera Cruz — o Brasil. Foi um dos momentos maiores da ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}.</p>
+<p>Pedro Álvares Cabral (c. 1467–1520) comandou a segunda armada portugueza à Índia e, a 22 de Abril de 1500, aportou às terras a que chamou Vera Cruz — o Brasil. Foi um dos momentos maiores da ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}.</p>
 <h2>A viagem</h2>
 <p>Seguindo a rota aberta por ${lk("vasco-da-gama", "Vasco da Gama")}, a sua frota desviou-se para ocidente e encontrou a costa brasileira, dentro do hemisfério que cabia a Portugal pelo ${lk("tratado-de-tordesilhas", "Tratado de Tordesilhas")}.</p>
 <h2>Memória</h2>
@@ -97,9 +97,9 @@ const SEEDS: Seed[] = [
     ],
     sources: [{ label: "Arquivo Amália Rodrigues", url: null }],
     body: `
-<p>Amália Rodrigues (1920–1999) é a maior intérprete da história do ${lk("fado", "fado")} e uma das vozes portuguesas mais conhecidas no mundo. Deu ao fado dignidade de arte maior.</p>
+<p>Amália Rodrigues (1920–1999) é a maior intérprete da história do ${lk("fado", "fado")} e uma das vozes portuguezas mais conhecidas no mundo. Deu ao fado dignidade de arte maior.</p>
 <h2>A voz da saudade</h2>
-<p>Em palcos de todo o mundo, cantou a ${lk("saudade", "saudade")} e o destino, levando a alma portuguesa a línguas e públicos que nunca a tinham ouvido.</p>
+<p>Em palcos de todo o mundo, cantou a ${lk("saudade", "saudade")} e o destino, levando a alma portugueza a línguas e públicos que nunca a tinham ouvido.</p>
 <h2>Memória nacional</h2>
 <p>À sua morte, em 1999, Portugal decretou luto nacional. Repousa no Panteão Nacional, entre os maiores da pátria.</p>
 `.trim(),
@@ -164,14 +164,14 @@ const SEEDS: Seed[] = [
 <h2>Cidade Invicta</h2>
 <p>Ganhou a alcunha de "Invicta" pela resistência no Cerco de 1832. Trabalhadora e orgulhosa, é tida como a cidade que "trabalha" no imaginário nacional.</p>
 <h2>O vinho</h2>
-<p>Nas caves de Gaia repousa o Vinho do Porto, néctar exportado há séculos e um dos grandes embaixadores da ${lk("lingua-portuguesa", "cultura portuguesa")} no mundo.</p>
+<p>Nas caves de Gaia repousa o Vinho do Porto, néctar exportado há séculos e um dos grandes embaixadores da ${lk("lingua-portugueza", "cultura portugueza")} no mundo.</p>
 `.trim(),
   },
   {
     slug: "coimbra",
     title: "Coimbra",
     category: "Lugares",
-    summary: "A cidade do saber, com a mais antiga universidade portuguesa.",
+    summary: "A cidade do saber, com a mais antiga universidade portugueza.",
     tags: ["cidades", "universidade", "fado"],
     infobox: [
       { label: "Rio", value: "Mondego" },
@@ -185,7 +185,7 @@ const SEEDS: Seed[] = [
 <h2>A Alta e a tradição</h2>
 <p>A Universidade, com a sua Biblioteca Joanina, é Património Mundial. Das suas repúblicas e capas negras nasceu o ${lk("fado", "fado de Coimbra")}, cantado por homens, à guitarra.</p>
 <h2>Berço de reis</h2>
-<p>Aqui nasceram vários reis e firmou-se a ${lk("lingua-portuguesa", "língua portuguesa")} como língua de cultura e de ciência.</p>
+<p>Aqui nasceram vários reis e firmou-se a ${lk("lingua-portugueza", "língua portugueza")} como língua de cultura e de ciência.</p>
 `.trim(),
   },
   {
@@ -223,9 +223,9 @@ const SEEDS: Seed[] = [
     ],
     sources: [{ label: "Crónica de D. João I, Fernão Lopes", url: null }],
     body: `
-<p>A Batalha de Aljubarrota, a 14 de Agosto de 1385, opôs Portugal a Castela e selou a crise de sucessão de 1383-85. A vitória portuguesa garantiu a ${lk("dom-afonso-henriques", "independência")} do reino por mais dois séculos.</p>
+<p>A Batalha de Aljubarrota, a 14 de Agosto de 1385, opôs Portugal a Castela e selou a crise de sucessão de 1383-85. A vitória portugueza garantiu a ${lk("dom-afonso-henriques", "independência")} do reino por mais dois séculos.</p>
 <h2>O génio do Condestável</h2>
-<p>O exército português, em clara inferioridade, venceu graças à táctica de ${lk("nuno-alvares-pereira", "Nuno Álvares Pereira")} e à coragem dos homens de D. João I.</p>
+<p>O exército portuguez, em clara inferioridade, venceu graças à táctica de ${lk("nuno-alvares-pereira", "Nuno Álvares Pereira")} e à coragem dos homens de D. João I.</p>
 <h2>Memória</h2>
 <p>Em agradecimento, ergueu-se o Mosteiro da Batalha, panteão da dinastia de Avis e monumento à liberdade nacional.</p>
 `.trim(),
@@ -276,7 +276,7 @@ const SEEDS: Seed[] = [
     slug: "mensagem",
     title: "Mensagem",
     category: "Obras",
-    summary: "O único livro que Pessoa publicou em vida — a epopeia do espírito português.",
+    summary: "O único livro que Pessoa publicou em vida — a epopeia do espírito portuguez.",
     tags: ["poesia", "literatura", "Pessoa"],
     infobox: [
       { label: "Autor", value: "Fernando Pessoa" },
@@ -286,31 +286,31 @@ const SEEDS: Seed[] = [
     ],
     sources: [{ label: "Mensagem (1934)", url: null }],
     body: `
-<p><em>Mensagem</em> (1934) é o único livro que ${lk("fernando-pessoa", "Fernando Pessoa")} publicou em português durante a vida. Em 44 poemas, relê o passado de Portugal como mito e profecia.</p>
-<h2>Mar Português</h2>
+<p><em>Mensagem</em> (1934) é o único livro que ${lk("fernando-pessoa", "Fernando Pessoa")} publicou em portuguez durante a vida. Em 44 poemas, relê o passado de Portugal como mito e profecia.</p>
+<h2>Mar Portuguez</h2>
 <p>Onde ${lk("os-lusiadas", "Os Lusíadas")} cantam a gesta concreta da ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}, <em>Mensagem</em> canta o seu sentido espiritual — "Valeu a pena? Tudo vale a pena / Se a alma não é pequena."</p>
 <h2>O Encoberto</h2>
-<p>A obra anuncia um Quinto Império feito de cultura e de espírito, prolongando o sonho português para o futuro.</p>
+<p>A obra anuncia um Quinto Império feito de cultura e de espírito, prolongando o sonho portuguez para o futuro.</p>
 `.trim(),
   },
   {
     slug: "lusofonia",
     title: "Lusofonia",
     category: "Conceitos",
-    summary: "A comunidade dos povos e culturas de língua portuguesa.",
+    summary: "A comunidade dos povos e culturas de língua portugueza.",
     tags: ["lusofonia", "língua", "CPLP"],
     infobox: [
-      { label: "Significado", value: "Mundo de língua portuguesa" },
+      { label: "Significado", value: "Mundo de língua portugueza" },
       { label: "Continentes", value: "Quatro" },
       { label: "Organização", value: "CPLP (fundada em 1996)" },
     ],
     sources: [{ label: "Comunidade dos Países de Língua Portuguesa", url: null }],
     body: `
-<p>Lusofonia é o nome dado ao conjunto dos povos, países e culturas que partilham a ${lk("lingua-portuguesa", "língua portuguesa")}. Liga, num mesmo idioma, gentes de quatro continentes.</p>
+<p>Lusofonia é o nome dado ao conjunto dos povos, países e culturas que partilham a ${lk("lingua-portugueza", "língua portugueza")}. Liga, num mesmo idioma, gentes de quatro continentes.</p>
 <h2>Uma comunidade</h2>
 <p>A Comunidade dos Países de Língua Portuguesa (CPLP), fundada em 1996, reúne nações da Europa, África, América e Ásia em torno de uma herança comum.</p>
 <h2>Raiz histórica</h2>
-<p>É fruto da ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}, que levou a língua e a cultura portuguesas pelo mundo, e mantém-se viva na criação literária, musical e humana de todos esses povos.</p>
+<p>É fruto da ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}, que levou a língua e a cultura portuguezas pelo mundo, e mantém-se viva na criação literária, musical e humana de todos esses povos.</p>
 `.trim(),
   },
   {
@@ -326,11 +326,11 @@ const SEEDS: Seed[] = [
     ],
     sources: [{ label: "Museu Nacional do Azulejo", url: null }],
     body: `
-<p>O azulejo é uma das expressões mais originais da arte portuguesa: placas de cerâmica vidrada que revestem igrejas, palácios, estações e fachadas. O nome vem do árabe <em>az-zulayj</em>.</p>
+<p>O azulejo é uma das expressões mais originais da arte portugueza: placas de cerâmica vidrada que revestem igrejas, palácios, estações e fachadas. O nome vem do árabe <em>az-zulayj</em>.</p>
 <h2>Uma arte nacional</h2>
 <p>De herança mourisca, ganhou em Portugal vida própria. Nos painéis azuis e brancos contam-se batalhas, santos e cenas do quotidiano — uma autêntica narrativa em parede.</p>
 <h2>Cidade revestida</h2>
-<p>Em ${lk("lisboa", "Lisboa")} e por todo o país, o azulejo dá cor e luz às ruas, sendo hoje um dos traços mais reconhecíveis da paisagem portuguesa.</p>
+<p>Em ${lk("lisboa", "Lisboa")} e por todo o país, o azulejo dá cor e luz às ruas, sendo hoje um dos traços mais reconhecíveis da paisagem portugueza.</p>
 `.trim(),
   },
 ];
@@ -352,6 +352,8 @@ export const seedFoundation2 = internalMutation({
         summary: s.summary,
         body: s.body,
         cover_image_id: null,
+        cover_image_url: `/lusopedia/${s.slug}.webp`,
+        image_credit: "Wikimedia Commons",
         infobox: s.infobox,
         sources: s.sources,
         status: "published" as const,

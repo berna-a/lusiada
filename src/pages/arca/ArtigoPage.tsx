@@ -220,11 +220,18 @@ export default function ArtigoPage() {
                 article.pantheon_slug) && (
                 <div className="rounded-2xl border border-border bg-card p-5">
                   {article.coverUrl && (
-                    <img
-                      alt={article.title}
-                      className="mb-4 w-full rounded-xl object-cover"
-                      src={article.coverUrl}
-                    />
+                    <figure className="mb-4">
+                      <img
+                        alt={article.title}
+                        className="w-full rounded-xl object-cover"
+                        src={article.coverUrl}
+                      />
+                      {article.image_credit && (
+                        <figcaption className="mt-1.5 font-body text-[10px] text-muted-foreground/70">
+                          Imagem: {article.image_credit}
+                        </figcaption>
+                      )}
+                    </figure>
                   )}
                   {infobox.length > 0 && (
                     <dl className="space-y-2.5">

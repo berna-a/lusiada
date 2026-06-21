@@ -151,6 +151,9 @@ export default defineSchema({
     summary: v.optional(v.union(v.string(), v.null())),
     body: v.string(), // HTML do editor visual (esquema controlado)
     cover_image_id: v.optional(v.union(v.id("_storage"), v.null())),
+    // Capa por URL (ex.: imagem de domínio público alojada em /public).
+    cover_image_url: v.optional(v.union(v.string(), v.null())),
+    image_credit: v.optional(v.union(v.string(), v.null())),
     infobox: v.optional(
       v.array(v.object({ label: v.string(), value: v.string() }))
     ),

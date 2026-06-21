@@ -1,3 +1,4 @@
+import { v } from "convex/values";
 import { internalMutation } from "./_generated/server";
 
 type Seed = {
@@ -40,7 +41,7 @@ const SEEDS: Seed[] = [
 <h2>A independência</h2>
 <p>Em 1128, na Batalha de São Mamede, venceu as forças da mãe e firmou o seu poder. A vitória sobre os mouros na Batalha de Ourique, em 1139, deu-lhe o título de rei. Pelo Tratado de Zamora, em 1143, o reino de Leão reconheceu Portugal, e em 1179 a Santa Sé confirmou a sua soberania.</p>
 <h2>Legado</h2>
-<p>A conquista de Lisboa, em 1147, com o auxílio de cruzados, alargou o reino para sul e abriu o caminho que, séculos depois, levaria à ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}. Afonso Henriques é, na memória portuguesa, o pai da pátria.</p>
+<p>A conquista de Lisboa, em 1147, com o auxílio de cruzados, alargou o reino para sul e abriu o caminho que, séculos depois, levaria à ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}. Afonso Henriques é, na memória portugueza, o pai da pátria.</p>
 `.trim(),
   },
   {
@@ -62,9 +63,9 @@ const SEEDS: Seed[] = [
     body: `
 <p>O Infante D. Henrique (1394–1460), filho do rei D. João I, é a figura tutelar do início da ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}. Em torno da sua corte, em Sagres, reuniu pilotos, cartógrafos e construtores que aperfeiçoaram a arte de navegar.</p>
 <h2>A conquista de Ceuta</h2>
-<p>A tomada de Ceuta, em 1415, marcou o primeiro passo da expansão portuguesa em África. A partir daí, o Infante patrocinou viagens sucessivas pela costa africana.</p>
+<p>A tomada de Ceuta, em 1415, marcou o primeiro passo da expansão portugueza em África. A partir daí, o Infante patrocinou viagens sucessivas pela costa africana.</p>
 <h2>O impulso atlântico</h2>
-<p>Sob o seu patrocínio, os portugueses povoaram a Madeira e os Açores e dobraram o Cabo Bojador (1434), vencendo o medo do "mar tenebroso". Abriu assim a rota que ${lk("vasco-da-gama", "Vasco da Gama")} havia de completar até à Índia.</p>
+<p>Sob o seu patrocínio, os portuguezes povoaram a Madeira e os Açores e dobraram o Cabo Bojador (1434), vencendo o medo do "mar tenebroso". Abriu assim a rota que ${lk("vasco-da-gama", "Vasco da Gama")} havia de completar até à Índia.</p>
 `.trim(),
   },
   {
@@ -96,7 +97,7 @@ const SEEDS: Seed[] = [
     title: "Fernando Pessoa",
     category: "Pessoas",
     summary:
-      "O maior poeta português do século XX, criador dos heterónimos e autor de Mensagem.",
+      "O maior poeta portuguez do século XX, criador dos heterónimos e autor de Mensagem.",
     tags: ["poesia", "modernismo", "heterónimos"],
     infobox: [
       { label: "Nascimento", value: "13 de Junho de 1888, Lisboa" },
@@ -109,11 +110,11 @@ const SEEDS: Seed[] = [
       { label: "Livro do Desassossego", url: null },
     ],
     body: `
-<p>Fernando Pessoa (1888–1935) é o maior poeta português do século XX. A sua obra desdobra-se em heterónimos — Alberto Caeiro, Ricardo Reis e Álvaro de Campos —, poetas imaginários com vida e estilo próprios.</p>
+<p>Fernando Pessoa (1888–1935) é o maior poeta portuguez do século XX. A sua obra desdobra-se em heterónimos — Alberto Caeiro, Ricardo Reis e Álvaro de Campos —, poetas imaginários com vida e estilo próprios.</p>
 <h2>Mensagem</h2>
 <p>O único livro que publicou em vida, <em>Mensagem</em> (1934), relê a história de Portugal em chave simbólica e profética, prolongando o imaginário de ${lk("os-lusiadas", "Os Lusíadas")}.</p>
 <h2>A pátria é a língua</h2>
-<p>A ele se deve a frase que resume uma identidade: "A minha pátria é a ${lk("lingua-portuguesa", "língua portuguesa")}." A sua poesia deu voz moderna à ${lk("saudade", "saudade")} e ao desassossego do homem contemporâneo.</p>
+<p>A ele se deve a frase que resume uma identidade: "A minha pátria é a ${lk("lingua-portugueza", "língua portugueza")}." A sua poesia deu voz moderna à ${lk("saudade", "saudade")} e ao desassossego do homem contemporâneo.</p>
 `.trim(),
   },
   {
@@ -121,20 +122,20 @@ const SEEDS: Seed[] = [
     title: "Saudade",
     category: "Conceitos",
     summary:
-      "O sentimento português por excelência — a presença da ausência, tida por intraduzível.",
+      "O sentimento portuguez por excelência — a presença da ausência, tida por intraduzível.",
     tags: ["identidade", "sentimento", "cultura"],
     infobox: [
       { label: "Natureza", value: "Sentimento, conceito cultural" },
-      { label: "Primeiro registo", value: "Poesia medieval galego-portuguesa" },
+      { label: "Primeiro registo", value: "Poesia medieval galego-portugueza" },
       { label: "Dia da Saudade", value: "30 de Janeiro" },
     ],
     sources: [
       { label: "Teixeira de Pascoaes, A Saudade e o Saudosismo", url: null },
     ],
     body: `
-<p>A saudade é o sentimento tido por mais português de todos: a presença viva daquilo que está ausente — uma pessoa, um tempo, um lugar. Fica entre a memória feliz e a dor da distância, e é frequentemente apontada como intraduzível.</p>
+<p>A saudade é o sentimento tido por mais portuguez de todos: a presença viva daquilo que está ausente — uma pessoa, um tempo, um lugar. Fica entre a memória feliz e a dor da distância, e é frequentemente apontada como intraduzível.</p>
 <h2>Origem</h2>
-<p>Encontra-se já nas cantigas galego-portuguesas da Idade Média e atravessa toda a literatura, da ${lk("lingua-portuguesa", "língua portuguesa")} aos versos de ${lk("fernando-pessoa", "Fernando Pessoa")}.</p>
+<p>Encontra-se já nas cantigas galego-portuguezas da Idade Média e atravessa toda a literatura, da ${lk("lingua-portugueza", "língua portugueza")} aos versos de ${lk("fernando-pessoa", "Fernando Pessoa")}.</p>
 <h2>Expressão</h2>
 <p>É no ${lk("fado", "fado")} que a saudade encontra a sua forma musical mais pura — a voz que canta o que se perdeu sem deixar de o amar.</p>
 `.trim(),
@@ -148,7 +149,7 @@ const SEEDS: Seed[] = [
     tags: ["música", "Lisboa", "UNESCO"],
     infobox: [
       { label: "Origem", value: "Lisboa, século XIX" },
-      { label: "Instrumento", value: "Guitarra portuguesa" },
+      { label: "Instrumento", value: "Guitarra portugueza" },
       { label: "UNESCO", value: "Património Imaterial (2011)" },
       { label: "Maior voz", value: "Amália Rodrigues" },
     ],
@@ -156,7 +157,7 @@ const SEEDS: Seed[] = [
       { label: "UNESCO — Lista do Património Cultural Imaterial", url: null },
     ],
     body: `
-<p>O fado é a canção urbana nascida em Lisboa no século XIX, acompanhada pela guitarra portuguesa. Em 2011 foi inscrito pela UNESCO na lista do Património Cultural Imaterial da Humanidade.</p>
+<p>O fado é a canção urbana nascida em Lisboa no século XIX, acompanhada pela guitarra portugueza. Em 2011 foi inscrito pela UNESCO na lista do Património Cultural Imaterial da Humanidade.</p>
 <h2>A alma do fado</h2>
 <p>O fado canta o destino, o amor e, sobretudo, a ${lk("saudade", "saudade")}. Amália Rodrigues levou-o ao mundo, tornando-se a sua voz maior.</p>
 <h2>Lisboa e Coimbra</h2>
@@ -164,15 +165,15 @@ const SEEDS: Seed[] = [
 `.trim(),
   },
   {
-    slug: "lingua-portuguesa",
-    title: "Língua Portuguesa",
+    slug: "lingua-portugueza",
+    title: "Língua Portugueza",
     category: "Língua",
     summary:
       "A língua de cerca de 260 milhões de pessoas em quatro continentes.",
     tags: ["língua", "lusofonia", "CPLP"],
     infobox: [
       { label: "Falantes", value: "~260 milhões" },
-      { label: "Origem", value: "Latim · galego-português" },
+      { label: "Origem", value: "Latim · galego-portuguez" },
       { label: "Países oficiais", value: "9 (CPLP)" },
       { label: "Posição", value: "Entre as mais faladas do mundo" },
     ],
@@ -180,11 +181,11 @@ const SEEDS: Seed[] = [
       { label: "Comunidade dos Países de Língua Portuguesa (CPLP)", url: null },
     ],
     body: `
-<p>A língua portuguesa é falada por cerca de 260 milhões de pessoas e é oficial em nove países de quatro continentes. Nascida do latim trazido à Península Ibérica, firmou-se como galego-português na poesia medieval.</p>
+<p>A língua portugueza é falada por cerca de 260 milhões de pessoas e é oficial em nove países de quatro continentes. Nascida do latim trazido à Península Ibérica, firmou-se como galego-portuguez na poesia medieval.</p>
 <h2>Da fundação ao mundo</h2>
 <p>Com a fundação do reino por ${lk("dom-afonso-henriques", "D. Afonso Henriques")} ganhou território; com a ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")} espalhou-se pelo globo. ${lk("os-lusiadas", "Os Lusíadas")} fixaram-lhe a forma literária.</p>
 <h2>Língua e identidade</h2>
-<p>"A minha pátria é a língua portuguesa", escreveu ${lk("fernando-pessoa", "Fernando Pessoa")}. Hoje, a CPLP une os povos que nela se reconhecem.</p>
+<p>"A minha pátria é a língua portugueza", escreveu ${lk("fernando-pessoa", "Fernando Pessoa")}. Hoje, a CPLP une os povos que nela se reconhecem.</p>
 `.trim(),
   },
   {
@@ -192,7 +193,7 @@ const SEEDS: Seed[] = [
     title: "Os Lusíadas",
     category: "Obras",
     summary:
-      "A epopeia da nação portuguesa, escrita por Camões e publicada em 1572.",
+      "A epopeia da nação portugueza, escrita por Camões e publicada em 1572.",
     tags: ["épica", "Camões", "literatura"],
     infobox: [
       { label: "Autor", value: "Luiz Vaz de Camões" },
@@ -202,11 +203,11 @@ const SEEDS: Seed[] = [
     ],
     sources: [{ label: "Os Lusíadas (1572)", url: null }],
     body: `
-<p><em>Os Lusíadas</em> é a epopeia nacional portuguesa, escrita por ${lk("luiz-vaz-de-camoes", "Luiz Vaz de Camões")} e publicada em 1572. Em dez cantos e oitavas, canta os feitos do povo português.</p>
+<p><em>Os Lusíadas</em> é a epopeia nacional portugueza, escrita por ${lk("luiz-vaz-de-camoes", "Luiz Vaz de Camões")} e publicada em 1572. Em dez cantos e oitavas, canta os feitos do povo portuguez.</p>
 <h2>A acção</h2>
 <p>O fio condutor é a viagem de ${lk("vasco-da-gama", "Vasco da Gama")} à Índia, mas, através dela, desfila toda a história de Portugal e o ímpeto da ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}.</p>
 <h2>Grandeza</h2>
-<p>Nela convivem a mitologia clássica e a fé cristã. Deu forma definitiva à ${lk("lingua-portuguesa", "língua portuguesa")} e um lugar a Portugal entre as grandes literaturas do mundo.</p>
+<p>Nela convivem a mitologia clássica e a fé cristã. Deu forma definitiva à ${lk("lingua-portugueza", "língua portugueza")} e um lugar a Portugal entre as grandes literaturas do mundo.</p>
 `.trim(),
   },
   {
@@ -238,7 +239,7 @@ const SEEDS: Seed[] = [
     title: "Padrão dos Descobrimentos",
     category: "Lugares",
     summary:
-      "O monumento de Belém que celebra os protagonistas da expansão portuguesa.",
+      "O monumento de Belém que celebra os protagonistas da expansão portugueza.",
     tags: ["monumento", "Belém", "descobrimentos"],
     infobox: [
       { label: "Local", value: "Belém, Lisboa" },
@@ -252,7 +253,7 @@ const SEEDS: Seed[] = [
 <h2>As figuras</h2>
 <p>Na proa, o Infante segura uma caravela; atrás dele desfilam 33 figuras maiores da ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")} — navegadores, reis, cartógrafos e poetas.</p>
 <h2>A rosa-dos-ventos</h2>
-<p>Diante do monumento, no chão, uma vasta rosa-dos-ventos com um mapa-múndi assinala as rotas e as datas da expansão portuguesa pelo mundo.</p>
+<p>Diante do monumento, no chão, uma vasta rosa-dos-ventos com um mapa-múndi assinala as rotas e as datas da expansão portugueza pelo mundo.</p>
 `.trim(),
   },
   {
@@ -276,7 +277,7 @@ const SEEDS: Seed[] = [
 <h2>O avanço</h2>
 <p>Sob o impulso do ${lk("infante-dom-henrique", "Infante D. Henrique")}, os navegadores desceram a costa de África; ${lk("vasco-da-gama", "Vasco da Gama")} chegou à Índia em 1498 e Pedro Álvares Cabral ao Brasil em 1500.</p>
 <h2>Um mundo novo</h2>
-<p>A partilha do globo foi acordada no ${lk("tratado-de-tordesilhas", "Tratado de Tordesilhas")}. Esta gesta inspirou ${lk("os-lusiadas", "Os Lusíadas")} e fez da ${lk("lingua-portuguesa", "língua portuguesa")} uma língua mundial.</p>
+<p>A partilha do globo foi acordada no ${lk("tratado-de-tordesilhas", "Tratado de Tordesilhas")}. Esta gesta inspirou ${lk("os-lusiadas", "Os Lusíadas")} e fez da ${lk("lingua-portugueza", "língua portugueza")} uma língua mundial.</p>
 `.trim(),
   },
   {
@@ -320,6 +321,8 @@ export const seedFoundation = internalMutation({
         summary: s.summary,
         body: s.body,
         cover_image_id: null,
+        cover_image_url: `/lusopedia/${s.slug}.webp`,
+        image_credit: "Wikimedia Commons",
         infobox: s.infobox,
         sources: s.sources,
         status: "published" as const,
@@ -342,5 +345,21 @@ export const seedFoundation = internalMutation({
       }
     }
     return { created, updated, total: SEEDS.length };
+  },
+});
+
+/** Apaga um artigo por slug. Usado para remover slugs descontinuados (ex.: renomeações). */
+export const deleteBySlug = internalMutation({
+  args: { slug: v.string() },
+  handler: async (ctx, { slug }) => {
+    const article = await ctx.db
+      .query("articles")
+      .withIndex("by_slug", (q) => q.eq("slug", slug))
+      .first();
+    if (!article) {
+      return { deleted: false };
+    }
+    await ctx.db.delete(article._id);
+    return { deleted: true };
   },
 });

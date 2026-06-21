@@ -48,12 +48,19 @@ const contentArgs = {
   ),
 };
 
+async function coverUrlOf(ctx: QueryCtx, article: Doc<"articles">) {
+  if (article.cover_image_url) {
+    return article.cover_image_url;
+  }
+  return article.cover_image_id
+    ? await ctx.storage.getUrl(article.cover_image_id)
+    : null;
+}
+
 async function withCover(ctx: QueryCtx, article: Doc<"articles">) {
   return {
     ...article,
-    coverUrl: article.cover_image_id
-      ? await ctx.storage.getUrl(article.cover_image_id)
-      : null,
+    coverUrl: await coverUrlOf(ctx, article),
   };
 }
 
@@ -90,9 +97,7 @@ export const list = query({
         category: a.category,
         summary: a.summary ?? null,
         tags: a.tags ?? [],
-        coverUrl: a.cover_image_id
-          ? await ctx.storage.getUrl(a.cover_image_id)
-          : null,
+        coverUrl: await coverUrlOf(ctx, a),
       }))
     );
   },
@@ -374,22 +379,24 @@ export const seedCamoes = internalMutation({
   handler: async (ctx) => {
     const slug = "luiz-vaz-de-camoes";
     const body = `
-<p>Luiz Vaz de Camões (c. 1525–1580) é o maior poeta da língua portuguesa e autor de <em>Os Lusíadas</em>, a epopeia da nação. A sua obra deu forma definitiva ao português e ofereceu a um pequeno país à beira-mar um lugar entre as grandes literaturas do mundo.</p>
+<p>Luiz Vaz de Camões (c. 1525–1580) é o maior poeta da língua portugueza e autor de <em>Os Lusíadas</em>, a epopeia da nação. A sua obra deu forma definitiva ao portuguez e ofereceu a um pequeno país à beira-mar um lugar entre as grandes literaturas do mundo.</p>
 <h2>Vida</h2>
-<p>Terá nascido a 23 de Janeiro de 1525, em Lisboa, durante um eclipse solar. Cortesão caído em desgraça, soldado em Ceuta — onde perdeu o olho direito — e viajante por todo o Oriente português, de Goa a Macau, naufragou na foz do rio Mekong, onde a tradição diz ter salvo a nado o manuscrito da sua obra maior.</p>
+<p>Terá nascido a 23 de Janeiro de 1525, em Lisboa, durante um eclipse solar. Cortesão caído em desgraça, soldado em Ceuta — onde perdeu o olho direito — e viajante por todo o Oriente portuguez, de Goa a Macau, naufragou na foz do rio Mekong, onde a tradição diz ter salvo a nado o manuscrito da sua obra maior.</p>
 <h2>Os Lusíadas</h2>
 <p>Publicada em 1572, em dez cantos, canta a viagem de Vasco da Gama à Índia e, com ela, toda a história e o destino de Portugal. Nela convivem a mitologia clássica e a fé cristã, a geografia dos Descobrimentos e a reflexão sobre a glória e a decadência dos povos.</p>
 <h2>Legado</h2>
-<p>Morreu a 10 de Junho de 1580 — data que Portugal escolheu para o seu dia nacional. Tornou-se símbolo da própria identidade portuguesa, e é por isso que a Associação Memória Lusíada o tem por patrono.</p>
+<p>Morreu a 10 de Junho de 1580 — data que Portugal escolheu para o seu dia nacional. Tornou-se símbolo da própria identidade portugueza, e é por isso que a Associação Memória Lusíada o tem por patrono.</p>
 `.trim();
     const fields = {
       title: "Luiz Vaz de Camões",
       category: "Pessoas",
       tags: ["poesia", "Os Lusíadas", "patrono"],
       summary:
-        "Príncipe dos poetas e autor de Os Lusíadas — a voz que deu forma à língua portuguesa.",
+        "Príncipe dos poetas e autor de Os Lusíadas — a voz que deu forma à língua portugueza.",
       body,
       cover_image_id: null,
+      cover_image_url: "/lusopedia/luiz-vaz-de-camoes.webp",
+      image_credit: "Wikimedia Commons",
       infobox: [
         { label: "Nascimento", value: "c. 1525, Lisboa" },
         { label: "Morte", value: "10 de Junho de 1580" },
