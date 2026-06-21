@@ -201,6 +201,31 @@ export default function ArtigoPage() {
               ))}
             </div>
           )}
+
+          {/* Nota de curadoria — sinal de autoridade (E-E-A-T) + convite à comunidade */}
+          <aside className="mt-12 rounded-2xl border border-border bg-muted/30 p-5">
+            <p className="font-body text-[11px] text-accent uppercase tracking-[0.2em]">
+              Sobre este verbete
+            </p>
+            <p className="mt-2 font-body text-[14px] text-foreground/75 leading-relaxed">
+              Verbete curado e revisto pela{" "}
+              <span className="text-foreground/90">
+                Associação Memória Lusíada
+              </span>
+              . A Lusopédia é uma enciclopédia viva: cada verbete melhora com o
+              saber da comunidade.
+            </p>
+            <p className="mt-2 font-body text-[13px] text-muted-foreground">
+              Encontrou um erro ou tem algo a acrescentar?{" "}
+              <Link
+                className="text-accent hover:underline"
+                to={`/arca/lusopedia/${article.slug}/editar`}
+              >
+                Proponha uma edição
+              </Link>{" "}
+              ou junte-se à discussão abaixo.
+            </p>
+          </aside>
         </article>
 
         {/* Coluna lateral: índice + ficha */}

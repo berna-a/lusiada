@@ -379,13 +379,15 @@ export const seedCamoes = internalMutation({
   handler: async (ctx) => {
     const slug = "luiz-vaz-de-camoes";
     const body = `
-<p>Luiz Vaz de Camões (c. 1525–1580) é o maior poeta da língua portugueza e autor de <em>Os Lusíadas</em>, a epopeia da nação. A sua obra deu forma definitiva ao portuguez e ofereceu a um pequeno país à beira-mar um lugar entre as grandes literaturas do mundo.</p>
+<p>Luiz Vaz de Camões (c. 1525–1580) é o maior poeta da língua portugueza e o autor de <em>Os Lusíadas</em>, a epopeia que deu à nação a consciência de si mesma. Soldado e desterrado, cego de um olho e pobre de bens, legou contudo a Portugal aquilo que nenhum rei lhe pôde dar: uma voz à altura do seu destino.</p>
 <h2>Vida</h2>
-<p>Terá nascido a 23 de Janeiro de 1525, em Lisboa, durante um eclipse solar. Cortesão caído em desgraça, soldado em Ceuta — onde perdeu o olho direito — e viajante por todo o Oriente portuguez, de Goa a Macau, naufragou na foz do rio Mekong, onde a tradição diz ter salvo a nado o manuscrito da sua obra maior.</p>
+<p>Terá nascido por volta de 1525, talvez em Lisboa. Fidalgo de poucos haveres e muita audácia, conheceu o favor e a desgraça da corte, e o desterro que o levou a servir como soldado em Ceuta, onde perdeu o olho direito. Embarcou depois para o Oriente portuguez — Goa, Malaca, Macau —, e na foz do rio Mekong naufragou: diz a tradição que salvou a nado o manuscrito d'<em>Os Lusíadas</em>, deixando afogar-se a amada Dinamene. Regressou pobre ao reino e pobre morreu, a 10 de Junho de 1580, no limiar dos anos em que Portugal perderia a independência.</p>
 <h2>Os Lusíadas</h2>
-<p>Publicada em 1572, em dez cantos, canta a viagem de Vasco da Gama à Índia e, com ela, toda a história e o destino de Portugal. Nela convivem a mitologia clássica e a fé cristã, a geografia dos Descobrimentos e a reflexão sobre a glória e a decadência dos povos.</p>
-<h2>Legado</h2>
-<p>Morreu a 10 de Junho de 1580 — data que Portugal escolheu para o seu dia nacional. Tornou-se símbolo da própria identidade portugueza, e é por isso que a Associação Memória Lusíada o tem por patrono.</p>
+<p>Publicada em 1572, em dez cantos de oitavas, a epopeia canta a viagem de <a href="/arca/lusopedia/vasco-da-gama">Vasco da Gama</a> à Índia e, com ela, toda a história e o destino de Portugal. Abre com os versos que todo o portuguez reconhece:</p>
+<blockquote>«As armas e os barões assinalados / Que da ocidental praia Lusitana, / Por mares nunca de antes navegados, / Passaram ainda além da Taprobana…»</blockquote>
+<p>Nela convivem os deuses do Olimpo e a fé cristã, a geografia dos Descobrimentos e a meditação sobre a glória e a queda dos impérios. É, ao mesmo tempo, crónica de um povo e advertência sobre a fragilidade da grandeza.</p>
+<h2>Porque importa</h2>
+<p>Camões não é só um poeta do passado: é o espelho onde Portugal aprendeu a ver-se como povo. Deu forma definitiva à língua portugueza e fez de um pequeno país à beira-mar uma das grandes vozes da literatura universal. Por isso Portugal escolheu o dia da sua morte — 10 de Junho — para celebrar a própria pátria, e por isso a Associação Memória Lusíada o tem por patrono.</p>
 `.trim();
     const fields = {
       title: "Luiz Vaz de Camões",
