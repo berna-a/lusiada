@@ -5,6 +5,9 @@
   "outputDirectory": "dist",
   "rewrites": [
     { "source": "/sitemap.xml", "destination": "/api/sitemap" },
+    { "source": "/arca/lusopedia", "destination": "/api/lusopedia" },
+    { "source": "/arca/lusopedia/novo", "destination": "/index.html" },
+    { "source": "/arca/lusopedia/:slug", "destination": "/api/lusopedia?slug=:slug" },
     { "source": "/((?!.*\\.).*)", "destination": "/index.html" }
   ]
 }
