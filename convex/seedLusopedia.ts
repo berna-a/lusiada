@@ -111,11 +111,14 @@ const SEEDS: Seed[] = [
       { label: "Livro do Desassossego", url: null },
     ],
     body: `
-<p>Fernando Pessoa (1888–1935) é o maior poeta portuguez do século XX. A sua obra desdobra-se em heterónimos — Alberto Caeiro, Ricardo Reis e Álvaro de Campos —, poetas imaginários com vida e estilo próprios.</p>
+<p>Fernando Pessoa (1888–1935) é o maior poeta portuguez do século XX e uma das vozes centrais do modernismo europeu. A sua genialidade fez-se multidão: criou os <em>heterónimos</em> — poetas imaginários com biografia, filosofia e estilo próprios —, como se um só homem contivesse uma literatura inteira.</p>
+<h2>Os heterónimos</h2>
+<p>Alberto Caeiro, o mestre, é o poeta da natureza e das coisas como são; Ricardo Reis, o classicista estóico; Álvaro de Campos, o futurista da exaltação e do tédio. Cada um abriu uma perspectiva diferente sobre o mesmo mistério, e o próprio Pessoa cantou a ${lk("saudade", "saudade")} e o desassossego do homem contemporâneo.</p>
 <h2>Mensagem</h2>
-<p>O único livro que publicou em vida, <em>Mensagem</em> (1934), relê a história de Portugal em chave simbólica e profética, prolongando o imaginário de ${lk("os-lusiadas", "Os Lusíadas")}.</p>
-<h2>A pátria é a língua</h2>
-<p>A ele se deve a frase que resume uma identidade: "A minha pátria é a ${lk("lingua-portugueza", "língua portugueza")}." A sua poesia deu voz moderna à ${lk("saudade", "saudade")} e ao desassossego do homem contemporâneo.</p>
+<p>O único livro que publicou em vida, <em>Mensagem</em> (1934), relê a história de Portugal em chave simbólica e profética, prolongando o imaginário d'${lk("os-lusiadas", "Os Lusíadas")} e anunciando um Quinto Império feito de cultura e de espírito:</p>
+<blockquote>«Ó mar salgado, quanto do teu sal / São lágrimas de Portugal!»</blockquote>
+<h2>Porque importa</h2>
+<p>A ele se deve a frase que resume uma identidade: "A minha pátria é a ${lk("lingua-portugueza", "língua portugueza")}." Pessoa provou que a nação não vive só de território, mas de língua, memória e sonho — e é, depois de Camões, o segundo nome da poesia portugueza.</p>
 `.trim(),
   },
   {
@@ -134,11 +137,14 @@ const SEEDS: Seed[] = [
       { label: "Teixeira de Pascoaes, A Saudade e o Saudosismo", url: null },
     ],
     body: `
-<p>A saudade é o sentimento tido por mais portuguez de todos: a presença viva daquilo que está ausente — uma pessoa, um tempo, um lugar. Fica entre a memória feliz e a dor da distância, e é frequentemente apontada como intraduzível.</p>
+<p>A saudade é o sentimento tido por mais portuguez de todos: a presença viva daquilo que está ausente — uma pessoa, um tempo, um lugar. Não é só tristeza nem só memória, mas um afecto que mistura as duas: a alegria de ter tido e a dor de já não ter. É, dizem muitos, intraduzível.</p>
 <h2>Origem</h2>
-<p>Encontra-se já nas cantigas galego-portuguezas da Idade Média e atravessa toda a literatura, da ${lk("lingua-portugueza", "língua portugueza")} aos versos de ${lk("fernando-pessoa", "Fernando Pessoa")}.</p>
-<h2>Expressão</h2>
-<p>É no ${lk("fado", "fado")} que a saudade encontra a sua forma musical mais pura — a voz que canta o que se perdeu sem deixar de o amar.</p>
+<p>Encontra-se já nas cantigas galego-portuguezas da Idade Média, onde o trovador chora a ausência da amada, e atravessa toda a ${lk("lingua-portugueza", "língua portugueza")}, de D. Dinis aos versos de ${lk("fernando-pessoa", "Fernando Pessoa")}:</p>
+<blockquote>«Ai flores, ai flores do verde pino, / se sabedes novas do meu amigo!»<br/>— D. Dinis</blockquote>
+<h2>Saudade e saudosismo</h2>
+<p>No início do século XX, Teixeira de Pascoaes fez da saudade uma filosofia — o <em>saudosismo</em> —, vendo nela a própria alma da pátria e a chave da sua redenção.</p>
+<h2>Porque importa</h2>
+<p>A saudade é a forma portugueza de amar o tempo. É no ${lk("fado", "fado")} que encontra a sua voz, e em cada despedida que se renova. Um povo de navegadores, que sempre partiu, fez dela o seu modo de guardar o que deixava para trás.</p>
 `.trim(),
   },
   {
@@ -158,11 +164,13 @@ const SEEDS: Seed[] = [
       { label: "UNESCO — Lista do Património Cultural Imaterial", url: null },
     ],
     body: `
-<p>O fado é a canção urbana nascida em Lisboa no século XIX, acompanhada pela guitarra portugueza. Em 2011 foi inscrito pela UNESCO na lista do Património Cultural Imaterial da Humanidade.</p>
+<p>O fado é a canção urbana nascida em ${lk("lisboa", "Lisboa")} no século XIX, cantada à voz e acompanhada pela guitarra portugueza e pela viola. Em 2011 foi inscrito pela UNESCO na lista do Património Cultural Imaterial da Humanidade. O nome vem do latim <em>fatum</em> — o destino.</p>
 <h2>A alma do fado</h2>
-<p>O fado canta o destino, o amor e, sobretudo, a ${lk("saudade", "saudade")}. Amália Rodrigues levou-o ao mundo, tornando-se a sua voz maior.</p>
+<p>O fado não é espectáculo: é confissão. Canta o destino, o amor, o ciúme, o mar e, sobretudo, a ${lk("saudade", "saudade")}. ${lk("amalia-rodrigues", "Amália Rodrigues")} deu-lhe dignidade de arte maior e levou-o ao mundo, tornando-se a sua voz eterna.</p>
 <h2>Lisboa e Coimbra</h2>
-<p>Distinguem-se o fado de Lisboa, popular e dos bairros, e o fado de Coimbra, ligado à tradição académica e cantado por homens.</p>
+<p>Distinguem-se duas escolas: o fado de ${lk("lisboa", "Lisboa")}, popular, dos bairros e das tabernas, cantado por homens e mulheres; e o fado de ${lk("coimbra", "Coimbra")}, ligado à tradição académica da universidade, cantado por homens, de capa e batina.</p>
+<h2>Porque importa</h2>
+<p>No fado, um povo inteiro reconhece a sua maneira de sentir. É a saudade feita som — e a prova de que a alma portugueza, mesmo na perda, canta.</p>
 `.trim(),
   },
   {
@@ -183,11 +191,13 @@ const SEEDS: Seed[] = [
       { label: "Comunidade dos Países de Língua Portuguesa (CPLP)", url: null },
     ],
     body: `
-<p>A língua portugueza é falada por cerca de 260 milhões de pessoas e é oficial em nove países de quatro continentes. Nascida do latim trazido à Península Ibérica, firmou-se como galego-portuguez na poesia medieval.</p>
+<p>A língua portugueza é, na actualidade, falada por cerca de 260 milhões de pessoas e é oficial em nove países de quatro continentes. Nascida do latim trazido à Península Ibérica pelos romanos, firmou-se como galego-portuguez na poesia medieval e tornou-se, com o reino, a língua de uma nação.</p>
 <h2>Da fundação ao mundo</h2>
-<p>Com a fundação do reino por ${lk("dom-afonso-henriques", "D. Afonso Henriques")} ganhou território; com a ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")} espalhou-se pelo globo. ${lk("os-lusiadas", "Os Lusíadas")} fixaram-lhe a forma literária.</p>
+<p>Com a fundação do reino por ${lk("dom-afonso-henriques", "D. Afonso Henriques")} ganhou território e nome; com a ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")} espalhou-se pelo globo, do Brasil a Goa, de Angola a Timor. ${lk("os-lusiadas", "Os Lusíadas")} fixaram-lhe a forma literária e deram-lhe a glória de uma epopeia.</p>
 <h2>Língua e identidade</h2>
-<p>"A minha pátria é a língua portugueza", escreveu ${lk("fernando-pessoa", "Fernando Pessoa")}. Hoje, a CPLP une os povos que nela se reconhecem.</p>
+<p>"A minha pátria é a língua portugueza", escreveu ${lk("fernando-pessoa", "Fernando Pessoa")}. Hoje, a Comunidade dos Países de Língua Portuguesa une os povos que nela se reconhecem — uma pátria sem fronteiras, feita de palavras.</p>
+<h2>Porque importa</h2>
+<p>A língua é a maior obra colectiva do Povo Portuguez. Preservá-la, estudá-la e fazê-la crescer — incluindo na grafia <strong>Portugueza</strong> — é a missão primeira da Associação Memória Lusíada.</p>
 `.trim(),
   },
   {
@@ -205,11 +215,14 @@ const SEEDS: Seed[] = [
     ],
     sources: [{ label: "Os Lusíadas (1572)", url: null }],
     body: `
-<p><em>Os Lusíadas</em> é a epopeia nacional portugueza, escrita por ${lk("luiz-vaz-de-camoes", "Luiz Vaz de Camões")} e publicada em 1572. Em dez cantos e oitavas, canta os feitos do povo portuguez.</p>
+<p><em>Os Lusíadas</em> é a epopeia nacional portugueza, escrita por ${lk("luiz-vaz-de-camoes", "Luiz Vaz de Camões")} e publicada em 1572. Em dez cantos de oitava-rima, canta os feitos do Povo Portuguez, erguendo a história de uma nação pequena à dignidade do mito clássico.</p>
 <h2>A acção</h2>
-<p>O fio condutor é a viagem de ${lk("vasco-da-gama", "Vasco da Gama")} à Índia, mas, através dela, desfila toda a história de Portugal e o ímpeto da ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}.</p>
-<h2>Grandeza</h2>
-<p>Nela convivem a mitologia clássica e a fé cristã. Deu forma definitiva à ${lk("lingua-portugueza", "língua portugueza")} e um lugar a Portugal entre as grandes literaturas do mundo.</p>
+<p>O fio condutor é a viagem de ${lk("vasco-da-gama", "Vasco da Gama")} à Índia; mas, através dela, desfila toda a história de Portugal e o ímpeto da ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}. Logo na abertura, Camões declara que os feitos portuguezes superam os da Antiguidade:</p>
+<blockquote>«Cessem do sábio Grego e do Troiano / As navegações grandes que fizeram; / Cale-se de Alexandro e de Trajano / A fama das vitórias que tiveram.»</blockquote>
+<h2>Mito e história</h2>
+<p>Nela convivem os deuses do Olimpo — que ora ajudam, ora estorvam os navegadores — e a fé cristã; a geografia dos Descobrimentos e a meditação sobre a glória e a queda dos impérios. Na praia, o Velho do Restelo adverte contra a ambição que arrasta os homens ao mar.</p>
+<h2>Porque importa</h2>
+<p>Deu forma definitiva à ${lk("lingua-portugueza", "língua portugueza")} e um lugar a Portugal entre as grandes literaturas do mundo. É o livro onde a nação se vê inteira — e a razão por que a língua portugueza é, ainda hoje, "a língua de Camões".</p>
 `.trim(),
   },
   {
