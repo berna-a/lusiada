@@ -5,10 +5,12 @@ import { Link, useParams } from "react-router-dom";
 import { buildArticleContent } from "@/components/arca/lusopedia/articleContent";
 import { CiteButton } from "@/components/arca/lusopedia/CiteButton";
 import { DiscussionFeed } from "@/components/arca/lusopedia/DiscussionFeed";
+import { GrafiaSelector } from "@/components/arca/lusopedia/GrafiaSelector";
 import { RelatedArticles } from "@/components/arca/lusopedia/RelatedArticles";
 import { TableOfContents } from "@/components/arca/lusopedia/TableOfContents";
 import { Seo } from "@/components/Seo";
 import { Button } from "@/components/ui/button";
+import { useGrafia } from "@/lib/grafia/store";
 import { api } from "../../../convex/_generated/api";
 
 function formatDate(ms: number) {
@@ -22,9 +24,12 @@ function formatDate(ms: number) {
 export default function ArtigoPage() {
   const { slug } = useParams();
   const article = useQuery(api.articles.getBySlug, slug ? { slug } : "skip");
+  const { convert, grafia, ready } = useGrafia();
   const content = useMemo(
-    () => buildArticleContent(article?.body ?? ""),
-    [article?.body]
+    () => buildArticleContent(convert(article?.body ?? "")),
+    // `grafia`/`ready` entram nas deps para reconverter ao mudar de grafia.
+    // biome-ignore lint/correctness/useExhaustiveDependencies: convert depende de grafia+ready
+    [article?.body, grafia, ready]
   );
 
   if (article === undefined) {
@@ -125,6 +130,10 @@ export default function ArtigoPage() {
         </p>
       )}
 
+      <div className="mt-6">
+        <GrafiaSelector />
+      </div>
+
       <div className="mt-6 grid gap-10 lg:grid-cols-[1fr_300px]">
         {/* Corpo */}
         <article>
@@ -132,14 +141,14 @@ export default function ArtigoPage() {
             {article.category}
           </p>
           <h1 className="mt-2 font-display text-[40px] text-primary leading-[1.05] sm:text-[48px]">
-            {article.title}
+            {convert(article.title)}
           </h1>
           {article.summary && (
             <p className="mt-4 font-display text-[19px] text-foreground/70 italic leading-relaxed">
-              {article.summary}
+              {convert(article.summary)}
             </p>
           )}
-          {aliases.length > 0 && (
+          {grafia === "pz" && aliases.length > 0 && (
             <p className="mt-3 font-body text-[13px] text-muted-foreground">
               Grafia tradicional:{" "}
               <span className="text-foreground/70">{aliases.join(" · ")}</span>
