@@ -51,7 +51,7 @@ export default function OsLusiadasPage() {
       data-nav-theme="light"
     >
       <Seo
-        description="Os Lusíadas de Luiz Vaz de Camões, anotados verso a verso — a epopeia da nação portugueza, com mitologia, história e vocabulário explicados."
+        description="Os Lusíadas de Luiz Vaz de Camões, anotados verso a verso — a epopeia da nação Portugueza, em Portuguez, com mitologia, história e vocabulário explicados."
         path={n === 1 ? "/os-lusiadas" : `/os-lusiadas/canto/${n}`}
         title={`Os Lusíadas — ${ROMANS[n]}${canto ? `: ${canto.titulo}` : ""} | Camões`}
         type="article"
@@ -65,8 +65,8 @@ export default function OsLusiadasPage() {
           Os Lusíadas
         </h1>
         <p className="mx-auto mt-4 max-w-xl font-body text-[16px] text-foreground/65 leading-relaxed">
-          A epopeia da nação portugueza, anotada verso a verso. Texto na grafia
-          tradicional; as três grafias chegam em breve.
+          A epopeia da nação Portugueza, anotada verso a verso — em{" "}
+          <strong>Portuguez</strong>, a grafia da Lusíada.
         </p>
         <Link
           className="mt-4 inline-flex items-center gap-1.5 font-body text-[14px] text-accent transition-all hover:gap-2.5"
