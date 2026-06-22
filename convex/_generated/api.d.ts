@@ -27,6 +27,7 @@ import type * as seedLusopedia4 from "../seedLusopedia4.js";
 import type * as seedLusopedia5 from "../seedLusopedia5.js";
 import type * as seedLusopedia6 from "../seedLusopedia6.js";
 import type * as seedLusopedia7 from "../seedLusopedia7.js";
+import type * as seedLusopedia8 from "../seedLusopedia8.js";
 import type * as stripe from "../stripe.js";
 
 import type {
@@ -55,6 +56,7 @@ declare const fullApi: ApiFromModules<{
   seedLusopedia5: typeof seedLusopedia5;
   seedLusopedia6: typeof seedLusopedia6;
   seedLusopedia7: typeof seedLusopedia7;
+  seedLusopedia8: typeof seedLusopedia8;
   stripe: typeof stripe;
 }>;
 
