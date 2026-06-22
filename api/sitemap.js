@@ -1,4 +1,6 @@
 // Sitemap dinâmico: páginas estáticas + todos os artigos publicados da Lusopédia.
+import VERBETES from "../src/data/dicionario/indexaveis.json" with { type: "json" };
+
 const BASE = "https://www.alusiada.pt";
 
 const STATIC_PATHS = [
@@ -78,6 +80,7 @@ export default async function handler(_req, res) {
     ...STATIC_PATHS.map((p) => ({ path: p, lastmod: today })),
     ...articles,
     ...DICIONARIO_SLUGS.map((s) => ({ path: `/dicionario/${s}`, lastmod: today })),
+    ...VERBETES.map((s) => ({ path: `/dicionario/${s}`, lastmod: today })),
   ];
   const urls = entries
     .map(

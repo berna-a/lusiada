@@ -4,7 +4,11 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Seo } from "@/components/Seo";
 import type { DicEntry } from "@/lib/grafia/dicionario";
 import { useGrafia } from "@/lib/grafia/store";
-import type { Verbete, VerbeteContext } from "@/lib/grafia/verbetes";
+import {
+  isIndexavel,
+  type Verbete,
+  type VerbeteContext,
+} from "@/lib/grafia/verbetes";
 
 function asciiSlug(s: string): string {
   return s
@@ -120,6 +124,7 @@ function VerbeteSearch() {
 function VerbeteView({ context }: { context: VerbeteContext }) {
   const { verbete: v, neighbors } = context;
   const { grafia, setGrafia, convert } = useGrafia();
+  const indexavel = isIndexavel(v.slug);
 
   return (
     <main
@@ -128,9 +133,23 @@ function VerbeteView({ context }: { context: VerbeteContext }) {
     >
       <Seo
         description={`${v.word}${v.pos ? ` (${v.pos})` : ""}: ${v.defs[0]}`}
-        noindex
+        jsonLd={
+          indexavel
+            ? {
+                "@type": "DefinedTerm",
+                name: v.word,
+                description: v.defs.join(" "),
+                inDefinedTermSet: {
+                  "@type": "DefinedTermSet",
+                  name: "Dicionário da Língua — Lusopédia",
+                  url: "https://www.alusiada.pt/dicionario",
+                },
+              }
+            : undefined
+        }
+        noindex={!indexavel}
         path={`/dicionario/${v.slug}`}
-        title={`${v.word} — Dicionário da Língua | Lusopédia`}
+        title={`${v.word}${v.pos ? `, ${v.pos}` : ""} — significado | Dicionário Lusopédia`}
         type="article"
       />
 
