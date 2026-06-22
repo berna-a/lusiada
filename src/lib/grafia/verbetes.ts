@@ -13,6 +13,8 @@ export type Verbete = {
   pos: string;
   defs: string[];
   etym?: string;
+  /** Exemplos/citações (quando a fonte os tem). */
+  ex?: string[];
 };
 
 const letterLoaders = import.meta.glob("../../data/dicionario/*.json");

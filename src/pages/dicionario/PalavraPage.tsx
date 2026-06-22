@@ -1,4 +1,4 @@
-import { ArrowLeft, Loader2, Search } from "lucide-react";
+import { ArrowLeft, Languages, Loader2, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Seo } from "@/components/Seo";
@@ -137,43 +137,48 @@ function VerbeteView({ context }: { context: VerbeteContext }) {
         </div>
       </div>
 
-      <article className="mt-8 rounded-2xl border border-border bg-card p-6 sm:p-8">
-        {/* Cabeçalho */}
-        <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
-          <h1 className="font-display text-[40px] text-primary leading-[1] sm:text-[48px]">
-            {convert(v.word)}
-          </h1>
-          {v.pos && (
-            <span className="rounded-md bg-muted px-2.5 py-1 font-body text-[12px] text-muted-foreground">
-              {v.pos}
-            </span>
-          )}
-        </div>
-
-        {/* Seletor de grafia */}
-        <div className="mt-5 inline-flex rounded-lg border border-border p-0.5">
-          {GRAFIAS.map((g) => (
-            <button
-              className={`rounded-md px-3 py-1.5 font-body text-[13px] transition-colors ${
-                grafia === g.id
-                  ? "bg-accent/15 text-accent"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-              key={g.id}
-              onClick={() => setGrafia(g.id)}
-              type="button"
-            >
-              {g.label}
-            </button>
-          ))}
+      <article className="mt-8 rounded-2xl border border-border bg-card p-7 sm:p-9">
+        {/* Cabeçalho: palavra + classe à esquerda, grafia (discreta) à direita */}
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <h1 className="font-display text-[44px] text-primary leading-[1.05] tracking-[-0.01em]">
+              {convert(v.word)}
+            </h1>
+            {v.pos && (
+              <span className="font-body text-[14px] text-muted-foreground italic">
+                {v.pos}
+              </span>
+            )}
+          </div>
+          <div className="flex shrink-0 items-center gap-2.5 pt-2.5">
+            <Languages
+              aria-hidden
+              className="h-3.5 w-3.5 text-muted-foreground/40"
+            />
+            {GRAFIAS.map((g) => (
+              <button
+                className={`font-body text-[12px] transition-colors ${
+                  grafia === g.id
+                    ? "text-accent"
+                    : "text-muted-foreground/55 hover:text-foreground"
+                }`}
+                key={g.id}
+                onClick={() => setGrafia(g.id)}
+                title={`Ler em ${g.label}`}
+                type="button"
+              >
+                {g.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Sentidos */}
-        <ol className="mt-7 space-y-3.5">
+        <ol className="mt-8 space-y-4">
           {v.defs.map((d, i) => (
-            <li className="flex gap-3" key={i}>
+            <li className="flex gap-3.5" key={i}>
               {v.defs.length > 1 && (
-                <span className="shrink-0 pt-1 font-display text-[14px] text-accent/70">
+                <span className="shrink-0 pt-[5px] font-display text-[13px] text-accent/70">
                   {i + 1}
                 </span>
               )}
@@ -184,11 +189,30 @@ function VerbeteView({ context }: { context: VerbeteContext }) {
           ))}
         </ol>
 
-        {/* Etimologia */}
-        {v.etym && (
-          <div className="mt-7 border-border/60 border-t pt-5">
+        {/* Exemplos (quando existem) */}
+        {v.ex && v.ex.length > 0 && (
+          <div className="mt-7 border-border/50 border-t pt-5">
             <p className="font-body text-[11px] text-muted-foreground uppercase tracking-[0.18em]">
-              Etimologia
+              Exemplos
+            </p>
+            <ul className="mt-2.5 space-y-1.5">
+              {v.ex.map((q, i) => (
+                <li
+                  className="font-body text-[15px] text-foreground/70 italic leading-relaxed"
+                  key={i}
+                >
+                  «{convert(q)}»
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Origem (etimologia) */}
+        {v.etym && (
+          <div className="mt-7 border-border/50 border-t pt-5">
+            <p className="font-body text-[11px] text-muted-foreground uppercase tracking-[0.18em]">
+              Origem
             </p>
             <p className="mt-1.5 font-body text-[15px] text-foreground/75 italic leading-relaxed">
               {convert(v.etym)}
@@ -199,11 +223,11 @@ function VerbeteView({ context }: { context: VerbeteContext }) {
 
       {/* Palavras vizinhas — teia interna */}
       {neighbors.length > 0 && (
-        <div className="mt-8">
+        <div className="mt-9">
           <p className="font-body text-[11px] text-muted-foreground uppercase tracking-[0.18em]">
             Palavras vizinhas
           </p>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-3.5 flex flex-wrap gap-2">
             {neighbors.map((nb) => (
               <Link
                 className="rounded-full border border-border bg-card px-3.5 py-1.5 font-display text-[15px] text-foreground/80 transition-colors hover:border-accent/40 hover:text-accent"
