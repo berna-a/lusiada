@@ -85,3 +85,9 @@ original, NÃO copiada). Mostradas na página (React + SSR) + no JSON-LD
 - 43 artigos publicados (todos `authorship: "ai"` — a migrar gradualmente para
   humano/revisto).
 - Indicador IA vs Humano: ver `/admin/lusopedia`.
+
+---
+
+## Log de lotes feitos
+
+- **Lote 4 (24-06-26)** — canon 43→53: Fátima · Pastel de Nata · José Saramago · Madeira · Açores · Aristides de Sousa Mendes · Almeida Garrett · Bandeira de Portugal · A Portuguesa · Mosteiro da Batalha. (`convex/seedLusopedia4.ts`)
