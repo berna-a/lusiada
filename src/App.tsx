@@ -81,6 +81,7 @@ const App = () => (
             <Route path="/dicionario" element={<DicionarioPage />} />
             <Route path="/dicionario/:slug" element={<PalavraPage />} />
             <Route path="/os-lusiadas" element={<OsLusiadasPage />} />
+            <Route path="/os-lusiadas/canto/:n" element={<OsLusiadasPage />} />
             <Route path="/arca/lugares" element={<LugaresPage />} />
             <Route path="/arca/lugares/:id" element={<LugarPage />} />
             <Route path="/arca/memorias" element={<MemoriasPage />} />
