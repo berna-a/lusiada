@@ -3,23 +3,40 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Seo } from "@/components/Seo";
 import type { DicEntry } from "@/lib/grafia/dicionario";
+import type { Verbete } from "@/lib/grafia/verbetes";
 
-type Loaded = { entry: DicEntry | null; dropped: string | null };
+type Loaded =
+  | { kind: "grafia"; entry: DicEntry; dropped: string | null }
+  | { kind: "verbete"; verbete: Verbete }
+  | { kind: "none" };
 
 export default function PalavraPage() {
   const { slug } = useParams();
   const [state, setState] = useState<Loaded | undefined>();
 
-  // Carrega o dicionário (chunk separado) e procura a palavra.
+  // 1.º procura como palavra de grafia (ação/acção); se não existir, procura
+  // como verbete do dicionário completo (definição).
   useEffect(() => {
     let alive = true;
-    import("@/lib/grafia/dicionario").then((m) => {
-      if (!alive) {
+    (async () => {
+      const grafia = await import("@/lib/grafia/dicionario");
+      const entry = slug ? grafia.getEntry(slug) : null;
+      if (entry) {
+        if (alive) {
+          setState({
+            kind: "grafia",
+            entry,
+            dropped: grafia.droppedLetter(entry),
+          });
+        }
         return;
       }
-      const entry = slug ? m.getEntry(slug) : null;
-      setState({ entry, dropped: entry ? m.droppedLetter(entry) : null });
-    });
+      const { getVerbete } = await import("@/lib/grafia/verbetes");
+      const verbete = slug ? await getVerbete(slug) : null;
+      if (alive) {
+        setState(verbete ? { kind: "verbete", verbete } : { kind: "none" });
+      }
+    })();
     return () => {
       alive = false;
     };
@@ -33,8 +50,7 @@ export default function PalavraPage() {
     );
   }
 
-  const entry = state.entry;
-  if (!entry) {
+  if (state.kind === "none") {
     return (
       <main
         className="mx-auto max-w-[760px] px-6 pt-40 pb-32 text-center"
@@ -53,9 +69,90 @@ export default function PalavraPage() {
     );
   }
 
+  if (state.kind === "verbete") {
+    return <VerbeteView verbete={state.verbete} />;
+  }
+
+  return <GrafiaView dropped={state.dropped} entry={state.entry} />;
+}
+
+function VerbeteView({ verbete: v }: { verbete: Verbete }) {
+  return (
+    <main
+      className="mx-auto max-w-[760px] px-6 pt-32 pb-24 sm:pt-40"
+      data-nav-theme="light"
+    >
+      <Seo
+        description={`${v.word}${v.pos ? ` (${v.pos})` : ""}: ${v.defs[0]}`}
+        noindex
+        path={`/dicionario/${v.slug}`}
+        title={`${v.word} — Dicionário da Língua | Lusopédia`}
+        type="article"
+      />
+      <Link
+        className="inline-flex items-center gap-2 font-body text-[13px] text-muted-foreground uppercase tracking-[0.15em] transition-colors hover:text-accent"
+        to="/dicionario"
+      >
+        <ArrowLeft className="h-4 w-4" /> Dicionário
+      </Link>
+      <h1 className="mt-6 font-display text-[40px] text-primary leading-[1.1] sm:text-[48px]">
+        {v.word}
+      </h1>
+      {v.pos && (
+        <p className="mt-1 font-body text-[14px] text-accent italic">{v.pos}</p>
+      )}
+
+      <ol className="mt-8 space-y-4">
+        {v.defs.map((d, i) => (
+          <li className="flex gap-3" key={i}>
+            {v.defs.length > 1 && (
+              <span className="shrink-0 pt-0.5 font-display text-[15px] text-muted-foreground/60">
+                {i + 1}.
+              </span>
+            )}
+            <p className="font-body text-[17px] text-foreground/85 leading-relaxed">
+              {d}
+            </p>
+          </li>
+        ))}
+      </ol>
+
+      {v.etym && (
+        <p className="mt-6 font-body text-[14px] text-muted-foreground italic">
+          {v.etym}
+        </p>
+      )}
+
+      <div className="mt-12 rounded-2xl border border-border/70 bg-muted/30 p-4">
+        <p className="font-body text-[12px] text-muted-foreground leading-relaxed">
+          Verbete importado do{" "}
+          <a
+            className="text-accent hover:underline"
+            href="https://dicionario-aberto.net"
+            rel="noreferrer"
+            target="_blank"
+          >
+            Dicionário-Aberto
+          </a>{" "}
+          (Cândido de Figueiredo, 1913 · domínio público · CC BY-SA). A
+          definição está na ortografia original de 1913 e será revista e
+          reescrita em <strong>Portuguez</strong>.
+        </p>
+      </div>
+    </main>
+  );
+}
+
+function GrafiaView({
+  entry,
+  dropped,
+}: {
+  entry: DicEntry;
+  dropped: string | null;
+}) {
   const rule =
     entry.kind === "consoante"
-      ? `A diferença está numa consoante muda: o Acordo Ortográfico de 1990 eliminou o «${state.dropped ?? ""}» que não se pronuncia. A ortografia anterior e o Portuguez mantêm-no.`
+      ? `A diferença está numa consoante muda: o Acordo Ortográfico de 1990 eliminou o «${dropped ?? ""}» que não se pronuncia. A ortografia anterior e o Portuguez mantêm-no.`
       : "Os nomes dos meses escrevem-se com maiúscula inicial em Portuguez e na ortografia anterior; o Acordo Ortográfico de 1990 passou-os a minúscula.";
 
   return (

@@ -4,10 +4,12 @@ import { Link } from "react-router-dom";
 import { Seo } from "@/components/Seo";
 import { Input } from "@/components/ui/input";
 import type { DicEntry } from "@/lib/grafia/dicionario";
+import type { Verbete } from "@/lib/grafia/verbetes";
 
 export default function DicionarioPage() {
   const [entries, setEntries] = useState<DicEntry[] | undefined>();
   const [query, setQuery] = useState("");
+  const [verbetes, setVerbetes] = useState<Verbete[]>([]);
 
   useEffect(() => {
     let alive = true;
@@ -24,6 +26,25 @@ export default function DicionarioPage() {
       alive = false;
     };
   }, []);
+
+  // Pesquisa no dicionário completo (verbetes com definição).
+  useEffect(() => {
+    let alive = true;
+    const q = query.trim();
+    if (q.length < 2) {
+      setVerbetes([]);
+      return;
+    }
+    import("@/lib/grafia/verbetes").then(async (m) => {
+      const res = await m.searchVerbetes(q, 24);
+      if (alive) {
+        setVerbetes(res);
+      }
+    });
+    return () => {
+      alive = false;
+    };
+  }, [query]);
 
   const shown = useMemo(() => {
     if (!entries) {
@@ -58,7 +79,8 @@ export default function DicionarioPage() {
         <p className="mx-auto mt-4 max-w-xl font-body text-[16px] text-foreground/65 leading-relaxed">
           Ação ou acção? Objetivo ou objectivo? Veja como cada palavra se escreve
           nas três grafias — incluindo o <strong>Portuguez</strong>, a grafia da
-          Lusíada.
+          Lusíada. E procure o significado de qualquer palavra no dicionário da
+          Língua.
         </p>
       </header>
 
@@ -67,7 +89,7 @@ export default function DicionarioPage() {
         <Input
           className="pl-9"
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Procurar palavra (ex.: ação)…"
+          placeholder="Procurar qualquer palavra (ex.: abismo)…"
           value={query}
         />
       </div>
@@ -90,6 +112,45 @@ export default function DicionarioPage() {
             </li>
           ))}
         </ul>
+
+        {verbetes.length > 0 && (
+          <div className="mt-10">
+            <h2 className="font-body text-[12px] text-muted-foreground uppercase tracking-[0.2em]">
+              No dicionário da Língua
+            </h2>
+            <ul className="mt-3 divide-y divide-border/60">
+              {verbetes.map((v) => (
+                <li key={v.slug}>
+                  <Link
+                    className="flex items-baseline gap-3 py-2.5 transition-colors hover:text-accent"
+                    to={`/dicionario/${v.slug}`}
+                  >
+                    <span className="font-display text-[17px] text-foreground">
+                      {v.word}
+                    </span>
+                    {v.pos && (
+                      <span className="shrink-0 font-body text-[12px] text-muted-foreground italic">
+                        {v.pos}
+                      </span>
+                    )}
+                    <span className="truncate font-body text-[14px] text-muted-foreground">
+                      {v.defs[0]}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {query.trim().length >= 2 &&
+          verbetes.length === 0 &&
+          !/^[a]/i.test(query.trim()) && (
+            <p className="mt-8 text-center font-body text-[13px] text-muted-foreground italic">
+              Piloto: por agora só a letra <strong>A</strong> está no dicionário
+              da Língua. As restantes chegam em breve.
+            </p>
+          )}
       </div>
     </main>
   );

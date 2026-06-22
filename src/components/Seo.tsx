@@ -17,6 +17,8 @@ type SeoProps = {
   type?: "website" | "article";
   /** Objeto(s) JSON-LD (sem @context — é adicionado). */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /** Impede a indexação no Google (mantém follow). Ex.: verbetes importados crus. */
+  noindex?: boolean;
 };
 
 function upsertMeta(attr: "name" | "property", key: string, content: string) {
@@ -54,6 +56,7 @@ export function Seo({
   image,
   type = "website",
   jsonLd,
+  noindex = false,
 }: SeoProps) {
   const url = `${SITE}${path}`;
   const graph = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
@@ -71,6 +74,7 @@ export function Seo({
 
   useEffect(() => {
     document.title = title;
+    upsertMeta("name", "robots", noindex ? "noindex,follow" : "index,follow");
     upsertLink("canonical", url);
     upsertMeta("property", "og:type", type);
     upsertMeta("property", "og:title", title);
@@ -101,7 +105,7 @@ export function Seo({
       document.head.appendChild(script);
     }
     script.textContent = ld;
-  }, [title, url, type, absImage, desc, ld]);
+  }, [title, url, type, absImage, desc, ld, noindex]);
 
   return null;
 }
