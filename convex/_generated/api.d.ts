@@ -17,6 +17,7 @@ import type * as discussion from "../discussion.js";
 import type * as figures from "../figures.js";
 import type * as http from "../http.js";
 import type * as lexicon from "../lexicon.js";
+import type * as lusiadas from "../lusiadas.js";
 import type * as members from "../members.js";
 import type * as memberships from "../memberships.js";
 import type * as permissions from "../permissions.js";
@@ -47,6 +48,7 @@ declare const fullApi: ApiFromModules<{
   figures: typeof figures;
   http: typeof http;
   lexicon: typeof lexicon;
+  lusiadas: typeof lusiadas;
   members: typeof members;
   memberships: typeof memberships;
   permissions: typeof permissions;

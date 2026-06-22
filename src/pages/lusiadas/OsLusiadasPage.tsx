@@ -1,9 +1,22 @@
-import { BookOpen, Check, Link2, Loader2 } from "lucide-react";
+import { useQuery } from "convex/react";
+import {
+  BookOpen,
+  Check,
+  Link2,
+  Loader2,
+  MessageSquare,
+  Users,
+} from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Seo } from "@/components/Seo";
+import {
+  type FeedTarget,
+  LusiadasFeed,
+} from "@/components/lusiadas/LusiadasFeed";
 import { useGrafia } from "@/lib/grafia/store";
 import type { Grafia } from "@/lib/grafia/lexicon";
+import { api } from "../../../convex/_generated/api";
 
 const cantoLoaders = import.meta.glob("../../data/lusiadas/canto*.json");
 
@@ -46,6 +59,8 @@ export default function OsLusiadasPage() {
   const [canto, setCanto] = useState<Canto | null>(null);
   const [copied, setCopied] = useState<number | null>(null);
   const copyTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [feed, setFeed] = useState<FeedTarget | null>(null);
+  const counts = useQuery(api.lusiadas.countsByCanto, { canto: n }) ?? {};
 
   useEffect(() => {
     let alive = true;
@@ -121,6 +136,22 @@ export default function OsLusiadasPage() {
         >
           <BookOpen className="h-4 w-4" /> Sobre a obra, na Lusopédia →
         </Link>
+        <div className="mt-3">
+          <button
+            className="inline-flex items-center gap-1.5 font-body text-[13px] text-muted-foreground transition-colors hover:text-accent"
+            onClick={() =>
+              setFeed({ target: "epic", canto: 0, label: "Os Lusíadas — a obra" })
+            }
+            type="button"
+          >
+            <Users className="h-3.5 w-3.5" /> Discussão da obra
+            {counts.epic ? (
+              <span className="rounded-full bg-accent/15 px-1.5 text-[11px] text-accent">
+                {counts.epic}
+              </span>
+            ) : null}
+          </button>
+        </div>
       </header>
 
       {/* Seletor de grafia */}
@@ -181,46 +212,111 @@ export default function OsLusiadasPage() {
           </div>
 
           <div className="mt-6 space-y-1">
-            {canto.stanzas.map((s) => (
-              <article
-                className="group flex gap-4 rounded-xl px-3 py-3 transition-colors hover:bg-accent/[0.04] target:bg-accent/10"
-                id={`estrofe-${s.n}`}
-                key={s.n}
-              >
-                <div className="flex shrink-0 flex-col items-center gap-1 pt-1">
-                  <button
-                    aria-label={`Ligar à estrofe ${s.n}`}
-                    className="font-display text-[14px] text-muted-foreground/60 transition-colors hover:text-accent"
-                    onClick={() => copyAnchor(s.n)}
-                    title="Copiar ligação para esta estrofe"
-                    type="button"
-                  >
-                    {s.n}
-                  </button>
-                  <button
-                    aria-label={`Copiar ligação da estrofe ${s.n}`}
-                    className="text-muted-foreground/0 transition-colors group-hover:text-muted-foreground/50 hover:!text-accent"
-                    onClick={() => copyAnchor(s.n)}
-                    type="button"
-                  >
-                    {copied === s.n ? (
-                      <Check className="h-3.5 w-3.5 text-accent" />
-                    ) : (
-                      <Link2 className="h-3.5 w-3.5" />
+            {canto.stanzas.map((s) => {
+              const stanzaTarget = `c${n}:e${s.n}`;
+              const stanzaCount = counts[stanzaTarget] ?? 0;
+              return (
+                <article
+                  className="group flex gap-4 rounded-xl px-3 py-3 transition-colors target:bg-accent/10 hover:bg-accent/[0.04]"
+                  id={`estrofe-${s.n}`}
+                  key={s.n}
+                >
+                  <div className="flex shrink-0 flex-col items-center gap-1.5 pt-1">
+                    <button
+                      aria-label={`Anotações da estrofe ${s.n}`}
+                      className="font-display text-[14px] text-muted-foreground/60 transition-colors hover:text-accent"
+                      onClick={() =>
+                        setFeed({
+                          target: stanzaTarget,
+                          canto: n,
+                          label: `Canto ${ROMANS[n]} · estrofe ${s.n}`,
+                        })
+                      }
+                      title="Anotar / debater esta estrofe"
+                      type="button"
+                    >
+                      {s.n}
+                    </button>
+                    {stanzaCount > 0 && (
+                      <span className="flex items-center gap-0.5 font-body text-[11px] text-accent">
+                        <MessageSquare className="h-3 w-3" />
+                        {stanzaCount}
+                      </span>
                     )}
-                  </button>
-                </div>
-                <div className="font-body text-[17px] text-foreground/90 leading-[1.9]">
-                  {s.lines.map((line, i) => (
-                    <p key={i}>{convert(line)}</p>
-                  ))}
-                </div>
-              </article>
-            ))}
+                    <button
+                      aria-label={`Copiar ligação da estrofe ${s.n}`}
+                      className="text-muted-foreground/0 transition-colors hover:!text-accent group-hover:text-muted-foreground/50"
+                      onClick={() => copyAnchor(s.n)}
+                      title="Copiar ligação"
+                      type="button"
+                    >
+                      {copied === s.n ? (
+                        <Check className="h-3.5 w-3.5 text-accent" />
+                      ) : (
+                        <Link2 className="h-3.5 w-3.5" />
+                      )}
+                    </button>
+                  </div>
+                  <div className="min-w-0 flex-1 font-body text-[17px] text-foreground/90 leading-[1.9]">
+                    {s.lines.map((line, i) => {
+                      const verseTarget = `${stanzaTarget}:v${i + 1}`;
+                      const verseCount = counts[verseTarget] ?? 0;
+                      return (
+                        <button
+                          className="group/v -mx-2 flex w-full items-center gap-2 rounded px-2 text-left transition-colors hover:bg-accent/[0.06]"
+                          key={i}
+                          onClick={() =>
+                            setFeed({
+                              target: verseTarget,
+                              canto: n,
+                              excerpt: convert(line),
+                              label: `Canto ${ROMANS[n]} · estrofe ${s.n} · verso ${i + 1}`,
+                            })
+                          }
+                          type="button"
+                        >
+                          <span className="flex-1">{convert(line)}</span>
+                          {verseCount > 0 ? (
+                            <span className="flex shrink-0 items-center gap-0.5 font-body text-[11px] text-accent">
+                              <MessageSquare className="h-3 w-3" />
+                              {verseCount}
+                            </span>
+                          ) : (
+                            <MessageSquare className="h-3.5 w-3.5 shrink-0 text-muted-foreground/0 transition-colors group-hover/v:text-muted-foreground/40" />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+
+          {/* Discussão do canto inteiro */}
+          <div className="mt-10 flex justify-center">
+            <button
+              className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 font-body text-[14px] text-muted-foreground transition-colors hover:border-accent/40 hover:text-accent"
+              onClick={() =>
+                setFeed({
+                  target: `c${n}`,
+                  canto: n,
+                  label: `Discussão do Canto ${ROMANS[n]}`,
+                })
+              }
+              type="button"
+            >
+              <Users className="h-4 w-4" /> Discutir o Canto {ROMANS[n]}
+              {counts[`c${n}`] ? (
+                <span className="rounded-full bg-accent/15 px-1.5 text-[12px] text-accent">
+                  {counts[`c${n}`]}
+                </span>
+              ) : null}
+            </button>
           </div>
 
           {/* Navegação inferior entre cantos */}
-          <div className="mt-12 flex items-center justify-between border-border/60 border-t pt-6 font-body text-[14px]">
+          <div className="mt-10 flex items-center justify-between border-border/60 border-t pt-6 font-body text-[14px]">
             {n > 1 ? (
               <Link
                 className="text-accent hover:underline"
@@ -243,6 +339,16 @@ export default function OsLusiadasPage() {
             )}
           </div>
         </>
+      )}
+
+      {feed && (
+        <LusiadasFeed
+          canto={feed.canto}
+          excerpt={feed.excerpt}
+          label={feed.label}
+          onClose={() => setFeed(null)}
+          target={feed.target}
+        />
       )}
     </main>
   );

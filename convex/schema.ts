@@ -242,6 +242,37 @@ export default defineSchema({
     reason: v.optional(v.union(v.string(), v.null())),
   }).index("by_post", ["post_id"]),
 
+  // ─── Os Lusíadas: anotações/comentários da comunidade (100% humano) ───
+  // target: "epic" | "c1" | "c1:e3" | "c1:e3:v2"  (obra/canto/estrofe/verso).
+  // canto: número do canto (0 = obra inteira) — para contagens por canto.
+  lusiadas_posts: defineTable({
+    target: v.string(),
+    canto: v.number(),
+    author_id: v.id("users"),
+    author_name: v.optional(v.union(v.string(), v.null())),
+    body: v.string(),
+    // Excerto citado (palavra/verso/passagem seleccionada), quando aplicável.
+    excerpt: v.optional(v.union(v.string(), v.null())),
+    upvotes: v.number(),
+    is_removed: v.optional(v.boolean()),
+    report_count: v.optional(v.number()),
+  })
+    .index("by_target", ["target"])
+    .index("by_canto", ["canto"]),
+
+  lusiadas_post_votes: defineTable({
+    post_id: v.id("lusiadas_posts"),
+    user_id: v.id("users"),
+  })
+    .index("by_post_user", ["post_id", "user_id"])
+    .index("by_user", ["user_id"]),
+
+  lusiadas_post_reports: defineTable({
+    post_id: v.id("lusiadas_posts"),
+    user_id: v.id("users"),
+    reason: v.optional(v.union(v.string(), v.null())),
+  }).index("by_post", ["post_id"]),
+
   // Léxico de grafias — dicionário relacional Portuguez ↔ AO90 ↔ pré-AO90.
   // Master editável (futura base do laboratório da ARCA). Exportado para o
   // bundle do motor de conversão. status: "approved" | "proposed".
