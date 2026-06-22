@@ -46,6 +46,14 @@ import { PlaceholderPage } from "@/components/PlaceholderPage";
 
 const queryClient = new QueryClient();
 
+/** Na raiz, o domínio oslusiadas.pt abre directo na obra; o resto, a homepage. */
+function RootRoute() {
+  const isLusiadasDomain =
+    typeof window !== "undefined" &&
+    /(^|\.)oslusiadas\.pt$/i.test(window.location.hostname);
+  return isLusiadasDomain ? <OsLusiadasPage /> : <HomePage />;
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <SitePreferencesProvider>
@@ -56,7 +64,9 @@ const App = () => (
         <Routes>
           {/* Global layout — dual navigation on all pages */}
           <Route element={<GlobalLayout />}>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<RootRoute />} />
+            {/* oslusiadas.pt — atalhos de canto na raiz do domínio dedicado */}
+            <Route path="/canto/:n" element={<OsLusiadasPage />} />
             <Route path="/associacao" element={<AssociacaoPage />} />
             <Route path="/programa" element={<ProgramaPage />} />
             <Route path="/apoiar" element={<ApoiarPage />} />
