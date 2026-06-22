@@ -1,10 +1,12 @@
 import { useQuery } from "convex/react";
 import {
   BookOpen,
+  BookText,
   Check,
   Link2,
   Loader2,
   MessageSquare,
+  Share2,
   Users,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -51,6 +53,23 @@ function cantoHref(base: string, num: number): string {
   return `${base}/canto/${num}`;
 }
 
+/** Slug ascii de uma palavra, para a ligação ao dicionário. */
+function wordSlug(s: string): string {
+  return s
+    .normalize("NFD")
+    .replace(/\p{Mn}/gu, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+type Selection = {
+  x: number;
+  y: number;
+  text: string;
+  stanza: number;
+};
+
 export default function OsLusiadasPage() {
   const params = useParams();
   const n = Math.min(10, Math.max(1, Number.parseInt(params.n ?? "1", 10) || 1));
@@ -61,6 +80,60 @@ export default function OsLusiadasPage() {
   const copyTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [feed, setFeed] = useState<FeedTarget | null>(null);
   const counts = useQuery(api.lusiadas.countsByCanto, { canto: n }) ?? {};
+  const [sel, setSel] = useState<Selection | null>(null);
+  const readerRef = useRef<HTMLDivElement>(null);
+  const toolbarRef = useRef<HTMLDivElement>(null);
+
+  // Barra de selecção: ao seleccionar texto no poema, mostra acções.
+  function onReaderMouseUp() {
+    const s = window.getSelection();
+    const text = s?.toString().trim() ?? "";
+    if (!s || s.isCollapsed || text.length < 1 || !readerRef.current) {
+      setSel(null);
+      return;
+    }
+    const node = s.anchorNode;
+    const host =
+      node instanceof Element
+        ? node
+        : (node?.parentElement ?? null);
+    const stanzaEl = host?.closest<HTMLElement>("[id^=estrofe-]");
+    if (!stanzaEl || !readerRef.current.contains(stanzaEl)) {
+      setSel(null);
+      return;
+    }
+    const rect = s.getRangeAt(0).getBoundingClientRect();
+    setSel({
+      x: rect.left + rect.width / 2,
+      y: rect.top,
+      text,
+      stanza: Number(stanzaEl.id.replace("estrofe-", "")),
+    });
+  }
+
+  // Esconde a barra ao deslizar ou ao clicar fora dela.
+  useEffect(() => {
+    const onScroll = () => setSel(null);
+    const onDown = (e: MouseEvent) => {
+      if (toolbarRef.current && !toolbarRef.current.contains(e.target as Node)) {
+        setSel(null);
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    document.addEventListener("mousedown", onDown);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("mousedown", onDown);
+    };
+  }, []);
+
+  function shareStanza(stanza: number) {
+    const url = `${window.location.origin}${cantoHref(base, n)}#estrofe-${stanza}`;
+    navigator.clipboard?.writeText(url).catch(() => {
+      // ignora
+    });
+    setSel(null);
+  }
 
   useEffect(() => {
     let alive = true;
@@ -211,7 +284,11 @@ export default function OsLusiadasPage() {
             </p>
           </div>
 
-          <div className="mt-6 space-y-1">
+          <div
+            className="mt-6 space-y-1"
+            onMouseUp={onReaderMouseUp}
+            ref={readerRef}
+          >
             {canto.stanzas.map((s) => {
               const stanzaTarget = `c${n}:e${s.n}`;
               const stanzaCount = counts[stanzaTarget] ?? 0;
@@ -262,29 +339,35 @@ export default function OsLusiadasPage() {
                       const verseTarget = `${stanzaTarget}:v${i + 1}`;
                       const verseCount = counts[verseTarget] ?? 0;
                       return (
-                        <button
-                          className="group/v -mx-2 flex w-full items-center gap-2 rounded px-2 text-left transition-colors hover:bg-accent/[0.06]"
+                        <div
+                          className="group/v -mx-2 flex items-center gap-2 rounded px-2 transition-colors hover:bg-accent/[0.05]"
                           key={i}
-                          onClick={() =>
-                            setFeed({
-                              target: verseTarget,
-                              canto: n,
-                              excerpt: convert(line),
-                              label: `Canto ${ROMANS[n]} · estrofe ${s.n} · verso ${i + 1}`,
-                            })
-                          }
-                          type="button"
                         >
-                          <span className="flex-1">{convert(line)}</span>
-                          {verseCount > 0 ? (
-                            <span className="flex shrink-0 items-center gap-0.5 font-body text-[11px] text-accent">
-                              <MessageSquare className="h-3 w-3" />
-                              {verseCount}
-                            </span>
-                          ) : (
-                            <MessageSquare className="h-3.5 w-3.5 shrink-0 text-muted-foreground/0 transition-colors group-hover/v:text-muted-foreground/40" />
-                          )}
-                        </button>
+                          <p className="flex-1">{convert(line)}</p>
+                          <button
+                            aria-label={`Anotações do verso ${i + 1}`}
+                            className="shrink-0"
+                            onClick={() =>
+                              setFeed({
+                                target: verseTarget,
+                                canto: n,
+                                excerpt: convert(line),
+                                label: `Canto ${ROMANS[n]} · estrofe ${s.n} · verso ${i + 1}`,
+                              })
+                            }
+                            title="Anotar este verso"
+                            type="button"
+                          >
+                            {verseCount > 0 ? (
+                              <span className="flex items-center gap-0.5 font-body text-[11px] text-accent">
+                                <MessageSquare className="h-3 w-3" />
+                                {verseCount}
+                              </span>
+                            ) : (
+                              <MessageSquare className="h-3.5 w-3.5 text-muted-foreground/0 transition-colors hover:text-accent group-hover/v:text-muted-foreground/40" />
+                            )}
+                          </button>
+                        </div>
                       );
                     })}
                   </div>
@@ -339,6 +422,48 @@ export default function OsLusiadasPage() {
             )}
           </div>
         </>
+      )}
+
+      {/* Barra de selecção — palavra/passagem seleccionada */}
+      {sel && (
+        <div
+          className="-translate-x-1/2 -translate-y-full fixed z-40"
+          ref={toolbarRef}
+          style={{ left: `${sel.x}px`, top: `${sel.y - 8}px` }}
+        >
+          <div className="flex items-center gap-0.5 rounded-lg border border-border bg-background p-1 shadow-lg">
+            <a
+              className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 font-body text-[13px] text-foreground transition-colors hover:bg-accent/10 hover:text-accent"
+              href={`/dicionario/${wordSlug(sel.text.split(/\s+/)[0] ?? "")}`}
+              rel="noreferrer"
+              target="_blank"
+            >
+              <BookText className="h-3.5 w-3.5" /> Dicionário
+            </a>
+            <button
+              className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 font-body text-[13px] text-foreground transition-colors hover:bg-accent/10 hover:text-accent"
+              onClick={() => {
+                setFeed({
+                  target: `c${n}:e${sel.stanza}`,
+                  canto: n,
+                  excerpt: sel.text,
+                  label: `Canto ${ROMANS[n]} · estrofe ${sel.stanza}`,
+                });
+                setSel(null);
+              }}
+              type="button"
+            >
+              <MessageSquare className="h-3.5 w-3.5" /> Anotar
+            </button>
+            <button
+              className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 font-body text-[13px] text-foreground transition-colors hover:bg-accent/10 hover:text-accent"
+              onClick={() => shareStanza(sel.stanza)}
+              type="button"
+            >
+              <Share2 className="h-3.5 w-3.5" /> Partilhar
+            </button>
+          </div>
+        </div>
       )}
 
       {feed && (
