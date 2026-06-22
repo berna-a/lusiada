@@ -56,6 +56,30 @@ export async function getVerbete(slug: string): Promise<Verbete | null> {
   return list.find((v) => v.slug === slug) ?? null;
 }
 
+export type VerbeteContext = {
+  verbete: Verbete;
+  /** Entradas alfabeticamente próximas (teia interna de navegação). */
+  neighbors: Verbete[];
+};
+
+/** Verbete + palavras vizinhas (3 antes, 3 depois) na ordem alfabética. */
+export async function getVerbeteContext(
+  slug: string
+): Promise<VerbeteContext | null> {
+  const letter = firstLetter(slug);
+  if (!letter) {
+    return null;
+  }
+  const list = await loadLetter(letter);
+  const i = list.findIndex((v) => v.slug === slug);
+  if (i < 0) {
+    return null;
+  }
+  const before = list.slice(Math.max(0, i - 3), i);
+  const after = list.slice(i + 1, i + 4);
+  return { verbete: list[i], neighbors: [...before, ...after] };
+}
+
 function norm(s: string): string {
   return s
     .normalize("NFD")

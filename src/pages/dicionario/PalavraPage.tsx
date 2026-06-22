@@ -1,13 +1,14 @@
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2, Search } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Seo } from "@/components/Seo";
-import type { DicEntry } from "@/lib/grafia/dicionario";
-import type { Verbete } from "@/lib/grafia/verbetes";
+import { asciiSlug, type DicEntry } from "@/lib/grafia/dicionario";
+import { useGrafia } from "@/lib/grafia/store";
+import type { Verbete, VerbeteContext } from "@/lib/grafia/verbetes";
 
 type Loaded =
   | { kind: "grafia"; entry: DicEntry; dropped: string | null }
-  | { kind: "verbete"; verbete: Verbete }
+  | { kind: "verbete"; context: VerbeteContext }
   | { kind: "none" };
 
 export default function PalavraPage() {
@@ -31,10 +32,10 @@ export default function PalavraPage() {
         }
         return;
       }
-      const { getVerbete } = await import("@/lib/grafia/verbetes");
-      const verbete = slug ? await getVerbete(slug) : null;
+      const { getVerbeteContext } = await import("@/lib/grafia/verbetes");
+      const context = slug ? await getVerbeteContext(slug) : null;
       if (alive) {
-        setState(verbete ? { kind: "verbete", verbete } : { kind: "none" });
+        setState(context ? { kind: "verbete", context } : { kind: "none" });
       }
     })();
     return () => {
@@ -70,13 +71,47 @@ export default function PalavraPage() {
   }
 
   if (state.kind === "verbete") {
-    return <VerbeteView verbete={state.verbete} />;
+    return <VerbeteView context={state.context} />;
   }
 
   return <GrafiaView dropped={state.dropped} entry={state.entry} />;
 }
 
-function VerbeteView({ verbete: v }: { verbete: Verbete }) {
+const GRAFIAS = [
+  { id: "pz", label: "Portuguez" },
+  { id: "pre", label: "Pré-acordo" },
+  { id: "ao", label: "AO 1990" },
+] as const;
+
+function VerbeteSearch() {
+  const navigate = useNavigate();
+  const [q, setQ] = useState("");
+  return (
+    <form
+      className="relative"
+      onSubmit={(e) => {
+        e.preventDefault();
+        const slug = asciiSlug(q);
+        if (slug) {
+          navigate(`/dicionario/${slug}`);
+        }
+      }}
+    >
+      <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+      <input
+        className="h-11 w-full rounded-xl border border-border bg-card pr-3 pl-9 font-body text-[15px] text-foreground outline-none transition-colors focus:border-accent/50"
+        onChange={(e) => setQ(e.target.value)}
+        placeholder="Procurar outra palavra…"
+        value={q}
+      />
+    </form>
+  );
+}
+
+function VerbeteView({ context }: { context: VerbeteContext }) {
+  const { verbete: v, neighbors } = context;
+  const { grafia, setGrafia, convert } = useGrafia();
+
   return (
     <main
       className="mx-auto max-w-[760px] px-6 pt-32 pb-24 sm:pt-40"
@@ -89,56 +124,113 @@ function VerbeteView({ verbete: v }: { verbete: Verbete }) {
         title={`${v.word} — Dicionário da Língua | Lusopédia`}
         type="article"
       />
-      <Link
-        className="inline-flex items-center gap-2 font-body text-[13px] text-muted-foreground uppercase tracking-[0.15em] transition-colors hover:text-accent"
-        to="/dicionario"
-      >
-        <ArrowLeft className="h-4 w-4" /> Dicionário
-      </Link>
-      <h1 className="mt-6 font-display text-[40px] text-primary leading-[1.1] sm:text-[48px]">
-        {v.word}
-      </h1>
-      {v.pos && (
-        <p className="mt-1 font-body text-[14px] text-accent italic">{v.pos}</p>
-      )}
 
-      <ol className="mt-8 space-y-4">
-        {v.defs.map((d, i) => (
-          <li className="flex gap-3" key={i}>
-            {v.defs.length > 1 && (
-              <span className="shrink-0 pt-0.5 font-display text-[15px] text-muted-foreground/60">
-                {i + 1}.
-              </span>
-            )}
-            <p className="font-body text-[17px] text-foreground/85 leading-relaxed">
-              {d}
-            </p>
-          </li>
-        ))}
-      </ol>
-
-      {v.etym && (
-        <p className="mt-6 font-body text-[14px] text-muted-foreground italic">
-          {v.etym}
-        </p>
-      )}
-
-      <div className="mt-12 rounded-2xl border border-border/70 bg-muted/30 p-4">
-        <p className="font-body text-[12px] text-muted-foreground leading-relaxed">
-          Verbete importado do{" "}
-          <a
-            className="text-accent hover:underline"
-            href="https://dicionario-aberto.net"
-            rel="noreferrer"
-            target="_blank"
-          >
-            Dicionário-Aberto
-          </a>{" "}
-          (Cândido de Figueiredo, 1913 · domínio público · CC BY-SA). A
-          definição está na ortografia original de 1913 e será revista e
-          reescrita em <strong>Portuguez</strong>.
-        </p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <Link
+          className="inline-flex shrink-0 items-center gap-2 font-body text-[13px] text-muted-foreground uppercase tracking-[0.15em] transition-colors hover:text-accent"
+          to="/dicionario"
+        >
+          <ArrowLeft className="h-4 w-4" /> Dicionário
+        </Link>
+        <div className="w-full sm:max-w-xs">
+          <VerbeteSearch />
+        </div>
       </div>
+
+      <article className="mt-8 rounded-2xl border border-border bg-card p-6 sm:p-8">
+        {/* Cabeçalho */}
+        <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
+          <h1 className="font-display text-[40px] text-primary leading-[1] sm:text-[48px]">
+            {convert(v.word)}
+          </h1>
+          {v.pos && (
+            <span className="rounded-md bg-muted px-2.5 py-1 font-body text-[12px] text-muted-foreground">
+              {v.pos}
+            </span>
+          )}
+        </div>
+
+        {/* Seletor de grafia */}
+        <div className="mt-5 inline-flex rounded-lg border border-border p-0.5">
+          {GRAFIAS.map((g) => (
+            <button
+              className={`rounded-md px-3 py-1.5 font-body text-[13px] transition-colors ${
+                grafia === g.id
+                  ? "bg-accent/15 text-accent"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+              key={g.id}
+              onClick={() => setGrafia(g.id)}
+              type="button"
+            >
+              {g.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Sentidos */}
+        <ol className="mt-7 space-y-3.5">
+          {v.defs.map((d, i) => (
+            <li className="flex gap-3" key={i}>
+              {v.defs.length > 1 && (
+                <span className="shrink-0 pt-1 font-display text-[14px] text-accent/70">
+                  {i + 1}
+                </span>
+              )}
+              <p className="font-body text-[17px] text-foreground/90 leading-[1.7]">
+                {convert(d)}
+              </p>
+            </li>
+          ))}
+        </ol>
+
+        {/* Etimologia */}
+        {v.etym && (
+          <div className="mt-7 border-border/60 border-t pt-5">
+            <p className="font-body text-[11px] text-muted-foreground uppercase tracking-[0.18em]">
+              Etimologia
+            </p>
+            <p className="mt-1.5 font-body text-[15px] text-foreground/75 italic leading-relaxed">
+              {convert(v.etym)}
+            </p>
+          </div>
+        )}
+      </article>
+
+      {/* Palavras vizinhas — teia interna */}
+      {neighbors.length > 0 && (
+        <div className="mt-8">
+          <p className="font-body text-[11px] text-muted-foreground uppercase tracking-[0.18em]">
+            Palavras vizinhas
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {neighbors.map((nb) => (
+              <Link
+                className="rounded-full border border-border bg-card px-3.5 py-1.5 font-display text-[15px] text-foreground/80 transition-colors hover:border-accent/40 hover:text-accent"
+                key={nb.slug}
+                to={`/dicionario/${nb.slug}`}
+              >
+                {convert(nb.word)}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Fonte */}
+      <p className="mt-10 font-body text-[12px] text-muted-foreground/80 leading-relaxed">
+        Verbete do{" "}
+        <a
+          className="hover:text-accent hover:underline"
+          href="https://dicionario-aberto.net"
+          rel="noreferrer"
+          target="_blank"
+        >
+          Dicionário-Aberto
+        </a>{" "}
+        (Cândido de Figueiredo, 1913 · domínio público · CC BY-SA) — na
+        ortografia original de 1913, a rever e reescrever em Portuguez.
+      </p>
     </main>
   );
 }
