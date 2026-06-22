@@ -157,6 +157,9 @@ export default defineSchema({
     // Grafias alternativas (ex.: ortografia oficial) — para descoberta nas
     // pesquisas de quem usa a grafia antiga. Mostradas e em alternateName.
     aliases: v.optional(v.array(v.string())),
+    // Proveniência do conteúdo (indicador interno IA vs Humano).
+    // "ai" | "human" | "mixed". Permite medir % e migrar para humano.
+    authorship: v.optional(v.string()),
     infobox: v.optional(
       v.array(v.object({ label: v.string(), value: v.string() }))
     ),

@@ -6,6 +6,7 @@ import { api } from "../../../convex/_generated/api";
 
 export default function AdminLusopediaPage() {
   const pending = useQuery(api.articles.adminPending);
+  const stats = useQuery(api.articles.authorshipStats);
   const reported = useQuery(api.discussion.adminReported);
   const setArticleStatus = useMutation(api.articles.adminSetArticleStatus);
   const approveEdit = useMutation(api.articles.adminApproveEdit);
@@ -21,6 +22,60 @@ export default function AdminLusopediaPage() {
           Aprove artigos e edições e modere a discussão.
         </p>
       </header>
+
+      {/* Indicador de autoria (IA vs Humano) */}
+      {stats && stats.total > 0 && (
+        <section className="rounded-xl border border-border bg-card p-4">
+          <h2 className="font-body text-muted-foreground text-xs uppercase tracking-[0.2em]">
+            Autoria do conteúdo
+          </h2>
+          <div className="mt-3 flex items-end gap-6">
+            <div>
+              <p className="font-display text-3xl text-primary">
+                {Math.round((stats.human / stats.total) * 100)}%
+              </p>
+              <p className="font-body text-[12px] text-muted-foreground">
+                Humano ({stats.human})
+              </p>
+            </div>
+            <div>
+              <p className="font-display text-3xl text-foreground/70">
+                {Math.round((stats.ai / stats.total) * 100)}%
+              </p>
+              <p className="font-body text-[12px] text-muted-foreground">
+                IA ({stats.ai})
+              </p>
+            </div>
+            {stats.mixed > 0 && (
+              <div>
+                <p className="font-display text-3xl text-foreground/70">
+                  {stats.mixed}
+                </p>
+                <p className="font-body text-[12px] text-muted-foreground">
+                  Misto
+                </p>
+              </div>
+            )}
+            <div className="ml-auto text-right">
+              <p className="font-display text-2xl text-foreground/50">
+                {stats.total}
+              </p>
+              <p className="font-body text-[12px] text-muted-foreground">
+                Total
+              </p>
+            </div>
+          </div>
+          <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-muted">
+            <div
+              className="h-full rounded-full bg-accent"
+              style={{ width: `${(stats.human / stats.total) * 100}%` }}
+            />
+          </div>
+          <p className="mt-2 font-body text-[11px] text-muted-foreground/80">
+            Meta: aumentar gradualmente a fração escrita/revista por humanos.
+          </p>
+        </section>
+      )}
 
       {/* Artigos pendentes */}
       <section>

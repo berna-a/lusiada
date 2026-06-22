@@ -186,6 +186,7 @@ export const create = mutation({
       sources: args.sources ?? [],
       status: "pending",
       author_id: userId,
+      authorship: "human",
     });
     return { id, slug };
   },
@@ -285,6 +286,30 @@ export const adminPendingCount = query({
       .withIndex("by_status", (q) => q.eq("status", "pending"))
       .collect();
     return articles.length + revisions.length;
+  },
+});
+
+/** Estatísticas de autoria (indicador interno IA vs Humano). */
+export const authorshipStats = query({
+  args: {},
+  handler: async (ctx) => {
+    if (!(await isAdmin(ctx))) {
+      return { ai: 0, human: 0, mixed: 0, total: 0 };
+    }
+    const all = await ctx.db.query("articles").collect();
+    let ai = 0;
+    let human = 0;
+    let mixed = 0;
+    for (const a of all) {
+      if (a.authorship === "human") {
+        human += 1;
+      } else if (a.authorship === "mixed") {
+        mixed += 1;
+      } else {
+        ai += 1;
+      }
+    }
+    return { ai, human, mixed, total: all.length };
   },
 });
 
@@ -401,6 +426,7 @@ export const seedCamoes = internalMutation({
       cover_image_url: "/lusopedia/luiz-vaz-de-camoes.webp",
       image_credit: "Wikimedia Commons",
       aliases: ["Luís Vaz de Camões", "Luís de Camões"],
+      authorship: "ai",
       infobox: [
         { label: "Nascimento", value: "c. 1525, Lisboa" },
         { label: "Morte", value: "10 de Junho de 1580" },

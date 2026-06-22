@@ -387,6 +387,7 @@ export const seedFoundation2 = internalMutation({
         cover_image_url: `/lusopedia/${s.slug}.webp`,
         image_credit: "Wikimedia Commons",
         aliases: s.aliases,
+        authorship: "ai",
         infobox: s.infobox,
         sources: s.sources,
         status: "published" as const,
