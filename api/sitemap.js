@@ -26,6 +26,13 @@ const DICIONARIO_SLUGS = [
   "ativo", "adocao", "batismo", "dialeto", "eletricidade", "eletrico",
   "reacao", "fratura", "infecao", "inspecao", "espetaculo", "espetador",
   "olfato", "teto", "tato", "coletivo", "letivo", "afeto",
+  "ato", "atos", "atuar", "atuacao", "ativar", "adotar", "adjetivo",
+  "subjetivo", "fracao", "atracao", "distracao", "contracao", "tracao",
+  "redacao", "fatura", "faturacao", "otica", "otimismo", "otimista",
+  "otimizar", "noturno", "efetivo", "afetivo", "coletividade", "inseto",
+  "detetar", "detecao", "recetor", "concecao", "dececao", "exceto",
+  "correcao", "diretorio", "eletronico", "eletronica", "arquitetonico",
+  "ereto", "perfecionismo", "selecionar", "colecionar",
 ];
 
 function isoDate(ms) {
