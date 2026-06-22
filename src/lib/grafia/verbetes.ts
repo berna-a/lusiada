@@ -15,6 +15,10 @@ export type Verbete = {
   etym?: string;
   /** Exemplos/citações (quando a fonte os tem). */
   ex?: string[];
+  /** Camada Wiktionary (CC BY-SA): fonética, sílabas, sinónimos. */
+  ipa?: string;
+  syl?: string;
+  syns?: string[];
 };
 
 const letterLoaders = import.meta.glob("../../data/dicionario/*.json");

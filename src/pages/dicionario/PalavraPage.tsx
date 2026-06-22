@@ -173,8 +173,19 @@ function VerbeteView({ context }: { context: VerbeteContext }) {
           </div>
         </div>
 
+        {/* Fonética + divisão silábica (camada Wiktionary) */}
+        {(v.syl || v.ipa) && (
+          <p className="mt-2.5 font-body text-[15px] text-muted-foreground">
+            {v.syl}
+            {v.syl && v.ipa && (
+              <span className="px-2 text-muted-foreground/40">·</span>
+            )}
+            {v.ipa && <span className="text-foreground/70">{v.ipa}</span>}
+          </p>
+        )}
+
         {/* Sentidos */}
-        <ol className="mt-8 space-y-4">
+        <ol className="mt-7 space-y-4">
           {v.defs.map((d, i) => (
             <li className="flex gap-3.5" key={i}>
               {v.defs.length > 1 && (
@@ -188,6 +199,26 @@ function VerbeteView({ context }: { context: VerbeteContext }) {
             </li>
           ))}
         </ol>
+
+        {/* Sinónimos (camada Wiktionary) */}
+        {v.syns && v.syns.length > 0 && (
+          <div className="mt-7 border-border/50 border-t pt-5">
+            <p className="font-body text-[11px] text-muted-foreground uppercase tracking-[0.18em]">
+              Sinónimos
+            </p>
+            <div className="mt-2.5 flex flex-wrap gap-2">
+              {v.syns.map((s) => (
+                <Link
+                  className="rounded-md bg-muted px-2.5 py-1 font-body text-[14px] text-accent transition-colors hover:bg-accent/10"
+                  key={s}
+                  to={`/dicionario/${asciiSlug(s)}`}
+                >
+                  {convert(s)}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Exemplos (quando existem) */}
         {v.ex && v.ex.length > 0 && (
@@ -252,8 +283,18 @@ function VerbeteView({ context }: { context: VerbeteContext }) {
         >
           Dicionário-Aberto
         </a>{" "}
-        (Cândido de Figueiredo, 1913 · domínio público · CC BY-SA) — na
-        ortografia original de 1913, a rever e reescrever em Portuguez.
+        (Cândido de Figueiredo, 1913 · domínio público) — definições na
+        ortografia de 1913, a rever em Portuguez. Fonética, divisão silábica e
+        sinónimos do{" "}
+        <a
+          className="hover:text-accent hover:underline"
+          href="https://pt.wiktionary.org"
+          rel="noreferrer"
+          target="_blank"
+        >
+          Wikcionário
+        </a>{" "}
+        (CC BY-SA).
       </p>
     </main>
   );
