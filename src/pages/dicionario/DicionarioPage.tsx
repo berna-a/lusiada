@@ -143,14 +143,11 @@ export default function DicionarioPage() {
           </div>
         )}
 
-        {query.trim().length >= 2 &&
-          verbetes.length === 0 &&
-          !/^[a]/i.test(query.trim()) && (
-            <p className="mt-8 text-center font-body text-[13px] text-muted-foreground italic">
-              Piloto: por agora só a letra <strong>A</strong> está no dicionário
-              da Língua. As restantes chegam em breve.
-            </p>
-          )}
+        {query.trim().length >= 2 && verbetes.length === 0 && (
+          <p className="mt-8 text-center font-body text-[13px] text-muted-foreground italic">
+            Sem resultados para «{query.trim()}» no dicionário da Língua.
+          </p>
+        )}
       </div>
     </main>
   );

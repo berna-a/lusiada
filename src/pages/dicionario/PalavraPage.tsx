@@ -2,9 +2,18 @@ import { ArrowLeft, Languages, Loader2, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Seo } from "@/components/Seo";
-import { asciiSlug, type DicEntry } from "@/lib/grafia/dicionario";
+import type { DicEntry } from "@/lib/grafia/dicionario";
 import { useGrafia } from "@/lib/grafia/store";
 import type { Verbete, VerbeteContext } from "@/lib/grafia/verbetes";
+
+function asciiSlug(s: string): string {
+  return s
+    .normalize("NFD")
+    .replace(/\p{Mn}/gu, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
 type Loaded =
   | { kind: "grafia"; entry: DicEntry; dropped: string | null }
