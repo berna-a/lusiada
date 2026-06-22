@@ -1,12 +1,19 @@
-import { BookOpen, Loader2, Sparkles } from "lucide-react";
-import { useEffect, useState } from "react";
+import { BookOpen, Check, Link2, Loader2 } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Seo } from "@/components/Seo";
+import { useGrafia } from "@/lib/grafia/store";
+import type { Grafia } from "@/lib/grafia/lexicon";
 
 const cantoLoaders = import.meta.glob("../../data/lusiadas/canto*.json");
-const notaLoaders = import.meta.glob("../../data/lusiadas/notas*.json");
 
 const ROMANS = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+
+const GRAFIAS: { id: Grafia; label: string }[] = [
+  { id: "pz", label: "Portuguez" },
+  { id: "pre", label: "Pré-acordo" },
+  { id: "ao", label: "AO 1990" },
+];
 
 type Canto = {
   canto: number;
@@ -14,46 +21,86 @@ type Canto = {
   stanzas: { n: number; lines: string[] }[];
 };
 
+/** No domínio dedicado oslusiadas.pt as rotas vivem na raiz; na alusiada.pt sob /os-lusiadas. */
+function useBasePath() {
+  return useMemo(() => {
+    const dedicated =
+      typeof window !== "undefined" &&
+      /(^|\.)oslusiadas\.pt$/i.test(window.location.hostname);
+    return dedicated ? "" : "/os-lusiadas";
+  }, []);
+}
+
+function cantoHref(base: string, num: number): string {
+  if (num === 1) {
+    return base || "/";
+  }
+  return `${base}/canto/${num}`;
+}
+
 export default function OsLusiadasPage() {
   const params = useParams();
   const n = Math.min(10, Math.max(1, Number.parseInt(params.n ?? "1", 10) || 1));
+  const base = useBasePath();
+  const { grafia, setGrafia, convert } = useGrafia();
   const [canto, setCanto] = useState<Canto | null>(null);
-  const [notas, setNotas] = useState<Record<string, string>>({});
-  const [selected, setSelected] = useState<number | null>(null);
+  const [copied, setCopied] = useState<number | null>(null);
+  const copyTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     let alive = true;
     setCanto(null);
-    setSelected(null);
-    window.scrollTo(0, 0);
     const cl = cantoLoaders[`../../data/lusiadas/canto${n}.json`];
-    const nl = notaLoaders[`../../data/lusiadas/notas${n}.json`];
-    Promise.all([
-      cl ? cl() : Promise.resolve(null),
-      nl ? nl() : Promise.resolve(null),
-    ]).then(([c, no]) => {
-      if (!alive) {
-        return;
+    (cl ? cl() : Promise.resolve(null)).then((c) => {
+      if (alive) {
+        setCanto((c as { default: Canto } | null)?.default ?? null);
       }
-      setCanto((c as { default: Canto } | null)?.default ?? null);
-      setNotas((no as { default: Record<string, string> } | null)?.default ?? {});
     });
     return () => {
       alive = false;
     };
   }, [n]);
 
-  const selectedNote = selected ? notas[String(selected)] : null;
+  // Endereçabilidade: ao carregar o canto, salta para a estrofe da âncora (#estrofe-N).
+  useEffect(() => {
+    if (!canto) {
+      window.scrollTo(0, 0);
+      return;
+    }
+    const hash = window.location.hash;
+    if (hash.startsWith("#estrofe-")) {
+      requestAnimationFrame(() => {
+        document
+          .getElementById(hash.slice(1))
+          ?.scrollIntoView({ block: "center" });
+      });
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [canto]);
+
+  function copyAnchor(stanza: number) {
+    const url = `${window.location.origin}${cantoHref(base, n)}#estrofe-${stanza}`;
+    navigator.clipboard?.writeText(url).catch(() => {
+      // clipboard indisponível — ignora
+    });
+    window.history.replaceState(null, "", `#estrofe-${stanza}`);
+    setCopied(stanza);
+    if (copyTimer.current) {
+      clearTimeout(copyTimer.current);
+    }
+    copyTimer.current = setTimeout(() => setCopied(null), 1600);
+  }
 
   return (
     <main
-      className="mx-auto max-w-5xl px-6 pt-32 pb-24 sm:pt-40"
+      className="mx-auto max-w-3xl px-6 pt-32 pb-24 sm:pt-40"
       data-nav-theme="light"
     >
       <Seo
-        description="Os Lusíadas de Luiz Vaz de Camões, anotados verso a verso — a epopeia da nação Portugueza, em Portuguez, com mitologia, história e vocabulário explicados."
+        description="Os Lusíadas de Luiz Vaz de Camões, lidos verso a verso nas três grafias da língua — a epopeia da nação Portugueza, para estudar, anotar e debater."
         path={n === 1 ? "/os-lusiadas" : `/os-lusiadas/canto/${n}`}
-        title={`Os Lusíadas — ${ROMANS[n]}${canto ? `: ${canto.titulo}` : ""} | Camões`}
+        title={`Os Lusíadas — Canto ${ROMANS[n]}${canto ? `: ${canto.titulo.replace(/^Canto\s+\w+\s*/, "")}` : ""} | Camões`}
         type="article"
       />
 
@@ -61,12 +108,12 @@ export default function OsLusiadasPage() {
         <p className="font-body text-[12px] text-accent uppercase tracking-[0.3em]">
           Luiz Vaz de Camões
         </p>
-        <h1 className="mt-3 font-display text-[48px] text-primary leading-[1] sm:text-[64px]">
+        <h1 className="mt-3 font-display text-[48px] text-primary leading-[1] sm:text-[60px]">
           Os Lusíadas
         </h1>
         <p className="mx-auto mt-4 max-w-xl font-body text-[16px] text-foreground/65 leading-relaxed">
-          A epopeia da nação Portugueza, anotada verso a verso — em{" "}
-          <strong>Portuguez</strong>, a grafia da Lusíada.
+          A epopeia da nação Portugueza, para ler e estudar verso a verso — nas{" "}
+          <strong>três grafias</strong> da língua.
         </p>
         <Link
           className="mt-4 inline-flex items-center gap-1.5 font-body text-[14px] text-accent transition-all hover:gap-2.5"
@@ -76,8 +123,28 @@ export default function OsLusiadasPage() {
         </Link>
       </header>
 
+      {/* Seletor de grafia */}
+      <div className="mt-7 flex justify-center">
+        <div className="inline-flex rounded-lg border border-border p-0.5">
+          {GRAFIAS.map((g) => (
+            <button
+              className={`rounded-md px-3 py-1.5 font-body text-[13px] transition-colors ${
+                grafia === g.id
+                  ? "bg-accent/15 text-accent"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+              key={g.id}
+              onClick={() => setGrafia(g.id)}
+              type="button"
+            >
+              {g.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Navegação dos cantos */}
-      <nav className="mt-10 flex flex-wrap justify-center gap-2">
+      <nav className="mt-6 flex flex-wrap justify-center gap-2">
         {ROMANS.slice(1).map((r, i) => {
           const num = i + 1;
           const active = num === n;
@@ -89,7 +156,7 @@ export default function OsLusiadasPage() {
                   : "border-border text-muted-foreground hover:border-accent/40 hover:text-foreground"
               }`}
               key={r}
-              to={num === 1 ? "/os-lusiadas" : `/os-lusiadas/canto/${num}`}
+              to={cantoHref(base, num)}
             >
               {r}
             </Link>
@@ -104,85 +171,76 @@ export default function OsLusiadasPage() {
       ) : (
         <>
           <div className="mt-8 border-border/60 border-t pt-8 text-center">
-            <h2 className="font-display text-[28px] text-primary">
-              {canto.titulo}
+            <h2 className="font-display text-[26px] text-primary">
+              {convert(canto.titulo)}
             </h2>
-            <p className="mt-3 flex items-center justify-center gap-1.5 font-body text-[12px] text-muted-foreground">
-              <Sparkles className="h-3.5 w-3.5 text-accent" /> As estrofes
-              assinaladas têm anotação — clique para a ler.
+            <p className="mt-2 font-body text-[12px] text-muted-foreground">
+              {canto.stanzas.length} estrofes · clica no número para ligar a uma
+              estrofe
             </p>
           </div>
 
-          <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_340px]">
-            <div className="space-y-2">
-              {canto.stanzas.map((s) => {
-                const note = notas[String(s.n)];
-                const isSel = selected === s.n;
-                return (
-                  <div key={s.n}>
-                    <button
-                      className={`flex w-full gap-4 rounded-xl border px-4 py-3 text-left transition-colors ${
-                        note
-                          ? "cursor-pointer border-transparent hover:border-accent/30 hover:bg-accent/5"
-                          : "cursor-default border-transparent"
-                      } ${isSel ? "border-accent/40 bg-accent/10" : ""}`}
-                      onClick={
-                        note ? () => setSelected(isSel ? null : s.n) : undefined
-                      }
-                      type="button"
-                    >
-                      <span
-                        className={`shrink-0 pt-0.5 font-display text-[14px] ${
-                          note ? "text-accent" : "text-muted-foreground/50"
-                        }`}
-                      >
-                        {s.n}
-                        {note && <Sparkles className="mt-1 h-3 w-3" />}
-                      </span>
-                      <div className="font-body text-[17px] text-foreground/90 leading-[1.85]">
-                        {s.lines.map((line, i) => (
-                          <p key={i}>{line}</p>
-                        ))}
-                      </div>
-                    </button>
-                    {note && isSel && (
-                      <div className="mt-1 rounded-xl border border-border bg-card p-4 lg:hidden">
-                        {/* biome-ignore lint/security/noDangerouslySetInnerHtml: anotação editorial nossa */}
-                        <div
-                          className="font-body text-[14px] text-foreground/80 leading-relaxed [&_a]:text-accent [&_a]:underline [&_strong]:text-foreground"
-                          dangerouslySetInnerHTML={{ __html: note }}
-                        />
-                      </div>
+          <div className="mt-6 space-y-1">
+            {canto.stanzas.map((s) => (
+              <article
+                className="group flex gap-4 rounded-xl px-3 py-3 transition-colors hover:bg-accent/[0.04] target:bg-accent/10"
+                id={`estrofe-${s.n}`}
+                key={s.n}
+              >
+                <div className="flex shrink-0 flex-col items-center gap-1 pt-1">
+                  <button
+                    aria-label={`Ligar à estrofe ${s.n}`}
+                    className="font-display text-[14px] text-muted-foreground/60 transition-colors hover:text-accent"
+                    onClick={() => copyAnchor(s.n)}
+                    title="Copiar ligação para esta estrofe"
+                    type="button"
+                  >
+                    {s.n}
+                  </button>
+                  <button
+                    aria-label={`Copiar ligação da estrofe ${s.n}`}
+                    className="text-muted-foreground/0 transition-colors group-hover:text-muted-foreground/50 hover:!text-accent"
+                    onClick={() => copyAnchor(s.n)}
+                    type="button"
+                  >
+                    {copied === s.n ? (
+                      <Check className="h-3.5 w-3.5 text-accent" />
+                    ) : (
+                      <Link2 className="h-3.5 w-3.5" />
                     )}
-                  </div>
-                );
-              })}
-            </div>
+                  </button>
+                </div>
+                <div className="font-body text-[17px] text-foreground/90 leading-[1.9]">
+                  {s.lines.map((line, i) => (
+                    <p key={i}>{convert(line)}</p>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
 
-            <aside className="hidden lg:block">
-              <div className="sticky top-28 rounded-2xl border border-border bg-card p-5">
-                <p className="font-body text-[11px] text-accent uppercase tracking-[0.2em]">
-                  Anotação
-                </p>
-                {selectedNote ? (
-                  <>
-                    <p className="mt-2 font-display text-[18px] text-primary">
-                      {ROMANS[n]}, estrofe {selected}
-                    </p>
-                    {/* biome-ignore lint/security/noDangerouslySetInnerHtml: anotação editorial nossa */}
-                    <div
-                      className="mt-2 font-body text-[14px] text-foreground/80 leading-relaxed [&_a]:text-accent [&_a]:underline [&_em]:italic [&_strong]:text-foreground"
-                      dangerouslySetInnerHTML={{ __html: selectedNote }}
-                    />
-                  </>
-                ) : (
-                  <p className="mt-3 font-body text-[14px] text-muted-foreground italic leading-relaxed">
-                    Clique numa estrofe assinalada (✦) para ler a anotação —
-                    mitologia, história e vocabulário, verso a verso.
-                  </p>
-                )}
-              </div>
-            </aside>
+          {/* Navegação inferior entre cantos */}
+          <div className="mt-12 flex items-center justify-between border-border/60 border-t pt-6 font-body text-[14px]">
+            {n > 1 ? (
+              <Link
+                className="text-accent hover:underline"
+                to={cantoHref(base, n - 1)}
+              >
+                ← Canto {ROMANS[n - 1]}
+              </Link>
+            ) : (
+              <span />
+            )}
+            {n < 10 ? (
+              <Link
+                className="text-accent hover:underline"
+                to={cantoHref(base, n + 1)}
+              >
+                Canto {ROMANS[n + 1]} →
+              </Link>
+            ) : (
+              <span />
+            )}
           </div>
         </>
       )}
