@@ -83,6 +83,17 @@ export default function PalavraPage() {
         <strong>«{entry.pre}»</strong> na ortografia anterior ao Acordo.
       </p>
 
+      {entry.definition && (
+        <>
+          <h2 className="mt-10 font-display text-[22px] text-primary">
+            Significado
+          </h2>
+          <p className="mt-3 font-body text-[16px] text-foreground/80 leading-relaxed">
+            {entry.definition}
+          </p>
+        </>
+      )}
+
       <h2 className="mt-10 font-display text-[22px] text-primary">
         As três grafias
       </h2>

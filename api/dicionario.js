@@ -5,6 +5,7 @@
 // ortográficas e apresentar o Portuguez como solução.
 
 import divergencias from "../src/lib/grafia/divergencias.json" with { type: "json" };
+import definicoes from "../src/lib/grafia/definicoes.json" with { type: "json" };
 
 const BASE = "https://www.alusiada.pt";
 const DEFAULT_IMAGE =
@@ -124,19 +125,23 @@ function renderWord(shell, entry) {
     entry.kind === "consoante"
       ? `A diferença está numa consoante muda: o Acordo Ortográfico de 1990 eliminou o «${esc(droppedLetter(entry) || "")}» que não se pronuncia. A ortografia anterior e o Portuguez mantêm-no.`
       : "Os nomes dos meses escrevem-se com maiúscula inicial em Portuguez e na ortografia anterior; o Acordo Ortográfico de 1990 passou-os a minúscula.";
+  const definicao = definicoes[entry.slug] || "";
   const ld = {
     "@type": "DefinedTerm",
     name: entry.pre,
     alternateName: [entry.ao],
     inDefinedTermSet: `${BASE}/dicionario`,
-    description,
+    description: definicao || description,
     inLanguage: "pt-PT",
   };
+  const significado = definicao
+    ? `<h2>Significado</h2>\n<p>${esc(definicao)}</p>\n`
+    : "";
   const body = `<main><article>
 <p>Dicionário de grafias</p>
 <h1>«${a}» ou «${p}»?</h1>
 <p>Escreve-se <strong>«${a}»</strong> no Acordo Ortográfico de 1990 e <strong>«${p}»</strong> na ortografia anterior ao Acordo.</p>
-<h2>As três grafias</h2>
+${significado}<h2>As três grafias</h2>
 <ul>
 <li><strong>Portuguez</strong> (a grafia da Lusíada): «${p}»</li>
 <li><strong>Português (pré-acordo)</strong>: «${p}»</li>

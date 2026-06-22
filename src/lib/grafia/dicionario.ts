@@ -4,6 +4,7 @@
 // Carrega o mesmo `divergencias.json` do conversor (~300 KB) — usado só nas
 // páginas do dicionário (lazy-load), não no bundle principal.
 
+import definicoes from "./definicoes.json";
 import divergencias from "./divergencias.json";
 
 export type DicEntry = {
@@ -13,7 +14,11 @@ export type DicEntry = {
   /** Pré-acordo (= Portuguez no eixo consoante). */
   pre: string;
   kind: "consoante" | "mes";
+  /** Definição (conteúdo nosso, original). Cresce com os lotes. */
+  definition?: string;
 };
+
+const DEFS: Record<string, string> = definicoes;
 
 export function asciiSlug(s: string): string {
   return s
@@ -42,7 +47,7 @@ function build() {
     if (!slug || bySlug.has(slug)) {
       return;
     }
-    const e: DicEntry = { slug, ao, pre, kind };
+    const e: DicEntry = { slug, ao, pre, kind, definition: DEFS[slug] };
     entries.push(e);
     bySlug.set(slug, e);
   };

@@ -72,9 +72,13 @@ Alentejano · Manuelino (estilo) · Lusíadas (feito).
 
 ### Dicionário — definições (track paralelo)
 
-Enriquecer `/dicionario/:slug` com uma **definição** curta por palavra (precisa
-de um campo `definition` no léxico/Convex — montar no 1.º lote deste track).
-Prioridade: palavras de alta procura primeiro. Expandir o sitemap ~30/lote.
+✅ **Montado:** definições em `src/lib/grafia/definicoes.json` (slug → definição
+original, NÃO copiada). Mostradas na página (React + SSR) + no JSON-LD
+(`DefinedTerm.description`). 43 palavras comuns já com definição.
+**Cada lote deste track:** escrever definições para +N palavras divergentes
+(alta procura primeiro) em `definicoes.json` e adicionar os slugs ao sitemap
+(`api/sitemap.js`, ~30/lote). Páginas com definição = ricas e únicas (menos
+"thin", melhor SEO/AEO).
 
 ## Estado
 
