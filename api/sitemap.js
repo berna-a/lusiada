@@ -7,6 +7,7 @@ const STATIC_PATHS = [
   "/arca/lusopedia",
   "/arca/panteao",
   "/dicionario",
+  "/os-lusiadas",
   "/associacao",
   "/sobre/manifesto",
   "/sobre/objectivos",
