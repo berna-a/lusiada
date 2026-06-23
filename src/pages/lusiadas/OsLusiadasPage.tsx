@@ -6,6 +6,7 @@ import {
   Check,
   Link2,
   Loader2,
+  Map,
   MessageSquare,
   Maximize2,
   Minimize2,
@@ -272,6 +273,12 @@ export default function OsLusiadasPage() {
             to={`${base || ""}/plano`}
           >
             <CalendarDays className="h-3.5 w-3.5" /> Plano de 30 dias
+          </Link>
+          <Link
+            className="inline-flex items-center gap-1.5 font-body text-[13px] text-muted-foreground transition-colors hover:text-accent"
+            to={`${base || ""}/viagem`}
+          >
+            <Map className="h-3.5 w-3.5" /> A Viagem
           </Link>
         </div>
       </header>

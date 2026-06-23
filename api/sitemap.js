@@ -59,7 +59,7 @@ export default async function handler(req, res) {
   if (/(^|\.)oslusiadas\.pt$/i.test(host)) {
     const LUS_BASE = "https://oslusiadas.pt";
     const paths = ["/", "/canto/2", "/canto/3", "/canto/4", "/canto/5",
-      "/canto/6", "/canto/7", "/canto/8", "/canto/9", "/canto/10", "/plano"];
+      "/canto/6", "/canto/7", "/canto/8", "/canto/9", "/canto/10", "/plano", "/viagem"];
     const xmlL = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${paths.map((p) => `  <url><loc>${LUS_BASE}${p}</loc><lastmod>${today}</lastmod></url>`).join("\n")}
