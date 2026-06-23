@@ -6,6 +6,8 @@ import {
   Link2,
   Loader2,
   MessageSquare,
+  Maximize2,
+  Minimize2,
   Share2,
   Users,
 } from "lucide-react";
@@ -68,6 +70,7 @@ type Selection = {
   y: number;
   text: string;
   stanza: number;
+  verse?: number;
 };
 
 export default function OsLusiadasPage() {
@@ -81,6 +84,7 @@ export default function OsLusiadasPage() {
   const [feed, setFeed] = useState<FeedTarget | null>(null);
   const counts = useQuery(api.lusiadas.countsByCanto, { canto: n }) ?? {};
   const [sel, setSel] = useState<Selection | null>(null);
+  const [focus, setFocus] = useState(false);
   const readerRef = useRef<HTMLDivElement>(null);
   const toolbarRef = useRef<HTMLDivElement>(null);
 
@@ -102,12 +106,14 @@ export default function OsLusiadasPage() {
       setSel(null);
       return;
     }
+    const verseEl = host?.closest<HTMLElement>("[data-verse]");
     const rect = s.getRangeAt(0).getBoundingClientRect();
     setSel({
       x: rect.left + rect.width / 2,
       y: rect.top,
       text,
       stanza: Number(stanzaEl.id.replace("estrofe-", "")),
+      verse: verseEl ? Number(verseEl.dataset.verse) : undefined,
     });
   }
 
@@ -127,11 +133,20 @@ export default function OsLusiadasPage() {
     };
   }, []);
 
-  function shareStanza(stanza: number) {
+  function share(excerpt: string | undefined, stanza: number) {
     const url = `${window.location.origin}${cantoHref(base, n)}#estrofe-${stanza}`;
-    navigator.clipboard?.writeText(url).catch(() => {
-      // ignora
-    });
+    const text = excerpt
+      ? `«${excerpt}» — Os Lusíadas, Canto ${ROMANS[n]}`
+      : `Os Lusíadas, Canto ${ROMANS[n]}`;
+    if (typeof navigator.share === "function") {
+      navigator.share({ title: "Os Lusíadas", text, url }).catch(() => {
+        // partilha cancelada — ignora
+      });
+    } else {
+      navigator.clipboard?.writeText(`${text}\n${url}`).catch(() => {
+        // ignora
+      });
+    }
     setSel(null);
   }
 
@@ -192,7 +207,7 @@ export default function OsLusiadasPage() {
         type="article"
       />
 
-      <header className="text-center">
+      <header className={`text-center ${focus ? "hidden" : ""}`}>
         <p className="font-body text-[12px] text-accent uppercase tracking-[0.3em]">
           Luiz Vaz de Camões
         </p>
@@ -228,7 +243,7 @@ export default function OsLusiadasPage() {
       </header>
 
       {/* Seletor de grafia */}
-      <div className="mt-7 flex justify-center">
+      <div className={`mt-7 flex justify-center ${focus ? "hidden" : ""}`}>
         <div className="inline-flex rounded-lg border border-border p-0.5">
           {GRAFIAS.map((g) => (
             <button
@@ -248,7 +263,9 @@ export default function OsLusiadasPage() {
       </div>
 
       {/* Navegação dos cantos */}
-      <nav className="mt-6 flex flex-wrap justify-center gap-2">
+      <nav
+        className={`mt-6 flex flex-wrap justify-center gap-2 ${focus ? "hidden" : ""}`}
+      >
         {ROMANS.slice(1).map((r, i) => {
           const num = i + 1;
           const active = num === n;
@@ -278,7 +295,9 @@ export default function OsLusiadasPage() {
             <h2 className="font-display text-[26px] text-primary">
               {convert(canto.titulo)}
             </h2>
-            <p className="mt-2 font-body text-[12px] text-muted-foreground">
+            <p
+              className={`mt-2 font-body text-[12px] text-muted-foreground ${focus ? "hidden" : ""}`}
+            >
               {canto.stanzas.length} estrofes · clica no número para ligar a uma
               estrofe
             </p>
@@ -334,7 +353,9 @@ export default function OsLusiadasPage() {
                       )}
                     </button>
                   </div>
-                  <div className="min-w-0 flex-1 font-body text-[17px] text-foreground/90 leading-[1.9]">
+                  <div
+                    className={`min-w-0 flex-1 font-body text-foreground/90 ${focus ? "text-[18px] leading-[2.15]" : "text-[17px] leading-[1.9]"}`}
+                  >
                     {s.lines.map((line, i) => {
                       const verseTarget = `${stanzaTarget}:v${i + 1}`;
                       const verseCount = counts[verseTarget] ?? 0;
@@ -343,7 +364,9 @@ export default function OsLusiadasPage() {
                           className="group/v -mx-2 flex items-center gap-2 rounded px-2 transition-colors hover:bg-accent/[0.05]"
                           key={i}
                         >
-                          <p className="flex-1">{convert(line)}</p>
+                          <p className="flex-1" data-verse={i + 1}>
+                            {convert(line)}
+                          </p>
                           <button
                             aria-label={`Anotações do verso ${i + 1}`}
                             className="shrink-0"
@@ -377,7 +400,7 @@ export default function OsLusiadasPage() {
           </div>
 
           {/* Discussão do canto inteiro */}
-          <div className="mt-10 flex justify-center">
+          <div className={`mt-10 flex justify-center ${focus ? "hidden" : ""}`}>
             <button
               className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 font-body text-[14px] text-muted-foreground transition-colors hover:border-accent/40 hover:text-accent"
               onClick={() =>
@@ -399,7 +422,9 @@ export default function OsLusiadasPage() {
           </div>
 
           {/* Navegação inferior entre cantos */}
-          <div className="mt-10 flex items-center justify-between border-border/60 border-t pt-6 font-body text-[14px]">
+          <div
+            className={`mt-10 flex items-center justify-between border-border/60 border-t pt-6 font-body text-[14px] ${focus ? "hidden" : ""}`}
+          >
             {n > 1 ? (
               <Link
                 className="text-accent hover:underline"
@@ -424,6 +449,25 @@ export default function OsLusiadasPage() {
         </>
       )}
 
+      {/* Modo de leitura focado */}
+      {canto && (
+        <button
+          className="fixed right-4 bottom-4 z-30 inline-flex items-center gap-1.5 rounded-full border border-border bg-background/90 px-3.5 py-2 font-body text-[13px] text-muted-foreground shadow-md backdrop-blur transition-colors hover:text-accent"
+          onClick={() => setFocus((f) => !f)}
+          type="button"
+        >
+          {focus ? (
+            <>
+              <Minimize2 className="h-4 w-4" /> Sair da leitura
+            </>
+          ) : (
+            <>
+              <Maximize2 className="h-4 w-4" /> Modo de leitura
+            </>
+          )}
+        </button>
+      )}
+
       {/* Barra de selecção — palavra/passagem seleccionada */}
       {sel && (
         <div
@@ -443,12 +487,18 @@ export default function OsLusiadasPage() {
             <button
               className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 font-body text-[13px] text-foreground transition-colors hover:bg-accent/10 hover:text-accent"
               onClick={() => {
-                setFeed({
-                  target: `c${n}:e${sel.stanza}`,
-                  canto: n,
-                  excerpt: sel.text,
-                  label: `Canto ${ROMANS[n]} · estrofe ${sel.stanza}`,
-                });
+                const tokens = sel.text.split(/\s+/).filter(Boolean);
+                const v = sel.verse;
+                let target = `c${n}:e${sel.stanza}`;
+                let label = `Canto ${ROMANS[n]} · estrofe ${sel.stanza}`;
+                if (v && tokens.length === 1) {
+                  target = `c${n}:e${sel.stanza}:v${v}:w-${wordSlug(tokens[0])}`;
+                  label = `Canto ${ROMANS[n]} · estrofe ${sel.stanza} · «${tokens[0]}»`;
+                } else if (v) {
+                  target = `c${n}:e${sel.stanza}:v${v}`;
+                  label = `Canto ${ROMANS[n]} · estrofe ${sel.stanza} · verso ${v}`;
+                }
+                setFeed({ target, canto: n, excerpt: sel.text, label });
                 setSel(null);
               }}
               type="button"
@@ -457,7 +507,7 @@ export default function OsLusiadasPage() {
             </button>
             <button
               className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 font-body text-[13px] text-foreground transition-colors hover:bg-accent/10 hover:text-accent"
-              onClick={() => shareStanza(sel.stanza)}
+              onClick={() => share(sel.text, sel.stanza)}
               type="button"
             >
               <Share2 className="h-3.5 w-3.5" /> Partilhar
