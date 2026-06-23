@@ -114,12 +114,21 @@ async function render(req) {
     ]
   );
 
-  return new ImageResponse(tree, {
+  const img = new ImageResponse(tree, {
     width: 1200,
     height: 630,
     fonts: [
       { name: "Cinzel", data: cinzel, weight: 400, style: "normal" },
       { name: "EBGaramond", data: garamond, weight: 400, style: "normal" },
     ],
+  });
+  // Força a renderização agora, para que erros sejam apanhados pelo try/catch.
+  const buf = await img.arrayBuffer();
+  return new Response(buf, {
+    status: 200,
+    headers: {
+      "content-type": "image/png",
+      "cache-control": "public, max-age=86400, s-maxage=86400",
+    },
   });
 }
