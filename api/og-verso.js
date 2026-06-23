@@ -9,6 +9,17 @@ function h(type, style, children) {
 }
 
 export default async function handler(req) {
+  try {
+    return await render(req);
+  } catch (err) {
+    return new Response(`OG error: ${err?.stack || err?.message || err}`, {
+      status: 500,
+      headers: { "content-type": "text/plain; charset=utf-8" },
+    });
+  }
+}
+
+async function render(req) {
   const url = new URL(req.url);
   const { origin } = url;
   const text = (url.searchParams.get("t") || "Os Lusíadas").slice(0, 240);
@@ -49,7 +60,7 @@ export default async function handler(req) {
       h(
         "div",
         {
-          flex: 1,
+          flexGrow: 1,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -107,7 +118,7 @@ export default async function handler(req) {
     width: 1200,
     height: 630,
     fonts: [
-      { name: "Cinzel", data: cinzel, weight: 700, style: "normal" },
+      { name: "Cinzel", data: cinzel, weight: 400, style: "normal" },
       { name: "EBGaramond", data: garamond, weight: 400, style: "normal" },
     ],
   });
