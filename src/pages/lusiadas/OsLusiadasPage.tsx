@@ -84,9 +84,28 @@ export default function OsLusiadasPage() {
   const [feed, setFeed] = useState<FeedTarget | null>(null);
   const counts = useQuery(api.lusiadas.countsByCanto, { canto: n }) ?? {};
   const [sel, setSel] = useState<Selection | null>(null);
-  const [focus, setFocus] = useState(false);
+  const [focus, setFocus] = useState(() => {
+    try {
+      return localStorage.getItem("lus-reading") === "1";
+    } catch {
+      return false;
+    }
+  });
   const readerRef = useRef<HTMLDivElement>(null);
   const toolbarRef = useRef<HTMLDivElement>(null);
+
+  // Modo de leitura: guarda a preferência e esconde a navegação global do site.
+  useEffect(() => {
+    try {
+      localStorage.setItem("lus-reading", focus ? "1" : "0");
+    } catch {
+      // ignora
+    }
+    document.body.dataset.reading = focus ? "1" : "";
+    return () => {
+      document.body.dataset.reading = "";
+    };
+  }, [focus]);
 
   // Barra de selecção: ao seleccionar texto no poema, mostra acções.
   function onReaderMouseUp() {
@@ -202,7 +221,7 @@ export default function OsLusiadasPage() {
 
   return (
     <main
-      className="mx-auto max-w-3xl px-6 pt-32 pb-24 sm:pt-40"
+      className={`mx-auto max-w-3xl px-6 pb-24 ${focus ? "pt-16" : "pt-32 sm:pt-40"}`}
       data-nav-theme="light"
     >
       <Seo
@@ -311,6 +330,7 @@ export default function OsLusiadasPage() {
           <div
             className="mt-6 space-y-1"
             onMouseUp={onReaderMouseUp}
+            onTouchEnd={() => setTimeout(onReaderMouseUp, 50)}
             ref={readerRef}
           >
             {canto.stanzas.map((s) => {

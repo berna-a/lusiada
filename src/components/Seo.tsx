@@ -58,7 +58,18 @@ export function Seo({
   jsonLd,
   noindex = false,
 }: SeoProps) {
-  const url = `${SITE}${path}`;
+  // No domínio dedicado oslusiadas.pt, as páginas do leitor canonicalizam para
+  // si próprias (não para a alusiada.pt) — caso contrário não rankeiam.
+  const onLusiadas =
+    typeof window !== "undefined" &&
+    /(^|\.)oslusiadas\.pt$/i.test(window.location.hostname);
+  let site = SITE;
+  let canonPath = path;
+  if (onLusiadas && path.startsWith("/os-lusiadas")) {
+    site = "https://oslusiadas.pt";
+    canonPath = path === "/os-lusiadas" ? "/" : path.replace(/^\/os-lusiadas/, "");
+  }
+  const url = `${site}${canonPath}`;
   const graph = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
   const ld = JSON.stringify({
     "@context": "https://schema.org",
