@@ -1,10 +1,28 @@
-import { BookOpen, CalendarDays, ChevronRight, Compass, Play, Search } from "lucide-react";
+import { useQuery } from "convex/react";
+import {
+  Bookmark,
+  BookOpen,
+  CalendarDays,
+  ChevronRight,
+  Compass,
+  Play,
+  Search,
+  Users,
+} from "lucide-react";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Seo } from "@/components/Seo";
 import { EstrofeDoDia } from "@/components/lusiadas/EstrofeDoDia";
-import { cantoHref, getLastRead, lusiadasBase } from "@/lib/lusiadas/nav";
+import { timeAgo } from "@/lib/lusiadas/format";
+import {
+  cantoHref,
+  getLastRead,
+  lusiadasBase,
+  targetHref,
+} from "@/lib/lusiadas/nav";
 import { loadPlano, PLAN_DAYS } from "@/lib/lusiadas/plano";
+import { useSaved } from "@/lib/lusiadas/saved";
+import { api } from "../../../convex/_generated/api";
 
 const ROMANS = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
@@ -14,6 +32,8 @@ export default function InicioPage() {
   const plano = useMemo(loadPlano, []);
   const planoDone = plano.startedAt ? plano.done.length : null;
   const planoPct = planoDone === null ? 0 : Math.round((planoDone / PLAN_DAYS) * 100);
+  const saved = useSaved();
+  const activity = useQuery(api.lusiadas.recentActivity, {});
 
   return (
     <main
@@ -119,6 +139,79 @@ export default function InicioPage() {
           </Link>
         ))}
       </div>
+
+      {/* Guardados — só quando há */}
+      {saved.length > 0 && (
+        <section className="mt-10">
+          <div className="flex items-center justify-between">
+            <h2 className="flex items-center gap-1.5 font-body text-[12px] text-muted-foreground uppercase tracking-[0.2em]">
+              <Bookmark className="h-3.5 w-3.5" /> Guardados
+            </h2>
+            <Link className="font-body text-[12px] text-accent hover:underline" to={`${base}/perfil`}>
+              Ver tudo →
+            </Link>
+          </div>
+          <ul className="mt-3 space-y-2">
+            {[...saved]
+              .sort((a, b) => b.ts - a.ts)
+              .slice(0, 3)
+              .map((s) => (
+                <li key={`${s.c}-${s.e}`}>
+                  <Link
+                    className="block rounded-xl border border-border bg-card px-4 py-3 transition-colors hover:border-accent/40"
+                    to={`${cantoHref(base, s.c)}#estrofe-${s.e}`}
+                  >
+                    <span className="block truncate font-body text-[15px] text-foreground/90 italic">
+                      «{s.preview}»
+                    </span>
+                    <span className="block font-body text-[12px] text-muted-foreground">
+                      Canto {ROMANS[s.c]} · estrofe {s.e}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+          </ul>
+        </section>
+      )}
+
+      {/* Comunidade — só quando há atividade */}
+      {activity && activity.length > 0 && (
+        <section className="mt-10">
+          <div className="flex items-center justify-between">
+            <h2 className="flex items-center gap-1.5 font-body text-[12px] text-muted-foreground uppercase tracking-[0.2em]">
+              <Users className="h-3.5 w-3.5" /> Na comunidade
+            </h2>
+            <Link className="font-body text-[12px] text-accent hover:underline" to={`${base}/comunidade`}>
+              Ver tudo →
+            </Link>
+          </div>
+          <ul className="mt-3 space-y-2">
+            {activity.slice(0, 3).map((a) => (
+              <li key={a._id}>
+                <Link
+                  className="block rounded-xl border border-border bg-card px-4 py-3 transition-colors hover:border-accent/40"
+                  to={targetHref(base, a.target)}
+                >
+                  <span className="flex items-center gap-2 font-body text-[12px] text-muted-foreground">
+                    <span
+                      className={`rounded-full px-2 py-0.5 ${
+                        a.kind === "sense" ? "bg-accent/10 text-accent" : "bg-muted text-foreground/70"
+                      }`}
+                    >
+                      {a.kind === "sense" ? "Sentido" : "Anotação"}
+                    </span>
+                    <span className="truncate">{a.label}</span>
+                    <span className="ml-auto shrink-0">{timeAgo(a.createdAt)}</span>
+                  </span>
+                  <span className="mt-1 block font-body text-[14px] text-foreground/85 leading-relaxed">
+                    {a.body.length > 130 ? `${a.body.slice(0, 130)}…` : a.body}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <p className="mt-12 text-center font-body text-[12px] text-muted-foreground/70">
         <span className="font-display tracking-[0.15em]">Os Lusíadas</span> · um
