@@ -2,6 +2,7 @@ import { useQuery } from "convex/react";
 import {
   BookOpen,
   BookText,
+  CalendarDays,
   Check,
   Link2,
   Loader2,
@@ -14,6 +15,7 @@ import {
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Seo } from "@/components/Seo";
+import { EstrofeDoDia } from "@/components/lusiadas/EstrofeDoDia";
 import {
   type FeedTarget,
   LusiadasFeed,
@@ -250,7 +252,7 @@ export default function OsLusiadasPage() {
         >
           <BookOpen className="h-4 w-4" /> Sobre a obra, na Lusopédia →
         </Link>
-        <div className="mt-3">
+        <div className="mt-3 flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
           <button
             className="inline-flex items-center gap-1.5 font-body text-[13px] text-muted-foreground transition-colors hover:text-accent"
             onClick={() =>
@@ -265,8 +267,16 @@ export default function OsLusiadasPage() {
               </span>
             ) : null}
           </button>
+          <Link
+            className="inline-flex items-center gap-1.5 font-body text-[13px] text-muted-foreground transition-colors hover:text-accent"
+            to={`${base || ""}/plano`}
+          >
+            <CalendarDays className="h-3.5 w-3.5" /> Plano de 30 dias
+          </Link>
         </div>
       </header>
+
+      {n === 1 && !focus && <EstrofeDoDia />}
 
       {/* Seletor de grafia */}
       <div className={`mt-7 flex justify-center ${focus ? "hidden" : ""}`}>
