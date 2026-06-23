@@ -24,3 +24,12 @@ createRoot(document.getElementById("root")!).render(
     <App />
   </ConvexAuthProvider>
 );
+
+// PWA: regista o service worker (instalável + leitura offline).
+if ("serviceWorker" in navigator && import.meta.env.PROD) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch(() => {
+      // sem service worker — a app funciona na mesma online
+    });
+  });
+}

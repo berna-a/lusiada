@@ -11,6 +11,7 @@
     { "source": "/dicionario", "destination": "/api/dicionario" },
     { "source": "/dicionario/:slug", "destination": "/api/dicionario?slug=:slug" },
     { "source": "/partilha", "destination": "/api/share-verso" },
+    { "source": "/manifest.webmanifest", "destination": "/api/manifest" },
     { "source": "/", "has": [{ "type": "host", "value": "(www\\.)?oslusiadas\\.pt" }], "destination": "/api/os-lusiadas?c=1" },
     { "source": "/canto/:n", "has": [{ "type": "host", "value": "(www\\.)?oslusiadas\\.pt" }], "destination": "/api/os-lusiadas?c=:n" },
     { "source": "/((?!.*\\.).*)", "destination": "/index.html" }
