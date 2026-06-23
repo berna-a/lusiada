@@ -134,7 +134,12 @@ export default function OsLusiadasPage() {
   }, []);
 
   function share(excerpt: string | undefined, stanza: number) {
-    const url = `${window.location.origin}${cantoHref(base, n)}#estrofe-${stanza}`;
+    // URL de partilha com cartão social (imagem) — servida por /api/share-verso.
+    const params = new URLSearchParams({ c: String(n), e: String(stanza) });
+    if (excerpt) {
+      params.set("t", excerpt);
+    }
+    const url = `${window.location.origin}/partilha?${params.toString()}`;
     const text = excerpt
       ? `«${excerpt}» — Os Lusíadas, Canto ${ROMANS[n]}`
       : `Os Lusíadas, Canto ${ROMANS[n]}`;
