@@ -22,6 +22,16 @@ export function cantoHref(base: string, n: number): string {
   return n === 1 ? base : `${base}/canto/${n}`;
 }
 
+/** Liga um target de anotação ("c5:e40:v2") à estrofe no leitor. */
+export function targetHref(base: string, target: string): string {
+  const c = Number(target.match(/^c(\d+)/)?.[1] ?? 0);
+  const e = target.match(/:e(\d+)/)?.[1];
+  if (!c) {
+    return cantoHref(base, 1);
+  }
+  return `${cantoHref(base, c)}${e ? `#estrofe-${e}` : ""}`;
+}
+
 /* Última leitura (para "Continuar a leitura" no hub). */
 
 export function setLastRead(canto: number) {

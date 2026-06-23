@@ -104,6 +104,30 @@ export const listMine = query({
   },
 });
 
+/** Atividade recente da comunidade — últimas anotações/sentidos em toda a obra. */
+export const recentActivity = query({
+  args: {},
+  handler: async (ctx) => {
+    const posts = await ctx.db.query("lusiadas_posts").order("desc").take(60);
+    return posts
+      .filter((p) => !p.is_removed)
+      .slice(0, 40)
+      .map((p) => ({
+        _id: p._id,
+        target: p.target,
+        canto: p.canto,
+        label: describeTarget(p.target),
+        authorName: p.author_name ?? null,
+        body: p.body,
+        excerpt: p.excerpt ?? null,
+        kind: p.kind === "sense" ? "sense" : "note",
+        verified: Boolean(p.is_verified),
+        upvotes: p.upvotes,
+        createdAt: p._creationTime,
+      }));
+  },
+});
+
 /** Contagem de anotações por target dentro de um canto (para os marcadores). */
 export const countsByCanto = query({
   args: { canto: v.number() },

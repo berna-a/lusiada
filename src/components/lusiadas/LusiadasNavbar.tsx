@@ -21,6 +21,11 @@ export function LusiadasNavbar() {
       to: `${base}/explorar`,
       active: pathname.endsWith("/explorar") || pathname.endsWith("/viagem"),
     },
+    {
+      label: "Comunidade",
+      to: `${base}/comunidade`,
+      active: pathname.endsWith("/comunidade"),
+    },
     { label: "Plano", to: `${base}/plano`, active: pathname.endsWith("/plano") },
     { label: "Dicionário", to: "/dicionario", active: pathname.startsWith("/dicionario") },
   ];

@@ -10,22 +10,17 @@ import {
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Seo } from "@/components/Seo";
-import { cantoHref, getLastRead, lusiadasBase } from "@/lib/lusiadas/nav";
+import {
+  cantoHref,
+  getLastRead,
+  lusiadasBase,
+  targetHref,
+} from "@/lib/lusiadas/nav";
 import { loadPlano, PLAN_DAYS } from "@/lib/lusiadas/plano";
 import { getVisited, removeSaved, useSaved } from "@/lib/lusiadas/saved";
 import { api } from "../../../convex/_generated/api";
 
 const ROMANS = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
-
-/** Liga um target de anotação ("c5:e40:v2") à estrofe correspondente no leitor. */
-function targetHref(base: string, target: string): string {
-  const c = Number(target.match(/^c(\d+)/)?.[1] ?? 0);
-  const e = target.match(/:e(\d+)/)?.[1];
-  if (!c) {
-    return cantoHref(base, 1);
-  }
-  return `${cantoHref(base, c)}${e ? `#estrofe-${e}` : ""}`;
-}
 
 export default function PerfilPage() {
   const base = useMemo(lusiadasBase, []);
