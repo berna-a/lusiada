@@ -1,3 +1,4 @@
+import { Search } from "lucide-react";
 import { useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cantoHref, lusiadasBase } from "@/lib/lusiadas/nav";
@@ -15,7 +16,11 @@ export function LusiadasNavbar() {
 
   const links = [
     { label: "Ler", to: cantoHref(base, 1), active: isReader },
-    { label: "A Viagem", to: `${base}/viagem`, active: pathname.endsWith("/viagem") },
+    {
+      label: "Explorar",
+      to: `${base}/explorar`,
+      active: pathname.endsWith("/explorar") || pathname.endsWith("/viagem"),
+    },
     { label: "Plano", to: `${base}/plano`, active: pathname.endsWith("/plano") },
     { label: "Dicionário", to: "/dicionario", active: pathname.startsWith("/dicionario") },
   ];
@@ -47,6 +52,17 @@ export function LusiadasNavbar() {
                 {l.label}
               </Link>
             ))}
+            <Link
+              aria-label="Procurar na obra"
+              className={`shrink-0 transition-colors ${
+                pathname.endsWith("/procurar")
+                  ? "text-accent"
+                  : "text-primary/75 hover:text-primary"
+              }`}
+              to={`${base}/procurar`}
+            >
+              <Search className="h-[18px] w-[18px]" />
+            </Link>
           </div>
         </div>
       </div>

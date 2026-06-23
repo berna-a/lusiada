@@ -1,4 +1,4 @@
-import { BookOpen, CalendarDays, ChevronRight, Map, Play } from "lucide-react";
+import { BookOpen, CalendarDays, ChevronRight, Compass, Play, Search } from "lucide-react";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Seo } from "@/components/Seo";
@@ -102,34 +102,22 @@ export default function InicioPage() {
       </Link>
 
       {/* Atalhos */}
-      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <Link
-          className="flex flex-col items-center gap-1.5 rounded-2xl border border-border bg-card p-4 text-center transition-colors hover:border-accent/40"
-          to={`${base}/viagem`}
-        >
-          <Map className="h-5 w-5 text-accent" />
-          <span className="font-body text-[13px] text-foreground/80">
-            A Viagem
-          </span>
-        </Link>
-        <Link
-          className="flex flex-col items-center gap-1.5 rounded-2xl border border-border bg-card p-4 text-center transition-colors hover:border-accent/40"
-          to="/dicionario"
-        >
-          <BookOpen className="h-5 w-5 text-accent" />
-          <span className="font-body text-[13px] text-foreground/80">
-            Dicionário
-          </span>
-        </Link>
-        <Link
-          className="col-span-2 flex flex-col items-center gap-1.5 rounded-2xl border border-border bg-card p-4 text-center transition-colors hover:border-accent/40 sm:col-span-1"
-          to="/arca/lusopedia/os-lusiadas"
-        >
-          <BookOpen className="h-5 w-5 text-accent" />
-          <span className="font-body text-[13px] text-foreground/80">
-            Sobre a obra
-          </span>
-        </Link>
+      <div className="mt-4 grid grid-cols-2 gap-3">
+        {[
+          { to: `${base}/explorar`, icon: Compass, label: "Explorar" },
+          { to: `${base}/procurar`, icon: Search, label: "Procurar" },
+          { to: "/dicionario", icon: BookOpen, label: "Dicionário" },
+          { to: "/arca/lusopedia/os-lusiadas", icon: BookOpen, label: "Sobre a obra" },
+        ].map(({ to, icon: Icon, label }) => (
+          <Link
+            className="flex flex-col items-center gap-1.5 rounded-2xl border border-border bg-card p-4 text-center transition-colors hover:border-accent/40"
+            key={label}
+            to={to}
+          >
+            <Icon className="h-5 w-5 text-accent" />
+            <span className="font-body text-[13px] text-foreground/80">{label}</span>
+          </Link>
+        ))}
       </div>
 
       <p className="mt-12 text-center font-body text-[12px] text-muted-foreground/70">

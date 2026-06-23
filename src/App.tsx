@@ -36,6 +36,8 @@ import PalavraPage from "@/pages/dicionario/PalavraPage";
 import InicioPage from "@/pages/lusiadas/InicioPage";
 import OsLusiadasPage from "@/pages/lusiadas/OsLusiadasPage";
 import PlanoPage from "@/pages/lusiadas/PlanoPage";
+import ProcurarPage from "@/pages/lusiadas/ProcurarPage";
+import ExplorarPage from "@/pages/lusiadas/ExplorarPage";
 import ViagemPage from "@/pages/lusiadas/ViagemPage";
 
 import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
@@ -99,6 +101,10 @@ const App = () => (
             <Route path="/plano" element={<PlanoPage />} />
             <Route path="/os-lusiadas/viagem" element={<ViagemPage />} />
             <Route path="/viagem" element={<ViagemPage />} />
+            <Route path="/os-lusiadas/procurar" element={<ProcurarPage />} />
+            <Route path="/procurar" element={<ProcurarPage />} />
+            <Route path="/os-lusiadas/explorar" element={<ExplorarPage />} />
+            <Route path="/explorar" element={<ExplorarPage />} />
             <Route path="/arca/lugares" element={<LugaresPage />} />
             <Route path="/arca/lugares/:id" element={<LugarPage />} />
             <Route path="/arca/memorias" element={<MemoriasPage />} />
