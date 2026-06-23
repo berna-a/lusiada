@@ -262,7 +262,8 @@ export default defineSchema({
     report_count: v.optional(v.number()),
   })
     .index("by_target", ["target"])
-    .index("by_canto", ["canto"]),
+    .index("by_canto", ["canto"])
+    .index("by_author", ["author_id"]),
 
   lusiadas_post_votes: defineTable({
     post_id: v.id("lusiadas_posts"),

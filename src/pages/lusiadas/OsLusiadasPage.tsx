@@ -1,5 +1,7 @@
 import { useQuery } from "convex/react";
 import {
+  Bookmark,
+  BookmarkCheck,
   BookOpen,
   BookText,
   CalendarDays,
@@ -24,7 +26,33 @@ import {
 import { useGrafia } from "@/lib/grafia/store";
 import type { Grafia } from "@/lib/grafia/lexicon";
 import { cantoHref, lusiadasBase, setLastRead } from "@/lib/lusiadas/nav";
+import { markVisited, toggleSaved, useIsSaved } from "@/lib/lusiadas/saved";
 import { api } from "../../../convex/_generated/api";
+
+/** Botão de guardar uma estrofe (favorito local ao dispositivo). */
+function SaveButton({ c, e, preview }: { c: number; e: number; preview: string }) {
+  const saved = useIsSaved(c, e);
+  return (
+    <button
+      aria-label={saved ? `Remover estrofe ${e} dos guardados` : `Guardar estrofe ${e}`}
+      aria-pressed={saved}
+      className={`transition-colors hover:!text-accent ${
+        saved
+          ? "text-accent"
+          : "text-muted-foreground/0 group-hover:text-muted-foreground/50"
+      }`}
+      onClick={() => toggleSaved(c, e, preview)}
+      title={saved ? "Guardada" : "Guardar"}
+      type="button"
+    >
+      {saved ? (
+        <BookmarkCheck className="h-3.5 w-3.5" />
+      ) : (
+        <Bookmark className="h-3.5 w-3.5" />
+      )}
+    </button>
+  );
+}
 
 const cantoLoaders = import.meta.glob("../../data/lusiadas/canto*.json");
 
@@ -167,6 +195,7 @@ export default function OsLusiadasPage() {
     let alive = true;
     setCanto(null);
     setLastRead(n);
+    markVisited(n);
     const cl = cantoLoaders[`../../data/lusiadas/canto${n}.json`];
     (cl ? cl() : Promise.resolve(null)).then((c) => {
       if (alive) {
@@ -399,6 +428,7 @@ export default function OsLusiadasPage() {
                         <Link2 className="h-3.5 w-3.5" />
                       )}
                     </button>
+                    <SaveButton c={n} e={s.n} preview={convert(s.lines[0] ?? "")} />
                   </div>
                   <div
                     className={`min-w-0 flex-1 font-body text-foreground/90 ${focus ? "text-[18px] leading-[2.15]" : "text-[17px] leading-[1.9]"}`}

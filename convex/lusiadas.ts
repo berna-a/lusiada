@@ -73,6 +73,37 @@ export const listByTarget = query({
   },
 });
 
+/** As anotações/sentidos do próprio utilizador (para o Perfil). Vazio se não autenticado. */
+export const listMine = query({
+  args: {},
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      return [];
+    }
+    const posts = await ctx.db
+      .query("lusiadas_posts")
+      .withIndex("by_author", (q) => q.eq("author_id", userId))
+      .collect();
+    return posts
+      .filter((p) => !p.is_removed)
+      .sort((a, b) => b._creationTime - a._creationTime)
+      .slice(0, 100)
+      .map((p) => ({
+        _id: p._id,
+        target: p.target,
+        canto: p.canto,
+        label: describeTarget(p.target),
+        body: p.body,
+        excerpt: p.excerpt ?? null,
+        kind: p.kind === "sense" ? "sense" : "note",
+        verified: Boolean(p.is_verified),
+        upvotes: p.upvotes,
+        createdAt: p._creationTime,
+      }));
+  },
+});
+
 /** Contagem de anotações por target dentro de um canto (para os marcadores). */
 export const countsByCanto = query({
   args: { canto: v.number() },
