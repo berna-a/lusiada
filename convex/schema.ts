@@ -253,6 +253,10 @@ export default defineSchema({
     body: v.string(),
     // Excerto citado (palavra/verso/passagem seleccionada), quando aplicável.
     excerpt: v.optional(v.union(v.string(), v.null())),
+    // "note" (anotação, default) | "sense" (paráfrase em português moderno).
+    kind: v.optional(v.string()),
+    // Paráfrase oficial validada por um curador/professor.
+    is_verified: v.optional(v.boolean()),
     upvotes: v.number(),
     is_removed: v.optional(v.boolean()),
     report_count: v.optional(v.number()),

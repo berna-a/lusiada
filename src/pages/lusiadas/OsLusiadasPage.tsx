@@ -83,6 +83,8 @@ export default function OsLusiadasPage() {
   const copyTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [feed, setFeed] = useState<FeedTarget | null>(null);
   const counts = useQuery(api.lusiadas.countsByCanto, { canto: n }) ?? {};
+  const senses = useQuery(api.lusiadas.sensesByCanto, { canto: n }) ?? {};
+  const [showSense, setShowSense] = useState(false);
   const [sel, setSel] = useState<Selection | null>(null);
   const [focus, setFocus] = useState(() => {
     try {
@@ -286,6 +288,23 @@ export default function OsLusiadasPage() {
         </div>
       </div>
 
+      {/* Modo Sentido — paráfrase em português moderno (contributo humano) */}
+      <div className="mt-3 flex justify-center">
+        <button
+          className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 font-body text-[13px] transition-colors ${
+            showSense
+              ? "border-accent/50 bg-accent/10 text-accent"
+              : "border-border text-muted-foreground hover:text-foreground"
+          }`}
+          onClick={() => setShowSense((v) => !v)}
+          title="Ver a paráfrase em português moderno, estrofe a estrofe"
+          type="button"
+        >
+          <BookText className="h-3.5 w-3.5" />
+          {showSense ? "Sentido ligado" : "Mostrar o sentido"}
+        </button>
+      </div>
+
       {/* Navegação dos cantos */}
       <nav
         className={`mt-6 flex flex-wrap justify-center gap-2 ${focus ? "hidden" : ""}`}
@@ -336,6 +355,7 @@ export default function OsLusiadasPage() {
             {canto.stanzas.map((s) => {
               const stanzaTarget = `c${n}:e${s.n}`;
               const stanzaCount = counts[stanzaTarget] ?? 0;
+              const sense = senses[stanzaTarget];
               return (
                 <article
                   className="group flex gap-4 rounded-xl px-3 py-3 transition-colors target:bg-accent/10 hover:bg-accent/[0.04]"
@@ -418,6 +438,35 @@ export default function OsLusiadasPage() {
                         </div>
                       );
                     })}
+
+                    {showSense &&
+                      (sense ? (
+                        <div className="mt-3 rounded-lg border-accent/30 border-l-2 bg-accent/[0.05] py-2 pr-3 pl-3">
+                          <p className="font-body text-[14px] text-foreground/75 italic leading-relaxed">
+                            {sense.body}
+                          </p>
+                          <p className="mt-1 font-body text-[11px] text-muted-foreground">
+                            Sentido ·{" "}
+                            {sense.verified
+                              ? "verificado"
+                              : (sense.authorName ?? "comunidade")}
+                          </p>
+                        </div>
+                      ) : (
+                        <button
+                          className="mt-2 font-body text-[12px] text-accent/70 italic transition-colors hover:text-accent"
+                          onClick={() =>
+                            setFeed({
+                              target: stanzaTarget,
+                              canto: n,
+                              label: `Canto ${ROMANS[n]} · estrofe ${s.n}`,
+                            })
+                          }
+                          type="button"
+                        >
+                          + Contribuir com o sentido desta estrofe
+                        </button>
+                      ))}
                   </div>
                 </article>
               );

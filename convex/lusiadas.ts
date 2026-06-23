@@ -62,6 +62,8 @@ export const listByTarget = query({
           authorName: p.author_name ?? null,
           body: p.body,
           excerpt: p.excerpt ?? null,
+          kind: p.kind === "sense" ? "sense" : "note",
+          verified: Boolean(p.is_verified),
           upvotes: p.upvotes,
           hasUpvoted: Boolean(mineVote),
           isMine: userId ? p.author_id === userId : false,
@@ -89,26 +91,28 @@ export const countsByCanto = query({
   },
 });
 
-/** Publica uma anotação/comentário numa unidade. Requer sessão. */
+/** Publica uma anotação ou paráfrase ("sense") numa unidade. Requer sessão. */
 export const addPost = mutation({
   args: {
     target: v.string(),
     canto: v.number(),
     body: v.string(),
     excerpt: v.optional(v.string()),
+    kind: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
-      throw new Error("É preciso iniciar sessão para anotar.");
+      throw new Error("É preciso iniciar sessão para contribuir.");
     }
     const body = args.body.trim();
     if (body.length < 2) {
-      throw new Error("Escreva a sua anotação.");
+      throw new Error("Escreva o seu contributo.");
     }
     if (body.length > MAX_POST) {
-      throw new Error("A anotação é demasiado longa.");
+      throw new Error("O contributo é demasiado longo.");
     }
+    const kind = args.kind === "sense" ? "sense" : "note";
     const user = await ctx.db.get(userId);
     const id = await ctx.db.insert("lusiadas_posts", {
       target: args.target,
@@ -117,9 +121,46 @@ export const addPost = mutation({
       author_name: user?.name ?? user?.email ?? null,
       body,
       excerpt: args.excerpt?.trim().slice(0, MAX_EXCERPT) || null,
+      kind,
       upvotes: 0,
     });
     return { id };
+  },
+});
+
+/** Paráfrase escolhida por estrofe de um canto (verificada > mais votada). */
+export const sensesByCanto = query({
+  args: { canto: v.number() },
+  handler: async (ctx, { canto }) => {
+    const posts = await ctx.db
+      .query("lusiadas_posts")
+      .withIndex("by_canto", (q) => q.eq("canto", canto))
+      .collect();
+    const senses = posts.filter((p) => p.kind === "sense" && !p.is_removed);
+    const best: Record<
+      string,
+      { body: string; authorName: string | null; verified: boolean; score: number }
+    > = {};
+    for (const p of senses) {
+      const score = (p.is_verified ? 1e9 : 0) + p.upvotes;
+      const cur = best[p.target];
+      if (!cur || score > cur.score) {
+        best[p.target] = {
+          body: p.body,
+          authorName: p.author_name ?? null,
+          verified: Boolean(p.is_verified),
+          score,
+        };
+      }
+    }
+    const out: Record<
+      string,
+      { body: string; authorName: string | null; verified: boolean }
+    > = {};
+    for (const [k, v2] of Object.entries(best)) {
+      out[k] = { body: v2.body, authorName: v2.authorName, verified: v2.verified };
+    }
+    return out;
   },
 });
 
@@ -206,6 +247,15 @@ export const adminRemovePost = mutation({
   handler: async (ctx, { postId }) => {
     await requireAdmin(ctx);
     await ctx.db.patch(postId, { is_removed: true });
+  },
+});
+
+/** Admin valida (ou retira) uma paráfrase como oficial. */
+export const adminVerifySense = mutation({
+  args: { postId: v.id("lusiadas_posts"), verified: v.boolean() },
+  handler: async (ctx, { postId, verified }) => {
+    await requireAdmin(ctx);
+    await ctx.db.patch(postId, { is_verified: verified });
   },
 });
 
