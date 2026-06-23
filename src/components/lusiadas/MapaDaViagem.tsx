@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { cantoHref as cantoLink } from "@/lib/lusiadas/nav";
 
 const ROMANS = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
@@ -37,8 +38,7 @@ const LAND = {
 
 export function MapaDaViagem({ base }: { base: string }) {
   const navigate = useNavigate();
-  const cantoHref = (c: number) =>
-    c === 1 ? base || "/" : `${base}/canto/${c}`;
+  const cantoHref = (c: number) => cantoLink(base, c);
 
   return (
     <svg

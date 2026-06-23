@@ -38,13 +38,19 @@ export default async function handler(req, res) {
     Math.max(1, Number.parseInt(u.searchParams.get("c") || "1", 10) || 1)
   );
   const roman = ROMANS[c];
+  const home = u.searchParams.get("home") === "1";
   const path = c === 1 ? "/" : `/canto/${c}`;
   const url = BASE + path;
-  const title = `Os Lusíadas — Canto ${roman} | Luiz Vaz de Camões`;
+  const title = home
+    ? "Os Lusíadas — Luiz Vaz de Camões"
+    : `Os Lusíadas — Canto ${roman} | Luiz Vaz de Camões`;
   const desc =
     "A epopeia da nação Portugueza, de Luiz Vaz de Camões — lida e estudada verso a verso nas três grafias da língua, anotada pela comunidade.";
-  const ogText =
-    c === 1 ? "As armas e os barões assinalados" : `Os Lusíadas — Canto ${roman}`;
+  const ogText = home
+    ? "As armas e os barões assinalados"
+    : c === 1
+      ? "As armas e os barões assinalados"
+      : `Os Lusíadas — Canto ${roman}`;
   const ogImage = `${BASE}/api/og-verso?t=${encodeURIComponent(ogText)}&ref=${encodeURIComponent(`Canto ${roman}`)}`;
 
   const head = [

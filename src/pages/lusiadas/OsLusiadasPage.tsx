@@ -23,6 +23,7 @@ import {
 } from "@/components/lusiadas/LusiadasFeed";
 import { useGrafia } from "@/lib/grafia/store";
 import type { Grafia } from "@/lib/grafia/lexicon";
+import { cantoHref, lusiadasBase, setLastRead } from "@/lib/lusiadas/nav";
 import { api } from "../../../convex/_generated/api";
 
 const cantoLoaders = import.meta.glob("../../data/lusiadas/canto*.json");
@@ -40,23 +41,6 @@ type Canto = {
   titulo: string;
   stanzas: { n: number; lines: string[] }[];
 };
-
-/** No domínio dedicado oslusiadas.pt as rotas vivem na raiz; na alusiada.pt sob /os-lusiadas. */
-function useBasePath() {
-  return useMemo(() => {
-    const dedicated =
-      typeof window !== "undefined" &&
-      /(^|\.)oslusiadas\.pt$/i.test(window.location.hostname);
-    return dedicated ? "" : "/os-lusiadas";
-  }, []);
-}
-
-function cantoHref(base: string, num: number): string {
-  if (num === 1) {
-    return base || "/";
-  }
-  return `${base}/canto/${num}`;
-}
 
 /** Slug ascii de uma palavra, para a ligação ao dicionário. */
 function wordSlug(s: string): string {
@@ -79,7 +63,7 @@ type Selection = {
 export default function OsLusiadasPage() {
   const params = useParams();
   const n = Math.min(10, Math.max(1, Number.parseInt(params.n ?? "1", 10) || 1));
-  const base = useBasePath();
+  const base = useMemo(lusiadasBase, []);
   const { grafia, setGrafia, convert } = useGrafia();
   const [canto, setCanto] = useState<Canto | null>(null);
   const [copied, setCopied] = useState<number | null>(null);
@@ -182,6 +166,7 @@ export default function OsLusiadasPage() {
   useEffect(() => {
     let alive = true;
     setCanto(null);
+    setLastRead(n);
     const cl = cantoLoaders[`../../data/lusiadas/canto${n}.json`];
     (cl ? cl() : Promise.resolve(null)).then((c) => {
       if (alive) {

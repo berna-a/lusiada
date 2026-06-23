@@ -33,6 +33,7 @@ import MemoriasPage from "@/pages/arca/MemoriasPage";
 import ColeccoesPage from "@/pages/arca/ColeccoesPage";
 import DicionarioPage from "@/pages/dicionario/DicionarioPage";
 import PalavraPage from "@/pages/dicionario/PalavraPage";
+import InicioPage from "@/pages/lusiadas/InicioPage";
 import OsLusiadasPage from "@/pages/lusiadas/OsLusiadasPage";
 import PlanoPage from "@/pages/lusiadas/PlanoPage";
 import ViagemPage from "@/pages/lusiadas/ViagemPage";
@@ -53,7 +54,7 @@ function RootRoute() {
   const isLusiadasDomain =
     typeof window !== "undefined" &&
     /(^|\.)oslusiadas\.pt$/i.test(window.location.hostname);
-  return isLusiadasDomain ? <OsLusiadasPage /> : <HomePage />;
+  return isLusiadasDomain ? <InicioPage /> : <HomePage />;
 }
 
 const App = () => (

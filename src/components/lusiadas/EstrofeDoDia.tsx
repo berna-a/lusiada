@@ -2,19 +2,13 @@ import { CalendarDays, Loader2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useGrafia } from "@/lib/grafia/store";
+import { cantoHref, lusiadasBase } from "@/lib/lusiadas/nav";
 import { refDoDia } from "@/lib/lusiadas/plano";
 
 const cantoLoaders = import.meta.glob("../../data/lusiadas/canto*.json");
 const ROMANS = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
 type Canto = { stanzas: { n: number; lines: string[] }[] };
-
-function basePath() {
-  const dedicated =
-    typeof window !== "undefined" &&
-    /(^|\.)oslusiadas\.pt$/i.test(window.location.hostname);
-  return dedicated ? "" : "/os-lusiadas";
-}
 
 /** Cartão "Estrofe do dia" — roda por toda a obra, uma estrofe por dia. */
 export function EstrofeDoDia() {
@@ -38,8 +32,8 @@ export function EstrofeDoDia() {
     };
   }, [ref.canto, ref.stanza]);
 
-  const base = basePath();
-  const href = `${ref.canto === 1 ? base || "/" : `${base}/canto/${ref.canto}`}#estrofe-${ref.stanza}`;
+  const base = lusiadasBase();
+  const href = `${cantoHref(base, ref.canto)}#estrofe-${ref.stanza}`;
 
   return (
     <div className="mx-auto mt-8 max-w-xl rounded-2xl border border-border bg-card p-5">

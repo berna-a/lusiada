@@ -2,20 +2,13 @@ import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Seo } from "@/components/Seo";
 import { EPISODES, MapaDaViagem } from "@/components/lusiadas/MapaDaViagem";
+import { cantoHref as cantoLink, lusiadasBase } from "@/lib/lusiadas/nav";
 
 const ROMANS = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
-function basePath() {
-  const dedicated =
-    typeof window !== "undefined" &&
-    /(^|\.)oslusiadas\.pt$/i.test(window.location.hostname);
-  return dedicated ? "" : "/os-lusiadas";
-}
-
 export default function ViagemPage() {
-  const base = basePath();
-  const cantoHref = (c: number) =>
-    c === 1 ? base || "/" : `${base}/canto/${c}`;
+  const base = lusiadasBase();
+  const cantoHref = (c: number) => cantoLink(base, c);
 
   return (
     <main

@@ -2,6 +2,7 @@ import { ArrowLeft, Check, Play } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Seo } from "@/components/Seo";
+import { cantoHref, lusiadasBase } from "@/lib/lusiadas/nav";
 import {
   loadPlano,
   PLAN_DAYS,
@@ -13,20 +14,12 @@ import {
 
 const ROMANS = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
-function basePath() {
-  const dedicated =
-    typeof window !== "undefined" &&
-    /(^|\.)oslusiadas\.pt$/i.test(window.location.hostname);
-  return dedicated ? "" : "/os-lusiadas";
-}
-
 function refHref(base: string, r: Ref) {
-  const canto = r.canto === 1 ? base || "/" : `${base}/canto/${r.canto}`;
-  return `${canto}#estrofe-${r.stanza}`;
+  return `${cantoHref(base, r.canto)}#estrofe-${r.stanza}`;
 }
 
 export default function PlanoPage() {
-  const base = basePath();
+  const base = lusiadasBase();
   const [plano, setPlano] = useState<PlanoState>(() => loadPlano());
 
   function update(next: PlanoState) {

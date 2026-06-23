@@ -14,5 +14,6 @@ export default function middleware(request) {
   const url = new URL(request.url);
   url.pathname = "/api/os-lusiadas";
   url.searchParams.set("c", "1");
+  url.searchParams.set("home", "1");
   return fetch(url, { headers: request.headers });
 }
