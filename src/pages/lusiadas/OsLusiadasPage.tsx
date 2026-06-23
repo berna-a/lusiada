@@ -525,6 +525,16 @@ export default function OsLusiadasPage() {
           target={feed.target}
         />
       )}
+
+      {!focus && (
+        <p className="mt-16 text-center font-body text-[12px] text-muted-foreground/70">
+          <span className="font-display tracking-[0.15em]">Os Lusíadas</span> ·
+          um projecto da{" "}
+          <a className="hover:text-accent" href="https://www.alusiada.pt">
+            Associação Lusíada
+          </a>
+        </p>
+      )}
     </main>
   );
 }

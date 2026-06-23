@@ -1,7 +1,34 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { requireAdmin } from "./permissions";
+import { isAdmin, requireAdmin } from "./permissions";
+
+const ROMANS = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+
+/** Descrição legível de um target ("c1:e3:v2" → "Canto I · estrofe 3 · verso 2"). */
+function describeTarget(t: string): string {
+  if (t === "epic") {
+    return "A obra inteira";
+  }
+  const c = t.match(/^c(\d+)/)?.[1];
+  const e = t.match(/:e(\d+)/)?.[1];
+  const vrs = t.match(/:v(\d+)/)?.[1];
+  const w = t.match(/:w-(.+)$/)?.[1];
+  const parts: string[] = [];
+  if (c) {
+    parts.push(`Canto ${ROMANS[Number(c)] ?? c}`);
+  }
+  if (e) {
+    parts.push(`estrofe ${e}`);
+  }
+  if (vrs) {
+    parts.push(`verso ${vrs}`);
+  }
+  if (w) {
+    parts.push(`«${w}»`);
+  }
+  return parts.join(" · ") || t;
+}
 
 const MAX_POST = 5000;
 const MAX_EXCERPT = 600;
@@ -179,5 +206,36 @@ export const adminRemovePost = mutation({
   handler: async (ctx, { postId }) => {
     await requireAdmin(ctx);
     await ctx.db.patch(postId, { is_removed: true });
+  },
+});
+
+/** Ignora as denúncias de uma anotação (mantém-na). */
+export const adminKeepPost = mutation({
+  args: { postId: v.id("lusiadas_posts") },
+  handler: async (ctx, { postId }) => {
+    await requireAdmin(ctx);
+    await ctx.db.patch(postId, { report_count: 0 });
+  },
+});
+
+/** Anotações d'Os Lusíadas denunciadas, para moderação. */
+export const adminReported = query({
+  args: {},
+  handler: async (ctx) => {
+    if (!(await isAdmin(ctx))) {
+      return [];
+    }
+    const posts = await ctx.db.query("lusiadas_posts").collect();
+    const flagged = posts.filter(
+      (p) => !p.is_removed && (p.report_count ?? 0) > 0
+    );
+    flagged.sort((a, b) => (b.report_count ?? 0) - (a.report_count ?? 0));
+    return flagged.map((p) => ({
+      _id: p._id,
+      body: p.body,
+      authorName: p.author_name ?? null,
+      reports: p.report_count ?? 0,
+      where: describeTarget(p.target),
+    }));
   },
 });

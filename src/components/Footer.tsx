@@ -12,6 +12,7 @@ const navLinks = [
 const arcaLinks = [
   { label: "Panteão", to: "/arca/panteao" },
   { label: "Lusopédia", to: "/arca/lusopedia" },
+  { label: "Os Lusíadas", to: "/os-lusiadas" },
   { label: "Dicionário de grafias", to: "/dicionario" },
   { label: "Calendário", to: "/arca/calendario" },
   { label: "Heróis", to: "/arca/herois" },

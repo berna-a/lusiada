@@ -12,6 +12,7 @@ const menus: Record<MenuKey, { label: string; items: DropdownItem[] }> = {
     items: [
       { label: "Panteão", subtitle: "Heróis e figuras maiores", to: "/arca/panteao" },
       { label: "Lusopédia", subtitle: "A enciclopédia da lusofonia", to: "/arca/lusopedia" },
+      { label: "Os Lusíadas", subtitle: "A epopeia, anotada verso a verso", to: "/os-lusiadas" },
       { label: "Obras", subtitle: "Cânone literário lusíada", to: "/arca/obras" },
       { label: "Lugares", subtitle: "Lugares de memória", to: "/arca/lugares" },
     ],
@@ -36,6 +37,9 @@ const menus: Record<MenuKey, { label: string; items: DropdownItem[] }> = {
 
 export function InstitutionalNavbar() {
   const location = useLocation();
+  const isLusiadas =
+    typeof window !== "undefined" &&
+    /(^|\.)oslusiadas\.pt$/i.test(window.location.hostname);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState<MenuKey | null>(null);
   const [onLight, setOnLight] = useState(true);
@@ -130,10 +134,14 @@ export function InstitutionalNavbar() {
             {/* Center — wordmark */}
             <Link
               to="/"
-              aria-label="Lusíada — Página inicial"
-              className={`font-display text-[28px] tracking-[0.18em] leading-none justify-self-center transition-colors ${wordmarkColor}`}
+              aria-label={
+                isLusiadas
+                  ? "Os Lusíadas — Página inicial"
+                  : "Lusíada — Página inicial"
+              }
+              className={`font-display ${isLusiadas ? "text-[19px] tracking-[0.14em] md:text-[23px]" : "text-[28px] tracking-[0.18em]"} leading-none justify-self-center transition-colors ${wordmarkColor}`}
             >
-              LUSÍADA
+              {isLusiadas ? "OS LUSÍADAS" : "LUSÍADA"}
             </Link>
 
             {/* Right — Junta-te CTA + control panel + Hamburger */}

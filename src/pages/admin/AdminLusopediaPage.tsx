@@ -13,6 +13,9 @@ export default function AdminLusopediaPage() {
   const rejectEdit = useMutation(api.articles.adminRejectEdit);
   const removePost = useMutation(api.discussion.adminRemovePost);
   const keepPost = useMutation(api.discussion.adminKeepPost);
+  const lusiadasReported = useQuery(api.lusiadas.adminReported);
+  const lusiadasRemove = useMutation(api.lusiadas.adminRemovePost);
+  const lusiadasKeep = useMutation(api.lusiadas.adminKeepPost);
 
   return (
     <div className="mx-auto max-w-3xl space-y-10">
@@ -228,6 +231,53 @@ export default function AdminLusopediaPage() {
                   </Button>
                   <Button
                     onClick={() => keepPost({ postId: p._id })}
+                    size="sm"
+                    variant="outline"
+                  >
+                    Manter
+                  </Button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      {/* Anotações d'Os Lusíadas denunciadas */}
+      <section>
+        <h2 className="mb-3 font-body text-muted-foreground text-xs uppercase tracking-[0.2em]">
+          Anotações d'Os Lusíadas denunciadas
+        </h2>
+        {lusiadasReported === undefined ? (
+          <Loader2 className="h-5 w-5 animate-spin text-accent" />
+        ) : lusiadasReported.length === 0 ? (
+          <p className="font-body text-muted-foreground text-sm italic">
+            Nenhuma.
+          </p>
+        ) : (
+          <ul className="space-y-3">
+            {lusiadasReported.map((p) => (
+              <li
+                className="rounded-xl border border-destructive/30 bg-card p-4"
+                key={p._id}
+              >
+                <p className="font-body text-[12px] text-muted-foreground uppercase tracking-[0.15em]">
+                  {p.reports} denúncia(s) · {p.authorName ?? "Anónimo"} · {p.where}
+                </p>
+                <p className="mt-2 whitespace-pre-line font-body text-[14px] text-foreground/85">
+                  {p.body}
+                </p>
+                <div className="mt-3 flex gap-2">
+                  <Button
+                    className="text-destructive hover:text-destructive"
+                    onClick={() => lusiadasRemove({ postId: p._id })}
+                    size="sm"
+                    variant="ghost"
+                  >
+                    <Trash2 className="mr-1.5 h-3.5 w-3.5" /> Remover
+                  </Button>
+                  <Button
+                    onClick={() => lusiadasKeep({ postId: p._id })}
                     size="sm"
                     variant="outline"
                   >
