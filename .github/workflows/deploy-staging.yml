@@ -30,10 +30,8 @@ jobs:
       - name: Build
         run: bun run build
 
-      # Lint informativo enquanto o código legado (Lovable) não está limpo.
-      - name: Lint (não bloqueante)
+      - name: Lint
         run: bun run lint
-        continue-on-error: true
 
   deploy-convex:
     name: Deploy Convex (produção)
