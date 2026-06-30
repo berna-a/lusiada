@@ -6,7 +6,19 @@ import { useGrafia } from "@/lib/grafia/store";
 import { cantoHref, lusiadasBase } from "@/lib/lusiadas/nav";
 
 const cantoLoaders = import.meta.glob("../../data/lusiadas/canto*.json");
-const ROMANS = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+const ROMANS = [
+  "",
+  "I",
+  "II",
+  "III",
+  "IV",
+  "V",
+  "VI",
+  "VII",
+  "VIII",
+  "IX",
+  "X",
+];
 
 type Verso = { canto: number; stanza: number; verse: number; line: string };
 type Canto = { canto: number; stanzas: { n: number; lines: string[] }[] };
@@ -61,7 +73,9 @@ export default function ProcurarPage() {
           });
         }
       }
-      all.sort((a, b) => a.canto - b.canto || a.stanza - b.stanza || a.verse - b.verse);
+      all.sort(
+        (a, b) => a.canto - b.canto || a.stanza - b.stanza || a.verse - b.verse
+      );
       setVersos(all);
     });
     return () => {
@@ -114,7 +128,6 @@ export default function ProcurarPage() {
 
       <div className="relative mt-7">
         <Search className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-        {/* biome-ignore lint/a11y/noAutofocus: a pesquisa é o propósito da página */}
         <input
           autoFocus
           className="h-12 w-full rounded-xl border border-border bg-card pr-4 pl-12 font-body text-[16px] text-foreground outline-none transition-colors focus:border-accent/50"
@@ -132,7 +145,9 @@ export default function ProcurarPage() {
         )}
         {query.trim().length >= 2 && versos !== null && (
           <p className="mb-3 font-body text-[12px] text-muted-foreground uppercase tracking-[0.15em]">
-            {results.length === 80 ? "80+ resultados" : `${results.length} resultado(s)`}
+            {results.length === 80
+              ? "80+ resultados"
+              : `${results.length} resultado(s)`}
           </p>
         )}
         <ul className="space-y-1">
@@ -152,11 +167,13 @@ export default function ProcurarPage() {
             </li>
           ))}
         </ul>
-        {query.trim().length >= 2 && versos !== null && results.length === 0 && (
-          <p className="py-8 text-center font-body text-[14px] text-muted-foreground italic">
-            Nada encontrado para «{query.trim()}».
-          </p>
-        )}
+        {query.trim().length >= 2 &&
+          versos !== null &&
+          results.length === 0 && (
+            <p className="py-8 text-center font-body text-[14px] text-muted-foreground italic">
+              Nada encontrado para «{query.trim()}».
+            </p>
+          )}
       </div>
     </main>
   );

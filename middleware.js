@@ -6,9 +6,11 @@
 
 export const config = { matcher: "/" };
 
+const RE_OSLUSIADAS = /(^|\.)oslusiadas\.pt$/i;
+
 export default function middleware(request) {
   const host = request.headers.get("host") || "";
-  if (!/(^|\.)oslusiadas\.pt$/i.test(host)) {
+  if (!RE_OSLUSIADAS.test(host)) {
     return; // alusiada.pt e outros — comportamento normal (homepage)
   }
   const url = new URL(request.url);

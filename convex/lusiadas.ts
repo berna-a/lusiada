@@ -3,17 +3,34 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { isAdmin, requireAdmin } from "./permissions";
 
-const ROMANS = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+const RE_CANTO = /^c(\d+)/;
+const RE_ESTROFE = /:e(\d+)/;
+const RE_VERSO = /:v(\d+)/;
+const RE_WORD = /:w-(.+)$/;
+
+const ROMANS = [
+  "",
+  "I",
+  "II",
+  "III",
+  "IV",
+  "V",
+  "VI",
+  "VII",
+  "VIII",
+  "IX",
+  "X",
+];
 
 /** Descrição legível de um target ("c1:e3:v2" → "Canto I · estrofe 3 · verso 2"). */
 function describeTarget(t: string): string {
   if (t === "epic") {
     return "A obra inteira";
   }
-  const c = t.match(/^c(\d+)/)?.[1];
-  const e = t.match(/:e(\d+)/)?.[1];
-  const vrs = t.match(/:v(\d+)/)?.[1];
-  const w = t.match(/:w-(.+)$/)?.[1];
+  const c = t.match(RE_CANTO)?.[1];
+  const e = t.match(RE_ESTROFE)?.[1];
+  const vrs = t.match(RE_VERSO)?.[1];
+  const w = t.match(RE_WORD)?.[1];
   const parts: string[] = [];
   if (c) {
     parts.push(`Canto ${ROMANS[Number(c)] ?? c}`);
@@ -194,7 +211,12 @@ export const sensesByCanto = query({
     const senses = posts.filter((p) => p.kind === "sense" && !p.is_removed);
     const best: Record<
       string,
-      { body: string; authorName: string | null; verified: boolean; score: number }
+      {
+        body: string;
+        authorName: string | null;
+        verified: boolean;
+        score: number;
+      }
     > = {};
     for (const p of senses) {
       const score = (p.is_verified ? 1e9 : 0) + p.upvotes;
@@ -213,7 +235,11 @@ export const sensesByCanto = query({
       { body: string; authorName: string | null; verified: boolean }
     > = {};
     for (const [k, v2] of Object.entries(best)) {
-      out[k] = { body: v2.body, authorName: v2.authorName, verified: v2.verified };
+      out[k] = {
+        body: v2.body,
+        authorName: v2.authorName,
+        verified: v2.verified,
+      };
     }
     return out;
   },

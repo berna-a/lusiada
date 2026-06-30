@@ -30,14 +30,16 @@ export const myMembership = query({
     const email = user.email ?? null;
     const member = email ? await memberByEmail(ctx, email) : null;
     const status = member?.status ?? null;
-    const level =
-      status === "active"
-        ? ("member" as const)
-        : status === "approved"
-          ? ("approved" as const)
-          : status === "pending"
-            ? ("pending" as const)
-            : ("adepto" as const);
+    let level: "member" | "approved" | "pending" | "adepto";
+    if (status === "active") {
+      level = "member";
+    } else if (status === "approved") {
+      level = "approved";
+    } else if (status === "pending") {
+      level = "pending";
+    } else {
+      level = "adepto";
+    }
     return {
       level,
       user: {
