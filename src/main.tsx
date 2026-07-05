@@ -1,4 +1,5 @@
 import { ConvexAuthProvider } from "@convex-dev/auth/react";
+import { Analytics } from "@vercel/analytics/react";
 import { ConvexReactClient } from "convex/react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
@@ -22,6 +23,7 @@ const convex = new ConvexReactClient(convexUrl);
 createRoot(document.getElementById("root")!).render(
   <ConvexAuthProvider client={convex}>
     <App />
+    <Analytics />
   </ConvexAuthProvider>
 );
 
