@@ -292,6 +292,31 @@ export default defineSchema({
     .index("by_pz", ["pz"])
     .index("by_status", ["status"]),
 
+  // ── Portal de Sócios ────────────────────────────────────────────────
+  // Documentos da associação (estatutos, actas, manifesto…), visíveis
+  // apenas a sócios activos. O ficheiro vive no storage do Convex.
+  member_documents: defineTable({
+    title: v.string(),
+    description: v.optional(v.union(v.string(), v.null())),
+    category: v.string(), // "estatutos" | "atas" | "institucional" | "outros"
+    file_id: v.id("_storage"),
+    display_order: v.optional(v.number()),
+    is_published: v.optional(v.boolean()),
+  }).index("by_published", ["is_published"]),
+
+  // Encontros de sócios (agenda reservada do portal).
+  member_events: defineTable({
+    title: v.string(),
+    description: v.optional(v.union(v.string(), v.null())),
+    date: v.string(), // ISO "YYYY-MM-DD"
+    time: v.optional(v.union(v.string(), v.null())), // "HH:MM"
+    location: v.optional(v.union(v.string(), v.null())),
+    link: v.optional(v.union(v.string(), v.null())),
+    is_published: v.optional(v.boolean()),
+  })
+    .index("by_published", ["is_published"])
+    .index("by_date", ["date"]),
+
   // Doações
   donations: defineTable({
     donor_email: v.string(),

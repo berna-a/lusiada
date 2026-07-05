@@ -3,6 +3,7 @@ import { useConvexAuth, useQuery } from "convex/react";
 import {
   BookMarked,
   ChevronLeft,
+  FolderLock,
   Inbox,
   LayoutDashboard,
   Loader2,
@@ -19,6 +20,7 @@ const adminLinks = [
   { label: "Sócios", to: "/admin/socios", icon: Users },
   { label: "Lusopédia", to: "/admin/lusopedia", icon: BookMarked },
   { label: "Moderação", to: "/admin/moderacao", icon: Inbox },
+  { label: "Portal de Sócios", to: "/admin/portal", icon: FolderLock },
   { label: "Definições", to: "/admin/definicoes", icon: Settings },
 ];
 
