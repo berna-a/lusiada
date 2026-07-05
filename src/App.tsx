@@ -138,6 +138,7 @@ const App = () => (
                     title="A Mensagem"
                   />
                 }
+                path="/obras/a-mensagem"
               />
               <Route
                 element={
@@ -146,6 +147,7 @@ const App = () => (
                     title="Sermão de Santo António aos Peixes"
                   />
                 }
+                path="/obras/sermao-de-santo-antonio-aos-peixes"
               />
 
               {/* Destinos de navegação — placeholders enquanto o conteúdo é preparado */}
@@ -156,6 +158,7 @@ const App = () => (
                     title="Obras"
                   />
                 }
+                path="/arca/obras"
               />
               <Route
                 element={
@@ -173,6 +176,7 @@ const App = () => (
                     title="Iniciativas"
                   />
                 }
+                path="/programa/iniciativas"
               />
               <Route
                 element={
@@ -181,6 +185,7 @@ const App = () => (
                     title="Blogue"
                   />
                 }
+                path="/programa/blogue"
               />
               <Route element={<AssociacaoPage />} path="/sobre/associacao" />
               <Route element={<ObjectivosPage />} path="/sobre/objectivos" />
@@ -191,6 +196,7 @@ const App = () => (
                     title="Estatutos"
                   />
                 }
+                path="/sobre/estatutos"
               />
               <Route
                 element={
@@ -199,6 +205,7 @@ const App = () => (
                     title="Encontros"
                   />
                 }
+                path="/programa/encontros"
               />
               <Route
                 element={
@@ -207,6 +214,7 @@ const App = () => (
                     title="Política de Privacidade"
                   />
                 }
+                path="/privacidade"
               />
               <Route
                 element={
@@ -215,6 +223,7 @@ const App = () => (
                     title="Termos e Condições"
                   />
                 }
+                path="/termos"
               />
             </Route>
 
