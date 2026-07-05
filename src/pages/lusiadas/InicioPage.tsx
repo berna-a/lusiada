@@ -11,8 +11,8 @@ import {
 } from "lucide-react";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { Seo } from "@/components/Seo";
 import { EstrofeDoDia } from "@/components/lusiadas/EstrofeDoDia";
+import { Seo } from "@/components/Seo";
 import { timeAgo } from "@/lib/lusiadas/format";
 import {
   cantoHref,
@@ -24,14 +24,27 @@ import { loadPlano, PLAN_DAYS } from "@/lib/lusiadas/plano";
 import { useSaved } from "@/lib/lusiadas/saved";
 import { api } from "../../../convex/_generated/api";
 
-const ROMANS = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+const ROMANS = [
+  "",
+  "I",
+  "II",
+  "III",
+  "IV",
+  "V",
+  "VI",
+  "VII",
+  "VIII",
+  "IX",
+  "X",
+];
 
 export default function InicioPage() {
   const base = useMemo(lusiadasBase, []);
   const last = getLastRead();
   const plano = useMemo(loadPlano, []);
   const planoDone = plano.startedAt ? plano.done.length : null;
-  const planoPct = planoDone === null ? 0 : Math.round((planoDone / PLAN_DAYS) * 100);
+  const planoPct =
+    planoDone === null ? 0 : Math.round((planoDone / PLAN_DAYS) * 100);
   const saved = useSaved();
   const activity = useQuery(api.lusiadas.recentActivity, {});
 
@@ -127,7 +140,11 @@ export default function InicioPage() {
           { to: `${base}/explorar`, icon: Compass, label: "Explorar" },
           { to: `${base}/procurar`, icon: Search, label: "Procurar" },
           { to: "/dicionario", icon: BookOpen, label: "Dicionário" },
-          { to: "/arca/lusopedia/os-lusiadas", icon: BookOpen, label: "Sobre a obra" },
+          {
+            to: "/arca/lusopedia/os-lusiadas",
+            icon: BookOpen,
+            label: "Sobre a obra",
+          },
         ].map(({ to, icon: Icon, label }) => (
           <Link
             className="flex flex-col items-center gap-1.5 rounded-2xl border border-border bg-card p-4 text-center transition-colors hover:border-accent/40"
@@ -135,7 +152,9 @@ export default function InicioPage() {
             to={to}
           >
             <Icon className="h-5 w-5 text-accent" />
-            <span className="font-body text-[13px] text-foreground/80">{label}</span>
+            <span className="font-body text-[13px] text-foreground/80">
+              {label}
+            </span>
           </Link>
         ))}
       </div>
@@ -147,7 +166,10 @@ export default function InicioPage() {
             <h2 className="flex items-center gap-1.5 font-body text-[12px] text-muted-foreground uppercase tracking-[0.2em]">
               <Bookmark className="h-3.5 w-3.5" /> Guardados
             </h2>
-            <Link className="font-body text-[12px] text-accent hover:underline" to={`${base}/perfil`}>
+            <Link
+              className="font-body text-[12px] text-accent hover:underline"
+              to={`${base}/perfil`}
+            >
               Ver tudo →
             </Link>
           </div>
@@ -181,7 +203,10 @@ export default function InicioPage() {
             <h2 className="flex items-center gap-1.5 font-body text-[12px] text-muted-foreground uppercase tracking-[0.2em]">
               <Users className="h-3.5 w-3.5" /> Na comunidade
             </h2>
-            <Link className="font-body text-[12px] text-accent hover:underline" to={`${base}/comunidade`}>
+            <Link
+              className="font-body text-[12px] text-accent hover:underline"
+              to={`${base}/comunidade`}
+            >
               Ver tudo →
             </Link>
           </div>
@@ -195,13 +220,17 @@ export default function InicioPage() {
                   <span className="flex items-center gap-2 font-body text-[12px] text-muted-foreground">
                     <span
                       className={`rounded-full px-2 py-0.5 ${
-                        a.kind === "sense" ? "bg-accent/10 text-accent" : "bg-muted text-foreground/70"
+                        a.kind === "sense"
+                          ? "bg-accent/10 text-accent"
+                          : "bg-muted text-foreground/70"
                       }`}
                     >
                       {a.kind === "sense" ? "Sentido" : "Anotação"}
                     </span>
                     <span className="truncate">{a.label}</span>
-                    <span className="ml-auto shrink-0">{timeAgo(a.createdAt)}</span>
+                    <span className="ml-auto shrink-0">
+                      {timeAgo(a.createdAt)}
+                    </span>
                   </span>
                   <span className="mt-1 block font-body text-[14px] text-foreground/85 leading-relaxed">
                     {a.body.length > 130 ? `${a.body.slice(0, 130)}…` : a.body}

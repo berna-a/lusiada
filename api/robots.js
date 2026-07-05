@@ -2,9 +2,11 @@
 // porque o oslusiadas.pt e a alusiada.pt partilham o deploy mas têm sitemaps
 // distintos — um robots.txt estático declararia o sitemap errado num deles.
 
+const RE_OSLUSIADAS = /(^|\.)oslusiadas\.pt$/i;
+
 export default function handler(req, res) {
   const host = req.headers["x-forwarded-host"] || req.headers.host || "";
-  const base = /(^|\.)oslusiadas\.pt$/i.test(host)
+  const base = RE_OSLUSIADAS.test(host)
     ? "https://oslusiadas.pt"
     : "https://www.alusiada.pt";
 

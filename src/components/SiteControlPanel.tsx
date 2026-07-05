@@ -1,21 +1,21 @@
+import {
+  Check,
+  Languages,
+  Moon,
+  Music2,
+  Settings2,
+  Sparkles,
+  Sun,
+  Type,
+  VolumeX,
+} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
-  Sun,
-  Moon,
-  Sparkles,
-  Settings2,
-  Music2,
-  VolumeX,
-  Type,
-  Languages,
-  Check,
-} from "lucide-react";
-import {
-  useSitePreferences,
-  type Orthography,
   type MotionLevel,
+  type Orthography,
   type TextSize,
+  useSitePreferences,
 } from "@/contexts/SitePreferencesContext";
 
 interface SiteControlPanelProps {
@@ -29,16 +29,22 @@ interface SiteControlPanelProps {
  */
 export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
   const [open, setOpen] = useState(false);
-  const [coords, setCoords] = useState<{ top: number; right: number } | null>(null);
+  const [coords, setCoords] = useState<{ top: number; right: number } | null>(
+    null
+  );
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const prefs = useSitePreferences();
 
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      return;
+    }
     const reposition = () => {
       const el = triggerRef.current;
-      if (!el) return;
+      if (!el) {
+        return;
+      }
       const r = el.getBoundingClientRect();
       setCoords({
         top: r.bottom + 12,
@@ -55,7 +61,9 @@ export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
   }, [open]);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      return;
+    }
     const handleClick = (e: MouseEvent) => {
       const t = e.target as Node;
       if (
@@ -68,7 +76,9 @@ export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
       }
     };
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") {
+        setOpen(false);
+      }
     };
     document.addEventListener("mousedown", handleClick);
     document.addEventListener("keydown", handleKey);
@@ -96,12 +106,12 @@ export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
     <>
       {/* Icon-only trigger — two horizontal toggles (iOS-style controls glyph) */}
       <button
+        aria-expanded={open}
+        aria-label="Painel de controlo"
+        className={`hidden h-10 w-10 items-center justify-center transition-colors sm:inline-flex ${triggerColor}`}
+        onClick={() => setOpen((v) => !v)}
         ref={triggerRef}
         type="button"
-        onClick={() => setOpen((v) => !v)}
-        aria-label="Painel de controlo"
-        aria-expanded={open}
-        className={`hidden sm:inline-flex items-center justify-center h-10 w-10 transition-colors ${triggerColor}`}
       >
         <Settings2 className="h-[20px] w-[20px]" />
       </button>
@@ -110,10 +120,10 @@ export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
         coords &&
         createPortal(
           <div
+            aria-label="Preferências do website"
+            className="fixed z-[60] w-[340px] max-w-[calc(100vw-2rem)] origin-top-right animate-scale-in"
             ref={panelRef}
             role="dialog"
-            aria-label="Preferências do website"
-            className="fixed z-[60] w-[340px] max-w-[calc(100vw-2rem)] animate-scale-in origin-top-right"
             style={{ top: coords.top, right: coords.right }}
           >
             {/* Same shell as the navbar: glass-nav-hero + rounded-[28px] */}
@@ -121,7 +131,7 @@ export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
               {/* Header strip */}
               <div className="flex items-center justify-between px-1 pb-3">
                 <span
-                  className={`font-display uppercase tracking-[0.18em] text-[12px] ${titleColor}`}
+                  className={`font-display text-[12px] uppercase tracking-[0.18em] ${titleColor}`}
                 >
                   PAINEL DE CONTROLO
                 </span>
@@ -132,7 +142,7 @@ export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
               <div className="grid grid-cols-2 gap-2">
                 <Tile
                   active={prefs.theme === "dark"}
-                  onClick={() => prefs.setTheme(prefs.theme === "dark" ? "light" : "dark")}
+                  baseClass={tileBase}
                   icon={
                     prefs.theme === "dark" ? (
                       <Moon className="h-5 w-5" />
@@ -141,33 +151,38 @@ export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
                     )
                   }
                   label="TEMA"
-                  value={prefs.theme === "dark" ? "ESCURO" : "CLARO"}
-                  baseClass={tileBase}
+                  onClick={() =>
+                    prefs.setTheme(prefs.theme === "dark" ? "light" : "dark")
+                  }
                   subtleClass={subtleColor}
+                  value={prefs.theme === "dark" ? "ESCURO" : "CLARO"}
                 />
                 <Tile
                   active={prefs.music}
-                  onClick={() => prefs.setMusic(!prefs.music)}
+                  baseClass={tileBase}
+                  comingSoon
                   icon={
-                    prefs.music ? <Music2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />
+                    prefs.music ? (
+                      <Music2 className="h-5 w-5" />
+                    ) : (
+                      <VolumeX className="h-5 w-5" />
+                    )
                   }
                   label="MÚSICA"
-                  value={prefs.music ? "LIGADA" : "DESLIGADA"}
-                  baseClass={tileBase}
+                  onClick={() => prefs.setMusic(!prefs.music)}
                   subtleClass={subtleColor}
-                  comingSoon
+                  value={prefs.music ? "LIGADA" : "DESLIGADA"}
                 />
               </div>
 
               <Section
                 icon={<Languages className="h-3.5 w-3.5" />}
-                title="ORTOGRAFIA"
                 labelColor={labelColor}
                 subtleColor={subtleColor}
+                title="ORTOGRAFIA"
                 trackClass={sectionTrack}
               >
                 <SegmentedGroup<Orthography>
-                  value={prefs.orthography}
                   onChange={prefs.setOrthography}
                   options={[
                     { value: "atual", label: "PORTUGUÊS" },
@@ -176,18 +191,18 @@ export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
                   ]}
                   segmentBase={segmentBase}
                   trackClass={segmentTrack}
+                  value={prefs.orthography}
                 />
               </Section>
 
               <Section
                 icon={<Sparkles className="h-3.5 w-3.5" />}
-                title="ANIMAÇÕES"
                 labelColor={labelColor}
                 subtleColor={subtleColor}
+                title="ANIMAÇÕES"
                 trackClass={sectionTrack}
               >
                 <SegmentedGroup<MotionLevel>
-                  value={prefs.motion}
                   onChange={prefs.setMotion}
                   options={[
                     { value: "reduzido", label: "MENOS" },
@@ -195,18 +210,18 @@ export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
                   ]}
                   segmentBase={segmentBase}
                   trackClass={segmentTrack}
+                  value={prefs.motion}
                 />
               </Section>
 
               <Section
                 icon={<Type className="h-3.5 w-3.5" />}
-                title="TAMANHO DO TEXTO"
                 labelColor={labelColor}
                 subtleColor={subtleColor}
+                title="TAMANHO DO TEXTO"
                 trackClass={sectionTrack}
               >
                 <SegmentedGroup<TextSize>
-                  value={prefs.textSize}
                   onChange={prefs.setTextSize}
                   options={[
                     { value: "pequeno", label: "A−" },
@@ -215,6 +230,7 @@ export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
                   ]}
                   segmentBase={segmentBase}
                   trackClass={segmentTrack}
+                  value={prefs.textSize}
                 />
               </Section>
 
@@ -225,7 +241,7 @@ export function SiteControlPanel({ onLight }: SiteControlPanelProps) {
               </p>
             </div>
           </div>,
-          document.body,
+          document.body
         )}
     </>
   );
@@ -254,24 +270,24 @@ function Tile({
 }) {
   return (
     <button
-      type="button"
-      onClick={onClick}
       className={`relative flex items-start gap-3 rounded-2xl p-3 text-left transition-all ${
         active ? "bg-accent text-accent-foreground shadow-inner" : baseClass
       }`}
+      onClick={onClick}
+      type="button"
     >
       <div
-        className={`grid place-items-center h-9 w-9 rounded-full shrink-0 ${
+        className={`grid h-9 w-9 shrink-0 place-items-center rounded-full ${
           active ? "bg-accent-foreground/15" : "bg-foreground/10"
         }`}
       >
         {icon}
       </div>
-      <div className="flex flex-col min-w-0">
-        <span className="font-display uppercase tracking-[0.15em] text-[9px] opacity-70">
+      <div className="flex min-w-0 flex-col">
+        <span className="font-display text-[9px] uppercase tracking-[0.15em] opacity-70">
           {label}
         </span>
-        <span className="font-display uppercase tracking-[0.12em] text-[12px] leading-tight mt-0.5 truncate">
+        <span className="mt-0.5 truncate font-display text-[12px] uppercase leading-tight tracking-[0.12em]">
           {value}
         </span>
       </div>
@@ -305,9 +321,11 @@ function Section({
 }) {
   return (
     <div className={`mt-2 rounded-2xl p-3 ${trackClass}`}>
-      <div className={`flex items-center gap-2 px-1 mb-2 ${labelColor}`}>
+      <div className={`mb-2 flex items-center gap-2 px-1 ${labelColor}`}>
         <span className={subtleColor}>{icon}</span>
-        <span className="font-display uppercase tracking-[0.18em] text-[10px]">{title}</span>
+        <span className="font-display text-[10px] uppercase tracking-[0.18em]">
+          {title}
+        </span>
       </div>
       {children}
     </div>
@@ -329,22 +347,26 @@ function SegmentedGroup<T extends string>({
 }) {
   return (
     <div
-      role="radiogroup"
       className={`grid gap-1 rounded-xl p-1 ${trackClass}`}
-      style={{ gridTemplateColumns: `repeat(${options.length}, minmax(0, 1fr))` }}
+      role="radiogroup"
+      style={{
+        gridTemplateColumns: `repeat(${options.length}, minmax(0, 1fr))`,
+      }}
     >
       {options.map((opt) => {
         const active = value === opt.value;
         return (
           <button
-            key={opt.value}
-            type="button"
-            role="radio"
             aria-checked={active}
-            onClick={() => onChange(opt.value)}
-            className={`flex items-center justify-center gap-1 rounded-lg px-2 py-1.5 font-display uppercase tracking-[0.12em] text-[10px] transition-all ${
-              active ? "bg-accent text-accent-foreground shadow-sm" : segmentBase
+            className={`flex items-center justify-center gap-1 rounded-lg px-2 py-1.5 font-display text-[10px] uppercase tracking-[0.12em] transition-all ${
+              active
+                ? "bg-accent text-accent-foreground shadow-sm"
+                : segmentBase
             }`}
+            key={opt.value}
+            onClick={() => onChange(opt.value)}
+            role="radio"
+            type="button"
           >
             {active && <Check className="h-3 w-3" />}
             <span>{opt.label}</span>

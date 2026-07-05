@@ -1,19 +1,55 @@
 import { ArrowLeft, Map } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Seo } from "@/components/Seo";
 import { EPISODES } from "@/components/lusiadas/MapaDaViagem";
+import { Seo } from "@/components/Seo";
 import { cantoHref, lusiadasBase } from "@/lib/lusiadas/nav";
 
-const ROMANS = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+const ROMANS = [
+  "",
+  "I",
+  "II",
+  "III",
+  "IV",
+  "V",
+  "VI",
+  "VII",
+  "VIII",
+  "IX",
+  "X",
+];
 
 /** Figuras maiores da epopeia — verbete na Lusopédia, ou canto onde surgem. */
 const FIGURAS: { nome: string; papel: string; href: string }[] = [
-  { nome: "Vasco da Gama", papel: "O capitão da armada", href: "/arca/lusopedia/vasco-da-gama" },
-  { nome: "Inês de Castro", papel: "«A que depois de morta foi Rainha»", href: "/arca/lusopedia/ines-de-castro" },
-  { nome: "O Adamastor", papel: "O gigante do Cabo das Tormentas", href: "CANTO:5" },
-  { nome: "Infante D. Henrique", papel: "O impulso dos Descobrimentos", href: "/arca/lusopedia/infante-dom-henrique" },
-  { nome: "D. Manuel I", papel: "O Rei que ordenou a viagem", href: "/arca/lusopedia/d-manuel-i" },
-  { nome: "Nuno Álvares Pereira", papel: "O herói de Aljubarrota", href: "/arca/lusopedia/nuno-alvares-pereira" },
+  {
+    nome: "Vasco da Gama",
+    papel: "O capitão da armada",
+    href: "/arca/lusopedia/vasco-da-gama",
+  },
+  {
+    nome: "Inês de Castro",
+    papel: "«A que depois de morta foi Rainha»",
+    href: "/arca/lusopedia/ines-de-castro",
+  },
+  {
+    nome: "O Adamastor",
+    papel: "O gigante do Cabo das Tormentas",
+    href: "CANTO:5",
+  },
+  {
+    nome: "Infante D. Henrique",
+    papel: "O impulso dos Descobrimentos",
+    href: "/arca/lusopedia/infante-dom-henrique",
+  },
+  {
+    nome: "D. Manuel I",
+    papel: "O Rei que ordenou a viagem",
+    href: "/arca/lusopedia/d-manuel-i",
+  },
+  {
+    nome: "Nuno Álvares Pereira",
+    papel: "O herói de Aljubarrota",
+    href: "/arca/lusopedia/nuno-alvares-pereira",
+  },
 ];
 
 export default function ExplorarPage() {
@@ -60,12 +96,16 @@ export default function ExplorarPage() {
           <Map className="h-6 w-6" />
         </span>
         <span className="min-w-0 flex-1">
-          <span className="block font-display text-[18px] text-primary">A Viagem</span>
+          <span className="block font-display text-[18px] text-primary">
+            A Viagem
+          </span>
           <span className="block font-body text-[14px] text-muted-foreground">
             O mapa da epopeia, de Lisboa à Índia
           </span>
         </span>
-        <span className="shrink-0 font-body text-[14px] text-accent">Ver →</span>
+        <span className="shrink-0 font-body text-[14px] text-accent">
+          Ver →
+        </span>
       </Link>
 
       {/* Figuras */}
@@ -83,8 +123,12 @@ export default function ExplorarPage() {
               key={f.nome}
               to={to}
             >
-              <span className="block font-display text-[16px] text-primary">{f.nome}</span>
-              <span className="block font-body text-[13px] text-muted-foreground">{f.papel}</span>
+              <span className="block font-display text-[16px] text-primary">
+                {f.nome}
+              </span>
+              <span className="block font-body text-[13px] text-muted-foreground">
+                {f.papel}
+              </span>
             </Link>
           );
         })}
@@ -105,8 +149,12 @@ export default function ExplorarPage() {
                 {i + 1}
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block font-display text-[16px] text-primary">{e.lugar}</span>
-                <span className="block font-body text-[13px] text-muted-foreground">{e.episodio}</span>
+                <span className="block font-display text-[16px] text-primary">
+                  {e.lugar}
+                </span>
+                <span className="block font-body text-[13px] text-muted-foreground">
+                  {e.episodio}
+                </span>
               </span>
               <span className="shrink-0 font-body text-[13px] text-accent">
                 Canto {ROMANS[e.canto]} →

@@ -1,19 +1,21 @@
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 export function SupportSection() {
   return (
-    <section className="py-14 md:py-20 bg-card relative overflow-hidden">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-px bg-accent/40" />
+    <section className="relative overflow-hidden bg-card py-14 md:py-20">
+      <div className="absolute top-0 left-1/2 h-px w-16 -translate-x-1/2 bg-accent/40" />
 
-      <div className="container mx-auto px-4 max-w-2xl text-center space-y-5">
-        <h2 className="text-2xl md:text-3xl font-bold text-foreground font-display">Apoia-nos</h2>
-        <p className="text-muted-foreground text-sm md:text-base leading-relaxed font-body">
-          A preservação do património depende de todos. Apoia a Associação Lusíada
-          através de mecenato, parcerias institucionais ou donativos. Cada contributo
-          ajuda a manter viva a nossa herança.
+      <div className="container mx-auto max-w-2xl space-y-5 px-4 text-center">
+        <h2 className="font-bold font-display text-2xl text-foreground md:text-3xl">
+          Apoia-nos
+        </h2>
+        <p className="font-body text-muted-foreground text-sm leading-relaxed md:text-base">
+          A preservação do património depende de todos. Apoia a Associação
+          Lusíada através de mecenato, parcerias institucionais ou donativos.
+          Cada contributo ajuda a manter viva a nossa herança.
         </p>
-        <Button size="lg" variant="outline" asChild>
+        <Button asChild size="lg" variant="outline">
           <Link to="/apoiar">Saber como Apoiar</Link>
         </Button>
       </div>

@@ -3,7 +3,21 @@
 // mesmo, para que partilhas directas e robôs sem JavaScript vejam a obra.
 
 const BASE = "https://oslusiadas.pt";
-const ROMANS = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+
+const RE_TITLE = /<title>[\s\S]*?<\/title>/i;
+const ROMANS = [
+  "",
+  "I",
+  "II",
+  "III",
+  "IV",
+  "V",
+  "VI",
+  "VII",
+  "VIII",
+  "IX",
+  "X",
+];
 
 function esc(s) {
   return String(s ?? "")
@@ -22,7 +36,7 @@ async function getShell(req) {
 
 function stripStatic(shell) {
   return shell
-    .replace(/<title>[\s\S]*?<\/title>/i, "")
+    .replace(RE_TITLE, "")
     .replace(/<meta[^>]+name="description"[^>]*>/gi, "")
     .replace(/<meta[^>]+property="og:[^"]*"[^>]*>/gi, "")
     .replace(/<meta[^>]+name="twitter:[^"]*"[^>]*>/gi, "")
@@ -46,11 +60,12 @@ export default async function handler(req, res) {
     : `Os Lusíadas — Canto ${roman} | Luiz Vaz de Camões`;
   const desc =
     "A epopeia da nação Portugueza, de Luiz Vaz de Camões — lida e estudada verso a verso nas três grafias da língua, anotada pela comunidade.";
-  const ogText = home
-    ? "As armas e os barões assinalados"
-    : c === 1
-      ? "As armas e os barões assinalados"
-      : `Os Lusíadas — Canto ${roman}`;
+  let ogText;
+  if (home || c === 1) {
+    ogText = "As armas e os barões assinalados";
+  } else {
+    ogText = `Os Lusíadas — Canto ${roman}`;
+  }
   const ogImage = `${BASE}/api/og-verso?t=${encodeURIComponent(ogText)}&ref=${encodeURIComponent(`Canto ${roman}`)}`;
 
   const head = [
@@ -79,7 +94,10 @@ export default async function handler(req, res) {
   );
   try {
     const shell = await getShell(req);
-    const html = stripStatic(shell).replace("</head>", `    ${head}\n  </head>`);
+    const html = stripStatic(shell).replace(
+      "</head>",
+      `    ${head}\n  </head>`
+    );
     res.status(200).send(html);
   } catch {
     // Falha ao obter o shell — devolve um HTML mínimo com as meta + redirect.

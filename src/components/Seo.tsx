@@ -67,7 +67,8 @@ export function Seo({
   let canonPath = path;
   if (onLusiadas && path.startsWith("/os-lusiadas")) {
     site = "https://oslusiadas.pt";
-    canonPath = path === "/os-lusiadas" ? "/" : path.replace(/^\/os-lusiadas/, "");
+    canonPath =
+      path === "/os-lusiadas" ? "/" : path.replace(/^\/os-lusiadas/, "");
   }
   const url = `${site}${canonPath}`;
   const graph = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];

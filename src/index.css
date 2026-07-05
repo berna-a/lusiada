@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -109,11 +109,14 @@
     @apply border-border;
   }
   body {
+    font-family: "Inter", system-ui, sans-serif;
     @apply bg-background text-foreground;
-    font-family: 'Inter', system-ui, sans-serif;
   }
-  h1, h2, h3, h4 {
-    font-family: 'Cinzel', 'Georgia', serif;
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: "Cinzel", "Georgia", serif;
     font-weight: 400;
     text-transform: uppercase;
   }
@@ -125,6 +128,7 @@
 @layer components {
   .glass-nav {
     position: relative;
+    overflow: hidden;
     background: linear-gradient(
       135deg,
       hsl(0 0% 100% / 0.05) 0%,
@@ -139,19 +143,22 @@
       inset 0 -1px 0 hsl(0 0% 0% / 0.06),
       inset 1px 0 0 hsl(0 0% 100% / 0.18),
       inset -1px 0 0 hsl(0 0% 0% / 0.04);
-    backdrop-filter: blur(28px) saturate(3) brightness(1.08) contrast(1.05);
-    -webkit-backdrop-filter: blur(28px) saturate(3) brightness(1.08) contrast(1.05);
-    overflow: hidden;
     isolation: isolate;
-    transition: box-shadow 0.6s ease, transform 0.6s ease;
+    -webkit-backdrop-filter: blur(28px) saturate(3) brightness(1.08)
+      contrast(1.05);
+    backdrop-filter: blur(28px) saturate(3) brightness(1.08) contrast(1.05);
+    transition:
+      box-shadow 0.6s ease,
+      transform 0.6s ease;
   }
 
   .glass-nav::before {
-    content: "";
     position: absolute;
     inset: 0;
-    border-radius: inherit;
+    z-index: 1;
     padding: 1.5px;
+    pointer-events: none;
+    content: "";
     background: conic-gradient(
       from 140deg,
       hsl(0 0% 100% / 0.03) 0deg,
@@ -162,27 +169,26 @@
       hsl(var(--accent) / 0.2) 340deg,
       hsl(0 0% 100% / 0.03) 360deg
     );
+    border-radius: inherit;
+    opacity: 0.5;
     -webkit-mask:
       linear-gradient(#000 0 0) content-box,
       linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
-            mask-composite: exclude;
-    pointer-events: none;
-    opacity: 0.5;
-    z-index: 1;
+    mask-composite: exclude;
   }
 
   .glass-nav::after {
-    content: "";
     position: absolute;
     inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    content: "";
     border-radius: inherit;
     box-shadow:
       inset 0 0 0 1px hsl(0 0% 100% / 0.35),
       inset 0 0 18px hsl(0 0% 100% / 0.18),
       inset 0 0 36px hsl(var(--accent) / 0.08);
-    pointer-events: none;
-    z-index: 0;
   }
 
   .glass-nav > * {
@@ -206,15 +212,19 @@
     position: relative;
     overflow: hidden;
     isolation: isolate;
-    transition: transform 0.25s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.3s ease,
+      background-color 0.3s ease;
   }
 
   .liquid-glass::before {
-    content: "";
     position: absolute;
     inset: 0;
-    border-radius: inherit;
+    z-index: 1;
     padding: 1.5px;
+    pointer-events: none;
+    content: "";
     background: conic-gradient(
       from 140deg,
       hsl(0 0% 100% / 0.04) 0deg,
@@ -225,27 +235,26 @@
       hsl(var(--accent) / 0.18) 340deg,
       hsl(0 0% 100% / 0.04) 360deg
     );
+    border-radius: inherit;
+    opacity: 0.45;
     -webkit-mask:
       linear-gradient(#000 0 0) content-box,
       linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
-            mask-composite: exclude;
-    pointer-events: none;
-    opacity: 0.45;
+    mask-composite: exclude;
     transition: opacity 0.3s ease;
-    z-index: 1;
   }
 
   .liquid-glass::after {
-    content: "";
     position: absolute;
     inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    content: "";
     border-radius: inherit;
     box-shadow:
       inset 0 0 0 1px hsl(0 0% 100% / 0.25),
       inset 0 0 12px hsl(0 0% 100% / 0.15);
-    pointer-events: none;
-    z-index: 0;
   }
 
   .liquid-glass > * {
@@ -258,8 +267,8 @@
   }
 
   .liquid-glass:hover {
-    transform: translateY(-1px);
     box-shadow: 0 0 22px -6px hsl(var(--accent) / 0.35);
+    transform: translateY(-1px);
   }
 
   .liquid-glass:active {
@@ -273,8 +282,8 @@
     box-shadow:
       0 4px 24px -4px hsl(220 40% 10% / 0.08),
       inset 0 1px 0 hsl(var(--nav-glass-highlight));
-    backdrop-filter: blur(16px) saturate(1.3);
     -webkit-backdrop-filter: blur(16px) saturate(1.3);
+    backdrop-filter: blur(16px) saturate(1.3);
   }
 
   .premium-shadow {
@@ -290,17 +299,18 @@
   }
 
   .font-display {
-    font-family: 'Cinzel', 'Georgia', serif;
+    font-family: "Cinzel", "Georgia", serif;
     text-transform: uppercase;
   }
 
   .font-body {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: "Inter", system-ui, sans-serif;
   }
 
   /* Ultra-transparent navbar variant for hero overlay */
   .glass-nav-hero {
     position: relative;
+    overflow: hidden;
     background: linear-gradient(
       135deg,
       hsl(0 0% 100% / 0.01) 0%,
@@ -311,17 +321,16 @@
     box-shadow:
       0 12px 48px -12px hsl(220 40% 10% / 0.25),
       inset 0 1px 0 hsl(0 0% 100% / 0.12);
-    backdrop-filter: blur(18px) saturate(1.8);
-    -webkit-backdrop-filter: blur(18px) saturate(1.8);
-    overflow: hidden;
     isolation: isolate;
+    -webkit-backdrop-filter: blur(18px) saturate(1.8);
+    backdrop-filter: blur(18px) saturate(1.8);
   }
   .glass-nav-hero::before {
-    content: "";
     position: absolute;
     inset: -1px;
-    border-radius: inherit;
     padding: 1.5px;
+    pointer-events: none;
+    content: "";
     background: conic-gradient(
       from var(--angle, 140deg),
       hsl(0 0% 100% / 0.04) 0deg,
@@ -332,12 +341,12 @@
       hsl(var(--accent) / 0.5) 310deg,
       hsl(0 0% 100% / 0.04) 360deg
     );
+    border-radius: inherit;
     -webkit-mask:
       linear-gradient(#000 0 0) content-box,
       linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
-            mask-composite: exclude;
-    pointer-events: none;
+    mask-composite: exclude;
     animation: nav-sun-rotate 20s linear infinite;
   }
   .glass-nav-hero > * {
@@ -352,17 +361,35 @@
   }
 
   @keyframes nav-sun-rotate {
-    from { --angle: 0deg; transform: rotate(0deg); }
-    to   { --angle: 360deg; transform: rotate(0deg); }
+    from {
+      --angle: 0deg;
+      transform: rotate(0deg);
+    }
+    to {
+      --angle: 360deg;
+      transform: rotate(0deg);
+    }
   }
 
   /* Calçada portuguesa pattern overlay (used inside footer card) */
   .calcada-pattern {
     background-image:
-      radial-gradient(circle at 12px 12px, hsl(var(--primary-foreground) / 0.06) 1.2px, transparent 1.6px),
-      radial-gradient(circle at 36px 36px, hsl(var(--primary-foreground) / 0.05) 1px, transparent 1.4px);
-    background-size: 48px 48px, 48px 48px;
-    background-position: 0 0, 24px 24px;
+      radial-gradient(
+        circle at 12px 12px,
+        hsl(var(--primary-foreground) / 0.06) 1.2px,
+        transparent 1.6px
+      ),
+      radial-gradient(
+        circle at 36px 36px,
+        hsl(var(--primary-foreground) / 0.05) 1px,
+        transparent 1.4px
+      );
+    background-position:
+      0 0,
+      24px 24px;
+    background-size:
+      48px 48px,
+      48px 48px;
   }
 }
 
@@ -378,25 +405,56 @@ html[data-motion="reduzido"] *::after {
 
 /* ── Panteão imersivo ── */
 @keyframes panteao-enter {
-  from { opacity: 0; transform: scale(1.06); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(1.06);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 @keyframes statue-rise {
-  from { opacity: 0; transform: translateY(28px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 @keyframes glow-pulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.75; }
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.75;
+  }
 }
 @keyframes dust-float {
-  0% { transform: translateY(0); opacity: 0; }
-  20% { opacity: 0.7; }
-  100% { transform: translateY(-60px); opacity: 0; }
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-60px);
+    opacity: 0;
+  }
 }
 @keyframes panel-in {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Modo de leitura d'Os Lusíadas: esconde a navegação global do site. */

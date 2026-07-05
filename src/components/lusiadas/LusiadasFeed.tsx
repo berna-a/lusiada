@@ -81,7 +81,9 @@ export function LusiadasFeed({
             <p className="font-body text-[11px] text-accent uppercase tracking-[0.18em]">
               Anotações
             </p>
-            <p className="mt-1 font-display text-[18px] text-primary">{label}</p>
+            <p className="mt-1 font-display text-[18px] text-primary">
+              {label}
+            </p>
             {excerpt && (
               <p className="mt-1 max-w-[320px] font-body text-[13px] text-muted-foreground italic">
                 «{excerpt}»
@@ -145,11 +147,16 @@ export function LusiadasFeed({
                         <button
                           className="inline-flex items-center gap-1 font-body text-[11px] text-accent hover:underline"
                           onClick={() =>
-                            verifySense({ postId: p._id, verified: !p.verified })
+                            verifySense({
+                              postId: p._id,
+                              verified: !p.verified,
+                            })
                           }
                           type="button"
                         >
-                          {p.verified ? "Retirar validação" : "Validar paráfrase"}
+                          {p.verified
+                            ? "Retirar validação"
+                            : "Validar paráfrase"}
                         </button>
                       )}
                       {p.isMine ? (

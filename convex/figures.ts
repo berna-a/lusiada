@@ -24,7 +24,9 @@ export const getBySlug = query({
       .query("figures")
       .withIndex("by_slug", (q) => q.eq("slug", slug))
       .first();
-    if (!figure) return null;
+    if (!figure) {
+      return null;
+    }
 
     const blocks = await ctx.db
       .query("figure_content_blocks")

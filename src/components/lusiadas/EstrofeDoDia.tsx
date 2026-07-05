@@ -6,7 +6,19 @@ import { cantoHref, lusiadasBase } from "@/lib/lusiadas/nav";
 import { refDoDia } from "@/lib/lusiadas/plano";
 
 const cantoLoaders = import.meta.glob("../../data/lusiadas/canto*.json");
-const ROMANS = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+const ROMANS = [
+  "",
+  "I",
+  "II",
+  "III",
+  "IV",
+  "V",
+  "VI",
+  "VII",
+  "VIII",
+  "IX",
+  "X",
+];
 
 type Canto = { stanzas: { n: number; lines: string[] }[] };
 

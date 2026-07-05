@@ -170,7 +170,9 @@ const SEEDS: Seed[] = [
       { label: "Morte", value: "6 de Março de 1992, Paris" },
       { label: "Estilo", value: "Abstracção; espaços e labirintos" },
     ],
-    sources: [{ label: "Catálogo da Fundação Arpad Szenes-Vieira da Silva", url: null }],
+    sources: [
+      { label: "Catálogo da Fundação Arpad Szenes-Vieira da Silva", url: null },
+    ],
     body: `
 <p>Maria Helena Vieira da Silva (1908–1992) é a mais célebre pintora portuguesa e uma das grandes figuras da arte europeia do século XX. A partir de Paris, conquistou um lugar entre os maiores da pintura moderna.</p>
 <h2>Os labirintos da luz</h2>

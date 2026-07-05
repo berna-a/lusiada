@@ -27,10 +27,19 @@ async function render(req) {
 
   const [cinzel, garamond] = await Promise.all([
     fetch(new URL("/fonts/Cinzel.ttf", origin)).then((r) => r.arrayBuffer()),
-    fetch(new URL("/fonts/EBGaramond.ttf", origin)).then((r) => r.arrayBuffer()),
+    fetch(new URL("/fonts/EBGaramond.ttf", origin)).then((r) =>
+      r.arrayBuffer()
+    ),
   ]);
 
-  const size = text.length > 160 ? 38 : text.length > 90 ? 46 : 54;
+  let size;
+  if (text.length > 160) {
+    size = 38;
+  } else if (text.length > 90) {
+    size = 46;
+  } else {
+    size = 54;
+  }
 
   const tree = h(
     "div",

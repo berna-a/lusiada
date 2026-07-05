@@ -262,7 +262,8 @@ export default function AdminLusopediaPage() {
                 key={p._id}
               >
                 <p className="font-body text-[12px] text-muted-foreground uppercase tracking-[0.15em]">
-                  {p.reports} denúncia(s) · {p.authorName ?? "Anónimo"} · {p.where}
+                  {p.reports} denúncia(s) · {p.authorName ?? "Anónimo"} ·{" "}
+                  {p.where}
                 </p>
                 <p className="mt-2 whitespace-pre-line font-body text-[14px] text-foreground/85">
                   {p.body}

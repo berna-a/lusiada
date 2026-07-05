@@ -1,7 +1,7 @@
 import { Outlet, useLocation } from "react-router-dom";
-import { InstitutionalNavbar } from "@/components/InstitutionalNavbar";
 import { ArcaSidebar } from "@/components/ArcaSidebar";
 import { Footer } from "@/components/Footer";
+import { InstitutionalNavbar } from "@/components/InstitutionalNavbar";
 import { LusiadasNavbar } from "@/components/lusiadas/LusiadasNavbar";
 import { isLusiadasHost } from "@/lib/lusiadas/nav";
 
@@ -12,17 +12,17 @@ export function GlobalLayout() {
   // Domínio dedicado oslusiadas.pt — navegação própria, sem sidebar/footer da alusiada.
   const isLusiadas = isLusiadasHost();
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="flex flex-1 relative">
+    <div className="flex min-h-screen flex-col">
+      <div className="relative flex flex-1">
         {isLusiadas ? <LusiadasNavbar /> : <InstitutionalNavbar />}
-        {!isHome && !isLusiadas && <ArcaSidebar />}
+        {!(isHome || isLusiadas) && <ArcaSidebar />}
         <main
-          className={`flex-1 min-w-0 ${isHome || isLusiadas ? "" : "p-4 sm:p-6 md:p-10"}`}
+          className={`min-w-0 flex-1 ${isHome || isLusiadas ? "" : "p-4 sm:p-6 md:p-10"}`}
         >
           <Outlet />
         </main>
       </div>
-      {!isHome && !isLusiadas && <Footer />}
+      {!(isHome || isLusiadas) && <Footer />}
     </div>
   );
 }

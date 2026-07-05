@@ -4,10 +4,17 @@
 // Conteúdo + meta + JSON-LD (DefinedTerm) para capturar as pesquisas de dúvidas
 // ortográficas e apresentar o Portuguez como solução.
 
-import divergencias from "../src/lib/grafia/divergencias.json" with { type: "json" };
-import definicoes from "../src/lib/grafia/definicoes.json" with { type: "json" };
+import definicoes from "../src/lib/grafia/definicoes.json" with {
+  type: "json",
+};
+import divergencias from "../src/lib/grafia/divergencias.json" with {
+  type: "json",
+};
 
 const BASE = "https://www.alusiada.pt";
+
+const RE_TITLE = /<title>[\s\S]*?<\/title>/i;
+const RE_ROOT_DIV = /<div id="root">\s*<\/div>/;
 const DEFAULT_IMAGE =
   "https://storage.googleapis.com/gpt-engineer-file-uploads/HZLq0vi45GUkFlWe5135LqHlgSd2/social-images/social-1776901317952-Melhor_desenho.webp";
 const ORG = {
@@ -73,7 +80,14 @@ function esc(s) {
 }
 function buildHead({ title, description, path, jsonLd }) {
   const url = BASE + path;
-  const graph = Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : [];
+  let graph;
+  if (Array.isArray(jsonLd)) {
+    graph = jsonLd;
+  } else if (jsonLd) {
+    graph = [jsonLd];
+  } else {
+    graph = [];
+  }
   const ld = JSON.stringify({
     "@context": "https://schema.org",
     "@graph": [ORG, ...graph],
@@ -95,7 +109,7 @@ function buildHead({ title, description, path, jsonLd }) {
 }
 function stripStatic(shell) {
   return shell
-    .replace(/<title>[\s\S]*?<\/title>/i, "")
+    .replace(RE_TITLE, "")
     .replace(/<meta[^>]+name="description"[^>]*>/gi, "")
     .replace(/<meta[^>]+property="og:[^"]*"[^>]*>/gi, "")
     .replace(/<meta[^>]+name="twitter:[^"]*"[^>]*>/gi, "")
@@ -104,7 +118,7 @@ function stripStatic(shell) {
 function compose(shell, head, body) {
   return stripStatic(shell)
     .replace("</head>", `    ${head}\n  </head>`)
-    .replace(/<div id="root">\s*<\/div>/, `<div id="root">${body}</div>`);
+    .replace(RE_ROOT_DIV, `<div id="root">${body}</div>`);
 }
 function send(res, html) {
   res.setHeader("Content-Type", "text/html; charset=utf-8");
@@ -187,7 +201,7 @@ function renderIndex(shell) {
 export default async function handler(req, res) {
   try {
     const shell = await getShell(req);
-    const slug = (req.query && req.query.slug ? req.query.slug : "").toString();
+    const slug = (req.query?.slug ?? "").toString();
     if (!slug) {
       return send(res, renderIndex(shell));
     }

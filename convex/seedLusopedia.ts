@@ -24,8 +24,7 @@ const SEEDS: Seed[] = [
     slug: "dom-afonso-henriques",
     title: "D. Afonso Henriques",
     category: "Pessoas",
-    summary:
-      "O Conquistador — primeiro Rei de Portugal e fundador da nação.",
+    summary: "O Conquistador — primeiro Rei de Portugal e fundador da nação.",
     tags: ["fundação", "reis", "independência"],
     infobox: [
       { label: "Nascimento", value: "c. 1109, Guimarães" },
@@ -60,9 +59,7 @@ const SEEDS: Seed[] = [
       { label: "Epíteto", value: "O Navegador" },
       { label: "Época", value: "Século XV" },
     ],
-    sources: [
-      { label: "Crónica de Guiné, Gomes Eanes de Zurara", url: null },
-    ],
+    sources: [{ label: "Crónica de Guiné, Gomes Eanes de Zurara", url: null }],
     body: `
 <p>O Infante D. Henrique (1394–1460), filho do rei D. João I, é a figura tutelar do início da ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}. Em torno de si, no Algarve, reuniu pilotos, cartógrafos e construtores que aperfeiçoaram a arte de navegar e o navio que a tornou possível: a caravela.</p>
 <h2>A conquista de Ceuta</h2>
@@ -77,8 +74,7 @@ const SEEDS: Seed[] = [
     slug: "vasco-da-gama",
     title: "Vasco da Gama",
     category: "Pessoas",
-    summary:
-      "O navegador que abriu o caminho marítimo para a Índia em 1498.",
+    summary: "O navegador que abriu o caminho marítimo para a Índia em 1498.",
     tags: ["descobrimentos", "Índia", "navegação"],
     infobox: [
       { label: "Nascimento", value: "c. 1469, Sines" },
@@ -244,9 +240,7 @@ const SEEDS: Seed[] = [
       { label: "Estilo", value: "Manuelino" },
       { label: "UNESCO", value: "Património Mundial (1983)" },
     ],
-    sources: [
-      { label: "UNESCO — Património Mundial", url: null },
-    ],
+    sources: [{ label: "UNESCO — Património Mundial", url: null }],
     body: `
 <p>O Mosteiro dos Jerónimos, em Belém, é a obra-prima da arquitectura manuelina e um dos maiores monumentos de Portugal. A sua construção começou em 1501, por ordem de D. Manuel I, financiada pelo ouro e pelas especiarias que as naus traziam do Oriente.</p>
 <h2>Memória da expansão</h2>
@@ -294,9 +288,7 @@ const SEEDS: Seed[] = [
       { label: "Marco", value: "Caminho marítimo para a Índia (1498)" },
       { label: "Brasil", value: "Chegada de Cabral (1500)" },
     ],
-    sources: [
-      { label: "Crónica de Guiné, Gomes Eanes de Zurara", url: null },
-    ],
+    sources: [{ label: "Crónica de Guiné, Gomes Eanes de Zurara", url: null }],
     body: `
 <p>A Era dos Descobrimentos foi o período em que Portugal, e depois a Europa, se lançou ao mar e ligou pela primeira vez todos os continentes. Começou com a conquista de Ceuta, em 1415, e fez de um reino pobre da periferia o centro de um império global.</p>
 <h2>O avanço</h2>
@@ -311,8 +303,7 @@ const SEEDS: Seed[] = [
     slug: "tratado-de-tordesilhas",
     title: "Tratado de Tordesilhas",
     category: "Eventos",
-    summary:
-      "O acordo de 1494 que dividiu o mundo entre Portugal e Castela.",
+    summary: "O acordo de 1494 que dividiu o mundo entre Portugal e Castela.",
     tags: ["diplomacia", "1494", "descobrimentos"],
     infobox: [
       { label: "Data", value: "7 de Junho de 1494" },

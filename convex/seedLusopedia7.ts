@@ -47,14 +47,17 @@ const SEEDS: Seed[] = [
     slug: "gil-vicente",
     title: "Gil Vicente",
     category: "Pessoas",
-    summary: "O pai do teatro português — autor dos autos que fundaram a nossa cena.",
+    summary:
+      "O pai do teatro português — autor dos autos que fundaram a nossa cena.",
     tags: ["literatura", "teatro", "século XVI"],
     infobox: [
       { label: "Nascimento", value: "c. 1465" },
       { label: "Morte", value: "c. 1536" },
       { label: "Obra", value: "Auto da Barca do Inferno; Trilogia das Barcas" },
     ],
-    sources: [{ label: "Compilaçam de todalas obras de Gil Vicente, 1562", url: null }],
+    sources: [
+      { label: "Compilaçam de todalas obras de Gil Vicente, 1562", url: null },
+    ],
     body: `
 <p>Gil Vicente (c. 1465 – c. 1536) é o fundador do teatro em língua portugueza. Nas cortes de ${lk("d-manuel-i", "D. Manuel I")} e D. João III, escreveu e encenou autos e farsas que misturam o sagrado e o riso, a fé e a sátira.</p>
 <h2>O teatro que nasce</h2>
@@ -69,7 +72,8 @@ const SEEDS: Seed[] = [
     slug: "camilo-castelo-branco",
     title: "Camilo Castelo Branco",
     category: "Pessoas",
-    summary: "O romancista da paixão e da tragédia — autor de «Amor de Perdição».",
+    summary:
+      "O romancista da paixão e da tragédia — autor de «Amor de Perdição».",
     tags: ["literatura", "romance", "século XIX"],
     infobox: [
       { label: "Nascimento", value: "16 de Março de 1825, Lisboa" },
@@ -170,7 +174,12 @@ const SEEDS: Seed[] = [
       { label: "Demarcação", value: "1756 (a mais antiga do mundo)" },
       { label: "Património", value: "Mundial (UNESCO)" },
     ],
-    sources: [{ label: "Companhia Geral da Agricultura das Vinhas do Alto Douro", url: null }],
+    sources: [
+      {
+        label: "Companhia Geral da Agricultura das Vinhas do Alto Douro",
+        url: null,
+      },
+    ],
     body: `
 <p>O Douro é o grande rio do Norte e dá nome a uma das mais belas paisagens de Portugal: o Alto Douro Vinhateiro, onde os homens esculpiram a montanha em socalcos para nela plantar a vinha.</p>
 <h2>A região demarcada mais antiga</h2>
@@ -235,7 +244,10 @@ const SEEDS: Seed[] = [
       "Como um condado se tornou reino — o nascimento de Portugal no século XII.",
     tags: ["medieval", "fundação", "século XII"],
     infobox: [
-      { label: "Condado Portucalense", value: "Doado a D. Henrique de Borgonha" },
+      {
+        label: "Condado Portucalense",
+        value: "Doado a D. Henrique de Borgonha",
+      },
       { label: "São Mamede", value: "1128, junto a Guimarães" },
       { label: "Reconhecimento", value: "1143 (Zamora); 1179 (Papa)" },
     ],

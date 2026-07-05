@@ -1,6 +1,13 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useConvexAuth, useMutation, useQuery } from "convex/react";
-import { Check, ChevronUp, Flag, Loader2, Sparkles, Trash2 } from "lucide-react";
+import {
+  Check,
+  ChevronUp,
+  Flag,
+  Loader2,
+  Sparkles,
+  Trash2,
+} from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { api } from "../../../../convex/_generated/api";

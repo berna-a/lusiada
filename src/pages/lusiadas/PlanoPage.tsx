@@ -6,13 +6,25 @@ import { cantoHref, lusiadasBase } from "@/lib/lusiadas/nav";
 import {
   loadPlano,
   PLAN_DAYS,
-  planoDia,
   type PlanoState,
+  planoDia,
   type Ref,
   savePlano,
 } from "@/lib/lusiadas/plano";
 
-const ROMANS = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+const ROMANS = [
+  "",
+  "I",
+  "II",
+  "III",
+  "IV",
+  "V",
+  "VI",
+  "VII",
+  "VIII",
+  "IX",
+  "X",
+];
 
 function refHref(base: string, r: Ref) {
   return `${cantoHref(base, r.canto)}#estrofe-${r.stanza}`;
@@ -33,8 +45,7 @@ export default function PlanoPage() {
     (d) => !doneSet.has(d)
   );
 
-  const start = () =>
-    update({ startedAt: new Date().toISOString(), done: [] });
+  const start = () => update({ startedAt: new Date().toISOString(), done: [] });
   const toggle = (d: number) =>
     update({
       ...plano,

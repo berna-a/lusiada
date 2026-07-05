@@ -1,5 +1,5 @@
-import { useGrafia } from "@/lib/grafia/store";
 import type { Grafia } from "@/lib/grafia/lexicon";
+import { useGrafia } from "@/lib/grafia/store";
 
 const OPTIONS: { g: Grafia; label: string; title: string }[] = [
   { g: "pz", label: "Portuguez", title: "A grafia da Lusíada (com z)" },

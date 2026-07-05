@@ -77,10 +77,10 @@ export default function DicionarioPage() {
           Dicionário de grafias
         </h1>
         <p className="mx-auto mt-4 max-w-xl font-body text-[16px] text-foreground/65 leading-relaxed">
-          Ação ou acção? Objetivo ou objectivo? Veja como cada palavra se escreve
-          nas três grafias — incluindo o <strong>Portuguez</strong>, a grafia da
-          Lusíada. E procure o significado de qualquer palavra no dicionário da
-          Língua.
+          Ação ou acção? Objetivo ou objectivo? Veja como cada palavra se
+          escreve nas três grafias — incluindo o <strong>Portuguez</strong>, a
+          grafia da Lusíada. E procure o significado de qualquer palavra no
+          dicionário da Língua.
         </p>
       </header>
 

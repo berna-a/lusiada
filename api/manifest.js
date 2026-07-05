@@ -1,9 +1,11 @@
 // Web App Manifest host-aware: "Os Lusíadas" no domínio dedicado, "Memória
 // Lusíada" na alusiada.pt. Permite instalar como app em cada origem.
 
+const RE_OSLUSIADAS = /(^|\.)oslusiadas\.pt$/i;
+
 export default function handler(req, res) {
   const host = req.headers["x-forwarded-host"] || req.headers.host || "";
-  const lus = /(^|\.)oslusiadas\.pt$/i.test(host);
+  const lus = RE_OSLUSIADAS.test(host);
 
   const manifest = {
     name: lus ? "Os Lusíadas" : "Memória Lusíada",

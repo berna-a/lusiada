@@ -1,5 +1,5 @@
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 
 type Line = { prefix: string; keyword: string; key: string };
 
@@ -50,7 +50,9 @@ export function MemoriaVivaSection() {
   // Reset on scroll out
   useEffect(() => {
     const el = sectionRef.current;
-    if (!el) return;
+    if (!el) {
+      return;
+    }
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) {
@@ -71,16 +73,16 @@ export function MemoriaVivaSection() {
 
   return (
     <section
-      ref={sectionRef}
       className="relative w-full overflow-hidden bg-white py-24 md:py-32"
+      ref={sectionRef}
       style={{ fontFamily: "'Cinzel', serif" }}
     >
       <div className="container mx-auto px-6 md:px-10">
         {/* ── FIXED STANZA ───────────────────────── */}
         <div className="mx-auto w-fit translate-x-0 md:-translate-x-[75px]">
-          <div className="flex flex-col gap-3 md:gap-5 items-end">
+          <div className="flex flex-col items-end gap-3 md:gap-5">
             {LINES.map((line) => (
-              <div key={line.key} className="flex items-baseline gap-x-[1.2em]">
+              <div className="flex items-baseline gap-x-[1.2em]" key={line.key}>
                 {line.prefix && (
                   <span
                     className="tracking-[0.08em]"
@@ -97,16 +99,18 @@ export function MemoriaVivaSection() {
                   </span>
                 )}
                 <button
+                  className="relative cursor-pointer leading-none tracking-[0.08em] transition-all duration-300"
                   onClick={() => setActive(line.key)}
                   onMouseEnter={() => setHover(line.key)}
                   onMouseLeave={() => setHover(null)}
-                  className="relative tracking-[0.08em] leading-none cursor-pointer transition-all duration-300"
                   style={{
                     fontFamily: "'Cinzel', serif",
                     fontSize: "clamp(1.6rem,7vw,3.6rem)",
                     fontWeight: 400,
                     wordSpacing: line.key === "memoria" ? "-0.35em" : undefined,
-                    ...(focusedKey === line.key ? goldStyle : { color: COBALT }),
+                    ...(focusedKey === line.key
+                      ? goldStyle
+                      : { color: COBALT }),
                   }}
                 >
                   {line.keyword}
@@ -118,30 +122,30 @@ export function MemoriaVivaSection() {
 
         {/* ── EXPANDABLE CONTENT AREA ───────────────────────── */}
         <motion.div
-          initial={false}
           animate={{ height: isOpen ? "auto" : 0 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="overflow-hidden"
+          initial={false}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="pt-12 md:pt-16 max-w-2xl mx-auto min-h-[180px] flex items-start justify-center">
+          <div className="mx-auto flex min-h-[180px] max-w-2xl items-start justify-center pt-12 md:pt-16">
             <AnimatePresence mode="wait">
               {def && (
                 <motion.div
-                  key={focusedKey}
-                  initial={{
-                    opacity: isActiveSelected ? 0 : 0.3,
-                    filter: isActiveSelected ? "blur(8px)" : "blur(8px)",
-                  }}
                   animate={{
                     opacity: isActiveSelected ? 1 : 0.3,
                     filter: isActiveSelected ? "blur(0px)" : "blur(8px)",
                   }}
-                  exit={{ opacity: 0, filter: "blur(8px)" }}
-                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                   className="text-center"
+                  exit={{ opacity: 0, filter: "blur(8px)" }}
+                  initial={{
+                    opacity: isActiveSelected ? 0 : 0.3,
+                    filter: isActiveSelected ? "blur(8px)" : "blur(8px)",
+                  }}
+                  key={focusedKey}
+                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <p
-                    className="text-[11px] tracking-[0.4em] uppercase mb-4"
+                    className="mb-4 text-[11px] uppercase tracking-[0.4em]"
                     style={{
                       color: COBALT,
                       fontFamily: "system-ui, sans-serif",
@@ -151,18 +155,18 @@ export function MemoriaVivaSection() {
                     {def.title}
                   </p>
                   <p
-                    className="text-lg md:text-xl leading-relaxed text-neutral-800"
+                    className="text-lg text-neutral-800 leading-relaxed md:text-xl"
                     style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
                   >
                     {def.body}
                   </p>
                   {isActiveSelected && (
                     <button
+                      className="mt-6 text-[10px] text-neutral-500 uppercase tracking-[0.3em] transition-colors hover:text-neutral-800"
                       onClick={() => {
                         setActive(null);
                         setHover(null);
                       }}
-                      className="mt-6 text-[10px] tracking-[0.3em] uppercase text-neutral-500 hover:text-neutral-800 transition-colors"
                       style={{ fontFamily: "system-ui, sans-serif" }}
                     >
                       ← fechar

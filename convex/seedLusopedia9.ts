@@ -146,7 +146,9 @@ const SEEDS: Seed[] = [
       { label: "Morte", value: "25 de Outubro de 1918, Espinho" },
       { label: "Movimento", value: "Vanguardas (cubismo, futurismo)" },
     ],
-    sources: [{ label: "Catálogo raisonné de Amadeo de Souza-Cardoso", url: null }],
+    sources: [
+      { label: "Catálogo raisonné de Amadeo de Souza-Cardoso", url: null },
+    ],
     body: `
 <p>Amadeo de Souza-Cardoso (1887–1918) foi o primeiro grande pintor moderno português. Em Paris, no fervilhar das vanguardas, criou uma obra de fulgor único — e morreu cedo demais para a ver reconhecida.</p>
 <h2>No coração da vanguarda</h2>
@@ -211,7 +213,10 @@ const SEEDS: Seed[] = [
       "O médico-escritor de Trás-os-Montes — voz telúrica e livre das letras portuguezas.",
     tags: ["literatura", "século XX", "Trás-os-Montes"],
     infobox: [
-      { label: "Nascimento", value: "12 de Agosto de 1907, São Martinho de Anta" },
+      {
+        label: "Nascimento",
+        value: "12 de Agosto de 1907, São Martinho de Anta",
+      },
       { label: "Morte", value: "17 de Janeiro de 1995, Coimbra" },
       { label: "Obras", value: "A Criação do Mundo; Bichos; Diário" },
     ],

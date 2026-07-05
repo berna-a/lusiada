@@ -1,7 +1,11 @@
 // Sitemap dinâmico: páginas estáticas + todos os artigos publicados da Lusopédia.
-import VERBETES from "../src/data/dicionario/indexaveis.json" with { type: "json" };
+import VERBETES from "../src/data/dicionario/indexaveis.json" with {
+  type: "json",
+};
 
 const BASE = "https://www.alusiada.pt";
+
+const RE_OSLUSIADAS = /(^|\.)oslusiadas\.pt$/i;
 
 const STATIC_PATHS = [
   "/",
@@ -31,20 +35,89 @@ const STATIC_PATHS = [
 // Palavras de alta procura do dicionário (subconjunto curado — evita despejar
 // milhares de páginas quase-iguais no Google).
 const DICIONARIO_SLUGS = [
-  "acao", "acoes", "objetivo", "objeto", "direcao", "diretor", "otimo",
-  "exato", "correto", "ator", "atriz", "atividade", "atual", "atualidade",
-  "fator", "colecao", "selecao", "protecao", "projeto",
-  "rececao", "excecao", "arquiteto", "arquitetura", "perspetiva", "respetivo",
-  "ativo", "adocao", "batismo", "dialeto", "eletricidade", "eletrico",
-  "reacao", "fratura", "infecao", "inspecao", "espetaculo", "espetador",
-  "olfato", "teto", "tato", "coletivo", "letivo", "afeto",
-  "ato", "atos", "atuar", "atuacao", "ativar", "adotar", "adjetivo",
-  "subjetivo", "fracao", "atracao", "distracao", "contracao", "tracao",
-  "redacao", "fatura", "faturacao", "otica", "otimismo", "otimista",
-  "otimizar", "noturno", "efetivo", "afetivo", "coletividade", "inseto",
-  "detetar", "detecao", "recetor", "concecao", "dececao", "exceto",
-  "correcao", "diretorio", "eletronico", "eletronica", "arquitetonico",
-  "ereto", "perfecionismo", "selecionar", "colecionar",
+  "acao",
+  "acoes",
+  "objetivo",
+  "objeto",
+  "direcao",
+  "diretor",
+  "otimo",
+  "exato",
+  "correto",
+  "ator",
+  "atriz",
+  "atividade",
+  "atual",
+  "atualidade",
+  "fator",
+  "colecao",
+  "selecao",
+  "protecao",
+  "projeto",
+  "rececao",
+  "excecao",
+  "arquiteto",
+  "arquitetura",
+  "perspetiva",
+  "respetivo",
+  "ativo",
+  "adocao",
+  "batismo",
+  "dialeto",
+  "eletricidade",
+  "eletrico",
+  "reacao",
+  "fratura",
+  "infecao",
+  "inspecao",
+  "espetaculo",
+  "espetador",
+  "olfato",
+  "teto",
+  "tato",
+  "coletivo",
+  "letivo",
+  "afeto",
+  "ato",
+  "atos",
+  "atuar",
+  "atuacao",
+  "ativar",
+  "adotar",
+  "adjetivo",
+  "subjetivo",
+  "fracao",
+  "atracao",
+  "distracao",
+  "contracao",
+  "tracao",
+  "redacao",
+  "fatura",
+  "faturacao",
+  "otica",
+  "otimismo",
+  "otimista",
+  "otimizar",
+  "noturno",
+  "efetivo",
+  "afetivo",
+  "coletividade",
+  "inseto",
+  "detetar",
+  "detecao",
+  "recetor",
+  "concecao",
+  "dececao",
+  "exceto",
+  "correcao",
+  "diretorio",
+  "eletronico",
+  "eletronica",
+  "arquitetonico",
+  "ereto",
+  "perfecionismo",
+  "selecionar",
+  "colecionar",
 ];
 
 function isoDate(ms) {
@@ -56,10 +129,22 @@ export default async function handler(req, res) {
   const host = req.headers["x-forwarded-host"] || req.headers.host || "";
 
   // Domínio dedicado oslusiadas.pt — sitemap próprio com o leitor da obra.
-  if (/(^|\.)oslusiadas\.pt$/i.test(host)) {
+  if (RE_OSLUSIADAS.test(host)) {
     const LUS_BASE = "https://oslusiadas.pt";
-    const paths = ["/", "/canto/2", "/canto/3", "/canto/4", "/canto/5",
-      "/canto/6", "/canto/7", "/canto/8", "/canto/9", "/canto/10", "/plano", "/viagem"];
+    const paths = [
+      "/",
+      "/canto/2",
+      "/canto/3",
+      "/canto/4",
+      "/canto/5",
+      "/canto/6",
+      "/canto/7",
+      "/canto/8",
+      "/canto/9",
+      "/canto/10",
+      "/plano",
+      "/viagem",
+    ];
     const xmlL = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${paths.map((p) => `  <url><loc>${LUS_BASE}${p}</loc><lastmod>${today}</lastmod></url>`).join("\n")}
@@ -78,12 +163,16 @@ ${paths.map((p) => `  <url><loc>${LUS_BASE}${p}</loc><lastmod>${today}</lastmod>
       const r = await fetch(`${convexUrl}/api/query`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ path: "articles:list", args: {}, format: "json" }),
+        body: JSON.stringify({
+          path: "articles:list",
+          args: {},
+          format: "json",
+        }),
       });
       const data = await r.json();
       const items = Array.isArray(data) ? data : (data?.value ?? []);
       articles = items
-        .filter((a) => a && a.slug)
+        .filter((a) => a?.slug)
         .map((a) => ({
           path: `/arca/lusopedia/${a.slug}`,
           lastmod: a.createdAt ? isoDate(a.createdAt) : today,
@@ -96,7 +185,10 @@ ${paths.map((p) => `  <url><loc>${LUS_BASE}${p}</loc><lastmod>${today}</lastmod>
   const entries = [
     ...STATIC_PATHS.map((p) => ({ path: p, lastmod: today })),
     ...articles,
-    ...DICIONARIO_SLUGS.map((s) => ({ path: `/dicionario/${s}`, lastmod: today })),
+    ...DICIONARIO_SLUGS.map((s) => ({
+      path: `/dicionario/${s}`,
+      lastmod: today,
+    })),
     ...VERBETES.map((s) => ({ path: `/dicionario/${s}`, lastmod: today })),
   ];
   const urls = entries

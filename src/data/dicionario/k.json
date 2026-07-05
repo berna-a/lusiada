@@ -1,1 +1,177 @@
-[{"slug":"k","word":"K","pos":"m.","defs":["Esta letra tem sido considerada a undécima do nosso alfabeto, mas, de facto, é estranha ao abecedário português, e só deverá usar-se em certos vocábulos não aportuguesados, e em alguns vocábulos derivados de nomes próprios estrangeiros, em que ela entre, sendo todavia tolerável em kilo e seus compostos, onde representa uma espécie de convenção internacional, embora destituída de base científica","Que numa série ocupa o undécimo lugar.--Os Latinos só empregavam o k como letra numeral, que significava 250"],"ipa":"/ˈka.pɐ/"},{"slug":"kabfussia","word":"Kabfússia","pos":"f.","defs":["Gênero de plantas compostas"]},{"slug":"kantismo","word":"Kantismo","pos":"m.","defs":["Sistema filosófico de Kant"]},{"slug":"kantista","word":"Kantista","pos":"m.","defs":["Sectário da filosofia de Kant"]},{"slug":"kenedia","word":"Kenédia","pos":"f.","defs":["Gênero de plantas leguminosas"]},{"slug":"kepi","word":"Képi","pos":"m.","defs":["(V. quépi)"]},{"slug":"kepler","word":"Képler","pos":"m.","defs":["A quarta mancha da lua"]},{"slug":"kepleria","word":"Kepléria","pos":"f.","defs":["Gênero de palmeiras indianas"]},{"slug":"kepleriano","word":"Kepleriano","pos":"adj.","defs":["Relativo a Kepler. Diz-se especialmente das três leis de Kepler, que precederam o descobrimento da gravitação"]},{"slug":"kera","word":"Kera...","pos":"pref.","defs":["(us. em algumas palavras científicas, mas que deve substituir-se por cera...)"]},{"slug":"kermesse","word":"Kermesse","pos":"f.","defs":["Estrangeirismo inútil, por feira com arraial, bazar"]},{"slug":"kerria","word":"Kérria","pos":"f.","defs":["Gênero de plantas da tríbo das espíreas, originária do Japão, (herria japonica)"]},{"slug":"khediva","word":"Khediva","pos":"m.","defs":["(V. quedive)"]},{"slug":"kilingia","word":"Kilíngia","pos":"f.","defs":["Gênero de plantas, ciperáceas"]},{"slug":"kilo","word":"Kilo","pos":"m.","defs":["(e seus compostos) (V. quilo^1, etc.)"]},{"slug":"kirganelia","word":"Kirganélia","pos":"f.","defs":["Árvore euforbiácea da Índia"]},{"slug":"kleinia","word":"Kleínia","pos":"f.","defs":["Gênero de plantas compostas"]},{"slug":"kneipista","word":"Kneipista","pos":"m.","defs":["Sectário do sistema terapêutico de Kneip"]},{"slug":"knoxia","word":"Knóxia","pos":"f.","defs":["Gênero de plantas rubiáceas da Índia"]},{"slug":"kochia","word":"Kóchia","pos":"f.","defs":["Gênero de plantas chenopódeas"]},{"slug":"koeleria","word":"Koeléria","pos":"f.","defs":["Gênero de plantas gramíneas"]},{"slug":"koelreuteria","word":"Koelreutéria","pos":"f.","defs":["Gênero de plantas sapindáceas"]},{"slug":"kolbia","word":"Kólbia","pos":"f.","defs":["Planta trepadeira da África tropical"]},{"slug":"krameria","word":"Kraméria","pos":"f.","defs":["Gênero de arbustos americanos"]},{"slug":"krausista","word":"Krausista","pos":"m.","defs":["Partidário do sistema filosófico de Krause"]},{"slug":"kumel","word":"Kúmel","pos":"m.","defs":["Licôr doce e alcoólico, cujo gôsto particular é devido a uma infusão de sementes de cominho"]},{"slug":"kuntia","word":"Kúntia","pos":"f.","defs":["Gênero de palmeiras dos Andes"]},{"slug":"kunzea","word":"Kúnzea","pos":"f.","defs":["Gênero de plantas mirtáceas"]}]
+[
+  {
+    "slug": "k",
+    "word": "K",
+    "pos": "m.",
+    "defs": [
+      "Esta letra tem sido considerada a undécima do nosso alfabeto, mas, de facto, é estranha ao abecedário português, e só deverá usar-se em certos vocábulos não aportuguesados, e em alguns vocábulos derivados de nomes próprios estrangeiros, em que ela entre, sendo todavia tolerável em kilo e seus compostos, onde representa uma espécie de convenção internacional, embora destituída de base científica",
+      "Que numa série ocupa o undécimo lugar.--Os Latinos só empregavam o k como letra numeral, que significava 250"
+    ],
+    "ipa": "/ˈka.pɐ/"
+  },
+  {
+    "slug": "kabfussia",
+    "word": "Kabfússia",
+    "pos": "f.",
+    "defs": ["Gênero de plantas compostas"]
+  },
+  {
+    "slug": "kantismo",
+    "word": "Kantismo",
+    "pos": "m.",
+    "defs": ["Sistema filosófico de Kant"]
+  },
+  {
+    "slug": "kantista",
+    "word": "Kantista",
+    "pos": "m.",
+    "defs": ["Sectário da filosofia de Kant"]
+  },
+  {
+    "slug": "kenedia",
+    "word": "Kenédia",
+    "pos": "f.",
+    "defs": ["Gênero de plantas leguminosas"]
+  },
+  { "slug": "kepi", "word": "Képi", "pos": "m.", "defs": ["(V. quépi)"] },
+  {
+    "slug": "kepler",
+    "word": "Képler",
+    "pos": "m.",
+    "defs": ["A quarta mancha da lua"]
+  },
+  {
+    "slug": "kepleria",
+    "word": "Kepléria",
+    "pos": "f.",
+    "defs": ["Gênero de palmeiras indianas"]
+  },
+  {
+    "slug": "kepleriano",
+    "word": "Kepleriano",
+    "pos": "adj.",
+    "defs": [
+      "Relativo a Kepler. Diz-se especialmente das três leis de Kepler, que precederam o descobrimento da gravitação"
+    ]
+  },
+  {
+    "slug": "kera",
+    "word": "Kera...",
+    "pos": "pref.",
+    "defs": [
+      "(us. em algumas palavras científicas, mas que deve substituir-se por cera...)"
+    ]
+  },
+  {
+    "slug": "kermesse",
+    "word": "Kermesse",
+    "pos": "f.",
+    "defs": ["Estrangeirismo inútil, por feira com arraial, bazar"]
+  },
+  {
+    "slug": "kerria",
+    "word": "Kérria",
+    "pos": "f.",
+    "defs": [
+      "Gênero de plantas da tríbo das espíreas, originária do Japão, (herria japonica)"
+    ]
+  },
+  {
+    "slug": "khediva",
+    "word": "Khediva",
+    "pos": "m.",
+    "defs": ["(V. quedive)"]
+  },
+  {
+    "slug": "kilingia",
+    "word": "Kilíngia",
+    "pos": "f.",
+    "defs": ["Gênero de plantas, ciperáceas"]
+  },
+  {
+    "slug": "kilo",
+    "word": "Kilo",
+    "pos": "m.",
+    "defs": ["(e seus compostos) (V. quilo^1, etc.)"]
+  },
+  {
+    "slug": "kirganelia",
+    "word": "Kirganélia",
+    "pos": "f.",
+    "defs": ["Árvore euforbiácea da Índia"]
+  },
+  {
+    "slug": "kleinia",
+    "word": "Kleínia",
+    "pos": "f.",
+    "defs": ["Gênero de plantas compostas"]
+  },
+  {
+    "slug": "kneipista",
+    "word": "Kneipista",
+    "pos": "m.",
+    "defs": ["Sectário do sistema terapêutico de Kneip"]
+  },
+  {
+    "slug": "knoxia",
+    "word": "Knóxia",
+    "pos": "f.",
+    "defs": ["Gênero de plantas rubiáceas da Índia"]
+  },
+  {
+    "slug": "kochia",
+    "word": "Kóchia",
+    "pos": "f.",
+    "defs": ["Gênero de plantas chenopódeas"]
+  },
+  {
+    "slug": "koeleria",
+    "word": "Koeléria",
+    "pos": "f.",
+    "defs": ["Gênero de plantas gramíneas"]
+  },
+  {
+    "slug": "koelreuteria",
+    "word": "Koelreutéria",
+    "pos": "f.",
+    "defs": ["Gênero de plantas sapindáceas"]
+  },
+  {
+    "slug": "kolbia",
+    "word": "Kólbia",
+    "pos": "f.",
+    "defs": ["Planta trepadeira da África tropical"]
+  },
+  {
+    "slug": "krameria",
+    "word": "Kraméria",
+    "pos": "f.",
+    "defs": ["Gênero de arbustos americanos"]
+  },
+  {
+    "slug": "krausista",
+    "word": "Krausista",
+    "pos": "m.",
+    "defs": ["Partidário do sistema filosófico de Krause"]
+  },
+  {
+    "slug": "kumel",
+    "word": "Kúmel",
+    "pos": "m.",
+    "defs": [
+      "Licôr doce e alcoólico, cujo gôsto particular é devido a uma infusão de sementes de cominho"
+    ]
+  },
+  {
+    "slug": "kuntia",
+    "word": "Kúntia",
+    "pos": "f.",
+    "defs": ["Gênero de palmeiras dos Andes"]
+  },
+  {
+    "slug": "kunzea",
+    "word": "Kúnzea",
+    "pos": "f.",
+    "defs": ["Gênero de plantas mirtáceas"]
+  }
+]

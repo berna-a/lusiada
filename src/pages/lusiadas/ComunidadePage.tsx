@@ -70,7 +70,9 @@ export default function ComunidadePage() {
                       {a.kind === "sense" ? "Sentido" : "Anotação"}
                     </span>
                     <span className="truncate">{a.label}</span>
-                    <span className="ml-auto shrink-0">{timeAgo(a.createdAt)}</span>
+                    <span className="ml-auto shrink-0">
+                      {timeAgo(a.createdAt)}
+                    </span>
                   </div>
                   {a.excerpt && (
                     <p className="mt-1.5 font-body text-[13px] text-foreground/60 italic">

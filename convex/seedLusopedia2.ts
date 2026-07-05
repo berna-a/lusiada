@@ -31,9 +31,7 @@ const SEEDS: Seed[] = [
       { label: "Feito", value: "Chegada ao Brasil (1500)" },
       { label: "Época", value: "Século XVI" },
     ],
-    sources: [
-      { label: "Carta de Pero Vaz de Caminha (1500)", url: null },
-    ],
+    sources: [{ label: "Carta de Pero Vaz de Caminha (1500)", url: null }],
     body: `
 <p>Pedro Álvares Cabral (c. 1467–1520) comandou a segunda armada portugueza à Índia e, a 22 de Abril de 1500, aportou às terras a que chamou Vera Cruz — o Brasil. Foi um dos momentos maiores da ${lk("era-dos-descobrimentos", "Era dos Descobrimentos")}.</p>
 <h2>A viagem</h2>
@@ -49,7 +47,8 @@ const SEEDS: Seed[] = [
     slug: "dom-joao-ii",
     title: "D. João II",
     category: "Pessoas",
-    summary: "O Príncipe Perfeito — o rei que centralizou o poder e impulsionou a expansão.",
+    summary:
+      "O Príncipe Perfeito — o rei que centralizou o poder e impulsionou a expansão.",
     tags: ["descobrimentos", "reis", "expansão"],
     infobox: [
       { label: "Nascimento", value: "3 de Março de 1455, Lisboa" },
@@ -72,7 +71,8 @@ const SEEDS: Seed[] = [
     slug: "nuno-alvares-pereira",
     title: "Nuno Álvares Pereira",
     category: "Pessoas",
-    summary: "O Santo Condestável — herói de Aljubarrota e garante da independência.",
+    summary:
+      "O Santo Condestável — herói de Aljubarrota e garante da independência.",
     tags: ["batalhas", "independência", "santos"],
     infobox: [
       { label: "Nascimento", value: "24 de Junho de 1360" },
@@ -302,7 +302,8 @@ const SEEDS: Seed[] = [
     slug: "mensagem",
     title: "Mensagem",
     category: "Obras",
-    summary: "O único livro que Pessoa publicou em vida — a epopeia do espírito portuguez.",
+    summary:
+      "O único livro que Pessoa publicou em vida — a epopeia do espírito portuguez.",
     tags: ["poesia", "literatura", "Pessoa"],
     infobox: [
       { label: "Autor", value: "Fernando Pessoa" },
@@ -332,7 +333,9 @@ const SEEDS: Seed[] = [
       { label: "Continentes", value: "Quatro" },
       { label: "Organização", value: "CPLP (fundada em 1996)" },
     ],
-    sources: [{ label: "Comunidade dos Países de Língua Portuguesa", url: null }],
+    sources: [
+      { label: "Comunidade dos Países de Língua Portuguesa", url: null },
+    ],
     body: `
 <p>Lusofonia é o nome dado ao conjunto dos povos, países e culturas que partilham a ${lk("lingua-portugueza", "língua portugueza")}. Liga, num mesmo idioma, gentes de quatro continentes.</p>
 <h2>Uma comunidade</h2>

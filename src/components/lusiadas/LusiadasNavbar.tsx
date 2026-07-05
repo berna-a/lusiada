@@ -26,14 +26,22 @@ export function LusiadasNavbar() {
       to: `${base}/comunidade`,
       active: pathname.endsWith("/comunidade"),
     },
-    { label: "Plano", to: `${base}/plano`, active: pathname.endsWith("/plano") },
-    { label: "Dicionário", to: "/dicionario", active: pathname.startsWith("/dicionario") },
+    {
+      label: "Plano",
+      to: `${base}/plano`,
+      active: pathname.endsWith("/plano"),
+    },
+    {
+      label: "Dicionário",
+      to: "/dicionario",
+      active: pathname.startsWith("/dicionario"),
+    },
   ];
 
   return (
     <nav
       aria-label="Navegação principal"
-      className="-translate-x-1/2 fixed top-4 left-1/2 z-50 w-[92%] max-w-[1000px]"
+      className="fixed top-4 left-1/2 z-50 w-[92%] max-w-[1000px] -translate-x-1/2"
     >
       <div className="glass-nav-hero overflow-hidden rounded-[28px]">
         <div className="flex h-[58px] items-center gap-3 px-4 md:px-6">

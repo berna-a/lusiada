@@ -20,7 +20,19 @@ import { loadPlano, PLAN_DAYS } from "@/lib/lusiadas/plano";
 import { getVisited, removeSaved, useSaved } from "@/lib/lusiadas/saved";
 import { api } from "../../../convex/_generated/api";
 
-const ROMANS = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+const ROMANS = [
+  "",
+  "I",
+  "II",
+  "III",
+  "IV",
+  "V",
+  "VI",
+  "VII",
+  "VIII",
+  "IX",
+  "X",
+];
 
 export default function PerfilPage() {
   const base = useMemo(lusiadasBase, []);
@@ -80,9 +92,14 @@ export default function PerfilPage() {
           <div className="rounded-2xl border border-border bg-card p-4">
             <p className="font-display text-[24px] text-primary">
               {visited.length}
-              <span className="font-body text-[14px] text-muted-foreground"> / 10</span>
+              <span className="font-body text-[14px] text-muted-foreground">
+                {" "}
+                / 10
+              </span>
             </p>
-            <p className="font-body text-[13px] text-muted-foreground">Cantos abertos</p>
+            <p className="font-body text-[13px] text-muted-foreground">
+              Cantos abertos
+            </p>
           </div>
           <Link
             className="rounded-2xl border border-border bg-card p-4 transition-colors hover:border-accent/40"
@@ -106,8 +123,8 @@ export default function PerfilPage() {
         </h2>
         {saved.length === 0 ? (
           <p className="mt-3 flex items-center gap-2 rounded-xl border border-border border-dashed bg-card/50 px-4 py-5 font-body text-[14px] text-muted-foreground">
-            <Bookmark className="h-4 w-4 shrink-0" /> Guarda estrofes no leitor (ícone
-            de marcador) e encontra-las aqui.
+            <Bookmark className="h-4 w-4 shrink-0" /> Guarda estrofes no leitor
+            (ícone de marcador) e encontra-las aqui.
           </p>
         ) : (
           <ul className="mt-3 space-y-2">
@@ -149,39 +166,43 @@ export default function PerfilPage() {
         <h2 className="font-body text-[12px] text-muted-foreground uppercase tracking-[0.2em]">
           As minhas anotações {mine.length > 0 && `· ${mine.length}`}
         </h2>
-        {!isAuthenticated ? (
+        {isAuthenticated ? (
+          mine.length === 0 ? (
+            <p className="mt-3 flex items-center gap-2 rounded-xl border border-border border-dashed bg-card/50 px-4 py-5 font-body text-[14px] text-muted-foreground">
+              <MessageSquare className="h-4 w-4 shrink-0" /> As tuas anotações e
+              sentidos aparecem aqui.
+            </p>
+          ) : (
+            <ul className="mt-3 space-y-2">
+              {mine.map((m) => (
+                <li key={m._id}>
+                  <Link
+                    className="block rounded-xl border border-border bg-card px-4 py-3 transition-colors hover:border-accent/40"
+                    to={targetHref(base, m.target)}
+                  >
+                    <span className="flex items-center gap-2 font-body text-[12px] text-muted-foreground">
+                      <span className="rounded-full bg-accent/10 px-2 py-0.5 text-accent">
+                        {m.kind === "sense" ? "Sentido" : "Anotação"}
+                      </span>
+                      {m.label}
+                    </span>
+                    <span className="mt-1 block font-body text-[15px] text-foreground/90 leading-relaxed">
+                      {m.body.length > 160
+                        ? `${m.body.slice(0, 160)}…`
+                        : m.body}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )
+        ) : (
           <p className="mt-3 rounded-xl border border-border border-dashed bg-card/50 px-4 py-5 font-body text-[14px] text-muted-foreground">
             <Link className="text-accent hover:underline" to="/aderir">
               Entra
             </Link>{" "}
             para anotar versos e guardar os teus contributos na tua conta.
           </p>
-        ) : mine.length === 0 ? (
-          <p className="mt-3 flex items-center gap-2 rounded-xl border border-border border-dashed bg-card/50 px-4 py-5 font-body text-[14px] text-muted-foreground">
-            <MessageSquare className="h-4 w-4 shrink-0" /> As tuas anotações e sentidos
-            aparecem aqui.
-          </p>
-        ) : (
-          <ul className="mt-3 space-y-2">
-            {mine.map((m) => (
-              <li key={m._id}>
-                <Link
-                  className="block rounded-xl border border-border bg-card px-4 py-3 transition-colors hover:border-accent/40"
-                  to={targetHref(base, m.target)}
-                >
-                  <span className="flex items-center gap-2 font-body text-[12px] text-muted-foreground">
-                    <span className="rounded-full bg-accent/10 px-2 py-0.5 text-accent">
-                      {m.kind === "sense" ? "Sentido" : "Anotação"}
-                    </span>
-                    {m.label}
-                  </span>
-                  <span className="mt-1 block font-body text-[15px] text-foreground/90 leading-relaxed">
-                    {m.body.length > 160 ? `${m.body.slice(0, 160)}…` : m.body}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
         )}
       </section>
     </main>

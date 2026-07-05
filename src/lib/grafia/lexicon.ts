@@ -28,7 +28,12 @@ function gentilico(pzBase: string, normaBase: string): LexEntry[] {
   const pzStem = pzBase.slice(0, -1); // "portugue"
   const normaStem = normaBase.slice(0, -2); // "portugu"
   return [
-    { pz: `${pzStem}z`, ao: `${normaStem}ês`, pre: `${normaStem}ês`, kind: "z" },
+    {
+      pz: `${pzStem}z`,
+      ao: `${normaStem}ês`,
+      pre: `${normaStem}ês`,
+      kind: "z",
+    },
     {
       pz: `${pzStem}za`,
       ao: `${normaStem}esa`,

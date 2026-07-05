@@ -23,7 +23,8 @@ const SEEDS: Seed[] = [
     slug: "d-dinis",
     title: "D. Dinis",
     category: "Pessoas",
-    summary: "O Rei Lavrador e Trovador — deu a Portugal a sua língua e a sua universidade.",
+    summary:
+      "O Rei Lavrador e Trovador — deu a Portugal a sua língua e a sua universidade.",
     tags: ["reis", "língua", "poesia"],
     infobox: [
       { label: "Nascimento", value: "9 de Outubro de 1261, Lisboa" },
@@ -46,7 +47,8 @@ const SEEDS: Seed[] = [
     slug: "d-manuel-i",
     title: "D. Manuel I",
     category: "Pessoas",
-    summary: "O Venturoso — o rei do auge dos Descobrimentos e do estilo manuelino.",
+    summary:
+      "O Venturoso — o rei do auge dos Descobrimentos e do estilo manuelino.",
     tags: ["reis", "descobrimentos", "manuelino"],
     infobox: [
       { label: "Nascimento", value: "31 de Maio de 1469, Alcochete" },
@@ -69,11 +71,15 @@ const SEEDS: Seed[] = [
     slug: "d-sebastiao",
     title: "D. Sebastião",
     category: "Pessoas",
-    summary: "O Desejado — o rei-menino cuja morte abriu o sonho do sebastianismo.",
+    summary:
+      "O Desejado — o rei-menino cuja morte abriu o sonho do sebastianismo.",
     tags: ["reis", "sebastianismo", "século XVI"],
     infobox: [
       { label: "Nascimento", value: "20 de Janeiro de 1554, Lisboa" },
-      { label: "Desaparecimento", value: "4 de Agosto de 1578, Alcácer-Quibir" },
+      {
+        label: "Desaparecimento",
+        value: "4 de Agosto de 1578, Alcácer-Quibir",
+      },
       { label: "Reinado", value: "1557–1578" },
       { label: "Epíteto", value: "O Desejado" },
     ],
@@ -160,7 +166,7 @@ const SEEDS: Seed[] = [
     slug: "guimaraes",
     title: "Guimarães",
     category: "Lugares",
-    summary: "A Cidade Berço — \"Aqui nasceu Portugal\".",
+    summary: 'A Cidade Berço — "Aqui nasceu Portugal".',
     tags: ["cidades", "fundação", "UNESCO"],
     infobox: [
       { label: "Região", value: "Minho" },
@@ -182,7 +188,8 @@ const SEEDS: Seed[] = [
     slug: "sintra",
     title: "Sintra",
     category: "Lugares",
-    summary: "A serra de palácios e nevoeiros que Byron chamou \"glorioso Éden\".",
+    summary:
+      'A serra de palácios e nevoeiros que Byron chamou "glorioso Éden".',
     tags: ["paisagem", "romantismo", "UNESCO"],
     infobox: [
       { label: "Região", value: "Grande Lisboa" },
@@ -204,7 +211,8 @@ const SEEDS: Seed[] = [
     slug: "evora",
     title: "Évora",
     category: "Lugares",
-    summary: "A cidade-museu do Alentejo, de raízes romanas e brancas muralhas.",
+    summary:
+      "A cidade-museu do Alentejo, de raízes romanas e brancas muralhas.",
     tags: ["cidades", "Alentejo", "UNESCO"],
     infobox: [
       { label: "Região", value: "Alentejo" },
@@ -226,7 +234,7 @@ const SEEDS: Seed[] = [
     slug: "sagres",
     title: "Sagres",
     category: "Lugares",
-    summary: "O \"fim do mundo\", no Algarve, onde começaram os Descobrimentos.",
+    summary: 'O "fim do mundo", no Algarve, onde começaram os Descobrimentos.',
     tags: ["descobrimentos", "Algarve", "mar"],
     infobox: [
       { label: "Região", value: "Algarve" },
@@ -248,7 +256,8 @@ const SEEDS: Seed[] = [
     slug: "batalha-de-alcacer-quibir",
     title: "Batalha de Alcácer-Quibir",
     category: "Eventos",
-    summary: "O desastre de 1578 que custou a vida ao rei e a independência ao reino.",
+    summary:
+      "O desastre de 1578 que custou a vida ao rei e a independência ao reino.",
     tags: ["batalhas", "1578", "Marrocos"],
     infobox: [
       { label: "Data", value: "4 de Agosto de 1578" },
@@ -279,7 +288,9 @@ const SEEDS: Seed[] = [
       { label: "Fim do domínio", value: "União Ibérica (1580–1640)" },
       { label: "Feriado", value: "Dia da Restauração" },
     ],
-    sources: [{ label: "História de Portugal Restaurado, Luís de Meneses", url: null }],
+    sources: [
+      { label: "História de Portugal Restaurado, Luís de Meneses", url: null },
+    ],
     body: `
 <p>A Restauração da Independência, a 1 de Dezembro de 1640, pôs fim a sessenta anos de domínio espanhol e devolveu a Portugal a sua soberania. É hoje feriado nacional.</p>
 <h2>O golpe</h2>
@@ -294,7 +305,8 @@ const SEEDS: Seed[] = [
     slug: "sebastianismo",
     title: "Sebastianismo",
     category: "Conceitos",
-    summary: "O mito do regresso de D. Sebastião — a esperança portugueza num futuro de glória.",
+    summary:
+      "O mito do regresso de D. Sebastião — a esperança portugueza num futuro de glória.",
     tags: ["mito", "identidade", "Quinto Império"],
     infobox: [
       { label: "Origem", value: "Após Alcácer-Quibir (1578)" },
@@ -316,7 +328,8 @@ const SEEDS: Seed[] = [
     slug: "bacalhau",
     title: "Bacalhau",
     category: "Conceitos",
-    summary: "O \"fiel amigo\" — o peixe que se tornou prato nacional de Portugal.",
+    summary:
+      'O "fiel amigo" — o peixe que se tornou prato nacional de Portugal.',
     tags: ["gastronomia", "mar", "tradição"],
     infobox: [
       { label: "Natureza", value: "Peixe seco e salgado" },

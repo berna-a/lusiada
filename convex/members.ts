@@ -1,5 +1,5 @@
-import { mutation } from "./_generated/server";
 import { v } from "convex/values";
+import { mutation } from "./_generated/server";
 
 /**
  * Cria uma nova adesão (membro) da Associação Memória Lusíada.

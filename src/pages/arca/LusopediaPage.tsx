@@ -26,9 +26,14 @@ export default function LusopediaPage() {
         jsonLd={{
           "@type": "CollectionPage",
           name: "Lusopédia",
-          description: "A enciclopédia da lusofonia da Associação Memória Lusíada.",
+          description:
+            "A enciclopédia da lusofonia da Associação Memória Lusíada.",
           inLanguage: "pt-PT",
-          isPartOf: { "@type": "WebSite", name: "Lusopédia", url: "https://www.alusiada.pt/arca/lusopedia" },
+          isPartOf: {
+            "@type": "WebSite",
+            name: "Lusopédia",
+            url: "https://www.alusiada.pt/arca/lusopedia",
+          },
         }}
         path="/arca/lusopedia"
         title="Lusopédia — A enciclopédia da lusofonia"

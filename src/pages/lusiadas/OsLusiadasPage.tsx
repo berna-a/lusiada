@@ -9,34 +9,44 @@ import {
   Link2,
   Loader2,
   Map,
-  MessageSquare,
   Maximize2,
+  MessageSquare,
   Minimize2,
   Share2,
   Users,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Seo } from "@/components/Seo";
 import { EstrofeDoDia } from "@/components/lusiadas/EstrofeDoDia";
 import {
   type FeedTarget,
   LusiadasFeed,
 } from "@/components/lusiadas/LusiadasFeed";
-import { useGrafia } from "@/lib/grafia/store";
+import { Seo } from "@/components/Seo";
 import type { Grafia } from "@/lib/grafia/lexicon";
+import { useGrafia } from "@/lib/grafia/store";
 import { cantoHref, lusiadasBase, setLastRead } from "@/lib/lusiadas/nav";
 import { markVisited, toggleSaved, useIsSaved } from "@/lib/lusiadas/saved";
 import { api } from "../../../convex/_generated/api";
 
 /** Botão de guardar uma estrofe (favorito local ao dispositivo). */
-function SaveButton({ c, e, preview }: { c: number; e: number; preview: string }) {
+function SaveButton({
+  c,
+  e,
+  preview,
+}: {
+  c: number;
+  e: number;
+  preview: string;
+}) {
   const saved = useIsSaved(c, e);
   return (
     <button
-      aria-label={saved ? `Remover estrofe ${e} dos guardados` : `Guardar estrofe ${e}`}
+      aria-label={
+        saved ? `Remover estrofe ${e} dos guardados` : `Guardar estrofe ${e}`
+      }
       aria-pressed={saved}
-      className={`transition-colors hover:!text-accent ${
+      className={`hover:!text-accent transition-colors ${
         saved
           ? "text-accent"
           : "text-muted-foreground/0 group-hover:text-muted-foreground/50"
@@ -56,7 +66,19 @@ function SaveButton({ c, e, preview }: { c: number; e: number; preview: string }
 
 const cantoLoaders = import.meta.glob("../../data/lusiadas/canto*.json");
 
-const ROMANS = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+const ROMANS = [
+  "",
+  "I",
+  "II",
+  "III",
+  "IV",
+  "V",
+  "VI",
+  "VII",
+  "VIII",
+  "IX",
+  "X",
+];
 
 const GRAFIAS: { id: Grafia; label: string }[] = [
   { id: "pz", label: "Portuguez" },
@@ -90,7 +112,10 @@ type Selection = {
 
 export default function OsLusiadasPage() {
   const params = useParams();
-  const n = Math.min(10, Math.max(1, Number.parseInt(params.n ?? "1", 10) || 1));
+  const n = Math.min(
+    10,
+    Math.max(1, Number.parseInt(params.n ?? "1", 10) || 1)
+  );
   const base = useMemo(lusiadasBase, []);
   const { grafia, setGrafia, convert } = useGrafia();
   const [canto, setCanto] = useState<Canto | null>(null);
@@ -133,12 +158,9 @@ export default function OsLusiadasPage() {
       return;
     }
     const node = s.anchorNode;
-    const host =
-      node instanceof Element
-        ? node
-        : (node?.parentElement ?? null);
+    const host = node instanceof Element ? node : (node?.parentElement ?? null);
     const stanzaEl = host?.closest<HTMLElement>("[id^=estrofe-]");
-    if (!stanzaEl || !readerRef.current.contains(stanzaEl)) {
+    if (!(stanzaEl && readerRef.current.contains(stanzaEl))) {
       setSel(null);
       return;
     }
@@ -157,7 +179,10 @@ export default function OsLusiadasPage() {
   useEffect(() => {
     const onScroll = () => setSel(null);
     const onDown = (e: MouseEvent) => {
-      if (toolbarRef.current && !toolbarRef.current.contains(e.target as Node)) {
+      if (
+        toolbarRef.current &&
+        !toolbarRef.current.contains(e.target as Node)
+      ) {
         setSel(null);
       }
     };
@@ -271,7 +296,11 @@ export default function OsLusiadasPage() {
           <button
             className="inline-flex items-center gap-1.5 font-body text-[13px] text-muted-foreground transition-colors hover:text-accent"
             onClick={() =>
-              setFeed({ target: "epic", canto: 0, label: "Os Lusíadas — a obra" })
+              setFeed({
+                target: "epic",
+                canto: 0,
+                label: "Os Lusíadas — a obra",
+              })
             }
             type="button"
           >
@@ -417,7 +446,7 @@ export default function OsLusiadasPage() {
                     )}
                     <button
                       aria-label={`Copiar ligação da estrofe ${s.n}`}
-                      className="text-muted-foreground/0 transition-colors hover:!text-accent group-hover:text-muted-foreground/50"
+                      className="hover:!text-accent text-muted-foreground/0 transition-colors group-hover:text-muted-foreground/50"
                       onClick={() => copyAnchor(s.n)}
                       title="Copiar ligação"
                       type="button"
@@ -428,7 +457,11 @@ export default function OsLusiadasPage() {
                         <Link2 className="h-3.5 w-3.5" />
                       )}
                     </button>
-                    <SaveButton c={n} e={s.n} preview={convert(s.lines[0] ?? "")} />
+                    <SaveButton
+                      c={n}
+                      e={s.n}
+                      preview={convert(s.lines[0] ?? "")}
+                    />
                   </div>
                   <div
                     className={`min-w-0 flex-1 font-body text-foreground/90 ${focus ? "text-[18px] leading-[2.15]" : "text-[17px] leading-[1.9]"}`}
@@ -577,7 +610,7 @@ export default function OsLusiadasPage() {
       {/* Barra de selecção — palavra/passagem seleccionada */}
       {sel && (
         <div
-          className="-translate-x-1/2 -translate-y-full fixed z-40"
+          className="fixed z-40 -translate-x-1/2 -translate-y-full"
           ref={toolbarRef}
           style={{ left: `${sel.x}px`, top: `${sel.y - 8}px` }}
         >

@@ -4,11 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Seo } from "@/components/Seo";
 import type { DicEntry } from "@/lib/grafia/dicionario";
 import { useGrafia } from "@/lib/grafia/store";
-import {
-  isIndexavel,
-  type Verbete,
-  type VerbeteContext,
-} from "@/lib/grafia/verbetes";
+import { isIndexavel, type VerbeteContext } from "@/lib/grafia/verbetes";
 
 function asciiSlug(s: string): string {
   return s

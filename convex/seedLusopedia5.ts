@@ -103,7 +103,9 @@ const SEEDS: Seed[] = [
       { label: "Monumentos", value: "Jerónimos, Torre de Belém, Padrão" },
       { label: "Significado", value: "Ponto de partida das viagens" },
     ],
-    sources: [{ label: "Roteiro da Primeira Viagem de Vasco da Gama", url: null }],
+    sources: [
+      { label: "Roteiro da Primeira Viagem de Vasco da Gama", url: null },
+    ],
     body: `
 <p>Belém, na foz do Tejo a ocidente de ${lk("lisboa", "Lisboa")}, é o lugar de onde Portugal partiu para o mundo. Daqui largaram as naus para a Índia e para o Brasil, e aqui se ergueram os monumentos que celebram essa epopeia.</p>
 <h2>O ponto de partida</h2>
@@ -124,7 +126,10 @@ const SEEDS: Seed[] = [
     infobox: [
       { label: "Época", value: "Reinado de D. Manuel I (1495–1521)" },
       { label: "Motivos", value: "Esferas armilares, cordas, seres do mar" },
-      { label: "Obras-primas", value: "Jerónimos, Torre de Belém, Janela de Tomar" },
+      {
+        label: "Obras-primas",
+        value: "Jerónimos, Torre de Belém, Janela de Tomar",
+      },
     ],
     sources: [{ label: "Estudos de arte manuelina", url: null }],
     body: `

@@ -31,7 +31,9 @@ const SEEDS: Seed[] = [
       { label: "Morte", value: "13 de Setembro de 1877, Vale de Lobos" },
       { label: "Obra maior", value: "História de Portugal" },
     ],
-    sources: [{ label: "História de Portugal, Alexandre Herculano", url: null }],
+    sources: [
+      { label: "História de Portugal, Alexandre Herculano", url: null },
+    ],
     body: `
 <p>Alexandre Herculano (1810–1877) foi historiador, romancista e poeta — uma das figuras maiores do Romantismo e o homem que deu a Portugal uma história escrita com rigor de documento.</p>
 <h2>A história como ciência</h2>
@@ -161,8 +163,7 @@ const SEEDS: Seed[] = [
     slug: "obidos",
     title: "Óbidos",
     category: "Lugares",
-    summary:
-      "A vila medieval muralhada que os reis ofereciam às rainhas.",
+    summary: "A vila medieval muralhada que os reis ofereciam às rainhas.",
     tags: ["vila", "medieval", "castelo"],
     infobox: [
       { label: "Distrito", value: "Leiria" },
@@ -184,8 +185,7 @@ const SEEDS: Seed[] = [
     slug: "aveiro",
     title: "Aveiro",
     category: "Lugares",
-    summary:
-      "A cidade da ria e dos moliceiros — a «Veneza de Portugal».",
+    summary: "A cidade da ria e dos moliceiros — a «Veneza de Portugal».",
     tags: ["cidade", "ria", "Arte Nova"],
     infobox: [
       { label: "Distrito", value: "Aveiro" },
@@ -207,8 +207,7 @@ const SEEDS: Seed[] = [
     slug: "galo-de-barcelos",
     title: "Galo de Barcelos",
     category: "Símbolos",
-    summary:
-      "O galo da lenda que virou o mais popular símbolo de Portugal.",
+    summary: "O galo da lenda que virou o mais popular símbolo de Portugal.",
     tags: ["símbolos", "lenda", "artesanato"],
     infobox: [
       { label: "Origem", value: "Barcelos, Minho" },

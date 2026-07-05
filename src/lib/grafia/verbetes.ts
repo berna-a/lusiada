@@ -27,6 +27,7 @@ const cache = new Map<string, Verbete[]>();
 // Lote curado de verbetes de alta procura — indexáveis no Google (saem de
 // noindex e entram no sitemap). Cresce de forma gradual e selectiva.
 import indexaveis from "../../data/dicionario/indexaveis.json";
+
 const INDEXAVEIS = new Set(indexaveis as string[]);
 
 /** O verbete pode ser indexado pelo Google? (lote curado, alta procura) */

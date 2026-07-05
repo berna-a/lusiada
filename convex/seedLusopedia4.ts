@@ -77,7 +77,10 @@ const SEEDS: Seed[] = [
       { label: "Nascimento", value: "16 de Novembro de 1922, Azinhaga" },
       { label: "Morte", value: "18 de Junho de 2010, Lanzarote" },
       { label: "Nobel", value: "Literatura, 1998" },
-      { label: "Obras", value: "Memorial do Convento, Ensaio sobre a Cegueira" },
+      {
+        label: "Obras",
+        value: "Memorial do Convento, Ensaio sobre a Cegueira",
+      },
     ],
     sources: [{ label: "Discurso Nobel de José Saramago, 1998", url: null }],
     body: `
@@ -149,7 +152,9 @@ const SEEDS: Seed[] = [
       { label: "Acto", value: "Vistos em Bordéus, 1940" },
       { label: "Reconhecimento", value: "Justo entre as Nações (Yad Vashem)" },
     ],
-    sources: [{ label: "Arquivos do Ministério dos Negócios Estrangeiros", url: null }],
+    sources: [
+      { label: "Arquivos do Ministério dos Negócios Estrangeiros", url: null },
+    ],
     body: `
 <p>Aristides de Sousa Mendes (1885–1954) foi um diplomata portuguez que, em Junho de 1940, desobedeceu às ordens do seu governo para salvar milhares de pessoas em fuga do avanço nazi. Pagou caro o gesto — e só décadas depois foi reconhecido como herói.</p>
 <h2>A decisão de Bordéus</h2>

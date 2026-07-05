@@ -2,7 +2,21 @@
 // (imagem do cartão gerado) para os robôs sociais, e reencaminha o humano para
 // o leitor. Funciona em oslusiadas.pt e em alusiada.pt/os-lusiadas.
 
-const ROMANS = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+const RE_OSLUSIADAS = /(^|\.)oslusiadas\.pt$/i;
+
+const ROMANS = [
+  "",
+  "I",
+  "II",
+  "III",
+  "IV",
+  "V",
+  "VI",
+  "VII",
+  "VIII",
+  "IX",
+  "X",
+];
 
 function esc(s) {
   return String(s ?? "")
@@ -28,7 +42,7 @@ export default function handler(req, res) {
   const ref = `Canto ${ROMANS[c]}${e ? ` · estrofe ${e}` : ""}`;
   const ogImage = `${base}/api/og-verso?t=${encodeURIComponent(t)}&ref=${encodeURIComponent(ref)}`;
 
-  const dedicated = /(^|\.)oslusiadas\.pt$/i.test(host);
+  const dedicated = RE_OSLUSIADAS.test(host);
   let readerPath;
   if (dedicated) {
     readerPath = c === 1 ? "/" : `/canto/${c}`;

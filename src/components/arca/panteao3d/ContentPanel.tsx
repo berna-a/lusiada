@@ -175,7 +175,7 @@ export function ContentPanel({
             <span className="flex items-center gap-2 font-body text-[11px] text-accent/80 uppercase tracking-[0.25em]">
               <MessageSquareQuote className="h-3.5 w-3.5" /> Arca viva
             </span>
-            <p className="mt-2 font-body text-[14px] text-[#f4f1ec]/70 leading-relaxed">
+            <p className="mt-2 font-body text-[#f4f1ec]/70 text-[14px] leading-relaxed">
               {memCount === undefined
                 ? "Memórias da comunidade…"
                 : memCount > 0

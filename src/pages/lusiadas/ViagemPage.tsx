@@ -1,10 +1,22 @@
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Seo } from "@/components/Seo";
 import { EPISODES, MapaDaViagem } from "@/components/lusiadas/MapaDaViagem";
+import { Seo } from "@/components/Seo";
 import { cantoHref as cantoLink, lusiadasBase } from "@/lib/lusiadas/nav";
 
-const ROMANS = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+const ROMANS = [
+  "",
+  "I",
+  "II",
+  "III",
+  "IV",
+  "V",
+  "VI",
+  "VII",
+  "VIII",
+  "IX",
+  "X",
+];
 
 export default function ViagemPage() {
   const base = lusiadasBase();

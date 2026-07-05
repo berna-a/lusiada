@@ -5,6 +5,9 @@
 // Os utilizadores recebem o mesmo HTML e a aplicação React monta-se por cima.
 
 const BASE = "https://www.alusiada.pt";
+
+const RE_TITLE = /<title>[\s\S]*?<\/title>/i;
+const RE_ROOT_DIV = /<div id="root">\s*<\/div>/;
 const CONVEX = process.env.VITE_CONVEX_URL;
 const DEFAULT_IMAGE =
   "https://storage.googleapis.com/gpt-engineer-file-uploads/HZLq0vi45GUkFlWe5135LqHlgSd2/social-images/social-1776901317952-Melhor_desenho.webp";
@@ -51,7 +54,14 @@ async function convexQuery(path, args) {
 
 function buildHead({ title, description, path, image, type, jsonLd }) {
   const url = BASE + path;
-  const graph = Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : [];
+  let graph;
+  if (Array.isArray(jsonLd)) {
+    graph = jsonLd;
+  } else if (jsonLd) {
+    graph = [jsonLd];
+  } else {
+    graph = [];
+  }
   const ld = JSON.stringify({
     "@context": "https://schema.org",
     "@graph": [ORG, ...graph],
@@ -80,7 +90,7 @@ function buildHead({ title, description, path, image, type, jsonLd }) {
 
 function stripStatic(shell) {
   return shell
-    .replace(/<title>[\s\S]*?<\/title>/i, "")
+    .replace(RE_TITLE, "")
     .replace(/<meta[^>]+name="description"[^>]*>/gi, "")
     .replace(/<meta[^>]+property="og:[^"]*"[^>]*>/gi, "")
     .replace(/<meta[^>]+name="twitter:[^"]*"[^>]*>/gi, "")
@@ -90,10 +100,7 @@ function stripStatic(shell) {
 function compose(shell, head, bodyHtml) {
   let html = stripStatic(shell).replace("</head>", `    ${head}\n  </head>`);
   if (bodyHtml) {
-    html = html.replace(
-      /<div id="root">\s*<\/div>/,
-      `<div id="root">${bodyHtml}</div>`
-    );
+    html = html.replace(RE_ROOT_DIV, `<div id="root">${bodyHtml}</div>`);
   }
   return html;
 }
@@ -164,7 +171,7 @@ function renderArticle(shell, article) {
 async function renderIndex(shell) {
   const articles = (await convexQuery("articles:list", {})) || [];
   const links = articles
-    .filter((a) => a && a.slug)
+    .filter((a) => a?.slug)
     .map(
       (a) =>
         `<li><a href="/arca/lusopedia/${esc(a.slug)}">${esc(a.title)}</a>${
@@ -197,7 +204,7 @@ async function renderIndex(shell) {
 export default async function handler(req, res) {
   try {
     const shell = await getShell(req);
-    const slug = (req.query && req.query.slug ? req.query.slug : "").toString();
+    const slug = (req.query?.slug ?? "").toString();
 
     if (!slug) {
       return send(res, await renderIndex(shell));
@@ -206,7 +213,7 @@ export default async function handler(req, res) {
       return send(res, shell);
     }
     const article = await convexQuery("articles:getBySlug", { slug });
-    if (!article || article.status !== "published") {
+    if (article?.status !== "published") {
       return send(res, shell);
     }
     return send(res, renderArticle(shell, article));
