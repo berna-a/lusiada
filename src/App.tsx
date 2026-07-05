@@ -46,6 +46,8 @@ import NotFound from "@/pages/NotFound";
 import ProgramaPage from "@/pages/ProgramaPage";
 import ManifestoPage from "@/pages/sobre/ManifestoPage";
 import ObjectivosPage from "@/pages/sobre/ObjectivosPage";
+import PrivacidadePage from "@/pages/sobre/PrivacidadePage";
+import TermosPage from "@/pages/sobre/TermosPage";
 
 const queryClient = new QueryClient();
 
@@ -208,24 +210,8 @@ const App = () => (
                 }
                 path="/programa/encontros"
               />
-              <Route
-                element={
-                  <PlaceholderPage
-                    description="Em preparação."
-                    title="Política de Privacidade"
-                  />
-                }
-                path="/privacidade"
-              />
-              <Route
-                element={
-                  <PlaceholderPage
-                    description="Em preparação."
-                    title="Termos e Condições"
-                  />
-                }
-                path="/termos"
-              />
+              <Route element={<PrivacidadePage />} path="/privacidade" />
+              <Route element={<TermosPage />} path="/termos" />
             </Route>
 
             {/* Admin layout */}
