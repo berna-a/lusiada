@@ -91,10 +91,10 @@ export function CalcadaFooter() {
                 <div>NIF 518 533 301</div>
                 <div className="mt-2">
                   <a
-                    href="mailto:admin@alusiada.pt"
+                    href="mailto:bernardo@alusiada.pt"
                     className="transition-colors hover:underline hover:!text-[#F4F1EC]"
                   >
-                    admin@alusiada.pt
+                    bernardo@alusiada.pt
                   </a>
                 </div>
               </address>
