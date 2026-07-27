@@ -89,7 +89,7 @@ export default function DecifradosPage() {
   return (
     <main data-nav-theme="light">
       <Seo
-        description="Análise computacional multi-agente d'Os Lusíadas, verso a verso, em três lentes — língua, história e mística. Um projecto de investigação da Associação Memória Lusíada."
+        description="Análise computacional multi-agente d'Os Lusíadas, verso a verso, em três lentes — língua, história e mística. Um projecto de investigação de oslusiadas.pt."
         path="/os-lusiadas/decifrados"
         title="Os Lusíadas Decifrados — projecto de investigação"
         type="article"
@@ -97,7 +97,7 @@ export default function DecifradosPage() {
 
       {/* ── Frontispício ───────────────────────────────────────────── */}
       <header className="mx-auto max-w-[820px] px-6 pt-32 pb-4 text-center sm:pt-40">
-        <Eyebrow>Associação Memória Lusíada · Projecto de investigação</Eyebrow>
+        <Eyebrow>Projecto de investigação</Eyebrow>
         <h1 className="mt-5 font-display text-[44px] text-primary leading-[1.02] sm:text-[68px]">
           Os Lusíadas
           <br />
@@ -375,11 +375,11 @@ export default function DecifradosPage() {
         <SectionTitle>Onde estamos, com franqueza</SectionTitle>
         <div className="mt-8 space-y-6">
           <P>
-            A Associação Memória Lusíada foi constituída em 2024 para assinalar
-            o quinto centenário do nascimento de Camões. A plataforma de leitura
-            está no ar e é o nosso activo mais sólido. A equipa técnica —
-            engenharia de software — trabalha em regime gratuito. O portefólio
-            está disponível a quem o queira examinar.
+            O trabalho começou em 2024, ao redor do quinto centenário do
+            nascimento de Camões. A plataforma de leitura está no ar e é o nosso
+            activo mais sólido. A equipa técnica — engenharia de software —
+            trabalha em regime gratuito. O portefólio está disponível a quem o
+            queira examinar.
           </P>
           <P>
             O financiamento da componente computacional será pedido ao programa{" "}
@@ -407,13 +407,10 @@ export default function DecifradosPage() {
           </p>
           <a
             className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3 font-body text-[14px] text-primary-foreground transition-opacity hover:opacity-90"
-            href="mailto:bernardo@alusiada.pt?subject=Os%20Lusíadas%20Decifrados"
+            href="mailto:decifrados@oslusiadas.pt?subject=Os%20Lusíadas%20Decifrados"
           >
-            bernardo@alusiada.pt
+            decifrados@oslusiadas.pt
           </a>
-          <p className="mt-6 font-body text-[13px] text-muted-foreground">
-            Associação Memória Lusíada · NIF 518 533 301
-          </p>
         </div>
       </section>
 
@@ -432,6 +429,18 @@ export default function DecifradosPage() {
           >
             Ler o poema
           </Link>
+
+          {/* Filiação — presente, mas em surdina: oslusiadas.pt tem marca própria. */}
+          <p className="mt-16 font-body text-[12px] text-muted-foreground/70 tracking-wide">
+            Ao cuidado da{" "}
+            <a
+              className="underline decoration-accent/25 decoration-dotted underline-offset-4 transition-colors hover:decoration-accent"
+              href="https://www.alusiada.pt"
+              rel="noopener"
+            >
+              Associação Memória Lusíada
+            </a>
+          </p>
         </div>
       </section>
     </main>
