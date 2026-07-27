@@ -197,7 +197,11 @@ export default function DecifradosPage() {
       </section>
 
       {/* ── O método ───────────────────────────────────────────────── */}
-      <section className="bg-primary text-primary-foreground">
+      {/* Fundo escuro: marcar para a navbar inverter as cores ao passar por cima. */}
+      <section
+        className="bg-primary text-primary-foreground"
+        data-nav-theme="dark"
+      >
         <div className="mx-auto max-w-[820px] px-6 py-20">
           <div className="text-center">
             <p className="font-body text-[11px] text-accent uppercase tracking-[0.28em]">
