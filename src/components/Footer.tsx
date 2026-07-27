@@ -86,9 +86,9 @@ export function Footer() {
               <span>NIF 518 533 301</span>
               <a
                 className="transition-colors duration-200 hover:text-accent"
-                href="mailto:admin@alusiada.pt"
+                href="mailto:bernardo@alusiada.pt"
               >
-                admin@alusiada.pt
+                bernardo@alusiada.pt
               </a>
               <Link
                 className="transition-colors duration-200 hover:text-accent"

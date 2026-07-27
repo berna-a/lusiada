@@ -100,9 +100,9 @@ export function CalcadaFooter() {
                 <div className="mt-2">
                   <a
                     className="hover:!text-[#F4F1EC] transition-colors hover:underline"
-                    href="mailto:admin@alusiada.pt"
+                    href="mailto:bernardo@alusiada.pt"
                   >
-                    admin@alusiada.pt
+                    bernardo@alusiada.pt
                   </a>
                 </div>
               </address>

@@ -84,9 +84,9 @@ export default function ContactosPage() {
               </h2>
               <a
                 className="mt-1 block font-body text-[15px] text-foreground/75 transition-colors hover:text-accent"
-                href="mailto:admin@alusiada.pt"
+                href="mailto:bernardo@alusiada.pt"
               >
-                admin@alusiada.pt
+                bernardo@alusiada.pt
               </a>
             </div>
           </div>

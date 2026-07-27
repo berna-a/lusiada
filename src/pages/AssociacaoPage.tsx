@@ -146,9 +146,9 @@ export default function AssociacaoPage() {
           <br />
           <a
             className="text-accent hover:underline"
-            href="mailto:admin@alusiada.pt"
+            href="mailto:bernardo@alusiada.pt"
           >
-            admin@alusiada.pt
+            bernardo@alusiada.pt
           </a>
         </address>
       </section>
