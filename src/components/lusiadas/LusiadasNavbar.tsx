@@ -1,12 +1,20 @@
 import { CircleUser, Search } from "lucide-react";
 import { useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useOnDarkSection } from "@/hooks/use-on-dark-section";
 import { cantoHref, lusiadasBase } from "@/lib/lusiadas/nav";
 
 /** Navegação própria do domínio dedicado oslusiadas.pt (substitui a da alusiada.pt). */
 export function LusiadasNavbar() {
   const base = useMemo(lusiadasBase, []);
   const { pathname } = useLocation();
+  const onDark = useOnDarkSection();
+
+  // Sobre fundo escuro, o azul da marca fica ilegível — inverter para claro.
+  const marca = onDark ? "text-white" : "text-primary";
+  const inactivo = onDark
+    ? "text-white/75 hover:text-white"
+    : "text-primary/75 hover:text-primary";
 
   const isReader =
     pathname === "/" ||
@@ -46,7 +54,7 @@ export function LusiadasNavbar() {
       <div className="glass-nav-hero overflow-hidden rounded-[28px]">
         <div className="flex h-[58px] items-center gap-3 px-4 md:px-6">
           <Link
-            className="shrink-0 font-display text-[20px] text-primary tracking-[0.14em] md:text-[23px]"
+            className={`shrink-0 font-display text-[20px] tracking-[0.14em] transition-colors md:text-[23px] ${marca}`}
             to={base || "/"}
           >
             OS LUSÍADAS
@@ -55,9 +63,7 @@ export function LusiadasNavbar() {
             {links.map((l) => (
               <Link
                 className={`shrink-0 font-display text-[13px] uppercase tracking-[0.12em] transition-colors ${
-                  l.active
-                    ? "text-accent"
-                    : "text-primary/75 hover:text-primary"
+                  l.active ? "text-accent" : inactivo
                 }`}
                 key={l.label}
                 to={l.to}
@@ -68,9 +74,7 @@ export function LusiadasNavbar() {
             <Link
               aria-label="Procurar na obra"
               className={`shrink-0 transition-colors ${
-                pathname.endsWith("/procurar")
-                  ? "text-accent"
-                  : "text-primary/75 hover:text-primary"
+                pathname.endsWith("/procurar") ? "text-accent" : inactivo
               }`}
               to={`${base}/procurar`}
             >
@@ -79,9 +83,7 @@ export function LusiadasNavbar() {
             <Link
               aria-label="O meu espaço"
               className={`shrink-0 transition-colors ${
-                pathname.endsWith("/perfil")
-                  ? "text-accent"
-                  : "text-primary/75 hover:text-primary"
+                pathname.endsWith("/perfil") ? "text-accent" : inactivo
               }`}
               to={`${base}/perfil`}
             >

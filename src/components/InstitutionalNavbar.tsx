@@ -2,6 +2,7 @@ import { ChevronDown, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { SiteControlPanel } from "@/components/SiteControlPanel";
+import { useOnDarkSection } from "@/hooks/use-on-dark-section";
 
 type DropdownItem = { label: string; subtitle?: string; to: string };
 type MenuKey = "arca" | "programa" | "sobre";
@@ -74,33 +75,7 @@ export function InstitutionalNavbar() {
     /(^|\.)oslusiadas\.pt$/i.test(window.location.hostname);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState<MenuKey | null>(null);
-  const [onLight, setOnLight] = useState(true);
-
-  useEffect(() => {
-    const navHeight = 80;
-    const compute = () => {
-      const elements = document.querySelectorAll<HTMLElement>(
-        '[data-nav-theme="dark"]'
-      );
-      let overDark = false;
-      elements.forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        if (rect.top <= navHeight && rect.bottom >= navHeight) {
-          overDark = true;
-        }
-      });
-      setOnLight(!overDark);
-    };
-    compute();
-    window.addEventListener("scroll", compute, { passive: true });
-    window.addEventListener("resize", compute);
-    const t = window.setTimeout(compute, 50);
-    return () => {
-      window.removeEventListener("scroll", compute);
-      window.removeEventListener("resize", compute);
-      window.clearTimeout(t);
-    };
-  }, [location.pathname]);
+  const onLight = !useOnDarkSection();
 
   const linkBase = onLight
     ? "text-primary/80 hover:text-primary"
