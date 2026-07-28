@@ -1,6 +1,7 @@
 import {
   BookOpen,
   Compass,
+  FlaskConical,
   Landmark,
   Mail,
   Scale,
@@ -41,29 +42,40 @@ const LENTES = [
     icon: ScrollText,
     numero: "I",
     nome: "Língua",
-    lema: "O mapa genético da nossa língua.",
+    lema: "As palavras que o poema pressupõe que já se sabem.",
     corpo:
-      "Os Lusíadas são o maior corpus coerente do português quinhentista, pela mão do maior mestre que a língua teve. Propomo-nos ao censo completo do léxico camoniano — que palavras morreram, quais sobreviveram, quais Camões cunhou. E à reconstrução da fonética de 1572: há rimas e jogos sonoros que hoje ninguém ouve, versos que deixaram de rimar em português moderno mas rimavam na boca de Camões.",
+      "O censo do léxico camoniano: que palavras morreram, quais sobreviveram, quais mudaram de sentido debaixo do mesmo som, quais Camões cunhou — e quais nunca escreveu. E a camada sonora: há versos que deixaram de rimar em português moderno e que fechavam na boca de quem os leu em 1572. Não a inventamos: lemo-los segundo o sistema fonológico já descrito para o quinhentismo, e declaramos as escolhas em nota.",
     remate:
-      "Uma camada musical inteira do poema está surda há 400 anos — e é recuperável.",
+      "Uma camada de música do poema está surda há quatro séculos. Não está perdida — está surda.",
   },
   {
     icon: Landmark,
     numero: "II",
     nome: "História",
-    lema: "Os desvios são a impressão digital das intenções.",
+    lema: "Onde o poema se afasta da crónica, alguém decidiu.",
     corpo:
-      "Camões escreveu com as crónicas abertas na mesa — Castanheda, Barros. Cruzar cada estrofe com as suas fontes produz um mapa inédito: onde segue a crónica, narrativa fiel; onde diverge, matéria de estudo. Cada desvio deliberado é Camões a editorializar. O poema torna-se assim fonte dupla: do que sucedeu em 1498, e de como o Portugal de 1572 se via a si próprio.",
-    remate: "Em vésperas de Alcácer Quibir — o último suspiro antes da queda.",
+      "Camões escreveu com as crónicas abertas na mesa — Castanheda, Barros, Góis, Osório. Cruzar cada estância com as suas fontes distingue o que narra do que altera, e cada alteração é matéria de estudo. Com uma cautela que não pode faltar: o texto de 1572 passou pela licença do Santo Ofício, assinada por Frei Bartolomeu Ferreira, e o de 1584 foi mexido. Antes de atribuir uma escolha ao poeta, há que perguntar se é dele.",
+    remate:
+      "Nem toda a decisão que está no texto é uma decisão de Camões — e essa é a primeira coisa a apurar.",
+  },
+  {
+    icon: Scale,
+    numero: "III",
+    nome: "Poética",
+    lema: "A oficina: o metro, a oitava, os modelos.",
+    corpo:
+      "A disciplina central dos estudos camonianos, e a que tem mais gente viva a trabalhá-la. A oitava-rima e o que ela obriga; a cesura e o que ela permite; a imitatio de Virgílio, de Ariosto, de Sannazaro, verificada verso a verso e não por impressão; a retórica das falas; a arquitectura dos dez cantos. É aqui que a afirmação vaga — «isto é ariostesco» — se converte em contagem, e portanto em coisa que se pode contestar.",
+    remate: "É aqui que o poema deixa de ser assunto e passa a ser feitura.",
   },
   {
     icon: Sparkles,
-    numero: "III",
-    nome: "Mística",
-    lema: "A arquitectura simbólica da obra.",
+    numero: "IV",
+    nome: "Símbolo",
+    lema: "O que um leitor de 1572 via sem esforço, e nós deixámos de ver.",
     corpo:
-      "Camões era entendedor e mestre da linguagem simbólica do seu tempo, e parte substancial da sua mensagem é entregue nessa gramática — mitológica, hermética, astrológica. A Máquina do Mundo do Canto X como descrição celeste testável; a viagem lida como percurso iniciático; o sincretismo cristão-pagão como código neoplatónico. Hipóteses, todas elas, para submeter a método.",
-    remate: "Ciência de mente aberta — mas ciência.",
+      "Em 1572, a mitologia era língua franca de gente instruída e a cosmografia lia-se com a astrologia ao lado. Reconstituímos esse código pelas fontes que Camões podia ter à mão — a Esfera de Sacrobosco, os Conimbricenses, Pedro Nunes, os mitógrafos, o neoplatonismo amoroso que entra em Portugal por Leão Hebreu — e medimos os desvios, como na lente histórica. O poema traz a sua própria objecção mais dura: é Tétis quem avisa que os deuses «fomos fabulosos, fingidos de mortal e cego engano» (X, 82). Começamos por aí.",
+    remate:
+      "Não procuramos um segredo escondido. Procuramos a literacia que o poema dá por adquirida.",
   },
 ] as const;
 
@@ -79,8 +91,13 @@ const CONSELHO = [
     estado: "Por preencher",
   },
   {
+    titulo: "Lente poética",
+    desc: "Métrica, oitava-rima, épica clássica e a oficina do verso camoniano.",
+    estado: "Por preencher",
+  },
+  {
     titulo: "Lente literária e mitológica",
-    desc: "Estudos camonianos, epopeia clássica, mitologia e recepção da obra.",
+    desc: "Estudos camonianos, mitologia, tradição simbólica e recepção da obra.",
     estado: "Em diálogo",
   },
 ] as const;
@@ -89,7 +106,7 @@ export default function DecifradosPage() {
   return (
     <main data-nav-theme="light">
       <Seo
-        description="Análise computacional multi-agente d'Os Lusíadas, verso a verso, em três lentes — língua, história e mística. Um projecto de investigação de oslusiadas.pt."
+        description="Análise computacional multi-agente d'Os Lusíadas, verso a verso, em quatro lentes — língua, história, poética e símbolo. Um projecto de investigação de oslusiadas.pt."
         path="/os-lusiadas/decifrados"
         title="Os Lusíadas Decifrados — projecto de investigação"
         type="article"
@@ -107,13 +124,14 @@ export default function DecifradosPage() {
           <span aria-hidden="true" className="block h-px w-[60px] bg-accent" />
         </div>
         <p className="mx-auto mt-8 max-w-[560px] font-display text-[20px] text-primary/80 italic leading-[1.5] sm:text-[24px]">
-          Ler o poema verso a verso, com as ferramentas do nosso século e o
-          rigor do método académico.
+          Ler o poema verso a verso, com os instrumentos do nosso século e o
+          método da casa.
         </p>
         <p className="mx-auto mt-6 max-w-[600px] font-body text-[16px] text-foreground/65 leading-[1.8]">
-          Uma leitura sistemática das 1102 estâncias em três lentes — língua,
-          história e mística — sujeita a contraditório em cada passo, e
-          devolvida ao público na plataforma onde a obra já se lê.
+          Decifrar, aqui, não é descobrir um segredo. É restituir uma literacia:
+          devolver ao poema aquilo que em 1572 se lia sem esforço e hoje já não
+          se lê. Uma leitura sistemática das 1102 estâncias, em quatro lentes,
+          sujeita a contraditório em cada passo.
         </p>
       </header>
 
@@ -121,41 +139,82 @@ export default function DecifradosPage() {
       <section className="mx-auto max-w-[760px] px-6 pt-20 pb-16">
         <Eyebrow>A premissa</Eyebrow>
         <SectionTitle>
-          Quatro séculos de leitura, e ainda há poema por ler
+          O poema pressupõe um leitor que deixou de existir
         </SectionTitle>
         <div className="mt-8 space-y-6">
           <P>
-            Os Lusíadas foram lidos, anotados e editados por gerações de
-            estudiosos. Existem edições críticas notáveis e uma bibliografia
-            camoniana vastíssima. Nada disto se substitui — e este projecto não
-            pretende substituí-lo.
+            <em>Os Lusíadas</em> foram lidos, anotados e editados por gerações
+            de estudiosos. Existem edições críticas notáveis e uma bibliografia
+            camoniana que ninguém domina inteira. Nada disto se substitui, e
+            este projecto não pretende substituí-lo. Trabalha à sombra dessas
+            obras, não ao lado delas.
           </P>
           <P>
-            O que mudou foi a escala do que é possível examinar. Uma leitura que
-            cruze, para <em>cada verso</em>, o léxico, a métrica, as fontes
-            cronísticas, os modelos clássicos e o aparato simbólico da época
-            exigiria décadas de trabalho humano. É um problema de dimensão, não
-            de inteligência: sempre foi possível fazê-lo para uma estância;
-            nunca foi praticável fazê-lo para todas.
+            O que mudou não foi a inteligência disponível: foi a escala do que
+            se pode examinar sem escolher. Toda a crítica camoniana argumenta
+            por passagem exemplar — a estância eleita, lida até ao fim. É bom
+            método, e tem uma consequência que ninguém quis: quatro séculos de
+            atenção concentraram-se em cerca de cinquenta estâncias, e as
+            restantes mil chegaram até hoje quase sem comentário. Sempre foi
+            possível fazer o levantamento completo de uma estância. Nunca foi
+            praticável fazê-lo para todas.
           </P>
           <P>
-            É esse trabalho de varrimento exaustivo que hoje se pode
-            instrumentar. Não para produzir conclusões — para produzir{" "}
-            <em>matéria-prima verificável</em>, que investigadores humanos
-            depois julgam.
+            E há uma coisa que só o levantamento exaustivo vê. A leitura humana
+            encontra o que está lá, porque a atenção é puxada pelo que existe.
+            Só o censo completo torna visível o que <em>não</em> está: a palavra
+            que Camões nunca usa, a rima que evita, o episódio das crónicas que
+            se recusou a versificar. Num poeta que escreve sob censura, o
+            silêncio é o gesto mais deliberado que praticou — e é ilegível a
+            olho nu.
           </P>
         </div>
       </section>
 
-      {/* ── As três lentes ─────────────────────────────────────────── */}
+      {/* ── O texto ────────────────────────────────────────────────── */}
+      <section className="mx-auto max-w-[760px] px-6 pb-20">
+        <Eyebrow>O texto</Eyebrow>
+        <SectionTitle>Qual é o Camões que lemos</SectionTitle>
+        <div className="mt-8 space-y-6">
+          <P>
+            Esta é a primeira pergunta que se faz a um projecto assim, e não
+            deve ficar para o fim.
+          </P>
+          <P>
+            Não há autógrafo d'<em>Os Lusíadas</em>. Ninguém, em quatro séculos
+            e meio, leu o que Camões escreveu pelo seu punho: lemos o que um
+            compositor tipográfico assentou. Há duas impressões de 1572 e a
+            discussão sobre qual delas é a primeira não está encerrada; a edição
+            de 1584 traz alterações; e a grafia de qualquer uma delas é da
+            oficina, não do poeta.
+          </P>
+          <P>
+            Este projecto não decide essa questão — não lhe compete. Compete-lhe
+            declará-la e trabalhar dentro dela.{" "}
+            <em>A primeira tarefa não é interpretativa</em>: é a colação
+            sistemática dos testemunhos, verso a verso, variante a variante, com
+            o aparato aberto e citável. É trabalho ingrato, é mecânico, é
+            exactamente aquilo em que a máquina é indiscutivelmente melhor do
+            que um homem cansado — e sem ele, tudo o que se disser a seguir é
+            comentário sobre um texto que não se sabe qual é.
+          </P>
+          <P>
+            A camada de leitura pública continua a ser o texto modernizado, para
+            quem chega ao poema pela primeira vez. A camada de trabalho é outra,
+            e será nomeada estância a estância.
+          </P>
+        </div>
+      </section>
+
+      {/* ── As quatro lentes ───────────────────────────────────────── */}
       <section className="border-accent/15 border-y bg-secondary/30">
         <div className="mx-auto max-w-[900px] px-6 py-20">
           <div className="text-center">
             <Eyebrow>O objecto</Eyebrow>
-            <SectionTitle>As três lentes</SectionTitle>
+            <SectionTitle>As quatro lentes</SectionTitle>
             <p className="mx-auto mt-5 max-w-[520px] font-body text-[15px] text-foreground/60 leading-relaxed">
-              Cada estância é lida três vezes, por três disciplinas distintas,
-              que não partilham pressupostos entre si.
+              Cada estância é lida quatro vezes, por quatro disciplinas com
+              hábitos diferentes e bibliografias diferentes.
             </p>
           </div>
 
@@ -208,25 +267,48 @@ export default function DecifradosPage() {
               O método
             </p>
             <h2 className="mt-3 font-display text-[30px] leading-[1.15] sm:text-[38px]">
-              Um concílio que se contradiz
+              Uma disputa desenhada para perder
             </h2>
           </div>
 
           <div className="mt-10 space-y-6">
             <p className="font-body text-[17px] text-primary-foreground/85 leading-[1.85]">
-              O risco de aplicar modelos de linguagem a texto arcaico é
-              conhecido: produzem leituras plausíveis e infundadas com a mesma
+              O risco de aplicar modelos de linguagem a texto antigo é conhecido
+              e é grave: produzem leituras plausíveis e infundadas com a mesma
               fluência com que produzem leituras correctas. Um sistema que
               procura confirmação encontra-a sempre.
             </p>
             <p className="font-body text-[17px] text-primary-foreground/85 leading-[1.85]">
-              O nosso desenho inverte o incentivo. Cada estância é submetida a
-              três agentes com mandatos opostos — um filólogo céptico, um
-              historiador das fontes, um leitor da tradição simbólica — que
-              analisam em paralelo e depois se contra-interrogam. Um quarto
-              agente modera e só regista o que sobreviveu ao ataque dos outros.
-              Toda a afirmação nasce ligada à passagem e à fonte que a sustenta;
-              o que não se ancora, cai.
+              O desenho inverte o incentivo. Cada estância é submetida a quatro
+              leitores automáticos com mandatos opostos, que analisam em
+              separado e depois se contra-interrogam; um quinto modera e regista
+              apenas o que sobreviveu ao ataque dos outros. Toda a afirmação
+              nasce ligada à passagem e à fonte que a sustenta.
+            </p>
+            <p className="font-body text-[17px] text-primary-foreground/85 leading-[1.85]">
+              <strong>
+                E é preciso dizer aquilo que este arranjo não resolve.
+              </strong>{" "}
+              Quatro leitores automáticos com papéis diferentes não são quatro
+              disciplinas independentes: partilham substrato e partilham os
+              lugares-comuns herdados sobre o Renascimento português.
+              Contradizerem-se por mandato não fabrica independência. O que a
+              fabrica é obrigar cada lente a ancorar em evidência externa de
+              tipo diferente — uma concordância lexical, um fac-símile, uma
+              crónica — e deitar fora tudo o que se apoie apenas no que a
+              máquina julga saber.
+            </p>
+            <p className="font-body text-[17px] text-primary-foreground/85 leading-[1.85]">
+              Por isso o método traz duas armadilhas montadas contra si próprio.{" "}
+              <strong>Prova cega:</strong> correr o sistema sobre estâncias
+              cujas fontes já foram estabelecidas por investigadores conhecidos,
+              e publicar três números antes de qualquer outra coisa — o que
+              acertou, o que não viu, e o que inventou.{" "}
+              <strong>Controlo negativo:</strong> dar-lhe a ler uma oitava de
+              outro poeta quinhentista disfarçada de Camões, e uma estância
+              genuína com um verso adulterado. Se descobrir arquitectura
+              simbólica no que não é dele, o método está morto, e é melhor
+              sabê-lo por nós do que por um revisor.
             </p>
           </div>
 
@@ -235,7 +317,7 @@ export default function DecifradosPage() {
               {
                 icon: Scale,
                 t: "Contraditório obrigatório",
-                d: "Nenhuma leitura passa sem sobreviver à refutação das outras duas lentes.",
+                d: "Nenhuma leitura passa sem sobreviver à refutação das outras lentes.",
               },
               {
                 icon: BookOpen,
@@ -245,7 +327,7 @@ export default function DecifradosPage() {
               {
                 icon: Compass,
                 t: "Hipótese, não veredicto",
-                d: "O sistema propõe. A validação científica é humana, e é dela que depende a publicação.",
+                d: "O sistema propõe; o juízo é humano, e é dele que depende a publicação.",
               },
             ].map((item) => (
               <div
@@ -268,142 +350,246 @@ export default function DecifradosPage() {
           </div>
 
           <p className="mt-12 text-center font-display text-[19px] text-accent italic leading-relaxed">
-            O que sobreviver fica blindado precisamente porque o método foi
-            desenhado para o matar.
+            O critério «o que não se ancora, cai» não separa o falso do
+            verdadeiro: separa o documentável do indocumentável. Este método
+            levanta a anatomia do poema; não o lê.
           </p>
         </div>
       </section>
 
-      {/* ── A plataforma ───────────────────────────────────────────── */}
+      {/* ── A prova ────────────────────────────────────────────────── */}
       <section className="mx-auto max-w-[760px] px-6 py-20">
-        <Eyebrow>A plataforma</Eyebrow>
-        <SectionTitle>A investigação tem para onde ir</SectionTitle>
+        <Eyebrow>A prova</Eyebrow>
+        <SectionTitle>Uma estância, de ponta a ponta</SectionTitle>
         <div className="mt-8 space-y-6">
           <P>
-            Este projecto não começa numa página em branco. O poema já está
-            publicado, integral e gratuito, em{" "}
-            <Link
-              className="text-primary underline decoration-accent/40 decoration-dotted underline-offset-4 transition-colors hover:decoration-accent"
-              to="/os-lusiadas"
-            >
-              oslusiadas.pt
-            </Link>{" "}
-            — legível nas três grafias da língua, com dicionário de época, plano
-            de leitura e anotação verso a verso pela comunidade.
+            Prometer é fácil. Aqui está o género de coisa que se produz,
+            apresentado como aquilo que é — hipótese à espera de arbitragem, e
+            não achado.
           </P>
           <P>
-            O modelo de leitura é o de uma plataforma de anotação aberta: cada
-            estância tem o seu espaço de discussão, onde as contribuições mais
-            valiosas sobem e o contraditório permanece visível. O que a
-            investigação apurar entra por essa porta — junto ao verso a que diz
-            respeito, ao alcance de quem estuda a obra.
+            <strong>Canto X, estâncias 82 a 84.</strong> Tétis desfaz-se a si
+            própria: «porque eu, Saturno e Jano, Júpiter, Juno, fomos fabulosos,
+            fingidos de mortal e cego engano. Só pera fazer versos deleitosos
+            servimos». É a refutação mais forte que existe contra qualquer
+            leitura simbólica do poema — e está dentro do poema.
           </P>
           <P>
-            Está aí a razão de ser deste trabalho. Não é produzir mais um volume
-            que fique por ler: é aproximar o texto de quem hoje o encontra pela
-            primeira vez — no ensino básico, no secundário, na universidade —
-            sem lhe baixar o nível.
+            Duas estâncias adiante, porém, o texto conserva uma máquina do mundo
+            governada «por espíritos mil que têm prudência», e logo a seguir
+            esclarece: «Que os Anjos de celeste companhia deuses o sacro verso
+            está chamando». A fábula é despromovida; a cosmologia fica de pé,
+            mas convertida em angelologia cristã.
           </P>
+          <P>
+            <strong>A lente do símbolo propõe</strong> que a fronteira do poema
+            não passa entre crer e não crer nos deuses, mas entre a fábula e a
+            doutrina — e que essa fronteira é o objecto de estudo.{" "}
+            <strong>A lente da poética objecta</strong> que a passagem é
+            primeiro um problema de decoro épico: o modo de conciliar máquina
+            pagã e ortodoxia, e que Camões não é o primeiro a resolvê-lo assim.{" "}
+            <strong>A lente histórica pergunta</strong> o que destas três
+            estâncias responde à licença do Santo Ofício e o que responde ao
+            poeta.
+          </P>
+          <P>
+            Nenhuma das três vence sozinha. É esse o ponto: o que fica registado
+            é a disputa, ancorada ao verso, à espera de quem a arbitre.
+          </P>
+        </div>
+      </section>
+
+      {/* ── A plataforma ───────────────────────────────────────────── */}
+      <section className="border-accent/15 border-t bg-secondary/30">
+        <div className="mx-auto max-w-[760px] px-6 py-20">
+          <Eyebrow>A plataforma</Eyebrow>
+          <SectionTitle>A investigação tem para onde ir</SectionTitle>
+          <div className="mt-8 space-y-6">
+            <P>
+              Este projecto não começa numa página em branco. O poema já está
+              publicado, integral e gratuito, em{" "}
+              <Link
+                className="text-primary underline decoration-accent/40 decoration-dotted underline-offset-4 transition-colors hover:decoration-accent"
+                to="/os-lusiadas"
+              >
+                oslusiadas.pt
+              </Link>{" "}
+              — legível em três grafias, com dicionário de época, plano de
+              leitura e anotação verso a verso pela comunidade.
+            </P>
+            <P>
+              O modelo é o de uma plataforma de anotação aberta: cada estância
+              tem o seu espaço de discussão, e o contraditório permanece
+              visível. O que a investigação apurar entra por essa porta, junto
+              ao verso a que diz respeito, ao alcance de quem estuda a obra e de
+              quem a está a ler pela primeira vez.
+            </P>
+            <P>
+              Tudo o que se produzir — corpus anotado, colação, aparato — fica
+              depositado em acesso aberto, com licença declarada e forma de
+              citação estável por estância, para que sobreviva a este projecto e
+              a quem o faz. Quem o quiser usar contra nós, usa.
+            </P>
+            <P>
+              Está aí a razão de ser do trabalho. Não é produzir mais um volume
+              que fique por abrir: é pôr o texto ao alcance de quem hoje o
+              encontra pela primeira vez — no ensino básico, no secundário, na
+              universidade, e em português que já não é só de Portugal — sem lhe
+              baixar o nível.
+            </P>
+          </div>
         </div>
       </section>
 
       {/* ── Conselho científico ────────────────────────────────────── */}
-      <section className="border-accent/15 border-y bg-secondary/30">
-        <div className="mx-auto max-w-[820px] px-6 py-20">
-          <div className="text-center">
-            <Eyebrow>O convite</Eyebrow>
-            <SectionTitle>Conselho científico</SectionTitle>
-            <p className="mx-auto mt-6 max-w-[600px] font-body text-[16px] text-foreground/75 leading-[1.8]">
-              Temos a capacidade técnica e temo-la comprometida a título
-              gratuito. O que nos falta — e é o que verdadeiramente decide a
-              qualidade deste projecto — é orientação científica.
-            </p>
-          </div>
+      <section className="mx-auto max-w-[820px] px-6 py-20">
+        <div className="text-center">
+          <Eyebrow>O convite</Eyebrow>
+          <SectionTitle>Conselho científico</SectionTitle>
+          <p className="mx-auto mt-6 max-w-[600px] font-body text-[16px] text-foreground/75 leading-[1.8]">
+            Temos os meios técnicos e temo-los comprometidos. O que nos falta é
+            quem escreva o exame que este trabalho tem de passar.
+          </p>
+        </div>
 
-          <div className="mt-12 grid gap-4 sm:grid-cols-3">
-            {CONSELHO.map((c) => (
-              <div
-                className="rounded-xl border border-accent/25 bg-background/70 p-6"
-                key={c.titulo}
+        <div className="mx-auto mt-10 max-w-[600px] space-y-4">
+          <P>
+            Não convidamos ninguém para fiscalizar o trabalho alheio. Convidamos
+            para uma coisa que não existe e que ficará feita:{" "}
+            <strong>
+              o padrão pelo qual se afere a leitura automática do português
+              quinhentista literário.
+            </strong>{" "}
+            Não há nenhum. Quem o fizer, fá-lo para quem vier depois, e o
+            objecto certo para o fazer é o mais difícil que a língua tem.
+          </P>
+        </div>
+
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {CONSELHO.map((c) => (
+            <div
+              className="rounded-xl border border-accent/25 bg-background/70 p-6"
+              key={c.titulo}
+            >
+              <p className="font-body text-[10px] text-accent uppercase tracking-[0.2em]">
+                {c.estado}
+              </p>
+              <h3 className="mt-3 font-display text-[19px] text-primary leading-snug">
+                {c.titulo}
+              </h3>
+              <p className="mt-2 font-body text-[14px] text-foreground/70 leading-relaxed">
+                {c.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-12 rounded-2xl border border-accent/30 bg-secondary/40 p-7 sm:p-9">
+          <h3 className="font-display text-[20px] text-primary">
+            Na prática, é isto
+          </h3>
+          <ul className="mt-5 space-y-3">
+            {[
+              [
+                "Escrever o gabarito.",
+                "Escolher estâncias e estabelecer, à mão, a leitura correcta contra a qual a máquina será medida. É trabalho de autoria, e é assinado.",
+              ],
+              [
+                "Definir o que conta como erro",
+                "em cada lente, e o que conta como achado.",
+              ],
+              [
+                "Indicar as edições e a bibliografia",
+                "que devem alimentar o trabalho — e as que não devem.",
+              ],
+              [
+                "Arbitrar o que se publica.",
+                "Nada sai com o selo do conselho sem passar por aqui.",
+              ],
+            ].map(([forte, resto]) => (
+              <li
+                className="flex gap-3 font-body text-[15px] text-foreground/80 leading-relaxed"
+                key={forte}
               >
-                <p className="font-body text-[10px] text-accent uppercase tracking-[0.2em]">
-                  {c.estado}
-                </p>
-                <h3 className="mt-3 font-display text-[19px] text-primary leading-snug">
-                  {c.titulo}
-                </h3>
-                <p className="mt-2 font-body text-[14px] text-foreground/70 leading-relaxed">
-                  {c.desc}
-                </p>
-              </div>
+                <span aria-hidden="true" className="mt-2 text-accent">
+                  —
+                </span>
+                <span>
+                  <strong>{forte}</strong> {resto}
+                </span>
+              </li>
             ))}
+          </ul>
+          <p className="mt-7 border-accent/30 border-t pt-6 font-body text-[15px] text-foreground/75 leading-relaxed">
+            Onde a máquina reprovar está o resultado mais interessante: cada
+            falha assinala um ponto em que a leitura do poema exige algo que não
+            está no texto. Esse mapa nunca foi desenhado, e é matéria de tese
+            para quem entrar agora.
+          </p>
+          <p className="mt-4 font-body text-[15px] text-foreground/65 leading-relaxed">
+            Não pedimos investigação não remunerada nem exclusividade. Pedimos
+            rigor — e o direito de o invocar.
+          </p>
+        </div>
+      </section>
+
+      {/* ── Estado ─────────────────────────────────────────────────── */}
+      <section className="border-accent/15 border-t bg-secondary/30">
+        <div className="mx-auto max-w-[760px] px-6 py-20">
+          <Eyebrow>Estado</Eyebrow>
+          <SectionTitle>Onde estamos, com franqueza</SectionTitle>
+          <div className="mt-8 space-y-6">
+            <P>
+              O trabalho começou em 2024, ao redor do quinto centenário do
+              nascimento de Camões. A plataforma de leitura está no ar e é a
+              parte sólida. A equipa de engenharia trabalha em regime gratuito.
+              O desenho completo do projecto está disponível a quem o peça, e é
+              enviado inteiro — incluindo o que ainda não sabemos fazer.
+            </P>
+            <P>
+              Nenhuma das quatro cadeiras do conselho está ocupada. Preferimos
+              declará-lo a insinuar o contrário: um conselho científico começa
+              com o primeiro nome, e o primeiro nome fixa todos os que vêm
+              depois.
+            </P>
+            <P>
+              Esta é a ordem que nos parece correcta: primeiro o crivo
+              académico, depois tudo o resto. Um projecto desta natureza sem
+              orientação científica não merecia existir, e não o quereríamos
+              assim.
+            </P>
           </div>
 
-          <div className="mt-12 rounded-2xl border border-accent/30 bg-background/70 p-7 sm:p-9">
-            <h3 className="font-display text-[20px] text-primary">
-              O que pedimos a quem aceite
-            </h3>
-            <ul className="mt-5 space-y-3">
-              {[
-                "Validar o desenho metodológico de cada lente antes de se produzir seja o que for.",
-                "Arbitrar o que se publica — nada sai com chancela científica sem passar por este crivo.",
-                "Indicar a bibliografia e as edições de referência que devem alimentar o trabalho.",
-                "Emprestar o nome ao conselho, com a liberdade de o retirar se o rumo deixar de merecer.",
-              ].map((linha) => (
-                <li
-                  className="flex gap-3 font-body text-[15px] text-foreground/80 leading-relaxed"
-                  key={linha}
-                >
-                  <span aria-hidden="true" className="mt-2 text-accent">
-                    —
-                  </span>
-                  <span>{linha}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-7 border-accent/30 border-t pt-6 font-body text-[15px] text-foreground/65 leading-relaxed">
-              Não pedimos trabalho de investigação não remunerado nem
-              exclusividade. Pedimos rigor — e o direito de o invocar.
+          <div className="mt-10 rounded-2xl border border-accent/25 bg-background/70 p-7 sm:p-9">
+            <p className="font-body text-[11px] text-accent uppercase tracking-[0.2em]">
+              Quem convida
+            </p>
+            <p className="mt-3 font-body text-[16px] text-foreground/85 leading-[1.8]">
+              <strong className="text-primary">Bernardo Abreu</strong>,
+              presidente da Associação Memória Lusíada, por{" "}
+              <em>Os Lusíadas Decifrados</em>.
+            </p>
+            <p className="mt-3 font-body text-[15px] text-foreground/65 leading-relaxed">
+              Associação cultural sem fins lucrativos dedicada à memória
+              literária portuguesa. Dizemo-lo à cabeça e não em rodapé: quem
+              aceitar um lugar neste conselho tem direito a saber a quem se
+              associa antes de responder, e não depois de procurar.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ── Estado e calendário ────────────────────────────────────── */}
+      {/* ── Falar connosco ─────────────────────────────────────────── */}
       <section className="mx-auto max-w-[760px] px-6 py-20">
-        <Eyebrow>Estado</Eyebrow>
-        <SectionTitle>Onde estamos, com franqueza</SectionTitle>
-        <div className="mt-8 space-y-6">
-          <P>
-            O trabalho começou em 2024, ao redor do quinto centenário do
-            nascimento de Camões. A plataforma de leitura está no ar e é o nosso
-            activo mais sólido. A equipa técnica — engenharia de software —
-            trabalha em regime gratuito. O portefólio está disponível a quem o
-            queira examinar.
-          </P>
-          <P>
-            O financiamento da componente computacional será pedido ao programa{" "}
-            <em>Claude Science</em>, da Anthropic, sob a forma de créditos de
-            utilização. A candidatura formal está em preparação para o próximo
-            trimestre — deliberadamente adiada para que o conselho científico
-            esteja constituído antes de se submeter, e não depois.
-          </P>
-          <P>
-            É esta a ordem que nos parece correcta: primeiro o crivo académico,
-            depois os meios. Um projecto desta natureza sem supervisão
-            científica não merecia ser financiado — e nós não o quereríamos
-            assim.
-          </P>
-        </div>
-
-        <div className="mt-12 rounded-2xl border border-accent/25 bg-secondary/40 p-7 text-center sm:p-9">
+        <div className="rounded-2xl border border-accent/25 bg-secondary/40 p-7 text-center sm:p-9">
           <Mail className="mx-auto text-accent" size={22} strokeWidth={1.5} />
           <h3 className="mt-4 font-display text-[22px] text-primary">
             Falar connosco
           </h3>
           <p className="mx-auto mt-3 max-w-[440px] font-body text-[15px] text-foreground/70 leading-relaxed">
             A investigadores, professores e instituições que queiram conhecer o
-            desenho do projecto em detalhe — ou apontar-lhe defeitos.
+            desenho do projecto em detalhe — ou apontar-lhe defeitos, que é o
+            que mais nos serve.
           </p>
           <a
             className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3 font-body text-[14px] text-primary-foreground transition-opacity hover:opacity-90"
@@ -417,11 +603,18 @@ export default function DecifradosPage() {
       {/* ── Remate ─────────────────────────────────────────────────── */}
       <section className="border-accent/15 border-t">
         <div className="mx-auto max-w-[640px] px-6 py-20 text-center">
-          <p className="font-display text-[24px] text-primary italic leading-[1.5] sm:text-[28px]">
-            «As Armas e os Barões assinalados»
+          <FlaskConical
+            className="mx-auto text-accent/60"
+            size={22}
+            strokeWidth={1.5}
+          />
+          <p className="mt-6 font-display text-[24px] text-primary italic leading-[1.5] sm:text-[28px]">
+            «Que os Anjos de celeste companhia
+            <br />
+            Deuses o sacro verso está chamando»
           </p>
           <p className="mt-5 font-body text-[14px] text-muted-foreground">
-            Canto I, estância 1 — o princípio de tudo o que temos para ler.
+            Canto X, estância 84 — uma das mil que quase ninguém leu.
           </p>
           <Link
             className="mt-8 inline-flex items-center gap-2 rounded-full border border-accent/40 px-7 py-3 font-body text-[14px] text-primary transition-colors hover:bg-accent/10"
