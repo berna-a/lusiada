@@ -79,6 +79,43 @@ const LENTES = [
   },
 ] as const;
 
+const ORGAOS_SOCIAIS = [
+  {
+    orgao: "Direcção",
+    membros: [
+      ["Bernardo Abreu", "Presidente"],
+      ["Manuel Dugos Pimentel", "Vice-presidente"],
+      ["Daniel Leal", "Secretário Geral"],
+    ],
+  },
+  {
+    orgao: "Mesa da Assembleia Geral",
+    membros: [
+      ["Ricardo Santos", "Presidente"],
+      ["Vasco Semedo", "1.º Secretário"],
+      ["Cristina Fernandes", "2.ª Secretária"],
+    ],
+  },
+  {
+    orgao: "Conselho Fiscal",
+    membros: [
+      ["João Silva", "Presidente"],
+      ["Gonçalo Santos", "Vice-presidente"],
+      ["Afonso Santos", "Vogal"],
+    ],
+  },
+  {
+    orgao: "Vogais",
+    membros: [
+      ["João Oliveira", ""],
+      ["Tiago Lobo", ""],
+      ["Tomás Duarte", ""],
+      ["Guilherme Pinho", ""],
+      ["Gonçalo Chaveiro", ""],
+    ],
+  },
+] as const;
+
 const CONSELHO = [
   {
     titulo: "Lente linguística",
@@ -575,6 +612,37 @@ export default function DecifradosPage() {
               aceitar um lugar neste conselho tem direito a saber a quem se
               associa antes de responder, e não depois de procurar.
             </p>
+          </div>
+
+          <div className="mt-6 rounded-2xl border border-accent/25 bg-background/70 p-7 sm:p-9">
+            <p className="font-body text-[11px] text-accent uppercase tracking-[0.2em]">
+              Órgãos sociais
+            </p>
+            <p className="mt-3 font-body text-[14px] text-foreground/60 leading-relaxed">
+              Eleitos em Assembleia Geral, 20 de Abril de 2026.
+            </p>
+            <div className="mt-6 grid gap-6 sm:grid-cols-2">
+              {ORGAOS_SOCIAIS.map((grupo) => (
+                <div key={grupo.orgao}>
+                  <h4 className="font-display text-[15px] text-primary">
+                    {grupo.orgao}
+                  </h4>
+                  <ul className="mt-2 space-y-1">
+                    {grupo.membros.map(([nome, cargo]) => (
+                      <li
+                        className="font-body text-[14px] text-foreground/75"
+                        key={nome}
+                      >
+                        {nome}
+                        {cargo ? (
+                          <span className="text-foreground/50"> — {cargo}</span>
+                        ) : null}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
