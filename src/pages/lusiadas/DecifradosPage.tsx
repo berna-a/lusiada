@@ -160,15 +160,16 @@ export default function DecifradosPage() {
         <div className="mt-8 flex justify-center">
           <span aria-hidden="true" className="block h-px w-[60px] bg-accent" />
         </div>
-        <p className="mx-auto mt-8 max-w-[560px] font-display text-[20px] text-primary/80 italic leading-[1.5] sm:text-[24px]">
-          Ler o poema verso a verso, com os instrumentos do nosso século e o
-          método da casa.
+        <p className="mx-auto mt-8 max-w-[600px] font-display text-[20px] text-primary/80 italic leading-[1.5] sm:text-[24px]">
+          Não democratizamos a interpretação — ela já é livre. Democratizamos o
+          acesso ao que é preciso saber para interpretar.
         </p>
         <p className="mx-auto mt-6 max-w-[600px] font-body text-[16px] text-foreground/65 leading-[1.8]">
           Decifrar, aqui, não é descobrir um segredo. É restituir uma literacia:
           devolver ao poema aquilo que em 1572 se lia sem esforço e hoje já não
           se lê. Uma leitura sistemática das 1102 estâncias, em quatro lentes,
-          sujeita a contraditório em cada passo.
+          para que qualquer leitor chegue ao verso com a mesma matéria-prima que
+          o especialista tem à mão.
         </p>
       </header>
 
@@ -455,11 +456,26 @@ export default function DecifradosPage() {
               leitura e anotação verso a verso pela comunidade.
             </P>
             <P>
-              O modelo é o de uma plataforma de anotação aberta: cada estância
-              tem o seu espaço de discussão, e o contraditório permanece
-              visível. O que a investigação apurar entra por essa porta, junto
-              ao verso a que diz respeito, ao alcance de quem estuda a obra e de
-              quem a está a ler pela primeira vez.
+              O modelo é o de uma plataforma de anotação aberta: qualquer leitor
+              selecciona uma palavra, um verso, uma estância ou um canto, e
+              encontra aí um espaço de discussão próprio. O que a investigação
+              apurar entra por essa porta, junto ao verso a que diz respeito.
+            </P>
+            <P>
+              <strong>E aqui está a linha que não se atravessa.</strong> O que
+              este trabalho estabelece são <em>factos</em>: o que a palavra
+              queria dizer em 1572, que crónica está por trás da estância, que
+              modelo clássico ecoa naquele verso. Esses factos verificam-se,
+              citam-se e contestam-se. O que a estância <em>significa</em> para
+              quem a lê não se estabelece — discute-se, e não há tribunal que o
+              decida.
+            </P>
+            <P>
+              Não haverá revisores a arbitrar sentidos. A poesia experimenta-se
+              de maneira pessoal, e essa é a sua natureza, não um defeito a
+              corrigir. O que fazemos é outra coisa: entregamos a quem lê a
+              mesma matéria-prima que o especialista tem à mão, e deixamos a
+              interpretação onde ela sempre esteve — em quem lê.
             </P>
             <P>
               Tudo o que se produzir — corpus anotado, colação, aparato — fica
@@ -485,20 +501,36 @@ export default function DecifradosPage() {
           <SectionTitle>Conselho científico</SectionTitle>
           <p className="mx-auto mt-6 max-w-[600px] font-body text-[16px] text-foreground/75 leading-[1.8]">
             Temos os meios técnicos e temo-los comprometidos. O que nos falta é
-            quem escreva o exame que este trabalho tem de passar.
+            quem responda pelos factos.
           </p>
         </div>
 
-        <div className="mx-auto mt-10 max-w-[600px] space-y-4">
+        <div className="mx-auto mt-10 max-w-[620px] space-y-5">
           <P>
-            Não convidamos ninguém para fiscalizar o trabalho alheio. Convidamos
-            para uma coisa que não existe e que ficará feita:{" "}
+            Ninguém é convidado para arbitrar sentidos — já dissemos que não é
+            isso que aqui se faz. O convite é para a camada de baixo, a que
+            sustenta tudo o resto:{" "}
+            <strong>
+              garantir que a matéria-prima que entregamos a milhares de leitores
+              está certa.
+            </strong>
+          </P>
+          <P>
+            Se dissermos que uma palavra queria dizer outra coisa em 1572, ou
+            que uma estância responde a uma passagem de Barros, isso é uma
+            afirmação que se verifica — e que alguém tem de responder por ela. É
+            esse o lugar, e não há nele nada de decorativo: é o que separa uma
+            edição de referência de um site com opiniões.
+          </P>
+          <P>
+            Daqui sai também uma coisa que ainda não existe:{" "}
             <strong>
               o padrão pelo qual se afere a leitura automática do português
               quinhentista literário.
             </strong>{" "}
-            Não há nenhum. Quem o fizer, fá-lo para quem vier depois, e o
-            objecto certo para o fazer é o mais difícil que a língua tem.
+            Não há nenhum, em nenhuma língua peninsular. Quem o estabelecer,
+            estabelece-o para quem vier depois — e o objecto certo para o fazer
+            é o mais difícil que a língua tem.
           </P>
         </div>
 
@@ -528,20 +560,20 @@ export default function DecifradosPage() {
           <ul className="mt-5 space-y-3">
             {[
               [
-                "Escrever o gabarito.",
-                "Escolher estâncias e estabelecer, à mão, a leitura correcta contra a qual a máquina será medida. É trabalho de autoria, e é assinado.",
+                "Escrever o padrão.",
+                "Escolher estâncias e estabelecer, à mão, a leitura de referência contra a qual a máquina é medida. É trabalho de autoria, e é assinado por quem o faz.",
               ],
               [
                 "Definir o que conta como erro",
-                "em cada lente, e o que conta como achado.",
+                "em cada lente — e o que conta como achado que vale a pena publicar.",
               ],
               [
                 "Indicar as edições e a bibliografia",
                 "que devem alimentar o trabalho — e as que não devem.",
               ],
               [
-                "Arbitrar o que se publica.",
-                "Nada sai com o selo do conselho sem passar por aqui.",
+                "Responder pelos factos publicados.",
+                "Nada sai com o selo do conselho sem passar por aqui. O que é interpretação sai sem selo nenhum, e assim deve ser.",
               ],
             ].map(([forte, resto]) => (
               <li
