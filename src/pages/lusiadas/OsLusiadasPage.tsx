@@ -23,6 +23,7 @@ import {
   LusiadasFeed,
 } from "@/components/lusiadas/LusiadasFeed";
 import { Seo } from "@/components/Seo";
+import { RESUMOS_CANTOS } from "@/data/lusiadas/resumos";
 import type { Grafia } from "@/lib/grafia/lexicon";
 import { useGrafia } from "@/lib/grafia/store";
 import { cantoHref, lusiadasBase, setLastRead } from "@/lib/lusiadas/nav";
@@ -269,7 +270,14 @@ export default function OsLusiadasPage() {
       data-nav-theme="light"
     >
       <Seo
-        description="Os Lusíadas de Luiz Vaz de Camões, lidos verso a verso nas três grafias da língua — a epopeia da nação Portugueza, para estudar, anotar e debater."
+        description={
+          RESUMOS_CANTOS[n]
+            ? `Canto ${ROMANS[n]} d'Os Lusíadas: ${RESUMOS_CANTOS[n]}`.slice(
+                0,
+                160
+              )
+            : "Os Lusíadas de Luiz Vaz de Camões, lidos verso a verso nas três grafias da língua — a epopeia da nação Portugueza, para estudar, anotar e debater."
+        }
         path={n === 1 ? "/os-lusiadas" : `/os-lusiadas/canto/${n}`}
         title={`Os Lusíadas — Canto ${ROMANS[n]} | Texto anotado, verso a verso | Camões`}
         type="article"
@@ -325,6 +333,17 @@ export default function OsLusiadasPage() {
           </Link>
         </div>
       </header>
+
+      {!focus && RESUMOS_CANTOS[n] && (
+        <section className="mx-auto mt-8 max-w-2xl rounded-lg border border-border/60 bg-secondary/20 px-5 py-4">
+          <p className="font-body text-[11px] text-muted-foreground uppercase tracking-[0.2em]">
+            Resumo do enredo — Canto {ROMANS[n]}
+          </p>
+          <p className="mt-2 font-body text-[15px] text-foreground/80 leading-relaxed">
+            {RESUMOS_CANTOS[n]}
+          </p>
+        </section>
+      )}
 
       {n === 1 && !focus && <EstrofeDoDia />}
 
