@@ -2,6 +2,7 @@ import {
   BookOpen,
   Compass,
   FlaskConical,
+  Hourglass,
   Landmark,
   Mail,
   Scale,
@@ -77,6 +78,15 @@ const LENTES = [
     remate:
       "Não procuramos um segredo escondido. Procuramos a literacia que o poema dá por adquirida.",
   },
+  {
+    icon: Hourglass,
+    numero: "V",
+    nome: "Memória",
+    lema: "O que aconteceu ao poema depois de estar escrito.",
+    corpo:
+      "Da leitura do texto passamos à leitura do que o texto gerou: quem o quis igualar, quem o purgou, quem se riu dele, e porquê. Um mapa de quatro séculos de epopeias que competiram com Camões, de edições que o expurgaram, de paródias que o levaram ao riso. Não é um leitor automático a analisar o verso; é o cruzamento sistemático do que a investigação camoniana já documentou, século a século, posto ao alcance de quem lê.",
+    remate: "Ninguém parodia o que já não importa.",
+  },
 ] as const;
 
 const ORGAOS_SOCIAIS = [
@@ -134,8 +144,13 @@ const CONSELHO = [
   },
   {
     titulo: "Lente literária e mitológica",
-    desc: "Estudos camonianos, mitologia, tradição simbólica e recepção da obra.",
+    desc: "Estudos camonianos, mitologia e tradição simbólica.",
     estado: "Em diálogo",
+  },
+  {
+    titulo: "Lente da memória",
+    desc: "História da recepção: imitação, canonização, censura e paródia d'Os Lusíadas ao longo dos séculos.",
+    estado: "Por preencher",
   },
 ] as const;
 
@@ -143,7 +158,7 @@ export default function DecifradosPage() {
   return (
     <main data-nav-theme="light">
       <Seo
-        description="Análise computacional multi-agente d'Os Lusíadas, verso a verso, em quatro lentes — língua, história, poética e símbolo. Um projecto de investigação de oslusiadas.pt."
+        description="Análise computacional multi-agente d'Os Lusíadas, verso a verso, em cinco lentes — língua, história, poética, símbolo e memória. Um projecto de investigação de oslusiadas.pt."
         path="/os-lusiadas/decifrados"
         title="Os Lusíadas Decifrados — projecto de investigação"
         type="article"
@@ -167,7 +182,7 @@ export default function DecifradosPage() {
         <p className="mx-auto mt-6 max-w-[600px] font-body text-[16px] text-foreground/65 leading-[1.8]">
           Decifrar, aqui, não é descobrir um segredo. É restituir uma literacia:
           devolver ao poema aquilo que em 1572 se lia sem esforço e hoje já não
-          se lê. Uma leitura sistemática das 1102 estâncias, em quatro lentes,
+          se lê. Uma leitura sistemática das 1102 estâncias, em cinco lentes,
           para que qualquer leitor chegue ao verso com a mesma matéria-prima que
           o especialista tem à mão.
         </p>
@@ -244,14 +259,14 @@ export default function DecifradosPage() {
         </div>
       </section>
 
-      {/* ── As quatro lentes ───────────────────────────────────────── */}
+      {/* ── As cinco lentes ───────────────────────────────────────── */}
       <section className="border-accent/15 border-y bg-secondary/30">
         <div className="mx-auto max-w-[900px] px-6 py-20">
           <div className="text-center">
             <Eyebrow>O objecto</Eyebrow>
-            <SectionTitle>As quatro lentes</SectionTitle>
+            <SectionTitle>As cinco lentes</SectionTitle>
             <p className="mx-auto mt-5 max-w-[520px] font-body text-[15px] text-foreground/60 leading-relaxed">
-              Cada estância é lida quatro vezes, por quatro disciplinas com
+              Cada estância é lida cinco vezes, por cinco disciplinas com
               hábitos diferentes e bibliografias diferentes.
             </p>
           </div>
@@ -534,7 +549,7 @@ export default function DecifradosPage() {
           </P>
         </div>
 
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {CONSELHO.map((c) => (
             <div
               className="rounded-xl border border-accent/25 bg-background/70 p-6"
@@ -616,7 +631,7 @@ export default function DecifradosPage() {
               enviado inteiro — incluindo o que ainda não sabemos fazer.
             </P>
             <P>
-              Nenhuma das quatro cadeiras do conselho está ocupada. Preferimos
+              Nenhuma das cinco cadeiras do conselho está ocupada. Preferimos
               declará-lo a insinuar o contrário: um conselho científico começa
               com o primeiro nome, e o primeiro nome fixa todos os que vêm
               depois.
