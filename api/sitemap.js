@@ -31,6 +31,11 @@ const STATIC_PATHS = [
   "/aderir",
   "/contactos",
   "/os-lusiadas/perguntas",
+  "/os-lusiadas/episodios",
+  "/os-lusiadas/episodios/ines-de-castro",
+  "/os-lusiadas/episodios/velho-do-restelo",
+  "/os-lusiadas/episodios/adamastor",
+  "/os-lusiadas/episodios/ilha-dos-amores",
   "/os-lusiadas/decifrados",
   "/os-lusiadas/decifrados/temas-de-tese",
 ];
@@ -148,6 +153,11 @@ export default async function handler(req, res) {
       "/plano",
       "/viagem",
       "/perguntas",
+      "/episodios",
+      "/episodios/ines-de-castro",
+      "/episodios/velho-do-restelo",
+      "/episodios/adamastor",
+      "/episodios/ilha-dos-amores",
       "/decifrados",
       "/decifrados/temas-de-tese",
     ];

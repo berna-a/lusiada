@@ -7,6 +7,7 @@ import {
   CalendarDays,
   Check,
   HelpCircle,
+  Landmark,
   Link2,
   Loader2,
   Map,
@@ -344,6 +345,12 @@ export default function OsLusiadasPage() {
             to={`${base || ""}/viagem`}
           >
             <Map className="h-3.5 w-3.5" /> A Viagem
+          </Link>
+          <Link
+            className="inline-flex items-center gap-1.5 font-body text-[13px] text-muted-foreground transition-colors hover:text-accent"
+            to={`${base || ""}/episodios`}
+          >
+            <Landmark className="h-3.5 w-3.5" /> Os episódios
           </Link>
           <Link
             className="inline-flex items-center gap-1.5 font-body text-[13px] text-muted-foreground transition-colors hover:text-accent"

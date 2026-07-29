@@ -103,12 +103,20 @@ export default function PerguntasPage() {
           O texto completo está aqui, verso a verso, nas três grafias da língua
           — com o resumo do enredo em cada canto.
         </p>
-        <Link
-          className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3 font-body text-[14px] text-primary-foreground transition-opacity hover:opacity-90"
-          to={cantoHref(base, 1)}
-        >
-          Ler Os Lusíadas
-        </Link>
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
+          <Link
+            className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3 font-body text-[14px] text-primary-foreground transition-opacity hover:opacity-90"
+            to={cantoHref(base, 1)}
+          >
+            Ler Os Lusíadas
+          </Link>
+          <Link
+            className="inline-flex items-center gap-2 rounded-full border border-accent/40 px-7 py-3 font-body text-[14px] text-primary transition-colors hover:bg-accent/10"
+            to={`${base}/episodios`}
+          >
+            Os episódios
+          </Link>
+        </div>
       </section>
     </main>
   );

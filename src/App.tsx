@@ -34,6 +34,7 @@ import PalavraPage from "@/pages/dicionario/PalavraPage";
 import HomePage from "@/pages/HomePage";
 import ComunidadePage from "@/pages/lusiadas/ComunidadePage";
 import DecifradosPage from "@/pages/lusiadas/DecifradosPage";
+import EpisodiosPage, { EpisodioPage } from "@/pages/lusiadas/EpisodiosPage";
 import ExplorarPage from "@/pages/lusiadas/ExplorarPage";
 import InicioPage from "@/pages/lusiadas/InicioPage";
 import OsLusiadasPage from "@/pages/lusiadas/OsLusiadasPage";
@@ -132,6 +133,16 @@ const App = () => (
                 path="/os-lusiadas/perguntas"
               />
               <Route element={<PerguntasPage />} path="/perguntas" />
+              <Route
+                element={<EpisodiosPage />}
+                path="/os-lusiadas/episodios"
+              />
+              <Route element={<EpisodiosPage />} path="/episodios" />
+              <Route
+                element={<EpisodioPage />}
+                path="/os-lusiadas/episodios/:slug"
+              />
+              <Route element={<EpisodioPage />} path="/episodios/:slug" />
               <Route element={<ViagemPage />} path="/os-lusiadas/viagem" />
               <Route element={<ViagemPage />} path="/viagem" />
               <Route element={<ProcurarPage />} path="/os-lusiadas/procurar" />
