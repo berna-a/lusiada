@@ -608,7 +608,14 @@ export default function DecifradosPage() {
             Onde a máquina reprovar está o resultado mais interessante: cada
             falha assinala um ponto em que a leitura do poema exige algo que não
             está no texto. Esse mapa nunca foi desenhado, e é matéria de tese
-            para quem entrar agora.
+            para quem entrar agora —{" "}
+            <Link
+              className="text-primary underline decoration-accent/40 decoration-dotted underline-offset-4 transition-colors hover:decoration-accent"
+              to="/os-lusiadas/decifrados/temas-de-tese"
+            >
+              dezoito pontos de partida, já esboçados
+            </Link>
+            .
           </p>
           <p className="mt-4 font-body text-[15px] text-foreground/65 leading-relaxed">
             Não pedimos investigação não remunerada nem exclusividade. Pedimos
