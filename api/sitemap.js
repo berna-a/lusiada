@@ -30,6 +30,7 @@ const STATIC_PATHS = [
   "/apoiar",
   "/aderir",
   "/contactos",
+  "/os-lusiadas/perguntas",
   "/os-lusiadas/decifrados",
   "/os-lusiadas/decifrados/temas-de-tese",
 ];
@@ -146,6 +147,7 @@ export default async function handler(req, res) {
       "/canto/10",
       "/plano",
       "/viagem",
+      "/perguntas",
       "/decifrados",
       "/decifrados/temas-de-tese",
     ];

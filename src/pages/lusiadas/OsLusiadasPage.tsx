@@ -6,6 +6,7 @@ import {
   BookText,
   CalendarDays,
   Check,
+  HelpCircle,
   Link2,
   Loader2,
   Map,
@@ -278,6 +279,19 @@ export default function OsLusiadasPage() {
               )
             : "Os Lusíadas de Luiz Vaz de Camões, lidos verso a verso nas três grafias da língua — a epopeia da nação Portugueza, para estudar, anotar e debater."
         }
+        jsonLd={{
+          "@type": "Book",
+          name: "Os Lusíadas",
+          author: { "@type": "Person", name: "Luís Vaz de Camões" },
+          inLanguage: "pt",
+          datePublished: "1572",
+          genre: "Epopeia",
+          hasPart: {
+            "@type": "CreativeWork",
+            name: `Canto ${ROMANS[n]}`,
+            position: n,
+          },
+        }}
         path={n === 1 ? "/os-lusiadas" : `/os-lusiadas/canto/${n}`}
         title={`Os Lusíadas — Canto ${ROMANS[n]} | Texto anotado, verso a verso | Camões`}
         type="article"
@@ -330,6 +344,12 @@ export default function OsLusiadasPage() {
             to={`${base || ""}/viagem`}
           >
             <Map className="h-3.5 w-3.5" /> A Viagem
+          </Link>
+          <Link
+            className="inline-flex items-center gap-1.5 font-body text-[13px] text-muted-foreground transition-colors hover:text-accent"
+            to={`${base || ""}/perguntas`}
+          >
+            <HelpCircle className="h-3.5 w-3.5" /> Perguntas frequentes
           </Link>
         </div>
       </header>

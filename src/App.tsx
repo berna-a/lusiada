@@ -38,6 +38,7 @@ import ExplorarPage from "@/pages/lusiadas/ExplorarPage";
 import InicioPage from "@/pages/lusiadas/InicioPage";
 import OsLusiadasPage from "@/pages/lusiadas/OsLusiadasPage";
 import PerfilPage from "@/pages/lusiadas/PerfilPage";
+import PerguntasPage from "@/pages/lusiadas/PerguntasPage";
 import PlanoPage from "@/pages/lusiadas/PlanoPage";
 import ProcurarPage from "@/pages/lusiadas/ProcurarPage";
 import TemasTesePage from "@/pages/lusiadas/TemasTesePage";
@@ -126,6 +127,11 @@ const App = () => (
                 element={<TemasTesePage />}
                 path="/decifrados/temas-de-tese"
               />
+              <Route
+                element={<PerguntasPage />}
+                path="/os-lusiadas/perguntas"
+              />
+              <Route element={<PerguntasPage />} path="/perguntas" />
               <Route element={<ViagemPage />} path="/os-lusiadas/viagem" />
               <Route element={<ViagemPage />} path="/viagem" />
               <Route element={<ProcurarPage />} path="/os-lusiadas/procurar" />
