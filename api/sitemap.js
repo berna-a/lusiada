@@ -30,6 +30,8 @@ const STATIC_PATHS = [
   "/apoiar",
   "/aderir",
   "/contactos",
+  "/os-lusiadas/decifrados",
+  "/os-lusiadas/decifrados/temas-de-tese",
 ];
 
 // Palavras de alta procura do dicionário (subconjunto curado — evita despejar
@@ -144,6 +146,8 @@ export default async function handler(req, res) {
       "/canto/10",
       "/plano",
       "/viagem",
+      "/decifrados",
+      "/decifrados/temas-de-tese",
     ];
     const xmlL = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

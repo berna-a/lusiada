@@ -271,7 +271,7 @@ export default function OsLusiadasPage() {
       <Seo
         description="Os Lusíadas de Luiz Vaz de Camões, lidos verso a verso nas três grafias da língua — a epopeia da nação Portugueza, para estudar, anotar e debater."
         path={n === 1 ? "/os-lusiadas" : `/os-lusiadas/canto/${n}`}
-        title={`Os Lusíadas — Canto ${ROMANS[n]}${canto ? `: ${canto.titulo.replace(/^Canto\s+\w+\s*/, "")}` : ""} | Camões`}
+        title={`Os Lusíadas — Canto ${ROMANS[n]} | Texto anotado, verso a verso | Camões`}
         type="article"
       />
 
