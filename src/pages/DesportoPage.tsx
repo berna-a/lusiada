@@ -12,13 +12,6 @@ import { JoinCTA } from "@/components/JoinCTA";
 import { PageHeader } from "@/components/PageHeader";
 import { Seo } from "@/components/Seo";
 
-/** Onde o jogo já está — a prova, antes da promessa. */
-const PROVA = [
-  { valor: "Sábados", rotulo: "Mesas de Go, todas as semanas" },
-  { valor: "20", rotulo: "Tabuleiros comprados e prontos" },
-  { valor: "30", rotulo: "Lugares no primeiro torneio aberto" },
-];
-
 const JOGOS = [
   {
     icon: CircleDot,
@@ -74,29 +67,11 @@ export default function DesportoPage() {
         title="Desportos da mente"
       />
 
-      {/* A prova, antes da promessa */}
-      <section className="mt-16 grid gap-6 sm:grid-cols-3">
-        {PROVA.map((p) => (
-          <div
-            className="border-accent/30 border-t pt-4 text-center sm:text-left"
-            key={p.rotulo}
-          >
-            <p className="font-display text-[30px] text-primary leading-none">
-              {p.valor}
-            </p>
-            <p className="mt-2 font-body text-[14px] text-foreground/70 leading-snug">
-              {p.rotulo}
-            </p>
-          </div>
-        ))}
-      </section>
-
       {/* A tese */}
       <section className="mx-auto mt-16 max-w-[640px]">
         <p className="font-body text-[17px] text-foreground/85 leading-[1.85]">
-          Há uma família de jogos a que os italianos chamam{" "}
-          <em>sport della mente</em> — desportos da mente. Não têm bola nem
-          pista, não se ganham por força nem por velocidade, e um jogador de
+          Há uma família de jogos que se chama desportos da mente. Não têm bola
+          nem pista, não se ganham por força nem por velocidade, e um jogador de
           setenta anos pode vencer um de vinte. Ganham-se por atenção, paciência
           e a disciplina de pensar antes de mexer.
         </p>
