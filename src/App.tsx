@@ -29,6 +29,7 @@ import MemoriasPage from "@/pages/arca/MemoriasPage";
 import NovoArtigoPage from "@/pages/arca/NovoArtigoPage";
 import PanteaoPage from "@/pages/arca/PanteaoPage";
 import ContactosPage from "@/pages/ContactosPage";
+import DesportoPage from "@/pages/DesportoPage";
 import DicionarioPage from "@/pages/dicionario/DicionarioPage";
 import PalavraPage from "@/pages/dicionario/PalavraPage";
 import HomePage from "@/pages/HomePage";
@@ -80,6 +81,8 @@ const App = () => (
               <Route element={<OsLusiadasPage />} path="/canto/:n" />
               <Route element={<AssociacaoPage />} path="/associacao" />
               <Route element={<ProgramaPage />} path="/programa" />
+              <Route element={<DesportoPage />} path="/desporto" />
+              <Route element={<DesportoPage />} path="/programa/desporto" />
               <Route element={<ApoiarPage />} path="/apoiar" />
               <Route element={<ContactosPage />} path="/contactos" />
               <Route element={<AderirPage />} path="/aderir" />

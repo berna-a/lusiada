@@ -27,6 +27,7 @@ const STATIC_PATHS = [
   "/sobre/manifesto",
   "/sobre/objectivos",
   "/programa",
+  "/desporto",
   "/apoiar",
   "/aderir",
   "/contactos",
