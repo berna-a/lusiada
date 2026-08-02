@@ -22,7 +22,7 @@ import json
 import unicodedata
 import urllib.request
 
-from construir_zonas import simplificar_anel
+from construir_zonas import area, dissolver, simplificar_anel
 
 CONCELHOS = (
     "https://raw.githubusercontent.com/nmota/caop_GeoJSON/master/"
@@ -40,6 +40,27 @@ AREA_MINIMA = 0.0005
 # A divisão de 1936, concelho a concelho. Os quatro concelhos criados depois
 # (Amadora, Odivelas, Trofa, Vizela) vão para a província do concelho de onde
 # se separaram.
+# As sete províncias tradicionais. A divisão do Renascimento tinha seis —
+# Entre-Douro-e-Minho, Trás-os-Montes, Beira, Estremadura, Entre-Tejo-e-Odiana
+# (o Alentejo) e o Reino do Algarve. O Ribatejo é o sétimo, destacado da
+# Estremadura em 1832.
+#
+# Cada uma é a soma de províncias de 1936, que é a divisão de que há listas de
+# concelhos fiáveis. As fronteiras não mudaram: só se apagam as de dentro.
+AGRUPAMENTO = {
+    "Minho": "Minho",
+    "Douro Litoral": "Minho",
+    "Trás-os-Montes e Alto Douro": "Trás-os-Montes",
+    "Beira Alta": "Beira",
+    "Beira Litoral": "Beira",
+    "Beira Baixa": "Beira",
+    "Estremadura": "Estremadura",
+    "Ribatejo": "Ribatejo",
+    "Alto Alentejo": "Alentejo",
+    "Baixo Alentejo": "Alentejo",
+    "Algarve": "Algarve",
+}
+
 # A divisão de 1936, concelho a concelho, separados por `;`. Os quatro
 # concelhos criados depois (Amadora, Odivelas, Trofa, Vizela) vão para a
 # província do concelho de onde se separaram.
@@ -133,96 +154,6 @@ def lista_de(bloco: str) -> list[str]:
     return [" ".join(n.split()) for n in bloco.split(";") if n.strip()]
 
 
-def dissolver(poligonos: list) -> list:
-    """Junta polígonos vizinhos apagando as fronteiras que partilham.
-
-    Duas áreas encostadas descrevem a fronteira comum com os mesmos vértices,
-    uma num sentido e a outra no sentido contrário. Cancelando os pares
-    opostos sobram só as arestas do contorno exterior, que depois se encadeiam
-    em anéis. Tem de correr ANTES de simplificar — depois de simplificar, cada
-    lado da fronteira já não tem os mesmos pontos e nada cancela.
-    """
-    arestas: dict[tuple, int] = {}
-    for anel in poligonos:
-        for i in range(len(anel) - 1):
-            a, b = tuple(anel[i]), tuple(anel[i + 1])
-            if a == b:
-                continue
-            if arestas.get((b, a)):
-                arestas[(b, a)] -= 1
-                if arestas[(b, a)] == 0:
-                    del arestas[(b, a)]
-            else:
-                arestas[(a, b)] = arestas.get((a, b), 0) + 1
-
-    seguintes: dict[tuple, list] = {}
-    for a, b in arestas:
-        seguintes.setdefault(a, []).append(b)
-
-    aneis = []
-    while seguintes:
-        inicio = next(iter(seguintes))
-        anel = [inicio]
-        actual = inicio
-        while True:
-            saidas = seguintes.get(actual)
-            if not saidas:
-                break
-            proximo = saidas.pop()
-            if not saidas:
-                del seguintes[actual]
-            anel.append(proximo)
-            actual = proximo
-            if actual == inicio:
-                break
-        if len(anel) > 3 and anel[0] == anel[-1]:
-            aneis.append([list(p) for p in anel])
-    return aneis
-
-
-def dentro(ponto, anel) -> bool:
-    """Lançamento de raio: conta as travessias da fronteira à direita."""
-    x, y = ponto
-    passou = False
-    for i in range(len(anel) - 1):
-        x1, y1 = anel[i]
-        x2, y2 = anel[i + 1]
-        if (y1 > y) != (y2 > y) and x < x1 + (y - y1) * (x2 - x1) / (y2 - y1):
-            passou = not passou
-    return passou
-
-
-def ancora(anel: list) -> list:
-    """Onde pousar o nome da província.
-
-    O centro geométrico de uma forma recortada cai muitas vezes fora dela —
-    a Estremadura tem o seu no meio do Tejo. Por isso varre-se uma grelha e
-    escolhe-se o ponto de dentro que fica mais longe da fronteira: é o sítio
-    onde há mais espaço livre para escrever.
-    """
-    xs = [c[0] for c in anel]
-    ys = [c[1] for c in anel]
-    melhor, folga_maxima = None, -1.0
-    passos = 28
-    for i in range(1, passos):
-        x = min(xs) + (max(xs) - min(xs)) * i / passos
-        for j in range(1, passos):
-            y = min(ys) + (max(ys) - min(ys)) * j / passos
-            if not dentro((x, y), anel):
-                continue
-            folga = min((x - a) ** 2 + (y - b) ** 2 for a, b in anel)
-            if folga > folga_maxima:
-                melhor, folga_maxima = [round(x, 4), round(y, 4)], folga
-    return melhor or [sum(xs) / len(xs), sum(ys) / len(ys)]
-
-
-def area(anel: list) -> float:
-    s = 0.0
-    for i in range(len(anel) - 1):
-        s += anel[i][0] * anel[i + 1][1] - anel[i + 1][0] * anel[i][1]
-    return abs(s) / 2
-
-
 def main() -> None:
     print(f"  ← {CONCELHOS[:78]}…")
     with urllib.request.urlopen(CONCELHOS, timeout=180) as r:
@@ -231,10 +162,11 @@ def main() -> None:
     de_concelho = {}
     for provincia, bloco in PROVINCIAS.items():
         for nome in lista_de(bloco):
-            de_concelho[chave(nome)] = provincia
-    print(f"{len(PROVINCIAS)} províncias, {len(de_concelho)} concelhos na tabela")
+            de_concelho[chave(nome)] = AGRUPAMENTO[provincia]
+    provincias = list(dict.fromkeys(AGRUPAMENTO.values()))
+    print(f"{len(provincias)} províncias, {len(de_concelho)} concelhos na tabela")
 
-    por_provincia: dict[str, list] = {p: [] for p in PROVINCIAS}
+    por_provincia: dict[str, list] = {p: [] for p in provincias}
     sem_provincia = []
     for f in dados["features"]:
         p = f["properties"]
