@@ -15,6 +15,7 @@ import type * as azulejos from "../azulejos.js";
 import type * as contact from "../contact.js";
 import type * as contributions from "../contributions.js";
 import type * as discussion from "../discussion.js";
+import type * as emailVerificacao from "../emailVerificacao.js";
 import type * as figures from "../figures.js";
 import type * as http from "../http.js";
 import type * as lexicon from "../lexicon.js";
@@ -49,6 +50,7 @@ declare const fullApi: ApiFromModules<{
   contact: typeof contact;
   contributions: typeof contributions;
   discussion: typeof discussion;
+  emailVerificacao: typeof emailVerificacao;
   figures: typeof figures;
   http: typeof http;
   lexicon: typeof lexicon;

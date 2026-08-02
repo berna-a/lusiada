@@ -1,6 +1,7 @@
 import Google from "@auth/core/providers/google";
 import { Password } from "@convex-dev/auth/providers/Password";
 import { convexAuth } from "@convex-dev/auth/server";
+import { CodigoPorEmail } from "./emailVerificacao";
 
 /**
  * Entrar na Lusíada.
@@ -16,6 +17,16 @@ import { convexAuth } from "@convex-dev/auth/server";
  * Falta a confirmação por email: precisa de um serviço de envio ligado.
  * Até lá entra-se logo e a conta fica por verificar.
  */
+/**
+ * A confirmação por email liga-se sozinha assim que a `AUTH_RESEND_KEY`
+ * existir no Convex. Enquanto não existir, entra-se logo e a conta fica por
+ * confirmar — mais vale isso do que uma porta fechada.
+ */
+const comConfirmacao = Boolean(process.env.AUTH_RESEND_KEY);
+
 export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
-  providers: [Google, Password],
+  providers: [
+    Google,
+    comConfirmacao ? Password({ verify: CodigoPorEmail }) : Password(),
+  ],
 });

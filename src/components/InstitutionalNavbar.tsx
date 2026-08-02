@@ -1,9 +1,10 @@
-import { useConvexAuth } from "convex/react";
+import { useConvexAuth, useQuery } from "convex/react";
 import { ChevronDown, Menu, UserRound, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { SiteControlPanel } from "@/components/SiteControlPanel";
 import { useOnDarkSection } from "@/hooks/use-on-dark-section";
+import { api } from "../../convex/_generated/api";
 
 type DropdownItem = { label: string; subtitle?: string; to: string };
 type MenuKey = "arca" | "programa" | "sobre";
@@ -76,6 +77,10 @@ const menus: Record<MenuKey, { label: string; items: DropdownItem[] }> = {
 
 export function InstitutionalNavbar() {
   const { isAuthenticated: autenticado } = useConvexAuth();
+  const perfil = useQuery(api.perfis.meu, autenticado ? {} : "skip");
+  // Só o primeiro nome: o botão é estreito e é assim que se trata alguém.
+  const primeiroNome =
+    perfil?.existe === true ? perfil.nomePublico.trim().split(/\s+/)[0] : null;
   const location = useLocation();
   const isLusiadas =
     typeof window !== "undefined" &&
@@ -164,30 +169,62 @@ export function InstitutionalNavbar() {
 
             {/* Right — Junta-te CTA + control panel + Hamburger */}
             <div className="flex items-center gap-2 justify-self-end">
-              {/* Entrar, ou o atalho para o próprio perfil de quem já entrou. */}
-              <Link
-                aria-label={autenticado ? "O meu perfil" : "Entrar"}
-                className={`hidden items-center gap-1.5 rounded-full border px-4 py-2.5 font-display text-[13px] uppercase tracking-[0.14em] transition-colors sm:inline-flex ${
-                  onLight
-                    ? "border-primary/25 text-primary hover:bg-primary/5"
-                    : "border-white/35 text-white hover:bg-white/10"
-                }`}
-                to={autenticado ? "/perfil" : "/entrar"}
-              >
-                <UserRound size={15} strokeWidth={1.75} />
-                {autenticado ? "Perfil" : "Entrar"}
-              </Link>
-              <Link
-                className="hidden items-center justify-center rounded-full px-6 py-2.5 font-display text-[14px] text-white uppercase tracking-[0.15em] transition-all hover:brightness-110 sm:inline-flex"
-                style={{
-                  backgroundColor: "hsl(351 62% 34%)",
-                  boxShadow:
-                    "0 4px 14px hsl(351 62% 20% / 0.4), inset 0 1px 0 hsl(0 0% 100% / 0.18)",
-                }}
-                to="/aderir"
-              >
-                Junta-te
-              </Link>
+              {/* Quem não tem conta vê «Junta-te»; quem tem, vê-se a si próprio
+                  — primeiro nome e retrato, a levar ao seu perfil. */}
+              {autenticado && primeiroNome ? (
+                <Link
+                  aria-label="O meu perfil"
+                  className="hidden items-center gap-2.5 rounded-full py-1.5 pr-1.5 pl-5 font-display text-[14px] text-white uppercase tracking-[0.15em] transition-all hover:brightness-110 sm:inline-flex"
+                  style={{
+                    backgroundColor: "hsl(351 62% 34%)",
+                    boxShadow:
+                      "0 4px 14px hsl(351 62% 20% / 0.4), inset 0 1px 0 hsl(0 0% 100% / 0.18)",
+                  }}
+                  to="/perfil"
+                >
+                  {primeiroNome}
+                  <span className="grid h-8 w-8 place-items-center overflow-hidden rounded-full bg-white/20">
+                    {perfil?.existe && perfil.avatarUrl ? (
+                      <img
+                        alt=""
+                        className="h-full w-full object-cover"
+                        src={perfil.avatarUrl}
+                      />
+                    ) : (
+                      <span className="font-display text-[13px] text-white">
+                        {primeiroNome.slice(0, 1).toUpperCase()}
+                      </span>
+                    )}
+                  </span>
+                </Link>
+              ) : (
+                <>
+                  {!autenticado && (
+                    <Link
+                      className={`hidden items-center gap-1.5 rounded-full border px-4 py-2.5 font-display text-[13px] uppercase tracking-[0.14em] transition-colors sm:inline-flex ${
+                        onLight
+                          ? "border-primary/25 text-primary hover:bg-primary/5"
+                          : "border-white/35 text-white hover:bg-white/10"
+                      }`}
+                      to="/entrar"
+                    >
+                      <UserRound size={15} strokeWidth={1.75} />
+                      Entrar
+                    </Link>
+                  )}
+                  <Link
+                    className="hidden items-center justify-center rounded-full px-6 py-2.5 font-display text-[14px] text-white uppercase tracking-[0.15em] transition-all hover:brightness-110 sm:inline-flex"
+                    style={{
+                      backgroundColor: "hsl(351 62% 34%)",
+                      boxShadow:
+                        "0 4px 14px hsl(351 62% 20% / 0.4), inset 0 1px 0 hsl(0 0% 100% / 0.18)",
+                    }}
+                    to="/aderir"
+                  >
+                    Junta-te
+                  </Link>
+                </>
+              )}
               {/* Painel de controlo temporariamente oculto — preservado para futura activação */}
               <div className="hidden">
                 <SiteControlPanel onLight={onLight} />
