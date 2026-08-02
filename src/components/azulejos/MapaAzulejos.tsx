@@ -103,7 +103,11 @@ export const MapaAzulejos = forwardRef<MapaHandle, Props>(
 
       const m = new MapLibreMap({
         container: alvo,
-        style: ESTILO_AZULEJO,
+        // Cópia: o MapLibre altera o objecto de estilo que recebe. Passar
+        // sempre a mesma constante fazia com que um segundo mapa (outra
+        // página, ou um recarregamento a quente) recebesse um estilo já
+        // consumido e ficasse em branco, sem erro nenhum.
+        style: structuredClone(ESTILO_AZULEJO),
         center: VISTA_PORTUGAL.center,
         zoom: VISTA_PORTUGAL.zoom,
         minZoom: 4,
@@ -285,8 +289,14 @@ export const MapaAzulejos = forwardRef<MapaHandle, Props>(
       m.setPaintProperty("paineis-halo", "circle-opacity", opacidade);
     }, [filtro, pronto]);
 
+    // Não juntar `relative` ao className recebido: quem chama passa
+    // `absolute inset-0`, e as duas classes brigam — o Tailwind declara
+    // `.relative` depois de `.absolute`, por isso ganhava `relative`, o
+    // `inset-0` deixava de ter efeito e o contentor colapsava para 240px de
+    // altura. Um elemento absoluto já serve de referência aos filhos
+    // absolutos, por isso o `relative` só faz falta no caso por omissão.
     return (
-      <div className={`relative ${className ?? "h-full w-full"}`}>
+      <div className={className ?? "relative h-full w-full"}>
         <div
           className="[&_.maplibregl-ctrl-attrib]:!text-[9px] [&_.maplibregl-ctrl-attrib]:!bg-white/70 h-full w-full"
           ref={contentor}

@@ -192,7 +192,22 @@ export const ESTILO_AZULEJO: StyleSpecification = {
         ["!=", ["get", "maritime"], 1],
       ],
       layout: { "line-cap": "round", "line-join": "round" },
-      paint: { "line-color": COBALTO.escuro, "line-width": 1.6 },
+      paint: {
+        "line-color": COBALTO.escuro,
+        // Mais grossa ao longe, que é quando interessa perceber onde acaba
+        // Portugal; ao perto seria só ruído.
+        "line-width": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          4,
+          1.6,
+          8,
+          3,
+          12,
+          2,
+        ],
+      },
     },
 
     // Nomes. Poucos, espaçados, sempre com halo do vidrado por baixo.
