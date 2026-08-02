@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { EscolherNoMapa } from "@/components/azulejos/EscolherNoMapa";
 import { Seo } from "@/components/Seo";
 import {
   COBALTO,
@@ -30,9 +31,16 @@ const ESTADOS: { valor: Estado; nota: string }[] = [
 
 /** Acima disto o GPS não distingue um prédio do vizinho — avisa-se, não se trava. */
 const PRECISAO_AVISO_M = 60;
+/** Abaixo disto já não vale a pena continuar a afinar. */
+const PRECISAO_BOA_M = 20;
+/** Tempo total até desistir, independente do que o browser prometa. */
+const ESPERA_MAXIMA_MS = 18_000;
+/** Depois da primeira leitura, quanto tempo se deixa afinar. */
+const ESPERA_AFINACAO_MS = 8000;
 const TIMEOUT_MORADA_MS = 6000;
 
-type Local = { lat: number; lng: number; accuracy: number };
+/** `accuracy` a null = marcado à mão no mapa, não medido pelo aparelho. */
+type Local = { lat: number; lng: number; accuracy: number | null };
 
 /** Lado maior da fotografia depois de reduzida. Chega para identificar um painel. */
 const LADO_MAXIMO = 1800;
@@ -204,6 +212,7 @@ function Formulario() {
   const [aEnviar, setAEnviar] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
   const [feito, setFeito] = useState(false);
+  const [aMarcarNoMapa, setAMarcarNoMapa] = useState(false);
   const inputFoto = useRef<HTMLInputElement | null>(null);
 
   useEffect(
@@ -215,39 +224,106 @@ function Formulario() {
     [preVisual]
   );
 
+  /**
+   * Obter o sítio, à prova do iPhone.
+   *
+   * O `getCurrentPosition` com alta precisão pendura-se no Chrome do iPhone:
+   * fica à espera de um sinal fino que dentro de um prédio nunca chega, e o
+   * `timeout` do próprio browser nem sempre é respeitado — daí ficar "a
+   * localizar" para sempre. Por isso:
+   *
+   * - usa-se `watchPosition`, que entrega a primeira posição muito mais cedo
+   *   e vai melhorando sozinho;
+   * - aceita-se logo a primeira leitura, mesmo grosseira, e continua-se a
+   *   afinar em fundo até ficar boa ou esgotar o tempo;
+   * - há relógio nosso, que não depende do browser cumprir o dele.
+   */
+  const pararRelogio = useRef<(() => void) | null>(null);
+
   const localizar = useCallback(() => {
+    pararRelogio.current?.();
     setErroLocal(null);
     if (!navigator.geolocation) {
       setErroLocal("Este aparelho não dá a localização.");
       return;
     }
     setALocalizar(true);
-    navigator.geolocation.getCurrentPosition(
-      async (pos) => {
+
+    let melhor: Local | null = null;
+    let vigia: number | null = null;
+    const temporizadores: number[] = [];
+
+    const terminar = (mensagem?: string) => {
+      if (vigia !== null) {
+        navigator.geolocation.clearWatch(vigia);
+        vigia = null;
+      }
+      for (const t of temporizadores) {
+        clearTimeout(t);
+      }
+      pararRelogio.current = null;
+      setALocalizar(false);
+      if (mensagem) {
+        setErroLocal(mensagem);
+      }
+    };
+    pararRelogio.current = () => terminar();
+
+    vigia = navigator.geolocation.watchPosition(
+      (pos) => {
         const { latitude, longitude, accuracy } = pos.coords;
-        setLocal({ lat: latitude, lng: longitude, accuracy });
-        setALocalizar(false);
-        const achado = await procurarMorada(latitude, longitude);
-        if (achado.morada) {
-          setMorada((m) => m || achado.morada || "");
+        if (melhor && melhor.accuracy <= accuracy) {
+          return;
         }
-        if (achado.concelho) {
-          setConcelho((c) => c || achado.concelho || "");
+        melhor = { lat: latitude, lng: longitude, accuracy };
+        setLocal(melhor);
+        setALocalizar(false);
+        // Já chega de bom: não vale a pena continuar a gastar bateria.
+        if (accuracy <= PRECISAO_BOA_M) {
+          terminar();
         }
       },
       (e) => {
-        setALocalizar(false);
-        setErroLocal(
+        // Só desiste se ainda não houver nada; um erro depois de já termos
+        // posição é ruído.
+        if (melhor) {
+          return;
+        }
+        terminar(
           e.code === e.PERMISSION_DENIED
-            ? "A localização está bloqueada. Autorize nas definições do navegador — sem o sítio, o registo não serve de prova."
-            : "Não foi possível obter a localização. Ao ar livre costuma resultar."
+            ? "A localização está bloqueada para este site. Autorize nas definições do navegador e tente outra vez."
+            : "Não foi possível obter a localização. Ao ar livre costuma resultar — ou marque o sítio no mapa."
         );
       },
-      { enableHighAccuracy: true, timeout: 15_000, maximumAge: 0 }
+      { enableHighAccuracy: true, timeout: 20_000, maximumAge: 30_000 }
+    );
+
+    // Relógio nosso: se nada chegar, não ficamos presos para sempre.
+    temporizadores.push(
+      window.setTimeout(() => {
+        if (melhor) {
+          terminar();
+        } else {
+          terminar(
+            "O telemóvel está a demorar a encontrar o sinal. Tente outra vez, ou marque o sítio no mapa."
+          );
+        }
+      }, ESPERA_MAXIMA_MS)
+    );
+    // Deixa afinar mais uns segundos depois da primeira leitura, e pára.
+    temporizadores.push(
+      window.setTimeout(() => {
+        if (melhor) {
+          terminar();
+        }
+      }, ESPERA_AFINACAO_MS)
     );
   }, []);
 
-  // Assim que há fotografia, pede-se o sítio: uma toque a menos na rua.
+  // Nunca deixar um `watchPosition` a correr depois de sair da página.
+  useEffect(() => () => pararRelogio.current?.(), []);
+
+  // Assim que há fotografia, pede-se o sítio: um toque a menos na rua.
   const escolherFicheiro = (f: File | null) => {
     if (preVisual) {
       URL.revokeObjectURL(preVisual);
@@ -279,7 +355,7 @@ function Formulario() {
       await submeter({
         lat: local.lat,
         lng: local.lng,
-        gpsAccuracy: local.accuracy,
+        gpsAccuracy: local.accuracy ?? undefined,
         imageId,
         estado,
         morada: morada.trim() || undefined,
@@ -352,12 +428,34 @@ function Formulario() {
     );
   }
 
-  const impreciso = local !== null && local.accuracy > PRECISAO_AVISO_M;
+  const impreciso =
+    local?.accuracy != null && local.accuracy > PRECISAO_AVISO_M;
   const completo = Boolean(ficheiro && local && estado);
   const campo =
     "w-full rounded-xl border border-slate-200 bg-white px-4 py-3 font-body text-[16px] text-slate-800 outline-none transition-colors focus:border-slate-400";
   const rotulo =
     "font-body text-[11px] text-slate-400 uppercase tracking-[0.14em]";
+
+  if (aMarcarNoMapa) {
+    return (
+      <EscolherNoMapa
+        inicio={local}
+        onCancelar={() => setAMarcarNoMapa(false)}
+        onConfirmar={async (lat, lng) => {
+          setLocal({ lat, lng, accuracy: null });
+          setErroLocal(null);
+          setAMarcarNoMapa(false);
+          const achado = await procurarMorada(lat, lng);
+          if (achado.morada) {
+            setMorada((m) => m || achado.morada || "");
+          }
+          if (achado.concelho) {
+            setConcelho((c) => c || achado.concelho || "");
+          }
+        }}
+      />
+    );
+  }
 
   return (
     <div className="mx-auto max-w-[560px] px-5 pt-5 pb-40">
@@ -424,7 +522,9 @@ function Formulario() {
               <p className="flex-1 font-body text-[14px] text-slate-800">
                 Sítio obtido
                 <span className="ml-1.5 text-slate-400">
-                  ±{Math.round(local.accuracy)} m
+                  {local.accuracy === null
+                    ? "marcado à mão"
+                    : `±${Math.round(local.accuracy)} m`}
                 </span>
               </p>
               <button
@@ -491,6 +591,16 @@ function Formulario() {
             {erroLocal}
           </p>
         )}
+        {/* Saída de emergência: há telemóveis onde o GPS simplesmente não
+            colabora, e ficar sem poder registar é pior do que um ponto posto
+            à mão — que fica marcado como tal. */}
+        <button
+          className="mt-2.5 w-full font-body text-[13px] text-slate-500 underline underline-offset-4"
+          onClick={() => setAMarcarNoMapa(true)}
+          type="button"
+        >
+          {local ? "Corrigir o sítio no mapa" : "Ou marcar o sítio no mapa"}
+        </button>
       </div>
 
       {/* 3 — o estado */}
