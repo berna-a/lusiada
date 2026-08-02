@@ -34,15 +34,56 @@ const TIMEOUT_MORADA_MS = 6000;
 
 type Local = { lat: number; lng: number; accuracy: number };
 
+/** Lado maior da fotografia depois de reduzida. Chega para identificar um painel. */
+const LADO_MAXIMO = 1800;
+const QUALIDADE = 0.85;
+
+/**
+ * Reduz a fotografia antes de a enviar. Uma foto de iPhone traz 4-5 MB e quem
+ * está na rua está em dados móveis — reduzida fica em algumas centenas de KB e
+ * sobe quase de imediato.
+ *
+ * Se alguma coisa falhar, devolve o ficheiro original: mais vale uma foto
+ * grande do que nenhuma.
+ */
+async function reduzir(ficheiro: File): Promise<Blob> {
+  try {
+    const bitmap = await createImageBitmap(ficheiro);
+    const maior = Math.max(bitmap.width, bitmap.height);
+    if (maior <= LADO_MAXIMO) {
+      bitmap.close();
+      return ficheiro;
+    }
+    const escala = LADO_MAXIMO / maior;
+    const cv = document.createElement("canvas");
+    cv.width = Math.round(bitmap.width * escala);
+    cv.height = Math.round(bitmap.height * escala);
+    const ctx = cv.getContext("2d");
+    if (!ctx) {
+      bitmap.close();
+      return ficheiro;
+    }
+    ctx.drawImage(bitmap, 0, 0, cv.width, cv.height);
+    bitmap.close();
+    const blob = await new Promise<Blob | null>((r) =>
+      cv.toBlob(r, "image/jpeg", QUALIDADE)
+    );
+    return blob && blob.size > 0 ? blob : ficheiro;
+  } catch {
+    return ficheiro;
+  }
+}
+
 async function enviarFotografia(
   gerarUrl: () => Promise<string>,
   ficheiro: File
 ): Promise<Id<"_storage">> {
+  const corpo = await reduzir(ficheiro);
   const url = await gerarUrl();
   const res = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": ficheiro.type },
-    body: ficheiro,
+    headers: { "Content-Type": corpo.type || ficheiro.type },
+    body: corpo,
   });
   if (!res.ok) {
     throw new Error("Falha no envio da fotografia.");
