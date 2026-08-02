@@ -1,98 +1,119 @@
 import type { StyleSpecification } from "maplibre-gl";
 
 /**
- * Estilo próprio do mapa dos azulejos: fundo branco, traço a azul cobalto.
- * A ideia não é um mapa de estradas com alfinetes por cima — é um mapa que
- * pareça, ele próprio, desenhado em azulejo. Por isso não há verdes, não há
- * cores de trânsito e não há pontos de interesse: a única coisa colorida no
- * ecrã é o património.
+ * Estilo próprio do mapa: um painel de azulejo, não um mapa de estradas.
  *
- * Os dados vêm do OpenFreeMap (OpenStreetMap, esquema OpenMapTiles) — serviço
- * livre, sem chave nem registo. A atribuição é obrigatória e está no rodapé
- * do componente do mapa.
+ * A lógica é a de um azulejo pintado — o mar a cobalto cheio, a terra no
+ * branco quente do vidrado, e todo o desenho (rios, vias, limites) a cobalto
+ * por cima. Nada de verdes, nada de cores de trânsito, nada de pontos de
+ * interesse: a única coisa que destoa no ecrã são os painéis registados.
+ *
+ * O branco é `#F7F5F1` e não `#FFFFFF` de propósito: o vidrado de um azulejo
+ * nunca é branco puro, e o branco puro fazia o mapa desaparecer no fundo da
+ * página.
+ *
+ * Dados: OpenFreeMap (OpenStreetMap, esquema OpenMapTiles) — livre, sem chave
+ * nem registo. A atribuição é obrigatória e vai no canto do mapa.
  */
 
-/** Paleta de cobalto, do mais lavado ao mais escuro. */
+/** Paleta do azulejo. Cobalto escuro e dessaturado, longe do azul de postal. */
 export const COBALTO = {
-  lavado: "#DCE8F4",
-  claro: "#A8C2DE",
-  medio: "#5B84BA",
-  forte: "#1B4F9C",
-  escuro: "#12345F",
+  vidrado: "#F7F5F1",
+  lavado: "#DDE7F1",
+  claro: "#A9C0D8",
+  medio: "#4E7BAE",
+  forte: "#1E4C8A",
+  escuro: "#123A6B",
+  tinta: "#0C2A4F",
 } as const;
 
-/** Cores dos painéis no mapa, por estado de conservação. */
+/** Cores dos painéis. Discos com halo branco — legíveis no mar e na terra. */
 export const COR_ESTADO = {
-  integro: "#1B4F9C",
-  danificado: "#B8860B",
+  integro: "#1E4C8A",
+  danificado: "#C98A2B",
   em_risco: "#C2410C",
-  desaparecido: "#8A8A8A",
+  desaparecido: "#93A3B3",
 } as const;
+
+export const ROTULO_ESTADO = {
+  integro: "Íntegro",
+  danificado: "Danificado",
+  em_risco: "Em risco",
+  desaparecido: "Desaparecido",
+} as const;
+
+export type Estado = keyof typeof COR_ESTADO;
 
 export const ATRIBUICAO =
-  '<a href="https://openfreemap.org" target="_blank" rel="noreferrer">OpenFreeMap</a> · <a href="https://www.openmaptiles.org/" target="_blank" rel="noreferrer">OpenMapTiles</a> · <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>';
+  '<a href="https://openfreemap.org" target="_blank" rel="noreferrer">OpenFreeMap</a> · <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>';
 
 const FONTE = "openmaptiles";
+const TILES = "https://tiles.openfreemap.org/planet";
 
 export const ESTILO_AZULEJO: StyleSpecification = {
   version: 8,
   name: "Azulejo",
   glyphs: "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf",
   sources: {
-    [FONTE]: { type: "vector", url: "https://tiles.openfreemap.org/planet" },
+    [FONTE]: { type: "vector", url: TILES },
   },
   layers: [
+    // O mar é o fundo: cobalto cheio. A terra vem por cima, em vidrado.
     {
-      id: "fundo",
+      id: "mar",
       type: "background",
-      paint: { "background-color": "#FFFFFF" },
+      paint: { "background-color": COBALTO.forte },
+    },
+    {
+      id: "terra",
+      type: "fill",
+      source: FONTE,
+      "source-layer": "landcover",
+      paint: { "fill-color": COBALTO.vidrado },
+    },
+    {
+      id: "terra-base",
+      type: "fill",
+      source: FONTE,
+      "source-layer": "landuse",
+      paint: { "fill-color": COBALTO.vidrado },
     },
 
-    // Água: um banho muito claro, como o vidrado de um azulejo branco.
+    // Rios e massas de água interiores, no mesmo azul do mar.
     {
       id: "agua",
       type: "fill",
       source: FONTE,
       "source-layer": "water",
-      filter: ["!=", ["get", "brunnel"], "tunnel"],
-      paint: { "fill-color": COBALTO.lavado },
-    },
-    {
-      id: "agua-contorno",
-      type: "line",
-      source: FONTE,
-      "source-layer": "water",
-      paint: { "line-color": COBALTO.claro, "line-width": 0.6 },
+      paint: { "fill-color": COBALTO.forte },
     },
     {
       id: "rios",
       type: "line",
       source: FONTE,
       "source-layer": "waterway",
-      minzoom: 7,
+      minzoom: 6,
       paint: {
-        "line-color": COBALTO.claro,
-        "line-width": ["interpolate", ["linear"], ["zoom"], 8, 0.5, 16, 2],
+        "line-color": COBALTO.medio,
+        "line-width": ["interpolate", ["linear"], ["zoom"], 6, 0.6, 16, 2.5],
       },
     },
 
-    // Edificado: só ao perto, e apenas como um sussurro — dá contexto de rua
-    // sem competir com os painéis.
+    // Edificado: só ao perto, o sussurro que dá contexto de rua.
     {
       id: "edificado",
       type: "fill",
       source: FONTE,
       "source-layer": "building",
-      minzoom: 15,
+      minzoom: 14.5,
       paint: {
-        "fill-color": "#F2F6FA",
-        "fill-outline-color": COBALTO.lavado,
-        "fill-opacity": ["interpolate", ["linear"], ["zoom"], 15, 0, 16.5, 1],
+        "fill-color": COBALTO.lavado,
+        "fill-outline-color": COBALTO.claro,
+        "fill-opacity": ["interpolate", ["linear"], ["zoom"], 14.5, 0, 16, 1],
       },
     },
 
-    // Estradas: três pesos de traço, todos a cobalto. Sem preenchimento,
-    // sem casing, sem cor de trânsito.
+    // Vias: três pesos, todos a cobalto, sem contorno e sem cor de trânsito.
     {
       id: "vias-menores",
       type: "line",
@@ -109,7 +130,7 @@ export const ESTILO_AZULEJO: StyleSpecification = {
       layout: { "line-cap": "round", "line-join": "round" },
       paint: {
         "line-color": COBALTO.claro,
-        "line-width": ["interpolate", ["linear"], ["zoom"], 12, 0.4, 18, 3],
+        "line-width": ["interpolate", ["linear"], ["zoom"], 12, 0.6, 18, 4],
       },
     },
     {
@@ -117,7 +138,7 @@ export const ESTILO_AZULEJO: StyleSpecification = {
       type: "line",
       source: FONTE,
       "source-layer": "transportation",
-      minzoom: 9,
+      minzoom: 8,
       filter: [
         "match",
         ["get", "class"],
@@ -128,7 +149,7 @@ export const ESTILO_AZULEJO: StyleSpecification = {
       layout: { "line-cap": "round", "line-join": "round" },
       paint: {
         "line-color": COBALTO.medio,
-        "line-width": ["interpolate", ["linear"], ["zoom"], 9, 0.5, 18, 5],
+        "line-width": ["interpolate", ["linear"], ["zoom"], 8, 0.7, 18, 6],
       },
     },
     {
@@ -147,13 +168,11 @@ export const ESTILO_AZULEJO: StyleSpecification = {
       layout: { "line-cap": "round", "line-join": "round" },
       paint: {
         "line-color": COBALTO.forte,
-        "line-width": ["interpolate", ["linear"], ["zoom"], 5, 0.5, 18, 6],
-        "line-opacity": 0.75,
+        "line-width": ["interpolate", ["linear"], ["zoom"], 5, 0.8, 18, 7],
       },
     },
 
-    // Fronteiras e limites administrativos, a tracejado — como a cercadura
-    // de um painel.
+    // Limites administrativos, tracejados como a cercadura de um painel.
     {
       id: "limites-concelho",
       type: "line",
@@ -168,7 +187,7 @@ export const ESTILO_AZULEJO: StyleSpecification = {
       ],
       paint: {
         "line-color": COBALTO.claro,
-        "line-width": 0.8,
+        "line-width": 1,
         "line-dasharray": [3, 2],
       },
     },
@@ -183,16 +202,16 @@ export const ESTILO_AZULEJO: StyleSpecification = {
         ["!=", ["get", "maritime"], 1],
       ],
       layout: { "line-cap": "round", "line-join": "round" },
-      paint: { "line-color": COBALTO.medio, "line-width": 1.2 },
+      paint: { "line-color": COBALTO.escuro, "line-width": 1.6 },
     },
 
-    // Nomes de lugar: azul escuro, espaçado, sem halo pesado.
+    // Nomes. Poucos, espaçados, sempre com halo do vidrado por baixo.
     {
       id: "nomes-localidades",
       type: "symbol",
       source: FONTE,
       "source-layer": "place",
-      minzoom: 8,
+      minzoom: 9,
       filter: [
         "match",
         ["get", "class"],
@@ -201,16 +220,16 @@ export const ESTILO_AZULEJO: StyleSpecification = {
         false,
       ],
       layout: {
-        "text-field": ["get", "name:pt"],
+        "text-field": ["coalesce", ["get", "name:pt"], ["get", "name"]],
         "text-font": ["Noto Sans Regular"],
-        "text-size": ["interpolate", ["linear"], ["zoom"], 8, 10, 14, 13],
-        "text-letter-spacing": 0.08,
+        "text-size": ["interpolate", ["linear"], ["zoom"], 9, 10, 15, 13],
+        "text-letter-spacing": 0.06,
         "text-max-width": 8,
       },
       paint: {
         "text-color": COBALTO.medio,
-        "text-halo-color": "#FFFFFF",
-        "text-halo-width": 1.2,
+        "text-halo-color": COBALTO.vidrado,
+        "text-halo-width": 1.4,
       },
     },
     {
@@ -220,29 +239,24 @@ export const ESTILO_AZULEJO: StyleSpecification = {
       "source-layer": "place",
       filter: ["==", ["get", "class"], "city"],
       layout: {
-        "text-field": ["get", "name:pt"],
+        "text-field": ["coalesce", ["get", "name:pt"], ["get", "name"]],
         "text-font": ["Noto Sans Bold"],
-        "text-size": ["interpolate", ["linear"], ["zoom"], 4, 11, 12, 17],
-        "text-letter-spacing": 0.12,
+        "text-size": ["interpolate", ["linear"], ["zoom"], 4, 11, 12, 16],
+        "text-letter-spacing": 0.14,
         "text-transform": "uppercase",
         "text-max-width": 9,
       },
       paint: {
-        "text-color": COBALTO.escuro,
-        "text-halo-color": "#FFFFFF",
-        "text-halo-width": 1.5,
+        "text-color": COBALTO.tinta,
+        "text-halo-color": COBALTO.vidrado,
+        "text-halo-width": 1.8,
       },
     },
   ],
 };
 
-/** Enquadramento inicial: Portugal continental inteiro. */
+/** Portugal continental inteiro no arranque. */
 export const VISTA_PORTUGAL = {
-  center: [-8.2, 39.6] as [number, number],
-  zoom: 5.9,
+  center: [-8.3, 39.6] as [number, number],
+  zoom: 6.1,
 };
-
-/** Trava a navegação ao território português (continente, Madeira, Açores). */
-export const LIMITES_PORTUGAL: [number, number, number, number] = [
-  -32, 30, -6, 43,
-];

@@ -77,6 +77,15 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
+            {/* Azulejos — aplicação de ecrã inteiro, sem a moldura do site.
+                O mapa é a interface; a navegação vai na barra de vidro. */}
+            <Route element={<AzulejosPage />} path="/azulejos" />
+            <Route
+              element={<RegistarAzulejoPage />}
+              path="/azulejos/registar"
+            />
+            <Route element={<AzulejoPage />} path="/azulejos/:id" />
+
             {/* Global layout — dual navigation on all pages */}
             <Route element={<GlobalLayout />}>
               <Route element={<RootRoute />} path="/" />
@@ -86,12 +95,6 @@ const App = () => (
               <Route element={<ProgramaPage />} path="/programa" />
               <Route element={<DesportoPage />} path="/desporto" />
               <Route element={<DesportoPage />} path="/programa/desporto" />
-              <Route element={<AzulejosPage />} path="/azulejos" />
-              <Route
-                element={<RegistarAzulejoPage />}
-                path="/azulejos/registar"
-              />
-              <Route element={<AzulejoPage />} path="/azulejos/:id" />
               <Route element={<ApoiarPage />} path="/apoiar" />
               <Route element={<ContactosPage />} path="/contactos" />
               <Route element={<AderirPage />} path="/aderir" />

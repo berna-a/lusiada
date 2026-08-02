@@ -1,245 +1,286 @@
 import { useQuery } from "convex/react";
-import { Camera, MapPin, ShieldAlert, Sparkles } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { api } from "@/../convex/_generated/api";
+import { ArrowLeft, Camera, Crosshair, Loader2 } from "lucide-react";
+import { useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FolhaInferior } from "@/components/azulejos/FolhaInferior";
 import {
   MapaAzulejos,
+  type MapaHandle,
   type PainelNoMapa,
 } from "@/components/azulejos/MapaAzulejos";
-import { JoinCTA } from "@/components/JoinCTA";
-import { PageHeader } from "@/components/PageHeader";
 import { Seo } from "@/components/Seo";
-import { COR_ESTADO } from "@/lib/azulejos/mapa-estilo";
+import {
+  COBALTO,
+  COR_ESTADO,
+  type Estado,
+  ROTULO_ESTADO,
+} from "@/lib/azulejos/mapa-estilo";
+import { api } from "../../convex/_generated/api";
 
-/** Legenda do mapa: o que cada cor quer dizer. */
-const LEGENDA = [
-  { cor: COR_ESTADO.integro, rotulo: "Íntegro" },
-  { cor: COR_ESTADO.danificado, rotulo: "Danificado" },
-  { cor: COR_ESTADO.em_risco, rotulo: "Em risco" },
-  { cor: COR_ESTADO.desaparecido, rotulo: "Desaparecido", oco: true },
-];
+const ESTADOS: Estado[] = ["integro", "danificado", "em_risco", "desaparecido"];
 
-/** Os três blocos da ficha, por ordem de exigência. */
-const BLOCOS = [
-  {
-    icon: Camera,
-    titulo: "O que se vê",
-    nota: "Obrigatório",
-    texto:
-      "Uma fotografia, a localização do telemóvel e o estado em que está. É tudo o que é preciso para contribuir — não é preciso saber nada sobre azulejo.",
-  },
-  {
-    icon: Sparkles,
-    titulo: "O que se sabe",
-    nota: "Opcional",
-    texto:
-      "Padrão, época, oficina, autor. Quem souber, preenche. Fica marcado como «por confirmar» até alguém com competência o validar — nunca apresentamos uma atribuição incerta como certa.",
-  },
-  {
-    icon: ShieldAlert,
-    titulo: "O que fica provado",
-    nota: "A consequência",
-    texto:
-      "Cada registo fica datado e localizado. Quando um painel desaparece, passa a existir prova do que ali estava e de quando deixou de estar. Nenhuma outra base de dados portuguesa faz isto.",
-  },
-];
-
-function BarraEstado({
-  total,
-  concelhos,
-  emRisco,
-  desaparecidos,
+function Pastilha({
+  estado,
+  activo,
+  onClick,
+  n,
 }: {
-  total: number;
-  concelhos: number;
-  emRisco: number;
-  desaparecidos: number;
+  estado: Estado;
+  activo: boolean;
+  onClick: () => void;
+  n: number;
 }) {
-  const numeros = [
-    { valor: total, rotulo: total === 1 ? "painel" : "painéis" },
-    { valor: concelhos, rotulo: concelhos === 1 ? "concelho" : "concelhos" },
-    { valor: emRisco, rotulo: "em risco" },
-    { valor: desaparecidos, rotulo: "desaparecidos" },
-  ];
   return (
-    <dl className="grid grid-cols-2 gap-x-8 gap-y-4 sm:grid-cols-4">
-      {numeros.map((n) => (
-        <div className="border-accent/25 border-t pt-3" key={n.rotulo}>
-          <dt className="font-display text-[26px] text-primary leading-none">
-            {n.valor}
-          </dt>
-          <dd className="mt-1.5 font-body text-[11px] text-muted-foreground uppercase tracking-[0.16em]">
-            {n.rotulo}
-          </dd>
-        </div>
-      ))}
-    </dl>
+    <button
+      aria-pressed={activo}
+      className={`flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-2 font-body text-[13px] transition-all ${
+        activo
+          ? "border-transparent text-white shadow-sm"
+          : "border-slate-200 bg-white/70 text-slate-600 hover:border-slate-300"
+      }`}
+      onClick={onClick}
+      style={activo ? { backgroundColor: COR_ESTADO[estado] } : undefined}
+      type="button"
+    >
+      <span
+        aria-hidden="true"
+        className="block h-2.5 w-2.5 rounded-full"
+        style={{
+          backgroundColor: activo ? "#FFFFFF" : COR_ESTADO[estado],
+        }}
+      />
+      {ROTULO_ESTADO[estado]}
+      <span className={activo ? "text-white/70" : "text-slate-400"}>{n}</span>
+    </button>
   );
 }
 
 export default function AzulejosPage() {
   const navigate = useNavigate();
+  const mapa = useRef<MapaHandle | null>(null);
+  const [filtro, setFiltro] = useState<Estado | null>(null);
+  const [aLocalizar, setALocalizar] = useState(false);
+
   const paineis = useQuery(api.azulejos.listApproved);
   const stats = useQuery(api.azulejos.stats);
+  const aCarregar = paineis === undefined;
+  const lista: PainelNoMapa[] = (paineis ?? []) as PainelNoMapa[];
 
-  const noMapa: PainelNoMapa[] = (paineis ?? []) as PainelNoMapa[];
-  const vazio = paineis !== undefined && paineis.length === 0;
+  const porEstado = (e: Estado) => lista.filter((p) => p.estado === e).length;
+
+  const localizar = () => {
+    if (!navigator.geolocation) {
+      return;
+    }
+    setALocalizar(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        mapa.current?.irPara(pos.coords.longitude, pos.coords.latitude, 16);
+        setALocalizar(false);
+      },
+      () => setALocalizar(false),
+      { enableHighAccuracy: true, timeout: 12_000 }
+    );
+  };
 
   return (
-    <article
-      className="mx-auto max-w-[1000px] px-6 pt-32 pb-24 sm:pt-40 sm:pb-32"
-      data-nav-theme="light"
-    >
+    <div className="fixed inset-0 overflow-hidden bg-white">
       <Seo
-        description="Um mapa do azulejo que ainda está nas paredes — feito por quem passa por ele todos os dias. Fotografe o azulejo da sua rua: o registo fica datado e localizado."
+        description="O mapa aberto do azulejo de fachada em Portugal. Fotografe o painel da sua rua: o registo fica datado e localizado — património e prova ao mesmo tempo."
         jsonLd={{
           "@type": "Dataset",
           name: "Inventário aberto do azulejo de fachada em Portugal",
           description:
             "Registo colaborativo, datado e geolocalizado, de painéis azulejares em fachadas portuguesas, incluindo painéis comuns sem autoria conhecida.",
           inLanguage: "pt",
-          license: "https://creativecommons.org/licenses/by-sa/4.0/",
           spatialCoverage: "Portugal",
         }}
         path="/azulejos"
         title="Azulejos — o mapa do que ainda está nas paredes | Memória Lusíada"
       />
 
-      <PageHeader
-        eyebrow="Associação Memória Lusíada"
-        intro="Um mapa do azulejo que ainda está nas paredes — feito por quem passa por ele todos os dias."
-        title="Azulejos"
+      <MapaAzulejos
+        className="absolute inset-0"
+        filtro={filtro}
+        onSelecionar={(id) => navigate(`/azulejos/${id}`)}
+        paineis={lista}
+        ref={mapa}
       />
 
-      {/* O mapa é a peça central da página, não uma ilustração. */}
-      <section className="mt-14">
-        <div className="premium-shadow overflow-hidden rounded-2xl border border-border bg-card">
-          <div className="h-[460px] w-full sm:h-[560px]">
-            <MapaAzulejos
-              onSelecionar={(id) => navigate(`/azulejos/${id}`)}
-              paineis={noMapa}
-            />
+      {/* Barra superior em vidro, dentro da safe area do iPhone. */}
+      <header
+        className="pointer-events-none absolute inset-x-0 top-0 z-20 px-4 pt-3"
+        style={{ paddingTop: "calc(env(safe-area-inset-top) + 0.75rem)" }}
+      >
+        <div className="pointer-events-auto mx-auto flex max-w-[560px] items-center gap-3 rounded-2xl border border-white/60 bg-white/80 px-3 py-2.5 shadow-[0_4px_24px_-6px_rgba(18,58,107,0.25)] backdrop-blur-xl backdrop-saturate-150">
+          <Link
+            aria-label="Voltar ao início"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-800"
+            to="/"
+          >
+            <ArrowLeft size={18} strokeWidth={1.75} />
+          </Link>
+          <div className="min-w-0 flex-1">
+            <p
+              className="font-display text-[15px] leading-none tracking-[0.12em]"
+              style={{ color: COBALTO.tinta }}
+            >
+              AZULEJOS
+            </p>
+            <p className="mt-1 truncate font-body text-[12px] text-slate-500 leading-none">
+              {aCarregar
+                ? "a carregar…"
+                : `${stats?.total ?? 0} painéis · ${stats?.concelhos ?? 0} concelhos`}
+            </p>
           </div>
+          <Link
+            aria-label="Registar um painel"
+            className="flex h-9 items-center gap-1.5 rounded-xl px-3 font-body text-[13px] text-white transition-opacity hover:opacity-90"
+            style={{ backgroundColor: COBALTO.forte }}
+            to="/azulejos/registar"
+          >
+            <Camera size={15} strokeWidth={1.75} />
+            <span className="hidden sm:inline">Registar</span>
+          </Link>
         </div>
+      </header>
 
-        <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3">
-          {LEGENDA.map((l) => (
-            <span
-              className="flex items-center gap-2 font-body text-[12px] text-muted-foreground uppercase tracking-[0.12em]"
-              key={l.rotulo}
-            >
-              <span
-                aria-hidden="true"
-                className="block h-3 w-3 rounded-full"
-                style={{
-                  backgroundColor: l.oco ? "#FFFFFF" : l.cor,
-                  border: `2px solid ${l.cor}`,
-                }}
-              />
-              {l.rotulo}
-            </span>
-          ))}
-        </div>
-      </section>
-
-      {stats && (
-        <section className="mt-12">
-          <BarraEstado
-            concelhos={stats.concelhos}
-            desaparecidos={stats.desaparecidos}
-            emRisco={stats.emRisco}
-            total={stats.total}
+      {/* Localizar-me — flutuante, acima da folha. */}
+      <button
+        aria-label="Centrar na minha localização"
+        className="absolute right-4 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-white/60 bg-white/85 shadow-[0_4px_20px_-4px_rgba(18,58,107,0.3)] backdrop-blur-xl transition-transform active:scale-95"
+        onClick={localizar}
+        style={{ bottom: "calc(208px + env(safe-area-inset-bottom) + 1rem)" }}
+        type="button"
+      >
+        {aLocalizar ? (
+          <Loader2
+            className="h-[18px] w-[18px] animate-spin"
+            style={{ color: COBALTO.forte }}
           />
-        </section>
-      )}
+        ) : (
+          <Crosshair
+            size={18}
+            strokeWidth={1.75}
+            style={{ color: COBALTO.forte }}
+          />
+        )}
+      </button>
 
-      {vazio && (
-        <section className="mt-12 rounded-2xl border border-accent/30 bg-secondary px-8 py-10 sm:px-10">
-          <h2 className="font-display text-[13px] text-accent uppercase tracking-[0.3em]">
-            O mapa está vazio
-          </h2>
-          <p className="mt-4 font-body text-[17px] text-foreground/85 leading-[1.85]">
-            Ainda não há nada registado — e é assim que todos estes projectos
-            começam. O primeiro painel do mapa é o mais difícil de arranjar e o
-            mais importante de todos.
-          </p>
-          <p className="mt-4 font-body text-[17px] text-foreground/85 leading-[1.85]">
-            Se passa por um azulejo hoje, fotografe-o.
-          </p>
-        </section>
-      )}
+      <FolhaInferior
+        cabecalho={
+          <>
+            {/* Filtros — tocar num estado destaca-o no mapa. */}
+            <div className="-mx-6 flex gap-2 overflow-x-auto px-6 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {ESTADOS.map((e) => (
+                <Pastilha
+                  activo={filtro === e}
+                  estado={e}
+                  key={e}
+                  n={porEstado(e)}
+                  onClick={() => setFiltro((f) => (f === e ? null : e))}
+                />
+              ))}
+            </div>
 
-      <section className="mx-auto mt-16 max-w-[640px]">
-        <h2 className="font-display text-[13px] text-accent uppercase tracking-[0.3em]">
-          O que este mapa é
-        </h2>
-        <p className="mt-5 font-body text-[17px] text-foreground/85 leading-[1.85]">
-          Não é o mais completo — há bases académicas que sabem muito mais sobre
-          o azulejo de autor. Não é o mais bonito — o Instagram ganha sempre. É
-          o único onde entra o azulejo <strong>comum</strong>, sem autor
-          conhecido, em prédio sem classificação, fotografado por quem mora na
-          rua.
-        </p>
-        <p className="mt-5 font-body text-[17px] text-foreground/85 leading-[1.85]">
-          Lisboa proíbe desde 2013 a remoção de azulejo de fachada, e os furtos
-          continuam. Quando um painel desaparece, quase nunca existe fotografia
-          datada que prove o que ali estava.{" "}
-          <strong>
-            Um registo com data e sítio é património e é prova ao mesmo tempo.
-          </strong>
-        </p>
-      </section>
-
-      <section className="mt-16">
-        <h2 className="font-display text-[13px] text-accent uppercase tracking-[0.3em]">
-          Como se regista
-        </h2>
-        <div className="mt-6 grid gap-6 sm:grid-cols-3">
-          {BLOCOS.map((b) => (
-            <div
-              className="premium-shadow flex flex-col rounded-2xl border border-border bg-card p-7"
-              key={b.titulo}
+            <Link
+              className="flex w-full items-center justify-center gap-2.5 rounded-2xl py-4 font-body text-[16px] text-white shadow-[0_6px_20px_-6px_rgba(30,76,138,0.7)] transition-transform active:scale-[0.98]"
+              style={{ backgroundColor: COBALTO.forte }}
+              to="/azulejos/registar"
             >
-              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent">
-                <b.icon className="h-5 w-5" />
-              </span>
-              <span className="mt-5 w-fit rounded-full border border-border px-3 py-1 font-body text-[11px] text-muted-foreground uppercase tracking-[0.14em]">
-                {b.nota}
-              </span>
-              <h3 className="mt-4 font-display text-[20px] text-primary leading-snug">
-                {b.titulo}
-              </h3>
-              <p className="mt-3 font-body text-[15px] text-foreground/75 leading-relaxed">
-                {b.texto}
+              <Camera size={19} strokeWidth={1.75} />
+              Fotografar um painel
+            </Link>
+            <p className="mt-2.5 text-center font-body text-[12px] text-slate-400">
+              Arraste para cima para saber mais
+            </p>
+          </>
+        }
+      >
+        <div className="pt-2">
+          {lista.length === 0 && !aCarregar && (
+            <div
+              className="rounded-2xl px-5 py-5"
+              style={{ backgroundColor: COBALTO.lavado }}
+            >
+              <p
+                className="font-display text-[13px] uppercase tracking-[0.2em]"
+                style={{ color: COBALTO.forte }}
+              >
+                O mapa está vazio
+              </p>
+              <p className="mt-3 font-body text-[15px] text-slate-700 leading-relaxed">
+                Ainda não há nada registado — e é assim que todos estes
+                projectos começam. O primeiro painel é o mais difícil de
+                arranjar e o mais importante de todos.
               </p>
             </div>
-          ))}
-        </div>
-      </section>
+          )}
 
-      <section className="mt-16 rounded-2xl border border-accent/30 bg-secondary px-8 py-10 text-center sm:px-10">
-        <h2 className="font-display text-[24px] text-primary leading-snug sm:text-[28px]">
-          Fotografe a sua rua antes que desapareça
-        </h2>
-        <p className="mx-auto mt-4 max-w-[520px] font-body text-[16px] text-foreground/80 leading-relaxed">
-          Leva segundos e faz-se do telemóvel, na rua, à frente do painel. Ver o
-          mapa não exige nada; para registar é preciso ter conta — é grátis.
-        </p>
-        <div className="mt-7 flex flex-wrap items-center justify-center gap-4">
-          <button
-            className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3 font-body text-[14px] text-primary-foreground transition-opacity hover:opacity-90"
-            onClick={() => navigate("/azulejos/registar")}
-            type="button"
+          <h2
+            className="mt-6 font-display text-[13px] uppercase tracking-[0.2em]"
+            style={{ color: COBALTO.medio }}
           >
-            <MapPin size={16} strokeWidth={1.5} />
-            Registar um painel
-          </button>
-        </div>
-      </section>
+            O que este mapa é
+          </h2>
+          <p className="mt-3 font-body text-[15px] text-slate-700 leading-[1.7]">
+            Não é o mais completo — há bases académicas que sabem muito mais
+            sobre o azulejo de autor. É o único onde entra o azulejo{" "}
+            <strong className="text-slate-900">comum</strong>, sem autor
+            conhecido, em prédio sem classificação, fotografado por quem passa
+            na rua.
+          </p>
+          <p className="mt-3 font-body text-[15px] text-slate-700 leading-[1.7]">
+            Lisboa proíbe desde 2013 a remoção de azulejo de fachada, e os
+            furtos continuam. Quando um painel desaparece, quase nunca há
+            fotografia datada que prove o que ali estava.{" "}
+            <strong className="text-slate-900">
+              Um registo com data e sítio é património e é prova.
+            </strong>
+          </p>
 
-      <div className="mt-16">
-        <JoinCTA lead="Faça parte desta casa." />
-      </div>
-    </article>
+          <h2
+            className="mt-7 font-display text-[13px] uppercase tracking-[0.2em]"
+            style={{ color: COBALTO.medio }}
+          >
+            Como se regista
+          </h2>
+          <ol className="mt-3 space-y-3">
+            {[
+              ["Fotografa-se", "O conjunto, não o pormenor. Tirada da rua."],
+              [
+                "O sítio vem do telemóvel",
+                "Não se escreve à mão — é isso que dá valor de prova.",
+              ],
+              [
+                "Marca-se o estado",
+                "Íntegro, danificado, em risco, ou já desaparecido.",
+              ],
+            ].map(([t, d], i) => (
+              <li className="flex gap-3" key={t}>
+                <span
+                  className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full font-body text-[12px] text-white"
+                  style={{ backgroundColor: COBALTO.medio }}
+                >
+                  {i + 1}
+                </span>
+                <span className="font-body text-[15px] text-slate-700 leading-snug">
+                  <strong className="text-slate-900">{t}.</strong> {d}
+                </span>
+              </li>
+            ))}
+          </ol>
+
+          <p className="mt-7 font-body text-[13px] text-slate-400 leading-relaxed">
+            Ver o mapa não exige nada. Para registar é preciso ter conta — é
+            grátis. Um projecto da{" "}
+            <Link className="underline underline-offset-2" to="/">
+              Associação Memória Lusíada
+            </Link>
+            .
+          </p>
+        </div>
+      </FolhaInferior>
+    </div>
   );
 }

@@ -1,24 +1,35 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useConvexAuth, useMutation } from "convex/react";
-import { Camera, Check, Crosshair, Loader2 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import {
+  ArrowLeft,
+  Camera,
+  Check,
+  ChevronDown,
+  Crosshair,
+  Loader2,
+  MapPin,
+} from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { api } from "@/../convex/_generated/api";
-import type { Id } from "@/../convex/_generated/dataModel";
 import { Seo } from "@/components/Seo";
-import { Button } from "@/components/ui/button";
+import {
+  COBALTO,
+  COR_ESTADO,
+  type Estado,
+  ROTULO_ESTADO,
+} from "@/lib/azulejos/mapa-estilo";
+import { api } from "../../../convex/_generated/api";
+import type { Id } from "../../../convex/_generated/dataModel";
 
-type Estado = "integro" | "danificado" | "em_risco" | "desaparecido";
-
-const ESTADOS: { valor: Estado; rotulo: string; nota: string }[] = [
-  { valor: "integro", rotulo: "Íntegro", nota: "Está inteiro" },
-  { valor: "danificado", rotulo: "Danificado", nota: "Faltam peças" },
-  { valor: "em_risco", rotulo: "Em risco", nota: "Obra, ruína, à venda" },
-  { valor: "desaparecido", rotulo: "Desaparecido", nota: "Já não está lá" },
+const ESTADOS: { valor: Estado; nota: string }[] = [
+  { valor: "integro", nota: "Está inteiro" },
+  { valor: "danificado", nota: "Faltam peças" },
+  { valor: "em_risco", nota: "Obra, ruína" },
+  { valor: "desaparecido", nota: "Já não está" },
 ];
 
-/** Acima disto o GPS não é de fiar para distinguir um prédio do vizinho. */
-const PRECISAO_MAXIMA_M = 100;
+/** Acima disto o GPS não distingue um prédio do vizinho — avisa-se, não se trava. */
+const PRECISAO_AVISO_M = 60;
 const TIMEOUT_MORADA_MS = 6000;
 
 type Local = { lat: number; lng: number; accuracy: number };
@@ -40,32 +51,30 @@ async function enviarFotografia(
   return storageId;
 }
 
-/**
- * Tenta descobrir a morada a partir das coordenadas. É uma comodidade, não um
- * requisito: se falhar, o registo segue na mesma e a pessoa escreve à mão.
- */
-async function procurarMorada(
-  lat: number,
-  lng: number
-): Promise<{ morada: string | null; concelho: string | null }> {
-  const vazio = { morada: null, concelho: null };
+/** Comodidade, não requisito: se falhar, escreve-se à mão. */
+async function procurarMorada(lat: number, lng: number) {
+  const vazio = {
+    morada: null as string | null,
+    concelho: null as string | null,
+  };
   try {
-    const controlador = new AbortController();
-    const timer = setTimeout(() => controlador.abort(), TIMEOUT_MORADA_MS);
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), TIMEOUT_MORADA_MS);
     const res = await fetch(
       `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&zoom=18&accept-language=pt`,
-      { signal: controlador.signal }
+      { signal: ctrl.signal }
     );
-    clearTimeout(timer);
+    clearTimeout(t);
     if (!res.ok) {
       return vazio;
     }
-    const dados = await res.json();
-    const a = dados?.address ?? {};
+    const d = await res.json();
+    const a = d?.address ?? {};
     const rua = a.road ?? a.pedestrian ?? a.footway ?? null;
-    const numero = a.house_number ? `, ${a.house_number}` : "";
     return {
-      morada: rua ? `${rua}${numero}` : null,
+      morada: rua
+        ? `${rua}${a.house_number ? `, ${a.house_number}` : ""}`
+        : null,
       concelho: a.municipality ?? a.city ?? a.town ?? a.village ?? null,
     };
   } catch {
@@ -73,53 +82,65 @@ async function procurarMorada(
   }
 }
 
-function PedirSessao() {
-  const { signIn } = useAuthActions();
+function BarraTopo({ titulo }: { titulo: string }) {
   return (
-    <div className="rounded-2xl border border-border/60 border-dashed bg-card/40 p-8 text-center">
-      <p className="font-body text-[15px] text-foreground/70 leading-relaxed">
-        Ver o mapa não exige nada. Para registar um painel é preciso ter conta —
-        é grátis e leva vinte segundos.
-      </p>
-      <Button
-        className="mt-5"
-        onClick={() => signIn("google", { redirectTo: "/azulejos/registar" })}
-        variant="accent"
-      >
-        Entrar com Google
-      </Button>
-    </div>
+    <header
+      className="sticky top-0 z-30 border-slate-200/70 border-b bg-white/85 backdrop-blur-xl backdrop-saturate-150"
+      style={{ paddingTop: "env(safe-area-inset-top)" }}
+    >
+      <div className="mx-auto flex max-w-[560px] items-center gap-3 px-4 py-3">
+        <Link
+          aria-label="Voltar ao mapa"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-800"
+          to="/azulejos"
+        >
+          <ArrowLeft size={18} strokeWidth={1.75} />
+        </Link>
+        <p
+          className="font-display text-[15px] tracking-[0.12em]"
+          style={{ color: COBALTO.tinta }}
+        >
+          {titulo}
+        </p>
+      </div>
+    </header>
   );
 }
 
-function Passo({
-  numero,
-  titulo,
-  nota,
-  children,
-}: {
-  numero: number;
-  titulo: string;
-  nota?: string;
-  children: React.ReactNode;
-}) {
+function PedirSessao() {
+  const { signIn } = useAuthActions();
   return (
-    <section className="mt-10">
-      <div className="flex items-baseline gap-3">
-        <span className="font-display text-[13px] text-accent tracking-[0.2em]">
-          {numero}
+    <div className="px-5 py-10">
+      <div
+        className="rounded-3xl px-6 py-10 text-center"
+        style={{ backgroundColor: COBALTO.lavado }}
+      >
+        <span
+          className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl"
+          style={{ backgroundColor: COBALTO.forte }}
+        >
+          <Camera className="h-6 w-6 text-white" strokeWidth={1.5} />
         </span>
-        <h2 className="font-display text-[18px] text-primary leading-snug">
-          {titulo}
-        </h2>
-      </div>
-      {nota && (
-        <p className="mt-1.5 font-body text-[14px] text-muted-foreground leading-relaxed">
-          {nota}
+        <p
+          className="mt-5 font-display text-[20px]"
+          style={{ color: COBALTO.tinta }}
+        >
+          Entre para registar
         </p>
-      )}
-      <div className="mt-4">{children}</div>
-    </section>
+        <p className="mx-auto mt-3 max-w-[300px] font-body text-[14px] text-slate-600 leading-relaxed">
+          Ver o mapa não exige nada. Para registar um painel é preciso ter conta
+          — é grátis e leva vinte segundos.
+        </p>
+        <button
+          className="mt-6 w-full rounded-2xl py-4 font-body text-[15px] text-white transition-transform active:scale-[0.98]"
+          onClick={() => signIn("google", { redirectTo: "/azulejos/registar" })}
+          style={{ backgroundColor: COBALTO.forte }}
+          type="button"
+        >
+          Entrar com Google
+        </button>
+      </div>
+    </div>
   );
 }
 
@@ -128,45 +149,35 @@ function Formulario() {
   const submeter = useMutation(api.azulejos.submit);
 
   const [ficheiro, setFicheiro] = useState<File | null>(null);
-  const [preVisualizacao, setPreVisualizacao] = useState<string | null>(null);
+  const [preVisual, setPreVisual] = useState<string | null>(null);
   const [local, setLocal] = useState<Local | null>(null);
   const [aLocalizar, setALocalizar] = useState(false);
   const [erroLocal, setErroLocal] = useState<string | null>(null);
   const [estado, setEstado] = useState<Estado | null>(null);
   const [morada, setMorada] = useState("");
   const [concelho, setConcelho] = useState("");
-  const [mostrarHistoria, setMostrarHistoria] = useState(false);
+  const [verHistoria, setVerHistoria] = useState(false);
   const [padrao, setPadrao] = useState("");
   const [epoca, setEpoca] = useState("");
   const [oficina, setOficina] = useState("");
-  const [autor, setAutor] = useState("");
   const [aEnviar, setAEnviar] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
   const [feito, setFeito] = useState(false);
   const inputFoto = useRef<HTMLInputElement | null>(null);
 
-  // Liberta o URL da pré-visualização quando deixa de ser preciso.
   useEffect(
     () => () => {
-      if (preVisualizacao) {
-        URL.revokeObjectURL(preVisualizacao);
+      if (preVisual) {
+        URL.revokeObjectURL(preVisual);
       }
     },
-    [preVisualizacao]
+    [preVisual]
   );
 
-  const escolherFicheiro = (f: File | null) => {
-    if (preVisualizacao) {
-      URL.revokeObjectURL(preVisualizacao);
-    }
-    setFicheiro(f);
-    setPreVisualizacao(f ? URL.createObjectURL(f) : null);
-  };
-
-  const localizar = () => {
+  const localizar = useCallback(() => {
     setErroLocal(null);
     if (!navigator.geolocation) {
-      setErroLocal("Este telemóvel não permite obter a localização.");
+      setErroLocal("Este aparelho não dá a localização.");
       return;
     }
     setALocalizar(true);
@@ -175,24 +186,36 @@ function Formulario() {
         const { latitude, longitude, accuracy } = pos.coords;
         setLocal({ lat: latitude, lng: longitude, accuracy });
         setALocalizar(false);
-        const encontrado = await procurarMorada(latitude, longitude);
-        if (encontrado.morada) {
-          setMorada((m) => m || encontrado.morada || "");
+        const achado = await procurarMorada(latitude, longitude);
+        if (achado.morada) {
+          setMorada((m) => m || achado.morada || "");
         }
-        if (encontrado.concelho) {
-          setConcelho((c) => c || encontrado.concelho || "");
+        if (achado.concelho) {
+          setConcelho((c) => c || achado.concelho || "");
         }
       },
       (e) => {
         setALocalizar(false);
         setErroLocal(
           e.code === e.PERMISSION_DENIED
-            ? "Deu-nos não à localização. Sem o sítio exacto, o registo não serve de prova — autorize nas definições do navegador."
-            : "Não foi possível obter a localização. Tente de novo ao ar livre."
+            ? "A localização está bloqueada. Autorize nas definições do navegador — sem o sítio, o registo não serve de prova."
+            : "Não foi possível obter a localização. Ao ar livre costuma resultar."
         );
       },
       { enableHighAccuracy: true, timeout: 15_000, maximumAge: 0 }
     );
+  }, []);
+
+  // Assim que há fotografia, pede-se o sítio: uma toque a menos na rua.
+  const escolherFicheiro = (f: File | null) => {
+    if (preVisual) {
+      URL.revokeObjectURL(preVisual);
+    }
+    setFicheiro(f);
+    setPreVisual(f ? URL.createObjectURL(f) : null);
+    if (f && !local) {
+      localizar();
+    }
   };
 
   const enviar = async () => {
@@ -206,7 +229,7 @@ function Formulario() {
       return;
     }
     if (!estado) {
-      setErro("Falta indicar o estado do painel.");
+      setErro("Falta dizer em que estado está.");
       return;
     }
     setAEnviar(true);
@@ -223,9 +246,9 @@ function Formulario() {
         padrao: padrao.trim() || undefined,
         epoca: epoca.trim() || undefined,
         oficina: oficina.trim() || undefined,
-        autor: autor.trim() || undefined,
       });
       setFeito(true);
+      window.scrollTo({ top: 0 });
     } catch (e) {
       setErro(e instanceof Error ? e.message : "Não foi possível registar.");
     } finally {
@@ -242,113 +265,146 @@ function Formulario() {
     setPadrao("");
     setEpoca("");
     setOficina("");
-    setAutor("");
-    setMostrarHistoria(false);
+    setVerHistoria(false);
     setFeito(false);
   };
 
   if (feito) {
     return (
-      <div className="mt-10 rounded-2xl border border-accent/30 bg-accent/[0.05] p-8 text-center">
-        <p className="font-display text-[22px] text-primary">Ficou registado</p>
-        <p className="mx-auto mt-3 max-w-[420px] font-body text-[15px] text-foreground/75 leading-relaxed">
-          O painel entra no mapa depois de uma revisão. A data e o sítio já
-          ficaram guardados — é isso que faz do registo uma prova.
-        </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <Button onClick={recomecar} variant="accent">
+      <div className="px-5 py-10">
+        <div
+          className="rounded-3xl px-6 py-10 text-center"
+          style={{ backgroundColor: COBALTO.lavado }}
+        >
+          <span
+            className="mx-auto flex h-14 w-14 items-center justify-center rounded-full"
+            style={{ backgroundColor: COBALTO.forte }}
+          >
+            <Check className="h-7 w-7 text-white" strokeWidth={2.5} />
+          </span>
+          <p
+            className="mt-5 font-display text-[22px]"
+            style={{ color: COBALTO.tinta }}
+          >
+            Ficou registado
+          </p>
+          <p className="mx-auto mt-3 max-w-[320px] font-body text-[14px] text-slate-600 leading-relaxed">
+            A data e o sítio já ficaram guardados — é isso que faz do registo
+            uma prova. Entra no mapa depois de uma revisão.
+          </p>
+          <button
+            className="mt-6 w-full rounded-2xl py-4 font-body text-[15px] text-white transition-transform active:scale-[0.98]"
+            onClick={recomecar}
+            style={{ backgroundColor: COBALTO.forte }}
+            type="button"
+          >
             Registar outro
-          </Button>
-          <Button asChild variant="outline">
-            <Link to="/azulejos">Ver o mapa</Link>
-          </Button>
+          </button>
+          <Link
+            className="mt-3 block w-full rounded-2xl border border-slate-200 bg-white py-4 font-body text-[15px] text-slate-700"
+            to="/azulejos"
+          >
+            Ver o mapa
+          </Link>
         </div>
       </div>
     );
   }
 
-  const impreciso = local !== null && local.accuracy > PRECISAO_MAXIMA_M;
-  const campoClasse =
-    "w-full rounded-lg border border-border bg-card px-4 py-2.5 font-body text-[15px] text-foreground outline-none focus:border-accent";
+  const impreciso = local !== null && local.accuracy > PRECISAO_AVISO_M;
+  const completo = Boolean(ficheiro && local && estado);
+  const campo =
+    "w-full rounded-xl border border-slate-200 bg-white px-4 py-3 font-body text-[16px] text-slate-800 outline-none transition-colors focus:border-slate-400";
+  const rotulo =
+    "font-body text-[11px] text-slate-400 uppercase tracking-[0.14em]";
 
   return (
-    <>
-      <Passo
-        nota="Do conjunto, não do pormenor. Tirada da rua."
-        numero={1}
-        titulo="A fotografia"
-      >
-        <input
-          accept="image/*"
-          capture="environment"
-          className="hidden"
-          onChange={(e) => escolherFicheiro(e.target.files?.[0] ?? null)}
-          ref={inputFoto}
-          type="file"
-        />
-        {preVisualizacao ? (
-          <div className="overflow-hidden rounded-xl border border-border">
-            <img
-              alt="Pré-visualização do painel fotografado"
-              className="max-h-[320px] w-full object-cover"
-              src={preVisualizacao}
-            />
-            <button
-              className="w-full border-border border-t bg-card px-4 py-3 font-body text-[14px] text-muted-foreground transition-colors hover:text-foreground"
-              onClick={() => inputFoto.current?.click()}
-              type="button"
-            >
-              Trocar de fotografia
-            </button>
-          </div>
-        ) : (
+    <div className="mx-auto max-w-[560px] px-5 pt-5 pb-40">
+      {/* 1 — a fotografia */}
+      <input
+        accept="image/*"
+        capture="environment"
+        className="hidden"
+        onChange={(e) => escolherFicheiro(e.target.files?.[0] ?? null)}
+        ref={inputFoto}
+        type="file"
+      />
+      {preVisual ? (
+        <div className="relative overflow-hidden rounded-3xl">
+          <img
+            alt="O painel que fotografou"
+            className="max-h-[42vh] w-full object-cover"
+            src={preVisual}
+          />
           <button
-            className="flex w-full flex-col items-center gap-3 rounded-xl border border-border border-dashed bg-card/40 px-6 py-12 transition-colors hover:border-accent/50"
+            className="absolute right-3 bottom-3 rounded-full bg-black/55 px-4 py-2 font-body text-[13px] text-white backdrop-blur-md"
             onClick={() => inputFoto.current?.click()}
             type="button"
           >
-            <Camera className="h-7 w-7 text-accent" strokeWidth={1.5} />
-            <span className="font-body text-[15px] text-foreground/70">
-              Tirar ou escolher uma fotografia
-            </span>
+            Trocar
           </button>
-        )}
-      </Passo>
+        </div>
+      ) : (
+        <button
+          className="flex w-full flex-col items-center gap-4 rounded-3xl py-16 transition-transform active:scale-[0.99]"
+          onClick={() => inputFoto.current?.click()}
+          style={{ backgroundColor: COBALTO.lavado }}
+          type="button"
+        >
+          <span
+            className="flex h-16 w-16 items-center justify-center rounded-2xl"
+            style={{ backgroundColor: COBALTO.forte }}
+          >
+            <Camera className="h-7 w-7 text-white" strokeWidth={1.5} />
+          </span>
+          <span
+            className="font-display text-[17px]"
+            style={{ color: COBALTO.tinta }}
+          >
+            Fotografar o painel
+          </span>
+          <span className="font-body text-[13px] text-slate-500">
+            O conjunto, não o pormenor
+          </span>
+        </button>
+      )}
 
-      <Passo
-        nota="Vem do telemóvel, não se escreve à mão — é isso que dá valor de prova ao registo."
-        numero={2}
-        titulo="O sítio"
-      >
+      {/* 2 — o sítio */}
+      <div className="mt-4">
         {local ? (
-          <div className="rounded-xl border border-border bg-card p-5">
-            <p className="flex items-center gap-2 font-body text-[15px] text-foreground">
-              <Check className="h-4 w-4 text-accent" strokeWidth={2} />
-              Localização obtida
-              <span className="font-body text-[13px] text-muted-foreground">
-                (±{Math.round(local.accuracy)} m)
+          <div className="rounded-2xl border border-slate-200 bg-white p-4">
+            <div className="flex items-center gap-2.5">
+              <span
+                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full"
+                style={{ backgroundColor: COBALTO.forte }}
+              >
+                <Check className="h-4 w-4 text-white" strokeWidth={3} />
               </span>
-            </p>
+              <p className="flex-1 font-body text-[14px] text-slate-800">
+                Sítio obtido
+                <span className="ml-1.5 text-slate-400">
+                  ±{Math.round(local.accuracy)} m
+                </span>
+              </p>
+              <button
+                className="font-body text-[13px] text-slate-400 underline underline-offset-4"
+                onClick={localizar}
+                type="button"
+              >
+                Refazer
+              </button>
+            </div>
             {impreciso && (
-              <p className="mt-2 font-body text-[13px] text-destructive leading-relaxed">
-                A precisão está fraca. Ao ar livre e parado uns segundos costuma
-                melhorar — vale a pena tentar de novo antes de enviar.
+              <p className="mt-2.5 font-body text-[13px] text-amber-700 leading-relaxed">
+                Precisão fraca. Ao ar livre, parado uns segundos, costuma
+                melhorar — mas pode registar assim se preferir.
               </p>
             )}
-            <button
-              className="mt-3 font-body text-[13px] text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
-              onClick={localizar}
-              type="button"
-            >
-              Obter de novo
-            </button>
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            <div className="mt-4 grid gap-2.5">
               <label className="block">
-                <span className="font-body text-[11px] text-muted-foreground uppercase tracking-[0.16em]">
-                  Rua
-                </span>
+                <span className={rotulo}>Rua</span>
                 <input
-                  className={`mt-1.5 ${campoClasse}`}
+                  className={`mt-1.5 ${campo}`}
                   onChange={(e) => setMorada(e.target.value)}
                   placeholder="Rua…"
                   type="text"
@@ -356,11 +412,9 @@ function Formulario() {
                 />
               </label>
               <label className="block">
-                <span className="font-body text-[11px] text-muted-foreground uppercase tracking-[0.16em]">
-                  Concelho
-                </span>
+                <span className={rotulo}>Concelho</span>
                 <input
-                  className={`mt-1.5 ${campoClasse}`}
+                  className={`mt-1.5 ${campo}`}
                   onChange={(e) => setConcelho(e.target.value)}
                   placeholder="Concelho…"
                   type="text"
@@ -370,138 +424,150 @@ function Formulario() {
             </div>
           </div>
         ) : (
-          <>
-            <Button
-              className="w-full sm:w-auto"
-              disabled={aLocalizar}
-              onClick={localizar}
-              variant="accent"
-            >
-              {aLocalizar ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Crosshair className="h-4 w-4" strokeWidth={1.5} />
-              )}
-              {aLocalizar ? "A localizar…" : "Usar a minha localização"}
-            </Button>
-            {erroLocal && (
-              <p className="mt-3 font-body text-[14px] text-destructive leading-relaxed">
-                {erroLocal}
-              </p>
-            )}
-          </>
-        )}
-      </Passo>
-
-      <Passo
-        nota="É o campo mais importante de todos: é o que permite provar que um painel desapareceu."
-        numero={3}
-        titulo="O estado"
-      >
-        <div className="grid gap-3 sm:grid-cols-2">
-          {ESTADOS.map((e) => {
-            const activo = estado === e.valor;
-            return (
-              <button
-                className={`rounded-xl border px-5 py-4 text-left transition-colors ${
-                  activo
-                    ? "border-accent bg-accent/10"
-                    : "border-border bg-card hover:border-accent/50"
-                }`}
-                key={e.valor}
-                onClick={() => setEstado(e.valor)}
-                type="button"
-              >
-                <span className="block font-display text-[16px] text-primary">
-                  {e.rotulo}
-                </span>
-                <span className="mt-0.5 block font-body text-[13px] text-muted-foreground">
-                  {e.nota}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </Passo>
-
-      <Passo
-        nota="Só para quem souber. Fica marcado como «por confirmar» — nunca apresentamos uma atribuição incerta como certa."
-        numero={4}
-        titulo="O que se sabe (opcional)"
-      >
-        {mostrarHistoria ? (
-          <div className="grid gap-3 sm:grid-cols-2">
-            {[
-              {
-                rotulo: "Padrão",
-                valor: padrao,
-                set: setPadrao,
-                dica: "Nome ou descrição",
-              },
-              {
-                rotulo: "Época",
-                valor: epoca,
-                set: setEpoca,
-                dica: "Ex.: finais do séc. XIX",
-              },
-              {
-                rotulo: "Oficina ou fábrica",
-                valor: oficina,
-                set: setOficina,
-                dica: "Ex.: Sant'Anna",
-              },
-              {
-                rotulo: "Autor",
-                valor: autor,
-                set: setAutor,
-                dica: "Se houver",
-              },
-            ].map((c) => (
-              <label className="block" key={c.rotulo}>
-                <span className="font-body text-[11px] text-muted-foreground uppercase tracking-[0.16em]">
-                  {c.rotulo}
-                </span>
-                <input
-                  className={`mt-1.5 ${campoClasse}`}
-                  onChange={(e) => c.set(e.target.value)}
-                  placeholder={c.dica}
-                  type="text"
-                  value={c.valor}
-                />
-              </label>
-            ))}
-          </div>
-        ) : (
           <button
-            className="font-body text-[14px] text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
-            onClick={() => setMostrarHistoria(true)}
+            className="flex w-full items-center justify-center gap-2.5 rounded-2xl border border-slate-200 bg-white py-4 font-body text-[15px] text-slate-700 transition-transform active:scale-[0.99]"
+            disabled={aLocalizar}
+            onClick={localizar}
             type="button"
           >
-            Sei alguma coisa sobre este painel
+            {aLocalizar ? (
+              <Loader2
+                className="h-[18px] w-[18px] animate-spin"
+                style={{ color: COBALTO.forte }}
+              />
+            ) : (
+              <Crosshair
+                size={18}
+                strokeWidth={1.75}
+                style={{ color: COBALTO.forte }}
+              />
+            )}
+            {aLocalizar ? "A localizar…" : "Marcar onde estou"}
           </button>
         )}
-      </Passo>
-
-      <div className="mt-12 border-accent/20 border-t pt-8">
-        {erro && (
-          <p className="mb-4 font-body text-[14px] text-destructive leading-relaxed">
-            {erro}
+        {erroLocal && (
+          <p className="mt-2.5 font-body text-[13px] text-red-700 leading-relaxed">
+            {erroLocal}
           </p>
         )}
-        <Button
-          className="w-full sm:w-auto"
-          disabled={aEnviar}
-          onClick={enviar}
-          variant="accent"
-        >
-          {aEnviar && <Loader2 className="h-4 w-4 animate-spin" />}
-          {aEnviar ? "A registar…" : "Registar o painel"}
-        </Button>
-        <p className="mt-4 font-body text-[13px] text-muted-foreground leading-relaxed">
-          O painel entra no mapa depois de uma revisão.
-        </p>
       </div>
-    </>
+
+      {/* 3 — o estado */}
+      <p className={`mt-6 ${rotulo}`}>Em que estado está</p>
+      <div className="mt-2.5 grid grid-cols-2 gap-2.5">
+        {ESTADOS.map((e) => {
+          const activo = estado === e.valor;
+          return (
+            <button
+              className={`rounded-2xl border-2 px-4 py-3.5 text-left transition-all ${
+                activo ? "shadow-sm" : "border-slate-200 bg-white"
+              }`}
+              key={e.valor}
+              onClick={() => setEstado(e.valor)}
+              style={
+                activo
+                  ? {
+                      borderColor: COR_ESTADO[e.valor],
+                      backgroundColor: `${COR_ESTADO[e.valor]}12`,
+                    }
+                  : undefined
+              }
+              type="button"
+            >
+              <span className="flex items-center gap-2">
+                <span
+                  aria-hidden="true"
+                  className="block h-2.5 w-2.5 rounded-full"
+                  style={{ backgroundColor: COR_ESTADO[e.valor] }}
+                />
+                <span className="font-body text-[15px] text-slate-900">
+                  {ROTULO_ESTADO[e.valor]}
+                </span>
+              </span>
+              <span className="mt-0.5 block font-body text-[12px] text-slate-500">
+                {e.nota}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* 4 — o que se sabe (opcional) */}
+      <button
+        className="mt-6 flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3.5"
+        onClick={() => setVerHistoria((v) => !v)}
+        type="button"
+      >
+        <span className="text-left">
+          <span className="block font-body text-[15px] text-slate-800">
+            Sei alguma coisa sobre este painel
+          </span>
+          <span className="block font-body text-[12px] text-slate-500">
+            Opcional · fica «por confirmar»
+          </span>
+        </span>
+        <ChevronDown
+          className={`h-5 w-5 shrink-0 text-slate-400 transition-transform ${verHistoria ? "rotate-180" : ""}`}
+        />
+      </button>
+      {verHistoria && (
+        <div className="mt-2.5 grid gap-2.5">
+          {[
+            { r: "Padrão", v: padrao, s: setPadrao, d: "Nome ou descrição" },
+            { r: "Época", v: epoca, s: setEpoca, d: "Ex.: finais do séc. XIX" },
+            { r: "Oficina", v: oficina, s: setOficina, d: "Ex.: Sant'Anna" },
+          ].map((c) => (
+            <label className="block" key={c.r}>
+              <span className={rotulo}>{c.r}</span>
+              <input
+                className={`mt-1.5 ${campo}`}
+                onChange={(e) => c.s(e.target.value)}
+                placeholder={c.d}
+                type="text"
+                value={c.v}
+              />
+            </label>
+          ))}
+        </div>
+      )}
+
+      {/* Barra de envio — fixa, sempre ao alcance do polegar. */}
+      <div
+        className="fixed inset-x-0 bottom-0 z-30 border-slate-200/70 border-t bg-white/90 px-5 pt-3 backdrop-blur-xl"
+        style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 0.75rem)" }}
+      >
+        <div className="mx-auto max-w-[560px]">
+          {erro && (
+            <p className="mb-2.5 text-center font-body text-[13px] text-red-700">
+              {erro}
+            </p>
+          )}
+          <button
+            className="flex w-full items-center justify-center gap-2.5 rounded-2xl py-4 font-body text-[16px] text-white transition-all active:scale-[0.98] disabled:opacity-40"
+            disabled={aEnviar || !completo}
+            onClick={enviar}
+            style={{ backgroundColor: COBALTO.forte }}
+            type="button"
+          >
+            {aEnviar ? (
+              <Loader2 className="h-[18px] w-[18px] animate-spin" />
+            ) : (
+              <MapPin size={18} strokeWidth={1.75} />
+            )}
+            {aEnviar ? "A registar…" : "Registar o painel"}
+          </button>
+          {!completo && (
+            <p className="mt-2 text-center font-body text-[12px] text-slate-400">
+              {ficheiro
+                ? local
+                  ? "Falta dizer em que estado está"
+                  : "Falta marcar onde está"
+                : "Falta a fotografia"}
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -509,35 +575,26 @@ export default function RegistarAzulejoPage() {
   const { isAuthenticated, isLoading } = useConvexAuth();
 
   return (
-    <main
-      className="mx-auto max-w-3xl px-6 pt-32 pb-24 sm:pt-40"
-      data-nav-theme="light"
-    >
+    <main className="min-h-dvh bg-slate-50">
       <Seo
-        description="Fotografe um painel de azulejo da sua rua. A localização vem do telemóvel e o registo fica datado — património e prova ao mesmo tempo."
+        description="Fotografe um painel de azulejo da sua rua. A localização vem do telemóvel e o registo fica datado."
         noindex
         path="/azulejos/registar"
         title="Registar um painel — Azulejos | Memória Lusíada"
       />
-
-      <header className="text-center">
-        <p className="font-body text-[12px] text-accent uppercase tracking-[0.3em]">
-          Azulejos
-        </p>
-        <h1 className="mt-3 font-display text-[36px] text-primary leading-[1.05] sm:text-[46px]">
-          Registar um painel
-        </h1>
-        <p className="mx-auto mt-6 max-w-[480px] font-body text-[16px] text-foreground/65 leading-relaxed">
-          Faz-se na rua, à frente do painel. Três passos e está.
-        </p>
-      </header>
-
-      {isLoading && (
-        <p className="mt-10 text-center font-body text-[15px] text-muted-foreground">
-          A carregar…
-        </p>
+      <BarraTopo titulo="REGISTAR" />
+      {isLoading ? (
+        <div className="flex justify-center py-20">
+          <Loader2
+            className="h-6 w-6 animate-spin"
+            style={{ color: COBALTO.forte }}
+          />
+        </div>
+      ) : isAuthenticated ? (
+        <Formulario />
+      ) : (
+        <PedirSessao />
       )}
-      {!isLoading && (isAuthenticated ? <Formulario /> : <PedirSessao />)}
     </main>
   );
 }
