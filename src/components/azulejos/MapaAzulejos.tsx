@@ -20,7 +20,12 @@ import {
   type Estado,
   VISTA_PORTUGAL,
 } from "@/lib/azulejos/mapa-estilo";
-import { instalarZonas, ZONAS } from "@/lib/azulejos/zonas";
+import { instalarProvincias } from "@/lib/azulejos/provincias";
+import {
+  instalarZonas,
+  MARGEM_DO_ENQUADRAMENTO,
+  ZONAS,
+} from "@/lib/azulejos/zonas";
 
 export type PainelNoMapa = {
   _id: string;
@@ -104,7 +109,7 @@ export const MapaAzulejos = forwardRef<MapaHandle, Props>(
       if (!alvo || mapa.current) {
         return;
       }
-      let desmontarZonas: (() => void) | null = null;
+      const desmontar: Array<() => void> = [];
 
       const m = new MapLibreMap({
         container: alvo,
@@ -145,18 +150,22 @@ export const MapaAzulejos = forwardRef<MapaHandle, Props>(
         setFalhou(false);
         setPronto(true);
 
-        // As zonas entram primeiro, para os painéis ficarem sempre por cima.
-        desmontarZonas = instalarZonas(m, {
-          aoEscolher: (zona) => {
-            m.fitBounds(ZONAS[zona].vista, {
-              // A barra em cima e a folha em baixo comem ecrã: a zona tem de
-              // caber no que sobra, não no rectângulo todo.
-              padding: { top: 96, bottom: 240, left: 32, right: 32 },
-              duration: 1300,
-            });
-          },
-          camadasDeTopo: [CAMADA_AGLOMERADOS, CAMADA_PONTOS],
-        });
+        // Zonas e províncias entram primeiro, para os painéis ficarem sempre
+        // por cima.
+        const enquadrar = (limites: [[number, number], [number, number]]) => {
+          m.fitBounds(limites, {
+            padding: MARGEM_DO_ENQUADRAMENTO,
+            duration: 1300,
+          });
+        };
+        const camadasDeTopo = [CAMADA_AGLOMERADOS, CAMADA_PONTOS];
+        desmontar.push(
+          instalarZonas(m, {
+            aoEscolher: (zona) => enquadrar(ZONAS[zona].vista),
+            camadasDeTopo,
+          }),
+          instalarProvincias(m, { aoEscolher: enquadrar, camadasDeTopo })
+        );
 
         m.addSource(FONTE, {
           type: "geojson",
@@ -272,6 +281,11 @@ export const MapaAzulejos = forwardRef<MapaHandle, Props>(
             aoSelecionar.current?.(id);
           }
         });
+
+        // As zonas e as províncias calibram-se pelo tamanho do ecrã, e este
+        // momento pode apanhar o contentor ainda por medir. Um `resize` de
+        // propósito obriga-as a fazer as contas outra vez, já com ecrã.
+        m.resize();
       });
 
       // O contentor muda de tamanho quando a folha inferior se arrasta.
@@ -295,7 +309,9 @@ export const MapaAzulejos = forwardRef<MapaHandle, Props>(
 
       return () => {
         observador.disconnect();
-        desmontarZonas?.();
+        for (const parar of desmontar) {
+          parar();
+        }
         m.remove();
         mapa.current = null;
         setPronto(false);

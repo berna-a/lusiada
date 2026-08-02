@@ -15,7 +15,7 @@ Fontes (oficiais, acesso público, sem chave):
     grosseira; o que não pode é faltar-lhe uma ilha.
 
 Correr à mão quando as fontes mudarem (raro):
-    python3 scripts/construir-zonas.py
+    python3 scripts/construir_zonas.py
 """
 
 import json
