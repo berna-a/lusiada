@@ -58,28 +58,18 @@ export const ESTILO_AZULEJO: StyleSpecification = {
     [FONTE]: { type: "vector", url: TILES },
   },
   layers: [
-    // O mar é o fundo: cobalto cheio. A terra vem por cima, em vidrado.
-    {
-      id: "mar",
-      type: "background",
-      paint: { "background-color": COBALTO.forte },
-    },
+    // A terra é o fundo, no branco do vidrado; a água vem por cima, a cobalto.
+    //
+    // Tem de ser por esta ordem. O contrário — fundo azul e terra desenhada
+    // por cima — parece igual mas não é: as camadas `landcover`/`landuse` só
+    // trazem florestas, parques e zonas urbanas, não o território todo, e o
+    // azul apareceria aos borrões por baixo. O oceano, esse, vem mesmo nos
+    // dados (`water`, class=ocean), por isso pinta-se.
     {
       id: "terra",
-      type: "fill",
-      source: FONTE,
-      "source-layer": "landcover",
-      paint: { "fill-color": COBALTO.vidrado },
+      type: "background",
+      paint: { "background-color": COBALTO.vidrado },
     },
-    {
-      id: "terra-base",
-      type: "fill",
-      source: FONTE,
-      "source-layer": "landuse",
-      paint: { "fill-color": COBALTO.vidrado },
-    },
-
-    // Rios e massas de água interiores, no mesmo azul do mar.
     {
       id: "agua",
       type: "fill",
