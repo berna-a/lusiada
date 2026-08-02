@@ -358,6 +358,8 @@ export default defineSchema({
     bio: v.optional(v.union(v.string(), v.null())),
     concelho: v.optional(v.union(v.string(), v.null())),
     avatar_id: v.optional(v.union(v.id("_storage"), v.null())),
+    /** Fotografia de capa, larga, no topo do perfil. */
+    capa_id: v.optional(v.union(v.id("_storage"), v.null())),
     /** Falso enquanto a pessoa não tiver passado pelas boas-vindas. */
     onboarding_feito: v.optional(v.boolean()),
     /** Quem esconde o perfil deixa de aparecer em /u/<handle>. */
@@ -405,4 +407,27 @@ export default defineSchema({
     .index("by_status", ["status"])
     .index("by_author", ["author_id"])
     .index("by_concelho_status", ["concelho", "status"]),
+
+  // O feed de um painel: fotografias e memórias de quem lá passou.
+  // Um contributo tem de trazer fotografia, texto, ou os dois.
+  azulejo_posts: defineTable({
+    azulejo_id: v.id("azulejos"),
+    author_id: v.id("users"),
+    author_name: v.optional(v.union(v.string(), v.null())),
+    body: v.optional(v.union(v.string(), v.null())),
+    image_id: v.optional(v.union(v.id("_storage"), v.null())),
+    /** Contagem desnormalizada, para ordenar sem contar votos a cada leitura. */
+    upvotes: v.number(),
+    is_removed: v.optional(v.boolean()),
+    report_count: v.optional(v.number()),
+  })
+    .index("by_azulejo", ["azulejo_id"])
+    .index("by_author", ["author_id"]),
+
+  azulejo_post_votos: defineTable({
+    post_id: v.id("azulejo_posts"),
+    user_id: v.id("users"),
+  })
+    .index("by_post_user", ["post_id", "user_id"])
+    .index("by_user", ["user_id"]),
 });

@@ -12,6 +12,7 @@ type Valores = {
   bio: string;
   concelho: string;
   avatarUrl: string | null;
+  capaUrl: string | null;
   perfilPrivado: boolean;
 };
 
@@ -52,6 +53,9 @@ export function FormularioPerfil({ inicial, modo, onGuardado }: Props) {
   const [avatar, setAvatar] = useState<File | null>(null);
   const [preVisual, setPreVisual] = useState<string | null>(inicial.avatarUrl);
   const [removerAvatar, setRemoverAvatar] = useState(false);
+  const [capa, setCapa] = useState<File | null>(null);
+  const [preCapa, setPreCapa] = useState<string | null>(inicial.capaUrl);
+  const [removerCapa, setRemoverCapa] = useState(false);
   const [aGuardar, setAGuardar] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
 
@@ -75,6 +79,15 @@ export function FormularioPerfil({ inicial, modo, onGuardado }: Props) {
     },
     [preVisual]
   );
+
+  const escolherCapa = (f: File | null) => {
+    if (preCapa?.startsWith("blob:")) {
+      URL.revokeObjectURL(preCapa);
+    }
+    setCapa(f);
+    setPreCapa(f ? URL.createObjectURL(f) : null);
+    setRemoverCapa(!f);
+  };
 
   const escolherAvatar = (f: File | null) => {
     if (preVisual?.startsWith("blob:")) {
@@ -101,6 +114,7 @@ export function FormularioPerfil({ inicial, modo, onGuardado }: Props) {
       const avatarId = avatar
         ? await enviarAvatar(gerarUrl, avatar)
         : undefined;
+      const capaId = capa ? await enviarAvatar(gerarUrl, capa) : undefined;
       const r = await guardar({
         handle,
         nomePublico: nome,
@@ -108,6 +122,8 @@ export function FormularioPerfil({ inicial, modo, onGuardado }: Props) {
         concelho: concelho.trim() || undefined,
         avatarId,
         removerAvatar: removerAvatar && !avatar ? true : undefined,
+        capaId,
+        removerCapa: removerCapa && !capa ? true : undefined,
         perfilPrivado: privado,
       });
       onGuardado(r.handle);
@@ -125,7 +141,39 @@ export function FormularioPerfil({ inicial, modo, onGuardado }: Props) {
 
   return (
     <form onSubmit={submeter}>
+      {/* Capa — a faixa larga no topo do perfil. */}
+      <div className="overflow-hidden rounded-2xl border border-border">
+        <div className="relative h-28 bg-secondary sm:h-36">
+          {preCapa && (
+            <img
+              alt="A sua capa"
+              className="h-full w-full object-cover"
+              src={preCapa}
+            />
+          )}
+          <label className="absolute right-3 bottom-3 cursor-pointer rounded-full bg-black/50 px-3.5 py-1.5 font-body text-[12px] text-white backdrop-blur-md">
+            <input
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => escolherCapa(e.target.files?.[0] ?? null)}
+              type="file"
+            />
+            {preCapa ? "Trocar capa" : "Escolher capa"}
+          </label>
+          {preCapa && (
+            <button
+              className="absolute top-3 right-3 grid h-7 w-7 place-items-center rounded-full bg-black/50 text-white"
+              onClick={() => escolherCapa(null)}
+              type="button"
+            >
+              <X size={14} />
+            </button>
+          )}
+        </div>
+      </div>
+
       {/* Retrato */}
+      <div className="mt-5" />
       <div className="flex items-center gap-4">
         <span className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-secondary">
           {preVisual ? (

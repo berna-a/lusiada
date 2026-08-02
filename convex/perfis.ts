@@ -89,6 +89,7 @@ async function paraPublico(ctx: QueryCtx, p: Doc<"profiles">) {
     bio: p.bio ?? null,
     concelho: p.concelho ?? null,
     avatarUrl: p.avatar_id ? await ctx.storage.getUrl(p.avatar_id) : null,
+    capaUrl: p.capa_id ? await ctx.storage.getUrl(p.capa_id) : null,
     desde: p._creationTime,
     ehSocio: await isMemberEmail(ctx, user?.email),
   };
@@ -123,6 +124,7 @@ export const meu = query({
       bio: p.bio ?? null,
       concelho: p.concelho ?? null,
       avatarUrl: p.avatar_id ? await ctx.storage.getUrl(p.avatar_id) : null,
+      capaUrl: p.capa_id ? await ctx.storage.getUrl(p.capa_id) : null,
       perfilPrivado: p.perfil_privado ?? false,
       onboardingFeito: p.onboarding_feito ?? false,
       email: user?.email ?? null,
@@ -232,6 +234,8 @@ export const guardar = mutation({
     concelho: v.optional(v.string()),
     avatarId: v.optional(v.id("_storage")),
     removerAvatar: v.optional(v.boolean()),
+    capaId: v.optional(v.id("_storage")),
+    removerCapa: v.optional(v.boolean()),
     perfilPrivado: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
@@ -264,19 +268,40 @@ export const guardar = mutation({
       onboarding_feito: true,
     };
 
-    if (existente) {
-      let avatar = existente.avatar_id ?? null;
-      if (args.removerAvatar && avatar) {
-        await ctx.storage.delete(avatar);
-        avatar = null;
-      }
-      if (args.avatarId) {
-        if (avatar) {
-          await ctx.storage.delete(avatar);
+    // Trocar uma imagem apaga a anterior: sem isto o armazenamento enche-se
+    // de retratos que ninguém volta a ver.
+    const trocar = async (
+      actual: Id<"_storage"> | null,
+      nova: Id<"_storage"> | undefined,
+      remover: boolean | undefined
+    ) => {
+      if (nova) {
+        if (actual) {
+          await ctx.storage.delete(actual);
         }
-        avatar = args.avatarId;
+        return nova;
       }
-      await ctx.db.patch(existente._id, { ...campos, avatar_id: avatar });
+      if (remover && actual) {
+        await ctx.storage.delete(actual);
+        return null;
+      }
+      return actual;
+    };
+
+    if (existente) {
+      await ctx.db.patch(existente._id, {
+        ...campos,
+        avatar_id: await trocar(
+          existente.avatar_id ?? null,
+          args.avatarId,
+          args.removerAvatar
+        ),
+        capa_id: await trocar(
+          existente.capa_id ?? null,
+          args.capaId,
+          args.removerCapa
+        ),
+      });
       return { handle };
     }
 
@@ -284,6 +309,7 @@ export const guardar = mutation({
       user_id: userId,
       ...campos,
       avatar_id: args.avatarId ?? null,
+      capa_id: args.capaId ?? null,
     });
     return { handle };
   },

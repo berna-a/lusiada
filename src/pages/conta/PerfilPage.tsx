@@ -83,6 +83,7 @@ export default function PerfilPage() {
                 bio: perfil.bio ?? "",
                 concelho: perfil.concelho ?? "",
                 avatarUrl: perfil.avatarUrl,
+                capaUrl: perfil.capaUrl,
                 perfilPrivado: perfil.perfilPrivado,
               }}
               modo="editar"
@@ -99,8 +100,23 @@ export default function PerfilPage() {
         </>
       ) : (
         <>
-          <header className="flex flex-col items-center text-center">
-            <span className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-border bg-secondary">
+          {/* Capa e retrato sobrepostos — o cabeçalho de um perfil. */}
+          <div className="-mx-6 sm:mx-0">
+            <div className="relative h-36 overflow-hidden bg-secondary sm:h-52 sm:rounded-2xl">
+              {perfil.capaUrl ? (
+                <img
+                  alt=""
+                  className="h-full w-full object-cover"
+                  src={perfil.capaUrl}
+                />
+              ) : (
+                <div className="calcada-pattern h-full w-full opacity-40" />
+              )}
+            </div>
+          </div>
+
+          <header className="-mt-14 flex flex-col items-center text-center">
+            <span className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border-4 border-background bg-secondary shadow-lg">
               {perfil.avatarUrl ? (
                 <img
                   alt={perfil.nomePublico}

@@ -78,6 +78,7 @@ export default function BemVindoPage() {
                   bio: perfil.bio ?? "",
                   concelho: perfil.concelho ?? "",
                   avatarUrl: perfil.avatarUrl,
+                  capaUrl: perfil.capaUrl,
                   perfilPrivado: perfil.perfilPrivado,
                 }
               : {
@@ -86,6 +87,7 @@ export default function BemVindoPage() {
                   bio: "",
                   concelho: "",
                   avatarUrl: null,
+                  capaUrl: null,
                   perfilPrivado: false,
                 }
           }
