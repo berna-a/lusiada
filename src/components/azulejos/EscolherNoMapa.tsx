@@ -34,9 +34,13 @@ export function EscolherNoMapa({ inicio, onConfirmar, onCancelar }: Props) {
     const m = new MapLibreMap({
       container: alvo,
       style: structuredClone(ESTILO_AZULEJO),
-      center: inicio ? [inicio.lng, inicio.lat] : VISTA_PORTUGAL.center,
-      zoom: inicio ? 17 : VISTA_PORTUGAL.zoom,
-      minZoom: 4,
+      ...(inicio
+        ? { center: [inicio.lng, inicio.lat] as [number, number], zoom: 17 }
+        : {
+            bounds: VISTA_PORTUGAL.limites,
+            fitBoundsOptions: { padding: VISTA_PORTUGAL.margem },
+          }),
+      minZoom: 3,
       maxZoom: 20,
       attributionControl: false,
       pitchWithRotate: false,

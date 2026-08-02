@@ -260,8 +260,14 @@ export const ESTILO_AZULEJO: StyleSpecification = {
   ],
 };
 
-/** Portugal continental inteiro no arranque. */
+/**
+ * Portugal inteiro no arranque — continente, Açores, Madeira e o mar entre
+ * eles. Ninguém tem de descobrir as ilhas a afastar o mapa pelo Atlântico.
+ */
 export const VISTA_PORTUGAL = {
-  center: [-8.3, 39.6] as [number, number],
-  zoom: 6.1,
+  limites: [
+    [-35.8, 29.0],
+    [-6.0, 43.2],
+  ] as [[number, number], [number, number]],
+  margem: 28,
 };

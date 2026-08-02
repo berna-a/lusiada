@@ -20,6 +20,7 @@ import {
   type Estado,
   VISTA_PORTUGAL,
 } from "@/lib/azulejos/mapa-estilo";
+import { instalarZonas, ZONAS } from "@/lib/azulejos/zonas";
 
 export type PainelNoMapa = {
   _id: string;
@@ -91,7 +92,10 @@ export const MapaAzulejos = forwardRef<MapaHandle, Props>(
         mapa.current?.flyTo({ center: [lng, lat], zoom, duration: 1600 });
       },
       verTudo: () => {
-        mapa.current?.flyTo({ ...VISTA_PORTUGAL, duration: 1400 });
+        mapa.current?.fitBounds(VISTA_PORTUGAL.limites, {
+          padding: VISTA_PORTUGAL.margem,
+          duration: 1400,
+        });
       },
     }));
 
@@ -100,6 +104,7 @@ export const MapaAzulejos = forwardRef<MapaHandle, Props>(
       if (!alvo || mapa.current) {
         return;
       }
+      let desmontarZonas: (() => void) | null = null;
 
       const m = new MapLibreMap({
         container: alvo,
@@ -108,9 +113,9 @@ export const MapaAzulejos = forwardRef<MapaHandle, Props>(
         // página, ou um recarregamento a quente) recebesse um estilo já
         // consumido e ficasse em branco, sem erro nenhum.
         style: structuredClone(ESTILO_AZULEJO),
-        center: VISTA_PORTUGAL.center,
-        zoom: VISTA_PORTUGAL.zoom,
-        minZoom: 4,
+        bounds: VISTA_PORTUGAL.limites,
+        fitBoundsOptions: { padding: VISTA_PORTUGAL.margem },
+        minZoom: 3,
         maxZoom: 19,
         attributionControl: false,
         // O mapa é a interface: sem inclinação nem rotação, que só confundem.
@@ -133,9 +138,25 @@ export const MapaAzulejos = forwardRef<MapaHandle, Props>(
         "bottom-left"
       );
 
-      m.on("load", () => {
+      // `style.load` e não `load`: o `load` só dispara quando os primeiros
+      // tiles acabam de chegar, e num arranque mal enquadrado isso podia
+      // demorar dezenas de segundos — as camadas nunca chegavam a entrar.
+      m.on("style.load", () => {
         setFalhou(false);
         setPronto(true);
+
+        // As zonas entram primeiro, para os painéis ficarem sempre por cima.
+        desmontarZonas = instalarZonas(m, {
+          aoEscolher: (zona) => {
+            m.fitBounds(ZONAS[zona].vista, {
+              // A barra em cima e a folha em baixo comem ecrã: a zona tem de
+              // caber no que sobra, não no rectângulo todo.
+              padding: { top: 96, bottom: 240, left: 32, right: 32 },
+              duration: 1300,
+            });
+          },
+          camadasDeTopo: [CAMADA_AGLOMERADOS, CAMADA_PONTOS],
+        });
 
         m.addSource(FONTE, {
           type: "geojson",
@@ -254,11 +275,27 @@ export const MapaAzulejos = forwardRef<MapaHandle, Props>(
       });
 
       // O contentor muda de tamanho quando a folha inferior se arrasta.
-      const observador = new ResizeObserver(() => m.resize());
+      //
+      // A primeira medição também serve para enquadrar: no arranque o
+      // contentor ainda não tem tamanho, o MapLibre assume 400×300 e o
+      // enquadramento dado ao construtor sai errado — o mapa abria no zoom
+      // mínimo, a puxar tiles do mundo inteiro.
+      let enquadrado = false;
+      const observador = new ResizeObserver(() => {
+        m.resize();
+        if (!enquadrado) {
+          enquadrado = true;
+          m.fitBounds(VISTA_PORTUGAL.limites, {
+            padding: VISTA_PORTUGAL.margem,
+            duration: 0,
+          });
+        }
+      });
       observador.observe(alvo);
 
       return () => {
         observador.disconnect();
+        desmontarZonas?.();
         m.remove();
         mapa.current = null;
         setPronto(false);
