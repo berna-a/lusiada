@@ -1,6 +1,7 @@
 import { useQuery } from "convex/react";
 import { Loader2, MapPin } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
+import { CabecalhoPerfil } from "@/components/conta/CabecalhoPerfil";
 import { Seo } from "@/components/Seo";
 import {
   COR_ESTADO,
@@ -50,58 +51,24 @@ export default function PerfilPublicoPage() {
       <Seo
         description={`${perfil.nomePublico} na Associação Memória Lusíada${perfil.concelho ? `, ${perfil.concelho}` : ""}. ${lista.length} contributos.`}
         image={perfil.avatarUrl}
-        path={`/u/${perfil.handle}`}
+        path={`/${perfil.handle}`}
         title={`${perfil.nomePublico} — Memória Lusíada`}
         type="article"
       />
 
-      {/* Capa e retrato sobrepostos — o cabeçalho de um perfil. */}
-      <div className="-mx-6 sm:mx-0">
-        <div className="relative h-36 overflow-hidden bg-secondary sm:h-52 sm:rounded-2xl">
-          {perfil.capaUrl ? (
-            <img
-              alt=""
-              className="h-full w-full object-cover"
-              src={perfil.capaUrl}
-            />
-          ) : (
-            <div className="calcada-pattern h-full w-full opacity-40" />
-          )}
-        </div>
-      </div>
+      <CabecalhoPerfil
+        avatarUrl={perfil.avatarUrl}
+        bio={perfil.bio}
+        capaPos={perfil.capaPos}
+        capaUrl={perfil.capaUrl}
+        concelho={perfil.concelho}
+        nome={perfil.nomePublico}
+      />
 
-      <header className="-mt-14 flex flex-col items-center text-center">
-        <span className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border-4 border-background bg-secondary shadow-lg">
-          {perfil.avatarUrl ? (
-            <img
-              alt={perfil.nomePublico}
-              className="h-full w-full object-cover"
-              src={perfil.avatarUrl}
-            />
-          ) : (
-            <span className="font-display text-[30px] text-primary">
-              {perfil.nomePublico.slice(0, 1).toUpperCase()}
-            </span>
-          )}
-        </span>
-        <h1 className="mt-5 font-display text-[30px] text-primary leading-tight sm:text-[38px]">
-          {perfil.nomePublico}
-        </h1>
-        <p className="mt-1.5 font-body text-[14px] text-muted-foreground">
-          {perfil.concelho ? `${perfil.concelho} · ` : ""}na casa desde{" "}
-          {dataPt(perfil.desde)}
-        </p>
-        {perfil.ehSocio && (
-          <span className="mt-4 rounded-full border border-accent/40 px-4 py-1.5 font-body text-[12px] text-primary uppercase tracking-[0.14em]">
-            Sócio
-          </span>
-        )}
-        {perfil.bio && (
-          <p className="mx-auto mt-6 max-w-[460px] font-body text-[16px] text-foreground/80 leading-relaxed">
-            {perfil.bio}
-          </p>
-        )}
-      </header>
+      <p className="mt-4 text-center font-body text-[13px] text-muted-foreground">
+        {perfil.ehSocio ? "Sócio · na casa desde " : "Na casa desde "}
+        {dataPt(perfil.desde)}
+      </p>
 
       <section className="mt-14">
         <h2 className="font-display text-[13px] text-accent uppercase tracking-[0.3em]">

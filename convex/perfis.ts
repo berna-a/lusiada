@@ -13,24 +13,65 @@ const HANDLE_MAX = 24;
 /** Só minúsculas, dígitos e travessão. Nada que precise de escape num URL. */
 const HANDLE_OK = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/;
 
-/** Nomes que não podem ser de ninguém: colidem com rotas ou induzem em erro. */
+/**
+ * Nomes que não podem ser de ninguém.
+ *
+ * O endereço de um perfil é `alusiada.pt/<handle>`, à cabeça do site — por
+ * isso qualquer nome que colida com uma página da casa tem de estar fora.
+ * Estão aqui todas as rotas de primeiro nível, mais as que ainda não existem
+ * mas hão-de existir. Ao acrescentar uma página nova, acrescentar aqui também.
+ */
 const HANDLES_RESERVADOS = new Set([
+  "a-associacao",
+  "aderir",
   "admin",
   "administrador",
+  "ajuda",
   "api",
+  "apoiar",
   "arca",
+  "associacao",
   "azulejos",
+  "bem-vindo",
+  "blog",
+  "canto",
+  "comunidade",
   "conta",
+  "contacto",
   "contactos",
+  "criar-conta",
+  "decifrados",
+  "definicoes",
+  "desporto",
+  "dicionario",
   "entrar",
+  "episodios",
+  "explorar",
+  "grupos",
+  "loja",
   "lusiada",
+  "mapa",
   "membros",
   "moderacao",
+  "noticias",
   "novo",
+  "obras",
+  "os-lusiadas",
+  "os-lusiadas-decifrados",
+  "painel",
+  "panteao",
   "perfil",
+  "perguntas",
+  "plano",
+  "privacidade",
+  "procurar",
+  "programa",
   "registar",
+  "sair",
   "sobre",
+  "termos",
   "u",
+  "viagem",
 ]);
 
 /** Transforma um nome em algo aceitável para o endereço público. */
@@ -65,6 +106,11 @@ function validarHandle(handle: string): string {
   return h;
 }
 
+/** Prende um valor ao intervalo 0–100. Uma percentagem fora dele não existe. */
+function limitar(valor: number): number {
+  return Number.isFinite(valor) ? Math.min(100, Math.max(0, valor)) : 50;
+}
+
 function texto(valor: string | undefined, max: number): string | null {
   if (!valor) {
     return null;
@@ -90,6 +136,7 @@ async function paraPublico(ctx: QueryCtx, p: Doc<"profiles">) {
     concelho: p.concelho ?? null,
     avatarUrl: p.avatar_id ? await ctx.storage.getUrl(p.avatar_id) : null,
     capaUrl: p.capa_id ? await ctx.storage.getUrl(p.capa_id) : null,
+    capaPos: p.capa_pos ?? 50,
     desde: p._creationTime,
     ehSocio: await isMemberEmail(ctx, user?.email),
   };
@@ -125,6 +172,7 @@ export const meu = query({
       concelho: p.concelho ?? null,
       avatarUrl: p.avatar_id ? await ctx.storage.getUrl(p.avatar_id) : null,
       capaUrl: p.capa_id ? await ctx.storage.getUrl(p.capa_id) : null,
+      capaPos: p.capa_pos ?? 50,
       perfilPrivado: p.perfil_privado ?? false,
       onboardingFeito: p.onboarding_feito ?? false,
       email: user?.email ?? null,
@@ -211,6 +259,26 @@ export const handleLivre = query({
 
 /* ──────────────── Escrita ──────────────── */
 
+/**
+ * Só o enquadramento da capa. Arrastar a capa não é editar o perfil: pedir o
+ * formulário inteiro para guardar um número era pesado e arriscava apagar o
+ * que ainda estivesse por escrever.
+ */
+export const guardarCapaPos = mutation({
+  args: { capaPos: v.number() },
+  handler: async (ctx, { capaPos }) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      throw new Error("É preciso iniciar sessão.");
+    }
+    const p = await porUser(ctx, userId);
+    if (!p) {
+      throw new Error("Ainda não tem perfil.");
+    }
+    await ctx.db.patch(p._id, { capa_pos: limitar(capaPos) });
+  },
+});
+
 export const generateUploadUrl = mutation({
   args: {},
   handler: async (ctx) => {
@@ -236,6 +304,7 @@ export const guardar = mutation({
     removerAvatar: v.optional(v.boolean()),
     capaId: v.optional(v.id("_storage")),
     removerCapa: v.optional(v.boolean()),
+    capaPos: v.optional(v.number()),
     perfilPrivado: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
@@ -265,6 +334,7 @@ export const guardar = mutation({
       bio: texto(args.bio, MAX_BIO),
       concelho: texto(args.concelho, MAX_CONCELHO),
       perfil_privado: args.perfilPrivado ?? existente?.perfil_privado ?? false,
+      capa_pos: limitar(args.capaPos ?? existente?.capa_pos ?? 50),
       onboarding_feito: true,
     };
 

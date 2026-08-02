@@ -224,15 +224,15 @@ export function FormularioPerfil({ inicial, modo, onGuardado }: Props) {
       </label>
 
       <label className="mt-4 block">
-        <span className={rotulo}>Nome de utilizador</span>
+        <span className={rotulo}>O seu endereço</span>
         <div className="relative">
           <span className="absolute top-1/2 left-4 -translate-y-1/2 font-body text-[16px] text-muted-foreground">
-            /u/
+            alusiada.pt/
           </span>
           <input
             autoCapitalize="none"
             autoCorrect="off"
-            className={`${campo} pr-10 pl-[3.1rem]`}
+            className={`${campo} pr-10 pl-[7.6rem]`}
             maxLength={24}
             onChange={(e) => setHandle(e.target.value.toLowerCase())}
             placeholder="o-seu-nome"

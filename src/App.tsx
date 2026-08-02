@@ -1,5 +1,11 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useParams,
+} from "react-router-dom";
 import { PlaceholderPage } from "@/components/PlaceholderPage";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
@@ -63,6 +69,12 @@ import TermosPage from "@/pages/sobre/TermosPage";
 
 const queryClient = new QueryClient();
 
+/** Os endereços antigos `/u/nome` continuam a levar ao sítio certo. */
+function PerfilAntigoRedireccionado() {
+  const { handle } = useParams<{ handle: string }>();
+  return <Navigate replace to={`/${handle ?? ""}`} />;
+}
+
 const RE_OSLUSIADAS = /(^|\.)oslusiadas\.pt$/i;
 
 /** Na raiz, o domínio oslusiadas.pt abre directo na obra; o resto, a homepage. */
@@ -114,7 +126,10 @@ const App = () => (
               />
               <Route element={<BemVindoPage />} path="/bem-vindo" />
               <Route element={<ContaPerfilPage />} path="/perfil" />
-              <Route element={<PerfilPublicoPage />} path="/u/:handle" />
+              <Route
+                element={<PerfilAntigoRedireccionado />}
+                path="/u/:handle"
+              />
               <Route element={<MembrosPage />} path="/membros" />
               <Route element={<ManifestoPage />} path="/sobre/manifesto" />
               {/* Homepage navbar/footer aliases — point to existing pages */}
@@ -279,6 +294,14 @@ const App = () => (
               />
               <Route element={<PrivacidadePage />} path="/privacidade" />
               <Route element={<TermosPage />} path="/termos" />
+              {/*
+                O perfil de uma pessoa mora à cabeça do site: alusiada.pt/nome.
+                Fica em último de propósito — o React Router prefere sempre uma
+                rota escrita por extenso a esta, por isso nenhuma página da casa
+                lhe é roubada. Os nomes que colidiriam estão reservados em
+                `convex/perfis.ts` e não podem ser escolhidos por ninguém.
+              */}
+              <Route element={<PerfilPublicoPage />} path="/:handle" />
             </Route>
 
             {/* Admin layout */}

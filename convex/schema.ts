@@ -352,7 +352,7 @@ export default defineSchema({
   // conta».
   profiles: defineTable({
     user_id: v.id("users"),
-    /** Identificador curto para o endereço público: /u/<handle>. */
+    /** Identificador curto para o endereço público: alusiada.pt/<handle>. */
     handle: v.string(),
     nome_publico: v.string(),
     bio: v.optional(v.union(v.string(), v.null())),
@@ -360,9 +360,15 @@ export default defineSchema({
     avatar_id: v.optional(v.union(v.id("_storage"), v.null())),
     /** Fotografia de capa, larga, no topo do perfil. */
     capa_id: v.optional(v.union(v.id("_storage"), v.null())),
+    /**
+     * Que altura da capa fica à vista, de 0 (topo) a 100 (fundo). Uma capa é
+     * sempre mais alta do que a fita onde cabe; sem isto, quem tem o assunto
+     * em cima ou em baixo via-o cortado e não podia fazer nada.
+     */
+    capa_pos: v.optional(v.union(v.number(), v.null())),
     /** Falso enquanto a pessoa não tiver passado pelas boas-vindas. */
     onboarding_feito: v.optional(v.boolean()),
-    /** Quem esconde o perfil deixa de aparecer em /u/<handle>. */
+    /** Quem esconde o perfil deixa de aparecer em alusiada.pt/<handle>. */
     perfil_privado: v.optional(v.boolean()),
   })
     .index("by_handle", ["handle"])

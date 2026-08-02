@@ -326,7 +326,7 @@ export function PainelPopup({
                       {p.autor.handle ? (
                         <Link
                           className="block truncate font-body text-[14px] text-slate-900 hover:underline"
-                          to={`/u/${p.autor.handle}`}
+                          to={`/${p.autor.handle}`}
                         >
                           {p.autor.nome}
                         </Link>
