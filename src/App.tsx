@@ -10,6 +10,7 @@ import { GlobalLayout } from "@/layouts/GlobalLayout";
 import AderirPage from "@/pages/AderirPage";
 import ApoiarPage from "@/pages/ApoiarPage";
 import AssociacaoPage from "@/pages/AssociacaoPage";
+import AzulejosPage from "@/pages/AzulejosPage";
 import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 import AdminDefinicoesPage from "@/pages/admin/AdminDefinicoesPage";
 import AdminLusopediaPage from "@/pages/admin/AdminLusopediaPage";
@@ -28,6 +29,8 @@ import LusopediaPage from "@/pages/arca/LusopediaPage";
 import MemoriasPage from "@/pages/arca/MemoriasPage";
 import NovoArtigoPage from "@/pages/arca/NovoArtigoPage";
 import PanteaoPage from "@/pages/arca/PanteaoPage";
+import AzulejoPage from "@/pages/azulejos/AzulejoPage";
+import RegistarAzulejoPage from "@/pages/azulejos/RegistarAzulejoPage";
 import ContactosPage from "@/pages/ContactosPage";
 import DesportoPage from "@/pages/DesportoPage";
 import DicionarioPage from "@/pages/dicionario/DicionarioPage";
@@ -83,6 +86,12 @@ const App = () => (
               <Route element={<ProgramaPage />} path="/programa" />
               <Route element={<DesportoPage />} path="/desporto" />
               <Route element={<DesportoPage />} path="/programa/desporto" />
+              <Route element={<AzulejosPage />} path="/azulejos" />
+              <Route
+                element={<RegistarAzulejoPage />}
+                path="/azulejos/registar"
+              />
+              <Route element={<AzulejoPage />} path="/azulejos/:id" />
               <Route element={<ApoiarPage />} path="/apoiar" />
               <Route element={<ContactosPage />} path="/contactos" />
               <Route element={<AderirPage />} path="/aderir" />

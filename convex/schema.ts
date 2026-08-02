@@ -343,4 +343,44 @@ export default defineSchema({
     message: v.string(),
     status: v.optional(v.string()),
   }).index("by_email", ["email"]),
+
+  // Painéis azulejares registados pela comunidade.
+  // A unidade é o PAINEL — o conjunto contínuo encomendado de uma vez
+  // (quase sempre a fachada de um prédio), não a peça nem o edifício.
+  azulejos: defineTable({
+    // --- Bloco 1: o que se vê. Obrigatório, qualquer pessoa consegue. ---
+    lat: v.number(),
+    lng: v.number(),
+    /** Precisão do GPS em metros, tal como o telemóvel a reportou. */
+    gps_accuracy: v.optional(v.union(v.number(), v.null())),
+    morada: v.optional(v.union(v.string(), v.null())),
+    concelho: v.optional(v.union(v.string(), v.null())),
+    image_id: v.id("_storage"),
+    estado: v.union(
+      v.literal("integro"),
+      v.literal("danificado"),
+      v.literal("em_risco"),
+      v.literal("desaparecido")
+    ),
+
+    // --- Bloco 2: o que se sabe. Opcional, fica «por confirmar». ---
+    padrao: v.optional(v.union(v.string(), v.null())),
+    epoca: v.optional(v.union(v.string(), v.null())),
+    oficina: v.optional(v.union(v.string(), v.null())),
+    autor: v.optional(v.union(v.string(), v.null())),
+    /** Falso enquanto ninguém com competência validar o bloco 2. */
+    historia_confirmada: v.optional(v.boolean()),
+
+    // --- Autoria e moderação ---
+    author_id: v.id("users"),
+    author_name: v.optional(v.union(v.string(), v.null())),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("approved"),
+      v.literal("rejected")
+    ),
+  })
+    .index("by_status", ["status"])
+    .index("by_author", ["author_id"])
+    .index("by_concelho_status", ["concelho", "status"]),
 });

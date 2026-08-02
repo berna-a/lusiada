@@ -32,6 +32,11 @@ const menus: Record<MenuKey, { label: string; items: DropdownItem[] }> = {
         to: "/arca/obras",
       },
       { label: "Lugares", subtitle: "Lugares de memória", to: "/arca/lugares" },
+      {
+        label: "Azulejos",
+        subtitle: "O mapa do que está nas paredes",
+        to: "/azulejos",
+      },
     ],
   },
   programa: {
