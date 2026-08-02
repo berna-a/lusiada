@@ -344,6 +344,28 @@ export default defineSchema({
     status: v.optional(v.string()),
   }).index("by_email", ["email"]),
 
+  // Perfil público de quem tem conta.
+  //
+  // Fica à parte da tabela `users` (que é do sistema de autenticação e não se
+  // deve tocar) e à parte de `members` (que é a inscrição de sócio, com quotas
+  // e estado). Uma pessoa pode ter perfil sem ser sócia — é o «titular de
+  // conta».
+  profiles: defineTable({
+    user_id: v.id("users"),
+    /** Identificador curto para o endereço público: /u/<handle>. */
+    handle: v.string(),
+    nome_publico: v.string(),
+    bio: v.optional(v.union(v.string(), v.null())),
+    concelho: v.optional(v.union(v.string(), v.null())),
+    avatar_id: v.optional(v.union(v.id("_storage"), v.null())),
+    /** Falso enquanto a pessoa não tiver passado pelas boas-vindas. */
+    onboarding_feito: v.optional(v.boolean()),
+    /** Quem esconde o perfil deixa de aparecer em /u/<handle>. */
+    perfil_privado: v.optional(v.boolean()),
+  })
+    .index("by_handle", ["handle"])
+    .index("by_user", ["user_id"]),
+
   // Painéis azulejares registados pela comunidade.
   // A unidade é o PAINEL — o conjunto contínuo encomendado de uma vez
   // (quase sempre a fachada de um prédio), não a peça nem o edifício.

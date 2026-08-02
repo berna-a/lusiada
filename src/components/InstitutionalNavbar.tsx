@@ -1,4 +1,5 @@
-import { ChevronDown, Menu, X } from "lucide-react";
+import { useConvexAuth } from "convex/react";
+import { ChevronDown, Menu, UserRound, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { SiteControlPanel } from "@/components/SiteControlPanel";
@@ -74,6 +75,7 @@ const menus: Record<MenuKey, { label: string; items: DropdownItem[] }> = {
 };
 
 export function InstitutionalNavbar() {
+  const { isAuthenticated: autenticado } = useConvexAuth();
   const location = useLocation();
   const isLusiadas =
     typeof window !== "undefined" &&
@@ -162,6 +164,19 @@ export function InstitutionalNavbar() {
 
             {/* Right — Junta-te CTA + control panel + Hamburger */}
             <div className="flex items-center gap-2 justify-self-end">
+              {/* Entrar, ou o atalho para o próprio perfil de quem já entrou. */}
+              <Link
+                aria-label={autenticado ? "O meu perfil" : "Entrar"}
+                className={`hidden items-center gap-1.5 rounded-full border px-4 py-2.5 font-display text-[13px] uppercase tracking-[0.14em] transition-colors sm:inline-flex ${
+                  onLight
+                    ? "border-primary/25 text-primary hover:bg-primary/5"
+                    : "border-white/35 text-white hover:bg-white/10"
+                }`}
+                to={autenticado ? "/perfil" : "/entrar"}
+              >
+                <UserRound size={15} strokeWidth={1.75} />
+                {autenticado ? "Perfil" : "Entrar"}
+              </Link>
               <Link
                 className="hidden items-center justify-center rounded-full px-6 py-2.5 font-display text-[14px] text-white uppercase tracking-[0.15em] transition-all hover:brightness-110 sm:inline-flex"
                 style={{

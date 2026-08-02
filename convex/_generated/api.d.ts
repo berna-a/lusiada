@@ -22,6 +22,7 @@ import type * as lusiadas from "../lusiadas.js";
 import type * as memberArea from "../memberArea.js";
 import type * as members from "../members.js";
 import type * as memberships from "../memberships.js";
+import type * as perfis from "../perfis.js";
 import type * as permissions from "../permissions.js";
 import type * as seedLusopedia from "../seedLusopedia.js";
 import type * as seedLusopedia2 from "../seedLusopedia2.js";
@@ -55,6 +56,7 @@ declare const fullApi: ApiFromModules<{
   memberArea: typeof memberArea;
   members: typeof members;
   memberships: typeof memberships;
+  perfis: typeof perfis;
   permissions: typeof permissions;
   seedLusopedia: typeof seedLusopedia;
   seedLusopedia2: typeof seedLusopedia2;

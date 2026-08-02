@@ -32,6 +32,10 @@ import PanteaoPage from "@/pages/arca/PanteaoPage";
 import AzulejoPage from "@/pages/azulejos/AzulejoPage";
 import RegistarAzulejoPage from "@/pages/azulejos/RegistarAzulejoPage";
 import ContactosPage from "@/pages/ContactosPage";
+import BemVindoPage from "@/pages/conta/BemVindoPage";
+import EntrarPage from "@/pages/conta/EntrarPage";
+import ContaPerfilPage from "@/pages/conta/PerfilPage";
+import PerfilPublicoPage from "@/pages/conta/PerfilPublicoPage";
 import DesportoPage from "@/pages/DesportoPage";
 import DicionarioPage from "@/pages/dicionario/DicionarioPage";
 import PalavraPage from "@/pages/dicionario/PalavraPage";
@@ -99,6 +103,18 @@ const App = () => (
               <Route element={<ContactosPage />} path="/contactos" />
               <Route element={<AderirPage />} path="/aderir" />
               <Route element={<MinhaContaPage />} path="/conta" />
+              {/* Contas: entrar, criar, boas-vindas, perfil próprio e público. */}
+              <Route
+                element={<EntrarPage modoInicial="entrar" />}
+                path="/entrar"
+              />
+              <Route
+                element={<EntrarPage modoInicial="criar" />}
+                path="/criar-conta"
+              />
+              <Route element={<BemVindoPage />} path="/bem-vindo" />
+              <Route element={<ContaPerfilPage />} path="/perfil" />
+              <Route element={<PerfilPublicoPage />} path="/u/:handle" />
               <Route element={<MembrosPage />} path="/membros" />
               <Route element={<ManifestoPage />} path="/sobre/manifesto" />
               {/* Homepage navbar/footer aliases — point to existing pages */}
@@ -165,7 +181,7 @@ const App = () => (
               <Route element={<ExplorarPage />} path="/os-lusiadas/explorar" />
               <Route element={<ExplorarPage />} path="/explorar" />
               <Route element={<PerfilPage />} path="/os-lusiadas/perfil" />
-              <Route element={<PerfilPage />} path="/perfil" />
+              <Route element={<ContaPerfilPage />} path="/perfil" />
               <Route
                 element={<ComunidadePage />}
                 path="/os-lusiadas/comunidade"
