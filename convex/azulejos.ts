@@ -211,6 +211,30 @@ export const submit = mutation({
 
 /* ──────────────── Admin ──────────────── */
 
+/** Contagem de painéis pendentes, para o crachá do menu. */
+export const adminPendingCount = query({
+  args: {},
+  handler: async (ctx) => {
+    const user = await getCurrentUser(ctx);
+    const email = user?.email;
+    if (!email) {
+      return 0;
+    }
+    const admin = await ctx.db
+      .query("admins")
+      .withIndex("by_email", (q) => q.eq("email", email.toLowerCase()))
+      .first();
+    if (!admin) {
+      return 0;
+    }
+    const items = await ctx.db
+      .query("azulejos")
+      .withIndex("by_status", (q) => q.eq("status", "pending"))
+      .collect();
+    return items.length;
+  },
+});
+
 /** Lista painéis por estado de moderação. Apenas administradores. */
 export const adminList = query({
   args: { status: v.optional(STATUS) },

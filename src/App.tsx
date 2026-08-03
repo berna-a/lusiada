@@ -18,6 +18,7 @@ import ApoiarPage from "@/pages/ApoiarPage";
 import AssociacaoPage from "@/pages/AssociacaoPage";
 import AzulejoPortuguesPage from "@/pages/AzulejoPortuguesPage";
 import AzulejosPage from "@/pages/AzulejosPage";
+import AdminAzulejosPage from "@/pages/admin/AdminAzulejosPage";
 import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 import AdminDefinicoesPage from "@/pages/admin/AdminDefinicoesPage";
 import AdminLusopediaPage from "@/pages/admin/AdminLusopediaPage";
@@ -317,6 +318,7 @@ const App = () => (
               <Route element={<AdminSociosPage />} path="/admin/socios" />
               <Route element={<AdminLusopediaPage />} path="/admin/lusopedia" />
               <Route element={<AdminModeracaoPage />} path="/admin/moderacao" />
+              <Route element={<AdminAzulejosPage />} path="/admin/azulejos" />
               <Route element={<AdminPortalPage />} path="/admin/portal" />
               <Route
                 element={<AdminDefinicoesPage />}

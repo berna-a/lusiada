@@ -2,6 +2,7 @@ import { useAuthActions } from "@convex-dev/auth/react";
 import { useConvexAuth, useQuery } from "convex/react";
 import {
   BookMarked,
+  Camera,
   ChevronLeft,
   FolderLock,
   Inbox,
@@ -20,6 +21,7 @@ const adminLinks = [
   { label: "Sócios", to: "/admin/socios", icon: Users },
   { label: "Lusopédia", to: "/admin/lusopedia", icon: BookMarked },
   { label: "Moderação", to: "/admin/moderacao", icon: Inbox },
+  { label: "Azulejos", to: "/admin/azulejos", icon: Camera },
   { label: "Portal de Sócios", to: "/admin/portal", icon: FolderLock },
   { label: "Definições", to: "/admin/definicoes", icon: Settings },
 ];
@@ -42,10 +44,12 @@ export function AdminLayout() {
   const pendingCount = useQuery(api.contributions.adminPendingCount);
   const pendingMembers = useQuery(api.memberships.adminPendingMembersCount);
   const pendingArticles = useQuery(api.articles.adminPendingCount);
+  const pendingAzulejos = useQuery(api.azulejos.adminPendingCount);
   const badges: Record<string, number | undefined> = {
     "/admin/moderacao": pendingCount,
     "/admin/socios": pendingMembers,
     "/admin/lusopedia": pendingArticles,
+    "/admin/azulejos": pendingAzulejos,
   };
 
   if (isLoading) {
