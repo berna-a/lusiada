@@ -283,10 +283,22 @@ def main() -> None:
             )
         ]
 
+    for zona, poligonos in mares.items():
+        features.append(
+            {
+                "type": "Feature",
+                "properties": {"zona": zona, "tipo": "mar"},
+                "geometry": simplificar_geometria(
+                    {"type": "MultiPolygon", "coordinates": poligonos}, TOLERANCIA
+                ),
+            }
+        )
+
     # A plataforma estendida chega numa mancha só. Reparte-se pelas três zonas
     # pela mediatriz entre elas — cada pedaço fica com a zona de que está mais
-    # perto — e funde-se no mar dessa zona. Assim o Continente, os Açores e a
-    # Madeira são três áreas e não seis.
+    # perto. Fica em separado da ZEE de propósito: no mapa serve para o rato
+    # saber a que zona pertence aquele pedaço de Atlântico, mas nunca se
+    # desenha nem se acende.
     centros = {z: centro([a for poly in p for a in poly]) for z, p in mares.items()}
     dados = buscar(DGRM.format(CAMADA_EXTENSAO))
     for f in dados["features"]:
@@ -294,33 +306,18 @@ def main() -> None:
         partes = [g["coordinates"]] if g["type"] == "Polygon" else g["coordinates"]
         for zona, aqui in centros.items():
             outros = [c for z, c in centros.items() if z != zona]
-            for parte in partes:
-                pedaco = repartir(parte, aqui, outros)
-                if pedaco:
-                    mares[zona].append(pedaco)
-
-    # A ZEE e a plataforma que lhe fica ao lado descrevem a mesma fronteira das
-    # 200 milhas, cada uma do seu lado. Sem as fundir ficavam duas manchas
-    # translúcidas sobrepostas e a costura via-se. O dissolve cancela a
-    # fronteira comum e devolve um contorno só por zona.
-    for zona, poligonos in mares.items():
-        contornos = [
-            a
-            for a in dissolver([anel for poly in poligonos for anel in poly])
-            if area(a) > AREA_MINIMA
-        ]
-        contornos.sort(key=area, reverse=True)
-        features.append(
-            {
-                "type": "Feature",
-                "properties": {"zona": zona, "tipo": "mar"},
-                "geometry": simplificar_geometria(
-                    {"type": "MultiPolygon", "coordinates": [[a] for a in contornos]},
-                    TOLERANCIA,
-                ),
-            }
-        )
-        print(f"  mar {zona}: {len(contornos)} contornos")
+            pedacos = [p for parte in partes if (p := repartir(parte, aqui, outros))]
+            if pedacos:
+                features.append(
+                    {
+                        "type": "Feature",
+                        "properties": {"zona": zona, "tipo": "extensao"},
+                        "geometry": simplificar_geometria(
+                            {"type": "MultiPolygon", "coordinates": pedacos},
+                            TOLERANCIA,
+                        ),
+                    }
+                )
 
     print("Terra — Natural Earth 10m")
     mundo = buscar(NATURAL_EARTH)
