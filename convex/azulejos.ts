@@ -266,10 +266,43 @@ export const adminList = query({
         lng: a.lng,
         morada: a.morada ?? null,
         concelho: a.concelho ?? null,
+        gpsAccuracy: a.gps_accuracy ?? null,
+        // Bloco 2 — o que se sabe. Quem modera precisa de ver o que foi
+        // afirmado sobre o painel, não só onde ele está.
+        padrao: a.padrao ?? null,
+        epoca: a.epoca ?? null,
+        oficina: a.oficina ?? null,
+        autor: a.autor ?? null,
+        historiaConfirmada: a.historia_confirmada ?? false,
         authorName: a.author_name ?? null,
         imageUrl: await ctx.storage.getUrl(a.image_id),
       }))
     );
+  },
+});
+
+/** Quantos painéis há em cada estado de moderação — para os separadores. */
+export const adminCounts = query({
+  args: {},
+  handler: async (ctx) => {
+    const vazio = { pending: 0, approved: 0, rejected: 0 };
+    const user = await getCurrentUser(ctx);
+    const email = user?.email;
+    if (!email) {
+      return vazio;
+    }
+    const admin = await ctx.db
+      .query("admins")
+      .withIndex("by_email", (q) => q.eq("email", email.toLowerCase()))
+      .first();
+    if (!admin) {
+      return vazio;
+    }
+    const items = await ctx.db.query("azulejos").take(MAX_NO_MAPA);
+    return items.reduce((acc, a) => {
+      acc[a.status] += 1;
+      return acc;
+    }, vazio);
   },
 });
 

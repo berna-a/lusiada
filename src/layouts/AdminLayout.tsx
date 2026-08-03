@@ -118,8 +118,11 @@ export function AdminLayout() {
 
   return (
     <div className="flex min-h-screen">
-      <aside className="flex w-56 flex-col border-r bg-card">
-        <div className="border-b p-4">
+      {/* Ao telemóvel a barra encolhe a uma coluna de ícones: a 375px, os
+          224px de menu não deixavam largura nenhuma ao conteúdo e o painel
+          transbordava para o lado em todas as páginas. */}
+      <aside className="flex w-14 shrink-0 flex-col border-r bg-card md:w-56">
+        <div className="hidden border-b p-4 md:block">
           <h2 className="font-display font-semibold text-foreground text-sm">
             Admin · Lusíada
           </h2>
@@ -133,18 +136,26 @@ export function AdminLayout() {
             const badge = badges[link.to];
             return (
               <Link
-                className={`flex items-center gap-3 px-4 py-2 text-sm transition-colors ${
+                className={`flex items-center justify-center gap-3 py-2 text-sm transition-colors md:justify-start md:px-4 ${
                   active
                     ? "bg-muted font-medium text-foreground"
                     : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
                 }`}
                 key={link.to}
+                title={link.label}
                 to={link.to}
               >
-                <link.icon className="h-4 w-4" />
-                <span>{link.label}</span>
+                <span className="relative">
+                  <link.icon className="h-4 w-4" />
+                  {/* Sem espaço para o número, o que fica é o sinal de que
+                      há algo à espera. */}
+                  {typeof badge === "number" && badge > 0 && (
+                    <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-accent md:hidden" />
+                  )}
+                </span>
+                <span className="hidden md:inline">{link.label}</span>
                 {typeof badge === "number" && badge > 0 && (
-                  <span className="ml-auto grid h-5 min-w-5 place-items-center rounded-full bg-accent px-1.5 font-body text-[11px] text-accent-foreground">
+                  <span className="ml-auto hidden h-5 min-w-5 place-items-center rounded-full bg-accent px-1.5 font-body text-[11px] text-accent-foreground md:grid">
                     {badge}
                   </span>
                 )}
@@ -152,23 +163,27 @@ export function AdminLayout() {
             );
           })}
         </nav>
-        <div className="space-y-2 border-t p-4">
+        <div className="space-y-3 border-t p-4 md:space-y-2">
           <button
-            className="flex items-center gap-1.5 font-body text-muted-foreground text-xs hover:text-foreground"
+            className="flex w-full items-center justify-center gap-1.5 font-body text-muted-foreground text-xs hover:text-foreground md:w-auto md:justify-start"
             onClick={() => signOut()}
+            title="Sair"
             type="button"
           >
-            <LogOut className="h-3 w-3" /> Sair
+            <LogOut className="h-3 w-3" />
+            <span className="hidden md:inline">Sair</span>
           </button>
           <Link
-            className="flex items-center gap-1 font-body text-muted-foreground text-xs hover:text-foreground"
+            className="flex items-center justify-center gap-1 font-body text-muted-foreground text-xs hover:text-foreground md:justify-start"
+            title="Voltar ao site"
             to="/"
           >
-            <ChevronLeft className="h-3 w-3" /> Voltar ao site
+            <ChevronLeft className="h-3 w-3" />
+            <span className="hidden md:inline">Voltar ao site</span>
           </Link>
         </div>
       </aside>
-      <main className="flex-1 p-6 md:p-10">
+      <main className="min-w-0 flex-1 p-5 md:p-10">
         <Outlet />
       </main>
     </div>
