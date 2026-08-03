@@ -27,10 +27,20 @@ export const COBALTO = {
   tinta: "#0C2A4F",
 } as const;
 
-/** Cores dos painéis. Discos com halo branco — legíveis no mar e na terra. */
+/**
+ * Cores dos painéis. Discos com halo branco — legíveis no mar e na terra.
+ *
+ * O «danificado» não é o ocre da casa por acidente evitado: era-o. O ocre de
+ * destaque da Associação (`--accent`, usado no botão Junta-te e em toda a
+ * parte) e o ocre de um painel danificado liam-se como a mesma cor. Numa
+ * colecção que vai crescer — castelos, património, o que vier a seguir — uma
+ * cor tem de querer dizer sempre a mesma coisa. O danificado passou a um
+ * castanho terroso, mais escuro e mais surdo: lê-se como desgaste, não como
+ * botão.
+ */
 export const COR_ESTADO = {
   integro: "#1E4C8A",
-  danificado: "#C98A2B",
+  danificado: "#8B5E3A",
   em_risco: "#C2410C",
   desaparecido: "#93A3B3",
 } as const;
@@ -38,14 +48,13 @@ export const COR_ESTADO = {
 /**
  * Sobre que tinta se escreve o nome de cada estado.
  *
- * Medido, não escolhido a olho: branco sobre o ocre do «danificado» dá 2,9 de
- * contraste e sobre o cinzento do «desaparecido» dá 2,6 — o mínimo legível é
- * 4,5. Ao sol, na rua, esses dois desapareciam. Com tinta escura sobem para
- * 4,9 e 5,6.
+ * Medido, não escolhido a olho: branco sobre o cinzento do «desaparecido» dá
+ * 2,6 de contraste — o mínimo legível é 4,5. Ao sol, na rua, desaparecia
+ * mesmo. Com tinta escura sobe para 5,6.
  */
 export const TINTA_DO_ESTADO = {
   integro: "#FFFFFF",
-  danificado: "#2A1B05",
+  danificado: "#FFFFFF",
   em_risco: "#FFFFFF",
   desaparecido: "#0C2A4F",
 } as const;

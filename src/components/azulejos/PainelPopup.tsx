@@ -9,14 +9,10 @@ import {
   Send,
   X,
 } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  COBALTO,
-  COR_ESTADO,
-  type Estado,
-  ROTULO_ESTADO,
-} from "@/lib/azulejos/mapa-estilo";
+import { SeloEstado } from "@/components/azulejos/SeloEstado";
+import { COBALTO, type Estado } from "@/lib/azulejos/mapa-estilo";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 
@@ -41,13 +37,13 @@ function Retrato({
 }) {
   return (
     <span
-      className="grid shrink-0 place-items-center overflow-hidden rounded-full bg-slate-200"
+      className="grid shrink-0 place-items-center overflow-hidden rounded-full bg-border"
       style={{ width: tamanho, height: tamanho }}
     >
       {url ? (
         <img alt="" className="h-full w-full object-cover" src={url} />
       ) : (
-        <span className="font-body text-[12px] text-slate-500">
+        <span className="font-body text-[12px] text-muted-foreground">
           {nome.slice(0, 1).toUpperCase()}
         </span>
       )}
@@ -67,8 +63,8 @@ function Compor({ azulejoId }: { azulejoId: Id<"azulejos"> }) {
 
   if (!isAuthenticated) {
     return (
-      <div className="rounded-2xl border border-slate-200 border-dashed bg-white p-4 text-center">
-        <p className="font-body text-[14px] text-slate-600">
+      <div className="rounded-2xl border border-border border-dashed bg-white p-4 text-center">
+        <p className="font-body text-[14px] text-foreground/75">
           Entre para juntar a sua fotografia ou memória.
         </p>
         <button
@@ -115,16 +111,16 @@ function Compor({ azulejoId }: { azulejoId: Id<"azulejos"> }) {
   };
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-3">
+    <div className="rounded-2xl border border-border bg-white p-3">
       <textarea
-        className="w-full resize-none rounded-xl bg-slate-50 px-3.5 py-2.5 font-body text-[16px] text-slate-800 outline-none placeholder:text-slate-400"
+        className="w-full resize-none rounded-xl bg-secondary px-3.5 py-2.5 font-body text-[16px] text-foreground outline-none placeholder:text-muted-foreground/70"
         onChange={(e) => setTexto(e.target.value)}
         placeholder="Uma fotografia sua, ou o que sabe deste painel…"
         rows={2}
         value={texto}
       />
       <div className="mt-2 flex items-center gap-2">
-        <label className="flex cursor-pointer items-center gap-1.5 rounded-lg px-2.5 py-1.5 font-body text-[13px] text-slate-500 transition-colors hover:bg-slate-100">
+        <label className="flex cursor-pointer items-center gap-1.5 rounded-lg px-2.5 py-1.5 font-body text-[13px] text-muted-foreground transition-colors hover:bg-secondary">
           <input
             accept="image/*"
             className="hidden"
@@ -136,7 +132,7 @@ function Compor({ azulejoId }: { azulejoId: Id<"azulejos"> }) {
         </label>
         {foto && (
           <button
-            className="font-body text-[13px] text-slate-400 hover:text-slate-700"
+            className="font-body text-[13px] text-muted-foreground/70 hover:text-foreground/85"
             onClick={() => setFoto(null)}
             type="button"
           >
@@ -186,15 +182,85 @@ export function PainelPopup({
 
   const estado = (painel?.estado ?? "integro") as Estado;
 
+  // Fecha-se arrastando para baixo, como a folha do mapa por trás dele — o
+  // mesmo gesto, a mesma mão. O X do canto fica, mas para quem segura o
+  // telemóvel com uma mão só, fora do alcance do polegar; a pega não.
+  const [arrasto, setArrasto] = useState(0);
+  const inicio = useRef<number | null>(null);
+  const arrastou = useRef(false);
+  const LIMIAR_FECHO = 90;
+  const TREMOR = 8;
+
+  const aoDescer = useCallback((e: React.PointerEvent) => {
+    inicio.current = e.clientY;
+    arrastou.current = false;
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+  }, []);
+  const aoMover = useCallback((e: React.PointerEvent) => {
+    if (inicio.current === null) {
+      return;
+    }
+    const delta = e.clientY - inicio.current;
+    if (Math.abs(delta) > TREMOR) {
+      arrastou.current = true;
+    }
+    setArrasto(Math.max(0, delta));
+  }, []);
+  const aoLargar = useCallback(
+    (e: React.PointerEvent) => {
+      if (inicio.current === null) {
+        return;
+      }
+      const fechou = e.clientY - inicio.current > LIMIAR_FECHO;
+      inicio.current = null;
+      if (fechou) {
+        onFechar();
+        return;
+      }
+      // Arrastou mas não o suficiente: volta ao lugar. `arrastou` continua
+      // marcado, para o `click` sintético que se segue não fechar por engano.
+      setArrasto(0);
+    },
+    [onFechar]
+  );
+  const aoClicarPega = useCallback(() => {
+    if (arrastou.current) {
+      arrastou.current = false;
+      return;
+    }
+    onFechar();
+  }, [onFechar]);
+
   return (
     <aside
       aria-label="Painel de azulejo"
       className="pointer-events-auto absolute inset-x-0 bottom-0 z-30 flex max-h-[85%] flex-col overflow-hidden rounded-t-[28px] bg-white shadow-[0_-8px_44px_-8px_rgba(18,58,107,0.4)] md:inset-y-4 md:right-auto md:left-4 md:max-h-none md:w-[420px] md:rounded-3xl"
-      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      style={{
+        paddingBottom: "env(safe-area-inset-bottom)",
+        transform: arrasto ? `translateY(${arrasto}px)` : undefined,
+        transition: arrasto ? "none" : "transform 220ms ease",
+      }}
     >
+      {/* Pega — arrastar para baixo fecha, como a folha do mapa por trás. */}
       <button
         aria-label="Fechar"
-        className="absolute top-3 right-3 z-10 grid h-9 w-9 place-items-center rounded-full bg-black/45 text-white backdrop-blur-md transition-transform active:scale-95"
+        className="flex w-full shrink-0 cursor-grab touch-none items-center justify-center pt-3 pb-1 active:cursor-grabbing md:hidden"
+        onClick={aoClicarPega}
+        onPointerCancel={aoLargar}
+        onPointerDown={aoDescer}
+        onPointerMove={aoMover}
+        onPointerUp={aoLargar}
+        type="button"
+      >
+        <span
+          aria-hidden="true"
+          className="block h-1.5 w-11 rounded-full bg-border"
+        />
+      </button>
+
+      <button
+        aria-label="Fechar"
+        className="absolute top-3 right-3 z-10 grid h-11 w-11 place-items-center rounded-full bg-black/45 text-white backdrop-blur-md transition-transform active:scale-95"
         onClick={onFechar}
         type="button"
       >
@@ -212,7 +278,7 @@ export function PainelPopup({
 
       {painel === null && (
         <div className="p-8 text-center">
-          <p className="font-body text-[15px] text-slate-600">
+          <p className="font-body text-[15px] text-foreground/75">
             Este painel já não está disponível.
           </p>
         </div>
@@ -229,12 +295,7 @@ export function PainelPopup({
           )}
 
           <div className="px-5 pt-4 pb-5">
-            <span
-              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-body text-[11px] text-white uppercase tracking-[0.1em]"
-              style={{ backgroundColor: COR_ESTADO[estado] }}
-            >
-              {ROTULO_ESTADO[estado]}
-            </span>
+            <SeloEstado estado={estado} />
             <h2
               className="mt-3 font-display text-[22px] leading-tight"
               style={{ color: COBALTO.tinta }}
@@ -242,12 +303,12 @@ export function PainelPopup({
               {painel.morada ?? painel.concelho ?? "Painel de azulejo"}
             </h2>
             {painel.concelho && (
-              <p className="mt-1.5 flex items-center gap-1.5 font-body text-[14px] text-slate-500">
+              <p className="mt-1.5 flex items-center gap-1.5 font-body text-[14px] text-muted-foreground">
                 <MapPin size={14} strokeWidth={1.75} />
                 {painel.concelho}
               </p>
             )}
-            <p className="mt-3 font-body text-[13px] text-slate-500 leading-relaxed">
+            <p className="mt-3 font-body text-[13px] text-muted-foreground leading-relaxed">
               Registado a {dataCurta(painel.createdAt)}
               {painel.authorName ? ` por ${painel.authorName}` : ""}.
             </p>
@@ -269,7 +330,7 @@ export function PainelPopup({
               >
                 Contributos
               </h3>
-              <div className="flex gap-1 rounded-full bg-slate-100 p-0.5">
+              <div className="flex gap-1 rounded-full bg-secondary p-0.5">
                 {(
                   [
                     ["popular", "Populares"],
@@ -279,8 +340,8 @@ export function PainelPopup({
                   <button
                     className={`rounded-full px-3 py-1 font-body text-[12px] transition-colors ${
                       ordem === v
-                        ? "bg-white text-slate-900 shadow-sm"
-                        : "text-slate-500"
+                        ? "bg-white text-foreground shadow-sm"
+                        : "text-muted-foreground"
                     }`}
                     key={v}
                     onClick={() => setOrdem(v)}
@@ -300,7 +361,7 @@ export function PainelPopup({
               <div className="mt-4 space-y-3">
                 {[0, 1].map((i) => (
                   <div
-                    className="h-20 animate-pulse rounded-2xl bg-slate-100"
+                    className="h-20 animate-pulse rounded-2xl bg-secondary"
                     key={i}
                   />
                 ))}
@@ -308,7 +369,7 @@ export function PainelPopup({
             )}
 
             {feed?.length === 0 && (
-              <p className="mt-5 font-body text-[14px] text-slate-500 leading-relaxed">
+              <p className="mt-5 font-body text-[14px] text-muted-foreground leading-relaxed">
                 Ainda ninguém acrescentou nada. Se passar por aqui, tire uma
                 fotografia — de outro ângulo, ou de outro dia.
               </p>
@@ -317,7 +378,7 @@ export function PainelPopup({
             <ul className="mt-4 space-y-4">
               {(feed ?? []).map((p) => (
                 <li
-                  className="rounded-2xl border border-slate-200 bg-white p-3.5"
+                  className="rounded-2xl border border-border bg-white p-3.5"
                   key={p._id}
                 >
                   <div className="flex items-center gap-2.5">
@@ -325,17 +386,17 @@ export function PainelPopup({
                     <div className="min-w-0 flex-1">
                       {p.autor.handle ? (
                         <Link
-                          className="block truncate font-body text-[14px] text-slate-900 hover:underline"
+                          className="block truncate font-body text-[14px] text-foreground hover:underline"
                           to={`/${p.autor.handle}`}
                         >
                           {p.autor.nome}
                         </Link>
                       ) : (
-                        <span className="block truncate font-body text-[14px] text-slate-900">
+                        <span className="block truncate font-body text-[14px] text-foreground">
                           {p.autor.nome}
                         </span>
                       )}
-                      <span className="font-body text-[12px] text-slate-400">
+                      <span className="font-body text-[12px] text-muted-foreground/70">
                         {dataCurta(p.criadoEm)}
                       </span>
                     </div>
@@ -343,7 +404,7 @@ export function PainelPopup({
                       className={`flex items-center gap-1.5 rounded-full px-2.5 py-1.5 font-body text-[13px] transition-colors ${
                         p.jaVotei
                           ? "bg-red-50 text-red-600"
-                          : "text-slate-400 hover:bg-slate-100"
+                          : "text-muted-foreground/70 hover:bg-secondary"
                       }`}
                       onClick={() => votar({ postId: p._id })}
                       type="button"
@@ -364,7 +425,7 @@ export function PainelPopup({
                     />
                   )}
                   {p.body && (
-                    <p className="mt-2.5 font-body text-[15px] text-slate-700 leading-relaxed">
+                    <p className="mt-2.5 font-body text-[15px] text-foreground/85 leading-relaxed">
                       {p.body}
                     </p>
                   )}

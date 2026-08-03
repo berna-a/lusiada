@@ -158,13 +158,13 @@ async function procurarMorada(lat: number, lng: number) {
 function BarraTopo({ titulo }: { titulo: string }) {
   return (
     <header
-      className="sticky top-0 z-30 border-slate-200/70 border-b bg-white/85 backdrop-blur-xl backdrop-saturate-150"
+      className="sticky top-0 z-30 border-border/70 border-b bg-white/85 backdrop-blur-xl backdrop-saturate-150"
       style={{ paddingTop: "env(safe-area-inset-top)" }}
     >
       <div className="mx-auto flex max-w-[560px] items-center gap-3 px-4 py-3">
         <Link
           aria-label="Voltar ao mapa"
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-800"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
           to="/mapa"
         >
           <ArrowLeft size={18} strokeWidth={1.75} />
@@ -200,7 +200,7 @@ function PedirSessao() {
         >
           Entre para registar
         </p>
-        <p className="mx-auto mt-3 max-w-[300px] font-body text-[14px] text-slate-600 leading-relaxed">
+        <p className="mx-auto mt-3 max-w-[300px] font-body text-[14px] text-foreground/75 leading-relaxed">
           Ver o mapa não exige nada. Para registar um painel é preciso ter conta
           — é grátis e leva vinte segundos.
         </p>
@@ -247,6 +247,49 @@ function Formulario() {
     },
     [preVisual]
   );
+
+  // Há uma fotografia por enviar, ainda não submetida.
+  const temRascunho = Boolean(ficheiro) && !feito;
+
+  // Fechar o separador ou actualizar a página. O gesto de recuar do telemóvel
+  // é tratado à parte, abaixo — o `beforeunload` nem sempre dispara para ele.
+  useEffect(() => {
+    if (!temRascunho) {
+      return;
+    }
+    const aoTentarSair = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", aoTentarSair);
+    return () => window.removeEventListener("beforeunload", aoTentarSair);
+  }, [temRascunho]);
+
+  // O gesto de recuar — deslizar da margem, ou o botão de trás do telemóvel.
+  // Sem isto, o único aviso do browser é para fechar a aba, e o gesto mais
+  // comum de todos, o de recuar a meio do registo, levava a fotografia com
+  // ele sem perguntar nada.
+  useEffect(() => {
+    if (!temRascunho) {
+      return;
+    }
+    // Uma páragem extra no histórico: o primeiro recuar cai nela, não na
+    // página anterior a sério — dá tempo a perguntar antes de sair.
+    window.history.pushState({ rascunhoAzulejo: true }, "", location.href);
+    const aoRecuar = () => {
+      const sair = window.confirm(
+        "Ainda não enviou o painel. Sair sem guardar a fotografia?"
+      );
+      if (sair) {
+        window.removeEventListener("popstate", aoRecuar);
+        window.history.back();
+        return;
+      }
+      window.history.pushState({ rascunhoAzulejo: true }, "", location.href);
+    };
+    window.addEventListener("popstate", aoRecuar);
+    return () => window.removeEventListener("popstate", aoRecuar);
+  }, [temRascunho]);
 
   /**
    * Obter o sítio, à prova do iPhone.
@@ -438,7 +481,7 @@ function Formulario() {
           >
             Ficou registado
           </p>
-          <p className="mx-auto mt-3 max-w-[320px] font-body text-[14px] text-slate-600 leading-relaxed">
+          <p className="mx-auto mt-3 max-w-[320px] font-body text-[14px] text-foreground/75 leading-relaxed">
             A data e o sítio já ficaram guardados — é isso que faz do registo
             uma prova. Entra no mapa depois de uma revisão.
           </p>
@@ -451,7 +494,7 @@ function Formulario() {
             Registar outro
           </button>
           <Link
-            className="mt-3 block w-full rounded-2xl border border-slate-200 bg-white py-4 font-body text-[15px] text-slate-700"
+            className="mt-3 block w-full rounded-2xl border border-border bg-white py-4 font-body text-[15px] text-foreground/85"
             to="/mapa"
           >
             Ver o mapa
@@ -465,9 +508,9 @@ function Formulario() {
     local?.accuracy != null && local.accuracy > PRECISAO_AVISO_M;
   const completo = Boolean(ficheiro && local && estado);
   const campo =
-    "w-full rounded-xl border border-slate-200 bg-white px-4 py-3 font-body text-[16px] text-slate-800 outline-none transition-colors focus:border-slate-400";
+    "w-full rounded-xl border border-border bg-white px-4 py-3 font-body text-[16px] text-foreground outline-none transition-colors focus:border-accent/50";
   const rotulo =
-    "font-body text-[11px] text-slate-400 uppercase tracking-[0.14em]";
+    "font-body text-[11px] text-muted-foreground/70 uppercase tracking-[0.14em]";
 
   if (aMarcarNoMapa) {
     return (
@@ -535,7 +578,7 @@ function Formulario() {
           >
             Fotografar o painel
           </span>
-          <span className="font-body text-[13px] text-slate-500">
+          <span className="font-body text-[13px] text-muted-foreground">
             O conjunto, não o pormenor
           </span>
         </button>
@@ -544,7 +587,7 @@ function Formulario() {
       {/* 2 — o sítio */}
       <div className="mt-4">
         {local ? (
-          <div className="rounded-2xl border border-slate-200 bg-white p-4">
+          <div className="rounded-2xl border border-border bg-white p-4">
             <div className="flex items-center gap-2.5">
               <span
                 className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full"
@@ -552,16 +595,16 @@ function Formulario() {
               >
                 <Check className="h-4 w-4 text-white" strokeWidth={3} />
               </span>
-              <p className="flex-1 font-body text-[14px] text-slate-800">
+              <p className="flex-1 font-body text-[14px] text-foreground">
                 Sítio obtido
-                <span className="ml-1.5 text-slate-400">
+                <span className="ml-1.5 text-muted-foreground/70">
                   {local.accuracy === null
                     ? "marcado à mão"
                     : `±${Math.round(local.accuracy)} m`}
                 </span>
               </p>
               <button
-                className="font-body text-[13px] text-slate-400 underline underline-offset-4"
+                className="-my-2.5 py-2.5 pl-2 font-body text-[13px] text-muted-foreground/70 underline underline-offset-4"
                 onClick={localizar}
                 type="button"
               >
@@ -599,7 +642,7 @@ function Formulario() {
           </div>
         ) : (
           <button
-            className="flex w-full items-center justify-center gap-2.5 rounded-2xl border border-slate-200 bg-white py-4 font-body text-[15px] text-slate-700 transition-transform active:scale-[0.99]"
+            className="flex w-full items-center justify-center gap-2.5 rounded-2xl border border-border bg-white py-4 font-body text-[15px] text-foreground/85 transition-transform active:scale-[0.99]"
             disabled={aLocalizar}
             onClick={localizar}
             type="button"
@@ -628,7 +671,7 @@ function Formulario() {
             colabora, e ficar sem poder registar é pior do que um ponto posto
             à mão — que fica marcado como tal. */}
         <button
-          className="mt-2.5 w-full font-body text-[13px] text-slate-500 underline underline-offset-4"
+          className="mt-1 w-full py-2.5 font-body text-[13px] text-muted-foreground underline underline-offset-4"
           onClick={() => setAMarcarNoMapa(true)}
           type="button"
         >
@@ -644,7 +687,7 @@ function Formulario() {
           return (
             <button
               className={`rounded-2xl border-2 px-4 py-3.5 text-left transition-all ${
-                activo ? "shadow-sm" : "border-slate-200 bg-white"
+                activo ? "shadow-sm" : "border-border bg-white"
               }`}
               key={e.valor}
               onClick={() => setEstado(e.valor)}
@@ -664,11 +707,11 @@ function Formulario() {
                   className="block h-2.5 w-2.5 rounded-full"
                   style={{ backgroundColor: COR_ESTADO[e.valor] }}
                 />
-                <span className="font-body text-[15px] text-slate-900">
+                <span className="font-body text-[15px] text-foreground">
                   {ROTULO_ESTADO[e.valor]}
                 </span>
               </span>
-              <span className="mt-0.5 block font-body text-[12px] text-slate-500">
+              <span className="mt-0.5 block font-body text-[12px] text-muted-foreground">
                 {e.nota}
               </span>
             </button>
@@ -678,20 +721,20 @@ function Formulario() {
 
       {/* 4 — o que se sabe (opcional) */}
       <button
-        className="mt-6 flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3.5"
+        className="mt-6 flex w-full items-center justify-between rounded-2xl border border-border bg-white px-4 py-3.5"
         onClick={() => setVerHistoria((v) => !v)}
         type="button"
       >
         <span className="text-left">
-          <span className="block font-body text-[15px] text-slate-800">
+          <span className="block font-body text-[15px] text-foreground">
             Sei alguma coisa sobre este painel
           </span>
-          <span className="block font-body text-[12px] text-slate-500">
+          <span className="block font-body text-[12px] text-muted-foreground">
             Opcional · fica «por confirmar»
           </span>
         </span>
         <ChevronDown
-          className={`h-5 w-5 shrink-0 text-slate-400 transition-transform ${verHistoria ? "rotate-180" : ""}`}
+          className={`h-5 w-5 shrink-0 text-muted-foreground/70 transition-transform ${verHistoria ? "rotate-180" : ""}`}
         />
       </button>
       {verHistoria && (
@@ -717,7 +760,7 @@ function Formulario() {
 
       {/* Barra de envio — fixa, sempre ao alcance do polegar. */}
       <div
-        className="fixed inset-x-0 bottom-0 z-30 border-slate-200/70 border-t bg-white/90 px-5 pt-3 backdrop-blur-xl"
+        className="fixed inset-x-0 bottom-0 z-30 border-border/70 border-t bg-white/90 px-5 pt-3 backdrop-blur-xl"
         style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 0.75rem)" }}
       >
         <div className="mx-auto max-w-[560px]">
@@ -729,7 +772,7 @@ function Formulario() {
           {/* A razão vem antes do botão apagado, e num cinzento que se lê:
               estava por baixo, a 12px no cinzento mais fraco do ecrã. */}
           {!completo && (
-            <p className="mb-2.5 text-center font-body text-[13.5px] text-slate-600">
+            <p className="mb-2.5 text-center font-body text-[13.5px] text-foreground/75">
               {ficheiro
                 ? local
                   ? "Falta dizer em que estado está o painel"
@@ -761,7 +804,7 @@ export default function RegistarAzulejoPage() {
   const { isAuthenticated, isLoading } = useConvexAuth();
 
   return (
-    <main className="min-h-dvh bg-slate-50">
+    <main className="min-h-dvh bg-secondary">
       <Seo
         description="Fotografe um painel de azulejo da sua rua. A localização vem do telemóvel e o registo fica datado."
         noindex

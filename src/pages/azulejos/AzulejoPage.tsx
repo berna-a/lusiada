@@ -1,10 +1,10 @@
 import { useQuery } from "convex/react";
 import { ArrowLeft, Camera, Loader2, MapPin } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
+import { SeloEstado } from "@/components/azulejos/SeloEstado";
 import { Seo } from "@/components/Seo";
 import {
   COBALTO,
-  COR_ESTADO,
   type Estado,
   ROTULO_ESTADO,
 } from "@/lib/azulejos/mapa-estilo";
@@ -25,7 +25,7 @@ export default function AzulejoPage() {
 
   if (painel === undefined) {
     return (
-      <main className="flex min-h-dvh items-center justify-center bg-slate-50">
+      <main className="flex min-h-dvh items-center justify-center bg-secondary">
         <Loader2
           className="h-6 w-6 animate-spin"
           style={{ color: COBALTO.forte }}
@@ -50,7 +50,7 @@ export default function AzulejoPage() {
   ].filter((c) => Boolean(c.v));
 
   return (
-    <main className="min-h-dvh bg-slate-50">
+    <main className="min-h-dvh bg-secondary">
       <Seo
         description={`Painel de azulejo${localizacao ? ` em ${localizacao}` : ""}. Estado: ${ROTULO_ESTADO[estado]}. Registo datado e geolocalizado.`}
         image={painel.imageUrl}
@@ -78,13 +78,8 @@ export default function AzulejoPage() {
         </Link>
       </div>
 
-      <div className="mx-auto -mt-6 max-w-[560px] rounded-t-[28px] bg-slate-50 px-5 pt-7 pb-16">
-        <span
-          className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 font-body text-[12px] text-white"
-          style={{ backgroundColor: COR_ESTADO[estado] }}
-        >
-          {ROTULO_ESTADO[estado]}
-        </span>
+      <div className="mx-auto -mt-6 max-w-[560px] rounded-t-[28px] bg-secondary px-5 pt-7 pb-16">
+        <SeloEstado estado={estado} />
         <h1
           className="mt-4 font-display text-[27px] leading-[1.15]"
           style={{ color: COBALTO.tinta }}
@@ -92,7 +87,7 @@ export default function AzulejoPage() {
           {titulo}
         </h1>
         {painel.concelho && painel.morada && (
-          <p className="mt-2 flex items-center gap-1.5 font-body text-[15px] text-slate-500">
+          <p className="mt-2 flex items-center gap-1.5 font-body text-[15px] text-muted-foreground">
             <MapPin size={15} strokeWidth={1.75} />
             {painel.concelho}
           </p>
@@ -109,9 +104,9 @@ export default function AzulejoPage() {
           >
             O registo
           </p>
-          <p className="mt-2 font-body text-[15px] text-slate-700 leading-relaxed">
+          <p className="mt-2 font-body text-[15px] text-foreground/85 leading-relaxed">
             Fotografado e localizado a{" "}
-            <strong className="text-slate-900">
+            <strong className="text-foreground">
               {dataPt(painel.createdAt)}
             </strong>
             {painel.authorName ? ` por ${painel.authorName}` : ""}. As
@@ -129,7 +124,7 @@ export default function AzulejoPage() {
                 O que se sabe
               </h2>
               {!painel.historiaConfirmada && (
-                <span className="rounded-full border border-slate-200 px-2.5 py-1 font-body text-[11px] text-slate-500 uppercase tracking-[0.1em]">
+                <span className="rounded-full border border-border px-2.5 py-1 font-body text-[11px] text-muted-foreground uppercase tracking-[0.1em]">
                   Por confirmar
                 </span>
               )}
@@ -137,20 +132,20 @@ export default function AzulejoPage() {
             <dl className="mt-4 grid gap-3 sm:grid-cols-2">
               {historia.map((c) => (
                 <div
-                  className="rounded-xl border border-slate-200 bg-white px-4 py-3"
+                  className="rounded-xl border border-border bg-white px-4 py-3"
                   key={c.r}
                 >
-                  <dt className="font-body text-[11px] text-slate-400 uppercase tracking-[0.14em]">
+                  <dt className="font-body text-[11px] text-muted-foreground/70 uppercase tracking-[0.14em]">
                     {c.r}
                   </dt>
-                  <dd className="mt-1 font-body text-[15px] text-slate-800">
+                  <dd className="mt-1 font-body text-[15px] text-foreground">
                     {c.v}
                   </dd>
                 </div>
               ))}
             </dl>
             {!painel.historiaConfirmada && (
-              <p className="mt-4 font-body text-[13px] text-slate-500 leading-relaxed">
+              <p className="mt-4 font-body text-[13px] text-muted-foreground leading-relaxed">
                 Isto foi escrito por quem registou o painel e ainda não foi
                 validado. O que se vê — a fotografia, o sítio, a data — é
                 verificável; o que se afirma sobre história, ainda não.
@@ -169,7 +164,7 @@ export default function AzulejoPage() {
             Registar outro painel
           </Link>
           <Link
-            className="rounded-2xl border border-slate-200 bg-white py-4 text-center font-body text-[15px] text-slate-700"
+            className="rounded-2xl border border-border bg-white py-4 text-center font-body text-[15px] text-foreground/85"
             to="/mapa"
           >
             Ver o mapa

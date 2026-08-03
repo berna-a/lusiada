@@ -141,7 +141,7 @@ export function FolhaInferior({
         >
           <span
             aria-hidden="true"
-            className="block h-1.5 w-11 rounded-full bg-slate-300"
+            className="block h-1.5 w-11 rounded-full bg-border"
           />
         </button>
 
@@ -151,7 +151,7 @@ export function FolhaInferior({
             gesto que toda a gente tenta primeiro. */}
         {!aberta && (
           <button
-            className="shrink-0 px-6 pt-2.5 pb-3 text-center font-body text-[13px] text-slate-500 underline decoration-slate-300 underline-offset-4 transition-colors hover:text-slate-700"
+            className="shrink-0 px-6 pt-2.5 pb-3 text-center font-body text-[13px] text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground/85"
             onClick={() => setAberta(true)}
             type="button"
           >

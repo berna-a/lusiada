@@ -67,7 +67,7 @@ export function EscolherNoMapa({ inicio, onConfirmar, onCancelar }: Props) {
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-white">
       <header
-        className="shrink-0 border-slate-200 border-b px-5 py-3"
+        className="shrink-0 border-border border-b px-5 py-3"
         style={{ paddingTop: "calc(env(safe-area-inset-top) + 0.75rem)" }}
       >
         <p
@@ -76,7 +76,7 @@ export function EscolherNoMapa({ inicio, onConfirmar, onCancelar }: Props) {
         >
           MARCAR O SÍTIO
         </p>
-        <p className="mt-1 font-body text-[13px] text-slate-500">
+        <p className="mt-1 font-body text-[13px] text-muted-foreground">
           Arraste o mapa até a mira ficar sobre o painel.
         </p>
       </header>
@@ -105,7 +105,7 @@ export function EscolherNoMapa({ inicio, onConfirmar, onCancelar }: Props) {
       </div>
 
       <div
-        className="shrink-0 border-slate-200 border-t px-5 pt-3"
+        className="shrink-0 border-border border-t px-5 pt-3"
         style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 0.75rem)" }}
       >
         <button
@@ -117,7 +117,7 @@ export function EscolherNoMapa({ inicio, onConfirmar, onCancelar }: Props) {
           Confirmar este sítio
         </button>
         <button
-          className="mt-2 w-full rounded-2xl border border-slate-200 py-3.5 font-body text-[15px] text-slate-600"
+          className="mt-2 w-full rounded-2xl border border-border py-3.5 font-body text-[15px] text-foreground/75"
           onClick={onCancelar}
           type="button"
         >

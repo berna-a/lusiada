@@ -1,4 +1,9 @@
-import type { Map as MapLibreMap, MapMouseEvent, Point } from "maplibre-gl";
+import type {
+  Map as MapLibreMap,
+  MapMouseEvent,
+  MapTouchEvent,
+  Point,
+} from "maplibre-gl";
 import { COBALTO } from "./mapa-estilo";
 import { charneira } from "./zonas";
 
@@ -189,7 +194,7 @@ export function instalarProvincias(
     return m.queryRenderedFeatures(ponto, { layers: [AREA] })[0] ?? null;
   };
 
-  const aoMover = (e: MapMouseEvent) => {
+  const aoMover = (e: MapMouseEvent | MapTouchEvent) => {
     const f = provinciaEm(e.point);
     const id = f?.properties?.provincia;
     realcar(typeof id === "string" ? id : null);
@@ -201,6 +206,7 @@ export function instalarProvincias(
   let arrastou = false;
   const aoArrastar = () => {
     arrastou = true;
+    realcar(null);
   };
 
   const aoClicar = (e: MapMouseEvent) => {
@@ -216,9 +222,35 @@ export function instalarProvincias(
     }
   };
 
+  // A mesma regra das zonas: ao pousar o dedo acende, ao afastar antes de
+  // largar cancela, ao largar sem arrastar é o `click` do browser que entra.
+  const TREMOR_DO_DEDO = 10;
+  let pousoDoDedo: Point | null = null;
+  const aoPousarDedo = (e: MapTouchEvent) => {
+    pousoDoDedo = e.point;
+    aoMover(e);
+  };
+  const aoMoverDedo = (e: MapTouchEvent) => {
+    if (
+      pousoDoDedo &&
+      Math.hypot(e.point.x - pousoDoDedo.x, e.point.y - pousoDoDedo.y) >
+        TREMOR_DO_DEDO
+    ) {
+      pousoDoDedo = null;
+      aoSair();
+    }
+  };
+  const aoLargarDedo = () => {
+    pousoDoDedo = null;
+  };
+
   m.on("resize", escalar);
   m.on("mousemove", aoMover);
   m.on("mouseout", aoSair);
+  m.on("touchstart", aoPousarDedo);
+  m.on("touchmove", aoMoverDedo);
+  m.on("touchend", aoLargarDedo);
+  m.on("touchcancel", aoLargarDedo);
   m.on("dragstart", aoArrastar);
   m.on("click", aoClicar);
 
@@ -227,6 +259,10 @@ export function instalarProvincias(
     m.off("resize", escalar);
     m.off("mousemove", aoMover);
     m.off("mouseout", aoSair);
+    m.off("touchstart", aoPousarDedo);
+    m.off("touchmove", aoMoverDedo);
+    m.off("touchend", aoLargarDedo);
+    m.off("touchcancel", aoLargarDedo);
     m.off("dragstart", aoArrastar);
     m.off("click", aoClicar);
   };

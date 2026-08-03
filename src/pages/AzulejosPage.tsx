@@ -45,7 +45,7 @@ function Pastilha({
       className={`flex min-h-[44px] shrink-0 items-center gap-2 rounded-full border px-4 font-body text-[13px] transition-all ${
         activo
           ? "border-transparent shadow-sm"
-          : "border-slate-200 bg-white/70 text-slate-600 hover:border-slate-300"
+          : "border-border bg-white/70 text-foreground/75 hover:border-border"
       }`}
       onClick={onClick}
       style={
@@ -68,7 +68,9 @@ function Pastilha({
         }}
       />
       {ROTULO_ESTADO[estado]}
-      <span className={activo ? "opacity-70" : "text-slate-400"}>{n}</span>
+      <span className={activo ? "opacity-70" : "text-muted-foreground/70"}>
+        {n}
+      </span>
     </button>
   );
 }
@@ -78,6 +80,7 @@ export default function AzulejosPage() {
   const mapa = useRef<MapaHandle | null>(null);
   const [filtro, setFiltro] = useState<Estado | null>(null);
   const [aLocalizar, setALocalizar] = useState(false);
+  const [erroLocalizar, setErroLocalizar] = useState<string | null>(null);
   const [aberto, setAberto] = useState<Id<"azulejos"> | null>(null);
   // Onde o mapa está: null é Portugal inteiro.
   const [lugar, setLugar] = useState<string | null>(null);
@@ -91,7 +94,9 @@ export default function AzulejosPage() {
   const coleccao = coleccaoDe(pedida);
 
   const localizar = () => {
+    setErroLocalizar(null);
     if (!navigator.geolocation) {
+      setErroLocalizar("Este aparelho não dá a localização.");
       return;
     }
     setALocalizar(true);
@@ -100,7 +105,16 @@ export default function AzulejosPage() {
         mapa.current?.irPara(pos.coords.longitude, pos.coords.latitude, 16);
         setALocalizar(false);
       },
-      () => setALocalizar(false),
+      (e) => {
+        setALocalizar(false);
+        // Falhava em silêncio — e é o primeiro gesto de quem chega ao mapa
+        // numa rua, à procura de se situar.
+        setErroLocalizar(
+          e.code === e.PERMISSION_DENIED
+            ? "A localização está bloqueada para este site."
+            : "Não foi possível localizar. Tente outra vez ao ar livre."
+        );
+      },
       { enableHighAccuracy: true, timeout: 12_000 }
     );
   };
@@ -156,7 +170,7 @@ export default function AzulejosPage() {
         <div className="pointer-events-auto mx-auto flex max-w-[560px] items-center gap-3 rounded-2xl border border-white/60 bg-white/80 px-3 py-2.5 shadow-[0_4px_24px_-6px_rgba(18,58,107,0.25)] backdrop-blur-xl backdrop-saturate-150">
           <Link
             aria-label="Sair do mapa"
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-800"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
             to="/"
           >
             <ArrowLeft size={18} strokeWidth={1.75} />
@@ -168,7 +182,7 @@ export default function AzulejosPage() {
             >
               {nomeDaColeccao}
             </p>
-            <p className="mt-1 truncate font-body text-[12px] text-slate-500 leading-none">
+            <p className="mt-1 truncate font-body text-[12px] text-muted-foreground leading-none">
               {aCarregar
                 ? "a carregar…"
                 : `${plural(stats?.total ?? 0, "painel", "painéis")} · ${plural(
@@ -194,7 +208,7 @@ export default function AzulejosPage() {
         {lugar && (
           <div className="mt-2.5 flex justify-center">
             <button
-              className="pointer-events-auto flex min-h-[40px] items-center gap-2 rounded-full border border-white/60 bg-white/85 px-4 font-body text-[13px] shadow-[0_4px_16px_-6px_rgba(18,58,107,0.35)] backdrop-blur-xl transition-transform active:scale-95"
+              className="pointer-events-auto flex min-h-[44px] items-center gap-2 rounded-full border border-white/60 bg-white/85 px-4 font-body text-[13px] shadow-[0_4px_16px_-6px_rgba(18,58,107,0.35)] backdrop-blur-xl transition-transform active:scale-95"
               onClick={() => {
                 mapa.current?.verTudo();
                 setLugar(null);
@@ -203,8 +217,8 @@ export default function AzulejosPage() {
               type="button"
             >
               <Undo2 size={15} strokeWidth={1.75} />
-              <span className="text-slate-500">{lugar}</span>
-              <span aria-hidden="true" className="text-slate-300">
+              <span className="text-muted-foreground">{lugar}</span>
+              <span aria-hidden="true" className="text-border">
                 ·
               </span>
               Ver Portugal
@@ -213,27 +227,41 @@ export default function AzulejosPage() {
         )}
       </header>
 
-      {/* Localizar-me — flutuante, acima da folha. */}
-      <button
-        aria-label="Centrar na minha localização"
-        className="absolute right-4 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-white/60 bg-white/85 shadow-[0_4px_20px_-4px_rgba(18,58,107,0.3)] backdrop-blur-xl transition-transform active:scale-95"
-        onClick={localizar}
+      {/* Localizar-me — flutuante, acima da folha. Falhava em silêncio; agora
+          diz porquê, mesmo sítio onde se pediu. */}
+      <div
+        className="absolute right-4 z-20 flex flex-col items-end gap-2"
         style={{ bottom: "calc(208px + env(safe-area-inset-bottom) + 1rem)" }}
-        type="button"
       >
-        {aLocalizar ? (
-          <Loader2
-            className="h-[18px] w-[18px] animate-spin"
-            style={{ color: COBALTO.forte }}
-          />
-        ) : (
-          <Crosshair
-            size={18}
-            strokeWidth={1.75}
-            style={{ color: COBALTO.forte }}
-          />
+        {erroLocalizar && (
+          <button
+            className="max-w-[240px] rounded-2xl border border-white/60 bg-white/95 px-3.5 py-2.5 text-right font-body text-[13px] text-foreground/85 leading-snug shadow-[0_4px_20px_-4px_rgba(18,58,107,0.3)] backdrop-blur-xl"
+            onClick={() => setErroLocalizar(null)}
+            type="button"
+          >
+            {erroLocalizar}
+          </button>
         )}
-      </button>
+        <button
+          aria-label="Centrar na minha localização"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/60 bg-white/85 shadow-[0_4px_20px_-4px_rgba(18,58,107,0.3)] backdrop-blur-xl transition-transform active:scale-95"
+          onClick={localizar}
+          type="button"
+        >
+          {aLocalizar ? (
+            <Loader2
+              className="h-[18px] w-[18px] animate-spin"
+              style={{ color: COBALTO.forte }}
+            />
+          ) : (
+            <Crosshair
+              size={18}
+              strokeWidth={1.75}
+              style={{ color: COBALTO.forte }}
+            />
+          )}
+        </button>
+      </div>
 
       <div className={aberto ? "hidden md:contents" : "contents"}>
         <FolhaInferior
@@ -256,9 +284,9 @@ export default function AzulejosPage() {
                 </div>
               ) : (
                 !aCarregar && (
-                  <p className="pb-3 font-body text-[14px] text-slate-600 leading-snug">
+                  <p className="pb-3 font-body text-[14px] text-foreground/75 leading-snug">
                     O mapa está vazio — é assim que estes projectos começam.{" "}
-                    <strong className="text-slate-800">
+                    <strong className="text-foreground">
                       O primeiro painel é o mais difícil de arranjar e o mais
                       importante de todos.
                     </strong>
@@ -285,21 +313,64 @@ export default function AzulejosPage() {
             >
               O que este mapa é
             </h2>
-            <p className="mt-3 font-body text-[15px] text-slate-700 leading-[1.7]">
+            <p className="mt-3 font-body text-[15px] text-foreground/85 leading-[1.7]">
               Não é o mais completo — há bases académicas que sabem muito mais
               sobre o azulejo de autor. É o único onde entra o azulejo{" "}
-              <strong className="text-slate-900">comum</strong>, sem autor
+              <strong className="text-foreground">comum</strong>, sem autor
               conhecido, em prédio sem classificação, fotografado por quem passa
               na rua.
             </p>
-            <p className="mt-3 font-body text-[15px] text-slate-700 leading-[1.7]">
+            <p className="mt-3 font-body text-[15px] text-foreground/85 leading-[1.7]">
               Lisboa proíbe desde 2013 a remoção de azulejo de fachada, e os
               furtos continuam. Quando um painel desaparece, quase nunca há
               fotografia datada que prove o que ali estava.{" "}
-              <strong className="text-slate-900">
+              <strong className="text-foreground">
                 Um registo com data e sítio é património e é prova.
               </strong>
             </p>
+
+            {/* Sem isto, quem não usa rato não tinha maneira nenhuma de
+                chegar a um painel — o mapa é um desenho, não uma lista de
+                sítios. Não é uma versão para deficientes: é a lista dos
+                painéis à vista, e serve toda a gente que prefira ler a
+                apontar. */}
+            {lista.length > 0 && (
+              <>
+                <h2
+                  className="mt-7 font-display text-[13px] uppercase tracking-[0.2em]"
+                  style={{ color: COBALTO.medio }}
+                >
+                  Os painéis
+                </h2>
+                <ul className="mt-3 divide-y divide-border">
+                  {lista
+                    .slice()
+                    .sort((a, b) =>
+                      (a.concelho ?? "").localeCompare(b.concelho ?? "", "pt")
+                    )
+                    .map((p) => (
+                      <li key={p._id}>
+                        <Link
+                          className="flex items-center gap-3 py-3 font-body text-[15px] text-foreground/85 hover:text-foreground"
+                          to={`/azulejos/${p._id}`}
+                        >
+                          <span
+                            aria-hidden="true"
+                            className="h-2.5 w-2.5 shrink-0 rounded-full"
+                            style={{ backgroundColor: COR_ESTADO[p.estado] }}
+                          />
+                          <span className="flex-1 truncate">
+                            {p.concelho ?? "Concelho por identificar"}
+                          </span>
+                          <span className="shrink-0 font-body text-[12px] text-muted-foreground/70">
+                            {ROTULO_ESTADO[p.estado]}
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                </ul>
+              </>
+            )}
 
             <h2
               className="mt-7 font-display text-[13px] uppercase tracking-[0.2em]"
@@ -326,14 +397,14 @@ export default function AzulejosPage() {
                   >
                     {i + 1}
                   </span>
-                  <span className="font-body text-[15px] text-slate-700 leading-snug">
-                    <strong className="text-slate-900">{t}.</strong> {d}
+                  <span className="font-body text-[15px] text-foreground/85 leading-snug">
+                    <strong className="text-foreground">{t}.</strong> {d}
                   </span>
                 </li>
               ))}
             </ol>
 
-            <p className="mt-7 font-body text-[13px] text-slate-400 leading-relaxed">
+            <p className="mt-7 font-body text-[13px] text-muted-foreground/70 leading-relaxed">
               Ver o mapa não exige nada. Para registar é preciso ter conta — é
               grátis.{" "}
               <Link className="underline underline-offset-2" to="/azulejos">

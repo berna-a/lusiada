@@ -1,13 +1,24 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import { useConvexAuth, useMutation, useQuery } from "convex/react";
-import { Check, Loader2, Settings2, X } from "lucide-react";
+import { Camera, Check, Loader2, Settings2, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { SeloEstado } from "@/components/azulejos/SeloEstado";
 import { CabecalhoPerfil } from "@/components/conta/CabecalhoPerfil";
 import { FormularioPerfil } from "@/components/conta/FormularioPerfil";
 import { RodapeGestao } from "@/components/conta/RodapeGestao";
 import { Seo } from "@/components/Seo";
+import { COBALTO, type Estado } from "@/lib/azulejos/mapa-estilo";
 import { api } from "../../../convex/_generated/api";
+
+/** Enquanto a moderação não decide, o painel não tem selo de estado próprio. */
+function SeloPendente() {
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-1 font-body text-[10px] text-muted-foreground uppercase tracking-[0.1em]">
+      Em análise
+    </span>
+  );
+}
 
 /** O meu perfil: ver, editar, e o degrau em que estou na casa. */
 export default function PerfilPage() {
@@ -20,6 +31,10 @@ export default function PerfilPage() {
     isAuthenticated ? {} : "skip"
   );
   const guardarCapaPos = useMutation(api.perfis.guardarCapaPos);
+  const meusPaineis = useQuery(
+    api.azulejos.mine,
+    isAuthenticated ? {} : "skip"
+  );
   const [aEditar, setAEditar] = useState(false);
   // Enquanto se enquadra a capa, a posição vive aqui: só vai para o servidor
   // quando a pessoa disser que está bem.
@@ -149,6 +164,72 @@ export default function PerfilPage() {
         nome={perfil.nomePublico}
         onEnquadrar={setEnquadramento}
       />
+
+      {/* O que já se registou. Sem isto, quem regista quatro painéis numa
+          caminhada fica sem prova nenhuma de que o fez — o perfil de outra
+          pessoa mostra contributos, e o próprio só mostrava definições. */}
+      <section className="mt-14">
+        <h2 className="font-display text-[13px] text-accent uppercase tracking-[0.3em]">
+          Os meus painéis
+        </h2>
+
+        {meusPaineis === undefined && (
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            {[0, 1].map((i) => (
+              <div
+                className="h-44 animate-pulse rounded-2xl bg-secondary"
+                key={i}
+              />
+            ))}
+          </div>
+        )}
+
+        {meusPaineis?.length === 0 && (
+          <div className="mt-5 rounded-2xl border border-border/70 bg-secondary/50 px-6 py-7 text-center">
+            <p className="font-body text-[15px] text-foreground/80 leading-relaxed">
+              Ainda não registou nenhum painel.
+            </p>
+            <Link
+              className="mt-4 inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-body text-[14px] text-white transition-opacity hover:opacity-90"
+              style={{ backgroundColor: COBALTO.forte }}
+              to="/azulejos/registar"
+            >
+              <Camera size={15} strokeWidth={1.75} />
+              Fotografar o primeiro
+            </Link>
+          </div>
+        )}
+
+        {meusPaineis && meusPaineis.length > 0 && (
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            {meusPaineis.map((p) => (
+              <Link
+                className="group overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-accent/50"
+                key={p._id}
+                to={p.status === "approved" ? `/azulejos/${p._id}` : "/perfil"}
+              >
+                {p.imageUrl && (
+                  <img
+                    alt={p.morada ?? "Painel de azulejo"}
+                    className="h-40 w-full object-cover"
+                    src={p.imageUrl}
+                  />
+                )}
+                <div className="p-4">
+                  {p.status === "approved" ? (
+                    <SeloEstado estado={p.estado as Estado} tamanho="pequeno" />
+                  ) : (
+                    <SeloPendente />
+                  )}
+                  <p className="mt-1.5 font-body text-[15px] text-foreground/85 leading-snug">
+                    {p.morada ?? p.concelho ?? "Painel de azulejo"}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </section>
 
       {/* O degrau seguinte na casa, quando faz sentido. */}
       {(associacao?.level ?? "adepto") === "adepto" && (
