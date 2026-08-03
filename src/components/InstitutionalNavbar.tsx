@@ -33,17 +33,21 @@ const menus: Record<MenuKey, { label: string; items: DropdownItem[] }> = {
         subtitle: "Cânone literário lusíada",
         to: "/arca/obras",
       },
-      { label: "Lugares", subtitle: "Lugares de memória", to: "/arca/lugares" },
       {
-        label: "Azulejos",
-        subtitle: "O mapa do que está nas paredes",
-        to: "/azulejos",
+        label: "Mapa",
+        subtitle: "Portugal inteiro, painel a painel",
+        to: "/mapa",
       },
     ],
   },
   programa: {
     label: "Programa",
     items: [
+      {
+        label: "Azulejo",
+        subtitle: "A arte que Portugal pôs na rua",
+        to: "/azulejos",
+      },
       { label: "Agenda", subtitle: "Próximos eventos", to: "/programa/agenda" },
       {
         label: "Iniciativas",

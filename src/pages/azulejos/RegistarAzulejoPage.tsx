@@ -141,7 +141,7 @@ function BarraTopo({ titulo }: { titulo: string }) {
         <Link
           aria-label="Voltar ao mapa"
           className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-800"
-          to="/azulejos"
+          to="/mapa"
         >
           <ArrowLeft size={18} strokeWidth={1.75} />
         </Link>
@@ -419,7 +419,7 @@ function Formulario() {
           </button>
           <Link
             className="mt-3 block w-full rounded-2xl border border-slate-200 bg-white py-4 font-body text-[15px] text-slate-700"
-            to="/azulejos"
+            to="/mapa"
           >
             Ver o mapa
           </Link>

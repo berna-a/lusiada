@@ -97,7 +97,7 @@ export default function AzulejosPage() {
           inLanguage: "pt",
           spatialCoverage: "Portugal",
         }}
-        path="/azulejos"
+        path="/mapa"
         title="Azulejos — o mapa do que ainda está nas paredes | Memória Lusíada"
       />
 
@@ -127,9 +127,9 @@ export default function AzulejosPage() {
       >
         <div className="pointer-events-auto mx-auto flex max-w-[560px] items-center gap-3 rounded-2xl border border-white/60 bg-white/80 px-3 py-2.5 shadow-[0_4px_24px_-6px_rgba(18,58,107,0.25)] backdrop-blur-xl backdrop-saturate-150">
           <Link
-            aria-label="Voltar ao início"
+            aria-label="Voltar aos azulejos"
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-800"
-            to="/"
+            to="/azulejos"
           >
             <ArrowLeft size={18} strokeWidth={1.75} />
           </Link>

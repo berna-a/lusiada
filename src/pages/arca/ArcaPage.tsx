@@ -22,10 +22,10 @@ const ENTRADAS = [
     accent: true,
   },
   {
-    title: "Lugares",
-    desc: "Locais de memória, significado e identidade.",
+    title: "Mapa",
+    desc: "O território — lugares, memória e o que ainda está de pé.",
     icon: MapPin,
-    to: "/arca/lugares",
+    to: "/mapa",
   },
   {
     title: "Memórias",

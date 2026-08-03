@@ -9,10 +9,10 @@ const arcaEntries = [
     to: "/arca/panteao",
   },
   {
-    title: "Lugares",
-    description: "Locais de memória e significado.",
+    title: "Mapa",
+    description: "O território, lugar a lugar.",
     icon: MapPin,
-    to: "/arca/lugares",
+    to: "/mapa",
   },
   {
     title: "Heróis",

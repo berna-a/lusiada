@@ -16,7 +16,7 @@ const arcaLinks = [
   { label: "Dicionário de grafias", to: "/dicionario" },
   { label: "Calendário", to: "/arca/calendario" },
   { label: "Heróis", to: "/arca/herois" },
-  { label: "Lugares", to: "/arca/lugares" },
+  { label: "Mapa", to: "/mapa" },
   { label: "Memórias", to: "/arca/memorias" },
   { label: "Colecções", to: "/arca/coleccoes" },
 ];

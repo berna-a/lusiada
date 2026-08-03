@@ -16,6 +16,7 @@ import { GlobalLayout } from "@/layouts/GlobalLayout";
 import AderirPage from "@/pages/AderirPage";
 import ApoiarPage from "@/pages/ApoiarPage";
 import AssociacaoPage from "@/pages/AssociacaoPage";
+import AzulejoPortuguesPage from "@/pages/AzulejoPortuguesPage";
 import AzulejosPage from "@/pages/AzulejosPage";
 import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 import AdminDefinicoesPage from "@/pages/admin/AdminDefinicoesPage";
@@ -29,7 +30,6 @@ import CalendarioPage from "@/pages/arca/CalendarioPage";
 import ColeccoesPage from "@/pages/arca/ColeccoesPage";
 import EditarArtigoPage from "@/pages/arca/EditarArtigoPage";
 import HeroiPage from "@/pages/arca/HeroiPage";
-import LugaresPage from "@/pages/arca/LugaresPage";
 import LugarPage from "@/pages/arca/LugarPage";
 import LusopediaPage from "@/pages/arca/LusopediaPage";
 import MemoriasPage from "@/pages/arca/MemoriasPage";
@@ -95,7 +95,7 @@ const App = () => (
           <Routes>
             {/* Azulejos — aplicação de ecrã inteiro, sem a moldura do site.
                 O mapa é a interface; a navegação vai na barra de vidro. */}
-            <Route element={<AzulejosPage />} path="/azulejos" />
+            <Route element={<AzulejosPage />} path="/mapa" />
             <Route
               element={<RegistarAzulejoPage />}
               path="/azulejos/registar"
@@ -202,7 +202,12 @@ const App = () => (
                 path="/os-lusiadas/comunidade"
               />
               <Route element={<ComunidadePage />} path="/comunidade" />
-              <Route element={<LugaresPage />} path="/arca/lugares" />
+              {/* Os lugares deixaram de ser uma lista à espera de conteúdo:
+                  são o mapa. */}
+              <Route
+                element={<Navigate replace to="/mapa" />}
+                path="/arca/lugares"
+              />
               <Route element={<LugarPage />} path="/arca/lugares/:id" />
               <Route element={<MemoriasPage />} path="/arca/memorias" />
               <Route element={<ColeccoesPage />} path="/arca/coleccoes" />
@@ -292,6 +297,7 @@ const App = () => (
                 }
                 path="/programa/encontros"
               />
+              <Route element={<AzulejoPortuguesPage />} path="/azulejos" />
               <Route element={<PrivacidadePage />} path="/privacidade" />
               <Route element={<TermosPage />} path="/termos" />
               {/*

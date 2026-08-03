@@ -5,7 +5,6 @@ import {
   BookOpen,
   Calendar,
   FolderOpen,
-  Grid3x3,
   Landmark,
   MapPin,
   Menu,
@@ -22,8 +21,7 @@ const arcaLinks = [
   { label: "Dicionário", to: "/dicionario", icon: BookA },
   { label: "Calendário", to: "/arca/calendario", icon: Calendar },
   { label: "Heróis", to: "/arca/herois", icon: Sword },
-  { label: "Lugares", to: "/arca/lugares", icon: MapPin },
-  { label: "Azulejos", to: "/azulejos", icon: Grid3x3 },
+  { label: "Mapa", to: "/mapa", icon: MapPin },
   { label: "Memórias", to: "/arca/memorias", icon: BookOpen },
   { label: "Colecções", to: "/arca/coleccoes", icon: FolderOpen },
 ];

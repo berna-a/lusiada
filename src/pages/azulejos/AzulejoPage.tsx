@@ -72,7 +72,7 @@ export default function AzulejoPage() {
           aria-label="Voltar ao mapa"
           className="absolute left-4 flex h-10 w-10 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur-md"
           style={{ top: "calc(env(safe-area-inset-top) + 1rem)" }}
-          to="/azulejos"
+          to="/mapa"
         >
           <ArrowLeft size={19} strokeWidth={1.75} />
         </Link>
@@ -170,7 +170,7 @@ export default function AzulejoPage() {
           </Link>
           <Link
             className="rounded-2xl border border-slate-200 bg-white py-4 text-center font-body text-[15px] text-slate-700"
-            to="/azulejos"
+            to="/mapa"
           >
             Ver o mapa
           </Link>
