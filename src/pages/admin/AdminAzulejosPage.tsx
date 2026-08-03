@@ -1,10 +1,67 @@
 import { useMutation, useQuery } from "convex/react";
-import { Check, Compass, ExternalLink, MapPin, Trash2, X } from "lucide-react";
+import {
+  Check,
+  Compass,
+  ExternalLink,
+  MapPin,
+  Pencil,
+  Trash2,
+  X,
+} from "lucide-react";
 import { useState } from "react";
 import { SeloEstado } from "@/components/azulejos/SeloEstado";
 import { Button } from "@/components/ui/button";
-import { COBALTO, type Estado } from "@/lib/azulejos/mapa-estilo";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  COBALTO,
+  type Estado,
+  ROTULO_ESTADO,
+} from "@/lib/azulejos/mapa-estilo";
 import { api } from "../../../convex/_generated/api";
+import type { Id } from "../../../convex/_generated/dataModel";
+
+type Rascunho = {
+  morada: string;
+  concelho: string;
+  estado: Estado;
+  padrao: string;
+  epoca: string;
+  oficina: string;
+  autor: string;
+  lat: string;
+  lng: string;
+};
+
+function paraRascunho(a: {
+  morada: string | null;
+  concelho: string | null;
+  estado: string;
+  padrao: string | null;
+  epoca: string | null;
+  oficina: string | null;
+  autor: string | null;
+  lat: number;
+  lng: number;
+}): Rascunho {
+  return {
+    morada: a.morada ?? "",
+    concelho: a.concelho ?? "",
+    estado: a.estado as Estado,
+    padrao: a.padrao ?? "",
+    epoca: a.epoca ?? "",
+    oficina: a.oficina ?? "",
+    autor: a.autor ?? "",
+    lat: String(a.lat),
+    lng: String(a.lng),
+  };
+}
 
 type Status = "pending" | "approved" | "rejected";
 
@@ -78,11 +135,49 @@ export default function AdminAzulejosPage() {
   const [tab, setTab] = useState<Status>("pending");
   // Eliminar apaga também a fotografia do armazenamento — não tem volta,
   // por isso pede confirmação no próprio cartão antes de avançar.
-  const [aEliminar, setAEliminar] = useState<string | null>(null);
+  const [aEliminar, setAEliminar] = useState<Id<"azulejos"> | null>(null);
+  // Só um cartão de cada vez em edição — evita rascunhos perdidos ao saltar
+  // de painel para painel sem guardar.
+  const [aEditar, setAEditar] = useState<Id<"azulejos"> | null>(null);
+  const [rascunho, setRascunho] = useState<Rascunho | null>(null);
   const items = useQuery(api.azulejos.adminList, { status: tab });
   const contagens = useQuery(api.azulejos.adminCounts);
   const setStatus = useMutation(api.azulejos.adminSetStatus);
+  const update = useMutation(api.azulejos.adminUpdate);
   const remove = useMutation(api.azulejos.adminDelete);
+
+  function iniciarEdicao(
+    id: Id<"azulejos">,
+    a: Parameters<typeof paraRascunho>[0]
+  ) {
+    setAEditar(id);
+    setRascunho(paraRascunho(a));
+  }
+
+  async function guardarEdicao(id: Id<"azulejos">) {
+    if (!rascunho) {
+      return;
+    }
+    const lat = Number.parseFloat(rascunho.lat);
+    const lng = Number.parseFloat(rascunho.lng);
+    if (!(Number.isFinite(lat) && Number.isFinite(lng))) {
+      return;
+    }
+    await update({
+      id,
+      lat,
+      lng,
+      morada: rascunho.morada,
+      concelho: rascunho.concelho,
+      estado: rascunho.estado,
+      padrao: rascunho.padrao,
+      epoca: rascunho.epoca,
+      oficina: rascunho.oficina,
+      autor: rascunho.autor,
+    });
+    setAEditar(null);
+    setRascunho(null);
+  }
 
   return (
     <div className="mx-auto max-w-4xl">
@@ -167,6 +262,8 @@ export default function AdminAzulejosPage() {
           const temBloco2 = Boolean(
             a.padrao || a.epoca || a.oficina || a.autor
           );
+          const emEdicao = aEditar === a._id;
+
           return (
             <li
               className="overflow-hidden rounded-2xl border border-border bg-card"
@@ -203,127 +300,331 @@ export default function AdminAzulejosPage() {
                 </div>
 
                 <div className="p-6">
-                  <h2 className="font-display text-[22px] text-primary leading-snug">
-                    {a.morada ?? a.concelho ?? "Sem morada indicada"}
-                  </h2>
-
-                  <dl className="mt-5 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
-                    <Campo rotulo="Concelho">
-                      {a.concelho ?? (
-                        <span className="text-muted-foreground italic">
-                          por indicar
-                        </span>
-                      )}
-                    </Campo>
-                    <Campo rotulo="Coordenadas">
-                      <span className="tabular-nums">{coords}</span>
-                      {typeof a.gpsAccuracy === "number" && (
-                        <span className="text-muted-foreground">
-                          {" "}
-                          · ±{Math.round(a.gpsAccuracy)} m
-                        </span>
-                      )}
-                    </Campo>
-                    <Campo rotulo="Submetido por">
-                      {a.authorName ?? "Anónimo"}
-                    </Campo>
-                    <Campo rotulo="Data">{formatDate(a.createdAt)}</Campo>
-                  </dl>
-
-                  {temBloco2 && (
-                    <dl
-                      className="mt-5 grid grid-cols-1 gap-x-6 gap-y-4 border-t pt-5 sm:grid-cols-2"
-                      style={{ borderColor: `${COBALTO.forte}1f` }}
-                    >
-                      {a.padrao && <Campo rotulo="Padrão">{a.padrao}</Campo>}
-                      {a.epoca && <Campo rotulo="Época">{a.epoca}</Campo>}
-                      {a.oficina && <Campo rotulo="Oficina">{a.oficina}</Campo>}
-                      {a.autor && <Campo rotulo="Autor">{a.autor}</Campo>}
-                      {!a.historiaConfirmada && (
-                        <p className="col-span-full font-body text-[12px] text-muted-foreground italic">
-                          História por confirmar.
-                        </p>
-                      )}
-                    </dl>
-                  )}
-
-                  {/* Verificar o sítio: um painel de rua confirma-se a olhar
-                      para a fachada, não para um par de números. */}
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    <LigacaoExterna
-                      href={`https://www.google.com/maps/search/?api=1&query=${a.lat},${a.lng}`}
-                      icon={MapPin}
-                    >
-                      Ver no mapa
-                    </LigacaoExterna>
-                    <LigacaoExterna
-                      href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${a.lat},${a.lng}`}
-                      icon={Compass}
-                    >
-                      Street View
-                    </LigacaoExterna>
-                  </div>
-
-                  <div
-                    className="mt-6 flex flex-wrap items-center gap-2 border-t pt-5"
-                    style={{ borderColor: `${COBALTO.forte}1f` }}
-                  >
-                    {a.status !== "approved" && (
-                      <Button
-                        onClick={() =>
-                          setStatus({ id: a._id, status: "approved" })
-                        }
-                        size="sm"
-                        variant="accent"
-                      >
-                        <Check className="mr-1.5 h-3.5 w-3.5" /> Aprovar
-                      </Button>
-                    )}
-                    {a.status !== "rejected" && (
-                      <Button
-                        onClick={() =>
-                          setStatus({ id: a._id, status: "rejected" })
-                        }
-                        size="sm"
-                        variant="outline"
-                      >
-                        <X className="mr-1.5 h-3.5 w-3.5" /> Recusar
-                      </Button>
-                    )}
-
-                    {aEliminar === a._id ? (
-                      <span className="ml-auto inline-flex items-center gap-2">
-                        <span className="font-body text-[12px] text-muted-foreground">
-                          Apaga também a fotografia.
-                        </span>
-                        <Button
-                          onClick={() => {
-                            remove({ id: a._id });
-                            setAEliminar(null);
-                          }}
-                          size="sm"
-                          variant="destructive"
+                  {emEdicao && rascunho ? (
+                    <>
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <label
+                          className="sm:col-span-2"
+                          htmlFor={`${a._id}-morada`}
                         >
-                          Eliminar mesmo
+                          <span className="font-body text-[10px] text-muted-foreground uppercase tracking-[0.18em]">
+                            Morada
+                          </span>
+                          <Input
+                            className="mt-1"
+                            id={`${a._id}-morada`}
+                            onChange={(e) =>
+                              setRascunho({
+                                ...rascunho,
+                                morada: e.target.value,
+                              })
+                            }
+                            value={rascunho.morada}
+                          />
+                        </label>
+                        <label htmlFor={`${a._id}-concelho`}>
+                          <span className="font-body text-[10px] text-muted-foreground uppercase tracking-[0.18em]">
+                            Concelho
+                          </span>
+                          <Input
+                            className="mt-1"
+                            id={`${a._id}-concelho`}
+                            onChange={(e) =>
+                              setRascunho({
+                                ...rascunho,
+                                concelho: e.target.value,
+                              })
+                            }
+                            value={rascunho.concelho}
+                          />
+                        </label>
+                        <label htmlFor={`${a._id}-estado`}>
+                          <span className="font-body text-[10px] text-muted-foreground uppercase tracking-[0.18em]">
+                            Estado
+                          </span>
+                          <Select
+                            onValueChange={(v) =>
+                              setRascunho({
+                                ...rascunho,
+                                estado: v as Estado,
+                              })
+                            }
+                            value={rascunho.estado}
+                          >
+                            <SelectTrigger
+                              className="mt-1"
+                              id={`${a._id}-estado`}
+                            >
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {Object.entries(ROTULO_ESTADO).map(
+                                ([valor, rotulo]) => (
+                                  <SelectItem key={valor} value={valor}>
+                                    {rotulo}
+                                  </SelectItem>
+                                )
+                              )}
+                            </SelectContent>
+                          </Select>
+                        </label>
+                        <label htmlFor={`${a._id}-lat`}>
+                          <span className="font-body text-[10px] text-muted-foreground uppercase tracking-[0.18em]">
+                            Latitude
+                          </span>
+                          <Input
+                            className="mt-1 tabular-nums"
+                            id={`${a._id}-lat`}
+                            onChange={(e) =>
+                              setRascunho({ ...rascunho, lat: e.target.value })
+                            }
+                            value={rascunho.lat}
+                          />
+                        </label>
+                        <label htmlFor={`${a._id}-lng`}>
+                          <span className="font-body text-[10px] text-muted-foreground uppercase tracking-[0.18em]">
+                            Longitude
+                          </span>
+                          <Input
+                            className="mt-1 tabular-nums"
+                            id={`${a._id}-lng`}
+                            onChange={(e) =>
+                              setRascunho({ ...rascunho, lng: e.target.value })
+                            }
+                            value={rascunho.lng}
+                          />
+                        </label>
+                      </div>
+
+                      <div
+                        className="mt-5 grid grid-cols-1 gap-4 border-t pt-5 sm:grid-cols-2"
+                        style={{ borderColor: `${COBALTO.forte}1f` }}
+                      >
+                        <label htmlFor={`${a._id}-padrao`}>
+                          <span className="font-body text-[10px] text-muted-foreground uppercase tracking-[0.18em]">
+                            Padrão
+                          </span>
+                          <Input
+                            className="mt-1"
+                            id={`${a._id}-padrao`}
+                            onChange={(e) =>
+                              setRascunho({
+                                ...rascunho,
+                                padrao: e.target.value,
+                              })
+                            }
+                            value={rascunho.padrao}
+                          />
+                        </label>
+                        <label htmlFor={`${a._id}-epoca`}>
+                          <span className="font-body text-[10px] text-muted-foreground uppercase tracking-[0.18em]">
+                            Época
+                          </span>
+                          <Input
+                            className="mt-1"
+                            id={`${a._id}-epoca`}
+                            onChange={(e) =>
+                              setRascunho({
+                                ...rascunho,
+                                epoca: e.target.value,
+                              })
+                            }
+                            value={rascunho.epoca}
+                          />
+                        </label>
+                        <label htmlFor={`${a._id}-oficina`}>
+                          <span className="font-body text-[10px] text-muted-foreground uppercase tracking-[0.18em]">
+                            Oficina
+                          </span>
+                          <Input
+                            className="mt-1"
+                            id={`${a._id}-oficina`}
+                            onChange={(e) =>
+                              setRascunho({
+                                ...rascunho,
+                                oficina: e.target.value,
+                              })
+                            }
+                            value={rascunho.oficina}
+                          />
+                        </label>
+                        <label htmlFor={`${a._id}-autor`}>
+                          <span className="font-body text-[10px] text-muted-foreground uppercase tracking-[0.18em]">
+                            Autor
+                          </span>
+                          <Input
+                            className="mt-1"
+                            id={`${a._id}-autor`}
+                            onChange={(e) =>
+                              setRascunho({
+                                ...rascunho,
+                                autor: e.target.value,
+                              })
+                            }
+                            value={rascunho.autor}
+                          />
+                        </label>
+                      </div>
+
+                      <div
+                        className="mt-6 flex flex-wrap items-center gap-2 border-t pt-5"
+                        style={{ borderColor: `${COBALTO.forte}1f` }}
+                      >
+                        <Button
+                          onClick={() => guardarEdicao(a._id)}
+                          size="sm"
+                          variant="accent"
+                        >
+                          <Check className="mr-1.5 h-3.5 w-3.5" /> Guardar
                         </Button>
                         <button
-                          className="font-body text-[12px] text-muted-foreground underline-offset-4 hover:underline"
-                          onClick={() => setAEliminar(null)}
+                          className="font-body text-[13px] text-muted-foreground hover:text-foreground"
+                          onClick={() => {
+                            setAEditar(null);
+                            setRascunho(null);
+                          }}
                           type="button"
                         >
                           Cancelar
                         </button>
-                      </span>
-                    ) : (
-                      <button
-                        className="ml-auto inline-flex items-center gap-1.5 font-body text-[13px] text-destructive transition-opacity hover:opacity-80"
-                        onClick={() => setAEliminar(a._id)}
-                        type="button"
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <h2 className="font-display text-[22px] text-primary leading-snug">
+                        {a.morada ?? a.concelho ?? "Sem morada indicada"}
+                      </h2>
+
+                      <dl className="mt-5 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
+                        <Campo rotulo="Concelho">
+                          {a.concelho ?? (
+                            <span className="text-muted-foreground italic">
+                              por indicar
+                            </span>
+                          )}
+                        </Campo>
+                        <Campo rotulo="Coordenadas">
+                          <span className="tabular-nums">{coords}</span>
+                          {typeof a.gpsAccuracy === "number" && (
+                            <span className="text-muted-foreground">
+                              {" "}
+                              · ±{Math.round(a.gpsAccuracy)} m
+                            </span>
+                          )}
+                        </Campo>
+                        <Campo rotulo="Submetido por">
+                          {a.authorName ?? "Anónimo"}
+                        </Campo>
+                        <Campo rotulo="Data">{formatDate(a.createdAt)}</Campo>
+                      </dl>
+
+                      {temBloco2 && (
+                        <dl
+                          className="mt-5 grid grid-cols-1 gap-x-6 gap-y-4 border-t pt-5 sm:grid-cols-2"
+                          style={{ borderColor: `${COBALTO.forte}1f` }}
+                        >
+                          {a.padrao && (
+                            <Campo rotulo="Padrão">{a.padrao}</Campo>
+                          )}
+                          {a.epoca && <Campo rotulo="Época">{a.epoca}</Campo>}
+                          {a.oficina && (
+                            <Campo rotulo="Oficina">{a.oficina}</Campo>
+                          )}
+                          {a.autor && <Campo rotulo="Autor">{a.autor}</Campo>}
+                          {!a.historiaConfirmada && (
+                            <p className="col-span-full font-body text-[12px] text-muted-foreground italic">
+                              História por confirmar.
+                            </p>
+                          )}
+                        </dl>
+                      )}
+
+                      {/* Verificar o sítio: um painel de rua confirma-se a
+                          olhar para a fachada, não para um par de números. */}
+                      <div className="mt-5 flex flex-wrap gap-2">
+                        <LigacaoExterna
+                          href={`https://www.google.com/maps/search/?api=1&query=${a.lat},${a.lng}`}
+                          icon={MapPin}
+                        >
+                          Ver no mapa
+                        </LigacaoExterna>
+                        <LigacaoExterna
+                          href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${a.lat},${a.lng}`}
+                          icon={Compass}
+                        >
+                          Street View
+                        </LigacaoExterna>
+                      </div>
+
+                      <div
+                        className="mt-6 flex flex-wrap items-center gap-2 border-t pt-5"
+                        style={{ borderColor: `${COBALTO.forte}1f` }}
                       >
-                        <Trash2 className="h-3.5 w-3.5" /> Eliminar
-                      </button>
-                    )}
-                  </div>
+                        {a.status !== "approved" && (
+                          <Button
+                            onClick={() =>
+                              setStatus({ id: a._id, status: "approved" })
+                            }
+                            size="sm"
+                            variant="accent"
+                          >
+                            <Check className="mr-1.5 h-3.5 w-3.5" /> Aprovar
+                          </Button>
+                        )}
+                        {a.status !== "rejected" && (
+                          <Button
+                            onClick={() =>
+                              setStatus({ id: a._id, status: "rejected" })
+                            }
+                            size="sm"
+                            variant="outline"
+                          >
+                            <X className="mr-1.5 h-3.5 w-3.5" /> Recusar
+                          </Button>
+                        )}
+                        <Button
+                          onClick={() => iniciarEdicao(a._id, a)}
+                          size="sm"
+                          variant="outline"
+                        >
+                          <Pencil className="mr-1.5 h-3.5 w-3.5" /> Editar
+                        </Button>
+
+                        {aEliminar === a._id ? (
+                          <span className="ml-auto inline-flex items-center gap-2">
+                            <span className="font-body text-[12px] text-muted-foreground">
+                              Apaga também a fotografia.
+                            </span>
+                            <Button
+                              onClick={() => {
+                                remove({ id: a._id });
+                                setAEliminar(null);
+                              }}
+                              size="sm"
+                              variant="destructive"
+                            >
+                              Eliminar mesmo
+                            </Button>
+                            <button
+                              className="font-body text-[12px] text-muted-foreground underline-offset-4 hover:underline"
+                              onClick={() => setAEliminar(null)}
+                              type="button"
+                            >
+                              Cancelar
+                            </button>
+                          </span>
+                        ) : (
+                          <button
+                            className="ml-auto inline-flex items-center gap-1.5 font-body text-[13px] text-destructive transition-opacity hover:opacity-80"
+                            onClick={() => setAEliminar(a._id)}
+                            type="button"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" /> Eliminar
+                          </button>
+                        )}
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </li>

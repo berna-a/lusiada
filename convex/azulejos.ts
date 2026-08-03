@@ -324,6 +324,37 @@ export const adminSetHistoriaConfirmada = mutation({
   },
 });
 
+/** Corrige a ficha de um painel. Apenas administradores. */
+export const adminUpdate = mutation({
+  args: {
+    id: v.id("azulejos"),
+    lat: v.number(),
+    lng: v.number(),
+    morada: v.optional(v.string()),
+    concelho: v.optional(v.string()),
+    estado: ESTADO,
+    padrao: v.optional(v.string()),
+    epoca: v.optional(v.string()),
+    oficina: v.optional(v.string()),
+    autor: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    await requireAdmin(ctx);
+    validarCoordenadas(args.lat, args.lng);
+    await ctx.db.patch(args.id, {
+      lat: args.lat,
+      lng: args.lng,
+      morada: campo(args.morada, MAX_MORADA),
+      concelho: campo(args.concelho, MAX_CAMPO),
+      estado: args.estado,
+      padrao: campo(args.padrao, MAX_CAMPO),
+      epoca: campo(args.epoca, MAX_CAMPO),
+      oficina: campo(args.oficina, MAX_CAMPO),
+      autor: campo(args.autor, MAX_CAMPO),
+    });
+  },
+});
+
 /** Elimina um painel e a respetiva fotografia. Apenas administradores. */
 export const adminDelete = mutation({
   args: { id: v.id("azulejos") },
