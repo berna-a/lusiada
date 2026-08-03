@@ -36,7 +36,10 @@ const SO_TIPO = (tipo: string) => ["==", ["get", "tipo"], tipo] as never;
 const desvanecer = (maximo: number) => maximo;
 
 type Opcoes = {
-  aoEscolher: (limites: [[number, number], [number, number]]) => void;
+  aoEscolher: (
+    limites: [[number, number], [number, number]],
+    nome: string
+  ) => void;
   /** Camadas que ganham ao clique — os painéis e os seus aglomerados. */
   camadasDeTopo?: string[];
 };
@@ -205,9 +208,11 @@ export function instalarProvincias(
       arrastou = false;
       return;
     }
-    const limites = limitesDe(provinciaEm(e.point)?.properties?.limites);
-    if (limites) {
-      aoEscolher(limites);
+    const f = provinciaEm(e.point);
+    const limites = limitesDe(f?.properties?.limites);
+    const nome = f?.properties?.nome;
+    if (limites && typeof nome === "string") {
+      aoEscolher(limites, nome);
     }
   };
 

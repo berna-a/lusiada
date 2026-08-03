@@ -199,16 +199,23 @@ export function RodapeGestao({
         />
       </Grupo>
 
-      <Grupo titulo="Sessão">
-        <Fila
-          linha={{
-            icone: LogOut,
-            titulo: "Terminar sessão",
-            onClick: onSair,
-            perigoso: true,
+      {/* Sair não é uma linha como as outras: estava logo por baixo de
+          «Adesão», e um toque a mais ao rolar deitava a sessão fora. Fica
+          separado, e pergunta antes. */}
+      <div className="px-5 py-7">
+        <button
+          className="flex w-full items-center justify-center gap-2 rounded-xl border border-destructive/30 py-3.5 font-body text-[14px] text-destructive transition-colors hover:bg-destructive/5"
+          onClick={() => {
+            if (window.confirm("Terminar a sessão neste aparelho?")) {
+              onSair();
+            }
           }}
-        />
-      </Grupo>
+          type="button"
+        >
+          <LogOut size={15} strokeWidth={1.75} />
+          Terminar sessão
+        </button>
+      </div>
     </div>
   );
 }

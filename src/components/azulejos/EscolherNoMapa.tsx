@@ -38,7 +38,7 @@ export function EscolherNoMapa({ inicio, onConfirmar, onCancelar }: Props) {
         ? { center: [inicio.lng, inicio.lat] as [number, number], zoom: 17 }
         : {
             bounds: VISTA_PORTUGAL.limites,
-            fitBoundsOptions: { padding: VISTA_PORTUGAL.margem },
+            fitBoundsOptions: { padding: 28 },
           }),
       minZoom: 3,
       maxZoom: 20,

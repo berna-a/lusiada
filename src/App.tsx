@@ -96,6 +96,7 @@ const App = () => (
             {/* Azulejos — aplicação de ecrã inteiro, sem a moldura do site.
                 O mapa é a interface; a navegação vai na barra de vidro. */}
             <Route element={<AzulejosPage />} path="/mapa" />
+            <Route element={<AzulejosPage />} path="/mapa/:coleccao" />
             <Route
               element={<RegistarAzulejoPage />}
               path="/azulejos/registar"

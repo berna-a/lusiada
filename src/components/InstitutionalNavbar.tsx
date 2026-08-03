@@ -176,18 +176,20 @@ export function InstitutionalNavbar() {
               {/* Quem não tem conta vê «Junta-te»; quem tem, vê-se a si próprio
                   — primeiro nome e retrato, a levar ao seu perfil. */}
               {autenticado && primeiroNome ? (
-                <Link
-                  aria-label="O meu perfil"
-                  className="hidden items-center gap-2.5 rounded-full py-1.5 pr-1.5 pl-5 font-display text-[14px] text-white uppercase tracking-[0.15em] transition-all hover:brightness-110 sm:inline-flex"
-                  style={{
-                    backgroundColor: "hsl(351 62% 34%)",
-                    boxShadow:
-                      "0 4px 14px hsl(351 62% 20% / 0.4), inset 0 1px 0 hsl(0 0% 100% / 0.18)",
-                  }}
-                  to="/perfil"
-                >
-                  {primeiroNome}
-                  <span className="grid h-8 w-8 place-items-center overflow-hidden rounded-full bg-white/20">
+                <>
+                  {/* No telemóvel só cabe o retrato — mas tem de caber. Sem
+                      isto não havia porta nenhuma para o próprio perfil em
+                      nenhum ecrã com menos de 640px, ou seja, em nenhum
+                      telemóvel em pé. */}
+                  <Link
+                    aria-label="O meu perfil"
+                    className="grid h-10 w-10 place-items-center overflow-hidden rounded-full sm:hidden"
+                    style={{
+                      backgroundColor: "hsl(351 62% 34%)",
+                      boxShadow: "0 4px 14px hsl(351 62% 20% / 0.4)",
+                    }}
+                    to="/perfil"
+                  >
                     {perfil?.existe && perfil.avatarUrl ? (
                       <img
                         alt=""
@@ -195,12 +197,37 @@ export function InstitutionalNavbar() {
                         src={perfil.avatarUrl}
                       />
                     ) : (
-                      <span className="font-display text-[13px] text-white">
+                      <span className="font-display text-[14px] text-white">
                         {primeiroNome.slice(0, 1).toUpperCase()}
                       </span>
                     )}
-                  </span>
-                </Link>
+                  </Link>
+                  <Link
+                    aria-label="O meu perfil"
+                    className="hidden items-center gap-2.5 rounded-full py-1.5 pr-1.5 pl-5 font-display text-[14px] text-white uppercase tracking-[0.15em] transition-all hover:brightness-110 sm:inline-flex"
+                    style={{
+                      backgroundColor: "hsl(351 62% 34%)",
+                      boxShadow:
+                        "0 4px 14px hsl(351 62% 20% / 0.4), inset 0 1px 0 hsl(0 0% 100% / 0.18)",
+                    }}
+                    to="/perfil"
+                  >
+                    {primeiroNome}
+                    <span className="grid h-8 w-8 place-items-center overflow-hidden rounded-full bg-white/20">
+                      {perfil?.existe && perfil.avatarUrl ? (
+                        <img
+                          alt=""
+                          className="h-full w-full object-cover"
+                          src={perfil.avatarUrl}
+                        />
+                      ) : (
+                        <span className="font-display text-[13px] text-white">
+                          {primeiroNome.slice(0, 1).toUpperCase()}
+                        </span>
+                      )}
+                    </span>
+                  </Link>
+                </>
               ) : (
                 <>
                   {!autenticado && (

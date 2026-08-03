@@ -117,7 +117,7 @@ function Compor({ azulejoId }: { azulejoId: Id<"azulejos"> }) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-3">
       <textarea
-        className="w-full resize-none rounded-xl bg-slate-50 px-3.5 py-2.5 font-body text-[15px] text-slate-800 outline-none placeholder:text-slate-400"
+        className="w-full resize-none rounded-xl bg-slate-50 px-3.5 py-2.5 font-body text-[16px] text-slate-800 outline-none placeholder:text-slate-400"
         onChange={(e) => setTexto(e.target.value)}
         placeholder="Uma fotografia sua, ou o que sabe deste painel…"
         rows={2}

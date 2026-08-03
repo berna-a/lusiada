@@ -35,6 +35,21 @@ export const COR_ESTADO = {
   desaparecido: "#93A3B3",
 } as const;
 
+/**
+ * Sobre que tinta se escreve o nome de cada estado.
+ *
+ * Medido, não escolhido a olho: branco sobre o ocre do «danificado» dá 2,9 de
+ * contraste e sobre o cinzento do «desaparecido» dá 2,6 — o mínimo legível é
+ * 4,5. Ao sol, na rua, esses dois desapareciam. Com tinta escura sobem para
+ * 4,9 e 5,6.
+ */
+export const TINTA_DO_ESTADO = {
+  integro: "#FFFFFF",
+  danificado: "#2A1B05",
+  em_risco: "#FFFFFF",
+  desaparecido: "#0C2A4F",
+} as const;
+
 export const ROTULO_ESTADO = {
   integro: "Íntegro",
   danificado: "Danificado",
@@ -265,9 +280,11 @@ export const ESTILO_AZULEJO: StyleSpecification = {
  * eles. Ninguém tem de descobrir as ilhas a afastar o mapa pelo Atlântico.
  */
 export const VISTA_PORTUGAL = {
+  // Encosta ao território e não à plataforma continental: o Corvo está a
+  // -31,3 e as Selvagens a 30,0. Cada grau de oceano vazio que se poupa aqui
+  // é Portugal maior no ecrã de um telemóvel.
   limites: [
-    [-35.8, 29.0],
-    [-6.0, 43.2],
+    [-32.6, 29.6],
+    [-6.1, 42.6],
   ] as [[number, number], [number, number]],
-  margem: 28,
 };

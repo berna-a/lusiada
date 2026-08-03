@@ -22,6 +22,30 @@ import {
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 
+/** Um minuto. Depois disto, a rede não está lenta: está fora. */
+const TECTO_DE_ENVIO = 60_000;
+
+/**
+ * Desiste de uma promessa que não acaba. Sem isto, um envio numa rua com má
+ * rede ficava a rodar sem fim e sem saída.
+ */
+function comTecto<T>(promessa: Promise<T>, ms: number): Promise<T> {
+  return Promise.race([
+    promessa,
+    new Promise<T>((_, rejeitar) =>
+      setTimeout(
+        () =>
+          rejeitar(
+            new Error(
+              "A ligação demorou de mais. A fotografia continua aqui — tente outra vez."
+            )
+          ),
+        ms
+      )
+    ),
+  ]);
+}
+
 const ESTADOS: { valor: Estado; nota: string }[] = [
   { valor: "integro", nota: "Está inteiro" },
   { valor: "danificado", nota: "Faltam peças" },
@@ -351,19 +375,28 @@ function Formulario() {
     }
     setAEnviar(true);
     try {
-      const imageId = await enviarFotografia(gerarUrl, ficheiro);
-      await submeter({
-        lat: local.lat,
-        lng: local.lng,
-        gpsAccuracy: local.accuracy ?? undefined,
-        imageId,
-        estado,
-        morada: morada.trim() || undefined,
-        concelho: concelho.trim() || undefined,
-        padrao: padrao.trim() || undefined,
-        epoca: epoca.trim() || undefined,
-        oficina: oficina.trim() || undefined,
-      });
+      // Numa rua com má rede, um envio sem tecto ficava a rodar para sempre e
+      // a pessoa não sabia se podia sair. Ao fim de um minuto desiste e diz —
+      // a fotografia e o que já foi escrito ficam no ecrã para tentar outra vez.
+      const imageId = await comTecto(
+        enviarFotografia(gerarUrl, ficheiro),
+        TECTO_DE_ENVIO
+      );
+      await comTecto(
+        submeter({
+          lat: local.lat,
+          lng: local.lng,
+          gpsAccuracy: local.accuracy ?? undefined,
+          imageId,
+          estado,
+          morada: morada.trim() || undefined,
+          concelho: concelho.trim() || undefined,
+          padrao: padrao.trim() || undefined,
+          epoca: epoca.trim() || undefined,
+          oficina: oficina.trim() || undefined,
+        }),
+        TECTO_DE_ENVIO
+      );
       setFeito(true);
       window.scrollTo({ top: 0 });
     } catch (e) {
@@ -693,8 +726,19 @@ function Formulario() {
               {erro}
             </p>
           )}
+          {/* A razão vem antes do botão apagado, e num cinzento que se lê:
+              estava por baixo, a 12px no cinzento mais fraco do ecrã. */}
+          {!completo && (
+            <p className="mb-2.5 text-center font-body text-[13.5px] text-slate-600">
+              {ficheiro
+                ? local
+                  ? "Falta dizer em que estado está o painel"
+                  : "Falta marcar onde está o painel"
+                : "Falta a fotografia do painel"}
+            </p>
+          )}
           <button
-            className="flex w-full items-center justify-center gap-2.5 rounded-2xl py-4 font-body text-[16px] text-white transition-all active:scale-[0.98] disabled:opacity-40"
+            className="flex min-h-[52px] w-full items-center justify-center gap-2.5 rounded-2xl font-body text-[16px] text-white transition-all active:scale-[0.98] disabled:opacity-40"
             disabled={aEnviar || !completo}
             onClick={enviar}
             style={{ backgroundColor: COBALTO.forte }}
@@ -707,15 +751,6 @@ function Formulario() {
             )}
             {aEnviar ? "A registar…" : "Registar o painel"}
           </button>
-          {!completo && (
-            <p className="mt-2 text-center font-body text-[12px] text-slate-400">
-              {ficheiro
-                ? local
-                  ? "Falta dizer em que estado está"
-                  : "Falta marcar onde está"
-                : "Falta a fotografia"}
-            </p>
-          )}
         </div>
       </div>
     </div>

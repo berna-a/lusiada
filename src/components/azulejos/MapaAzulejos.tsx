@@ -22,8 +22,9 @@ import {
 } from "@/lib/azulejos/mapa-estilo";
 import { instalarProvincias } from "@/lib/azulejos/provincias";
 import {
+  charneira,
   instalarZonas,
-  MARGEM_DO_ENQUADRAMENTO,
+  margensDoMapa,
   ZONAS,
 } from "@/lib/azulejos/zonas";
 
@@ -47,6 +48,11 @@ type Props = {
   onSelecionar?: (id: string) => void;
   /** Estado destacado; os restantes esbatem-se. */
   filtro?: Estado | null;
+  /**
+   * Onde o mapa está — o nome da zona ou província em que se entrou, ou null
+   * quando se vê Portugal inteiro. É o que dá à página a migalha de regresso.
+   */
+  onLugar?: (nome: string | null) => void;
   className?: string;
 };
 
@@ -84,23 +90,28 @@ const CORES_POR_ESTADO = [
  * cheio não conta.
  */
 export const MapaAzulejos = forwardRef<MapaHandle, Props>(
-  ({ paineis, onSelecionar, filtro, className }, ref) => {
+  ({ paineis, onSelecionar, filtro, onLugar, className }, ref) => {
     const contentor = useRef<HTMLDivElement | null>(null);
     const mapa = useRef<MapLibreMap | null>(null);
     const [pronto, setPronto] = useState(false);
     const [falhou, setFalhou] = useState(false);
     const aoSelecionar = useRef(onSelecionar);
     aoSelecionar.current = onSelecionar;
+    const aoLugar = useRef(onLugar);
+    aoLugar.current = onLugar;
 
     useImperativeHandle(ref, () => ({
       irPara: (lng, lat, zoom = 16) => {
         mapa.current?.flyTo({ center: [lng, lat], zoom, duration: 1600 });
       },
       verTudo: () => {
-        mapa.current?.fitBounds(VISTA_PORTUGAL.limites, {
-          padding: VISTA_PORTUGAL.margem,
-          duration: 1400,
-        });
+        const m = mapa.current;
+        if (m) {
+          m.fitBounds(VISTA_PORTUGAL.limites, {
+            padding: margensDoMapa(m),
+            duration: 1400,
+          });
+        }
       },
     }));
 
@@ -119,8 +130,7 @@ export const MapaAzulejos = forwardRef<MapaHandle, Props>(
         // consumido e ficasse em branco, sem erro nenhum.
         style: structuredClone(ESTILO_AZULEJO),
         bounds: VISTA_PORTUGAL.limites,
-        fitBoundsOptions: { padding: VISTA_PORTUGAL.margem },
-        minZoom: 3,
+        minZoom: 2.6,
         maxZoom: 19,
         attributionControl: false,
         // O mapa é a interface: sem inclinação nem rotação, que só confundem.
@@ -152,20 +162,30 @@ export const MapaAzulejos = forwardRef<MapaHandle, Props>(
 
         // Zonas e províncias entram primeiro, para os painéis ficarem sempre
         // por cima.
-        const enquadrar = (limites: [[number, number], [number, number]]) => {
-          m.fitBounds(limites, {
-            padding: MARGEM_DO_ENQUADRAMENTO,
-            duration: 1300,
-          });
+        const enquadrar = (
+          limites: [[number, number], [number, number]],
+          nome: string
+        ) => {
+          m.fitBounds(limites, { padding: margensDoMapa(m), duration: 1300 });
+          aoLugar.current?.(nome);
         };
         const camadasDeTopo = [CAMADA_AGLOMERADOS, CAMADA_PONTOS];
         desmontar.push(
           instalarZonas(m, {
-            aoEscolher: (zona) => enquadrar(ZONAS[zona].vista),
+            aoEscolher: (zona) =>
+              enquadrar(ZONAS[zona].vista, ZONAS[zona].nome),
             camadasDeTopo,
           }),
           instalarProvincias(m, { aoEscolher: enquadrar, camadasDeTopo })
         );
+
+        // Afastar até se ver Portugal inteiro apaga a migalha sozinho: quem
+        // sai a andar para trás não devia ter de carregar em nada.
+        m.on("moveend", () => {
+          if (m.getZoom() <= charneira(m).inicio) {
+            aoLugar.current?.(null);
+          }
+        });
 
         m.addSource(FONTE, {
           type: "geojson",
@@ -300,7 +320,7 @@ export const MapaAzulejos = forwardRef<MapaHandle, Props>(
         if (!enquadrado) {
           enquadrado = true;
           m.fitBounds(VISTA_PORTUGAL.limites, {
-            padding: VISTA_PORTUGAL.margem,
+            padding: margensDoMapa(m),
             duration: 0,
           });
         }

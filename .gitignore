@@ -26,3 +26,6 @@ dist-ssr
 
 # Python dos scripts de dados
 __pycache__/
+
+# Rascunhos de sessão (relatórios, artefactos) — não são do produto
+scratch/
