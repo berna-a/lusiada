@@ -40,6 +40,7 @@ import AzulejoPage from "@/pages/azulejos/AzulejoPage";
 import RegistarAzulejoPage from "@/pages/azulejos/RegistarAzulejoPage";
 import ContactosPage from "@/pages/ContactosPage";
 import BemVindoPage from "@/pages/conta/BemVindoPage";
+import CallbackAos from "@/pages/conta/CallbackAos";
 import EntrarPage from "@/pages/conta/EntrarPage";
 import ContaPerfilPage from "@/pages/conta/PerfilPage";
 import PerfilPublicoPage from "@/pages/conta/PerfilPublicoPage";
@@ -126,6 +127,7 @@ const App = () => (
                 element={<EntrarPage modoInicial="criar" />}
                 path="/criar-conta"
               />
+              <Route element={<CallbackAos />} path="/conta/callback" />
               <Route element={<BemVindoPage />} path="/bem-vindo" />
               <Route element={<ContaPerfilPage />} path="/perfil" />
               <Route

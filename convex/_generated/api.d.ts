@@ -9,10 +9,12 @@
  */
 
 import type * as admin from "../admin.js";
+import type * as aosAccount from "../aosAccount.js";
 import type * as articles from "../articles.js";
 import type * as auth from "../auth.js";
 import type * as azulejoPosts from "../azulejoPosts.js";
 import type * as azulejos from "../azulejos.js";
+import type * as cep from "../cep.js";
 import type * as contact from "../contact.js";
 import type * as contributions from "../contributions.js";
 import type * as discussion from "../discussion.js";
@@ -45,10 +47,12 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   admin: typeof admin;
+  aosAccount: typeof aosAccount;
   articles: typeof articles;
   auth: typeof auth;
   azulejoPosts: typeof azulejoPosts;
   azulejos: typeof azulejos;
+  cep: typeof cep;
   contact: typeof contact;
   contributions: typeof contributions;
   discussion: typeof discussion;

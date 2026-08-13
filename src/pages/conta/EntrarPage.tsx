@@ -8,6 +8,15 @@ import { Seo } from "@/components/Seo";
 type Modo = "entrar" | "criar";
 
 const MIN_PASSE = 8;
+const CHAVE_ESTADO = "aos_entrar_estado";
+
+function entrarComContaAos() {
+  const estado = crypto.randomUUID();
+  sessionStorage.setItem(CHAVE_ESTADO, estado);
+  const url = new URL("https://staging.aos.ardo.vc/entrar/lusiada");
+  url.searchParams.set("state", estado);
+  window.location.href = url.toString();
+}
 
 /** As mensagens do servidor de autenticação são cruas; traduzem-se aqui. */
 function traduzirErro(bruto: string, modo: Modo): string {
@@ -135,6 +144,14 @@ export default function EntrarPage({ modoInicial }: { modoInicial: Modo }) {
           />
         </svg>
         Continuar com Google
+      </button>
+
+      <button
+        className="mt-3 flex w-full items-center justify-center gap-3 rounded-xl border border-border bg-card py-3.5 font-body text-[15px] text-foreground transition-colors hover:border-accent/50"
+        onClick={entrarComContaAos}
+        type="button"
+      >
+        Entrar com conta AOS
       </button>
 
       <div className="my-6 flex items-center gap-4">

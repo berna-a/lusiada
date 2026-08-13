@@ -1,6 +1,8 @@
 import Google from "@auth/core/providers/google";
+import { ConvexCredentials } from "@convex-dev/auth/providers/ConvexCredentials";
 import { Password } from "@convex-dev/auth/providers/Password";
 import { convexAuth } from "@convex-dev/auth/server";
+import { internal } from "./_generated/api";
 import { CodigoPorEmail } from "./emailVerificacao";
 
 /**
@@ -28,5 +30,19 @@ export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
   providers: [
     Google,
     comConfirmacao ? Password({ verify: CodigoPorEmail }) : Password(),
+    // "Entrar com conta AOS" (convex/aosAccount.ts) — resgata o bilhete
+    // local de uso único emitido depois de trocar o código do AOS pela
+    // identidade da pessoa. Nunca autentica por password nem por token
+    // externo directamente — só por este bilhete, já verificado.
+    ConvexCredentials({
+      id: "aos-account",
+      authorize: async (params, ctx) => {
+        const { userId } = await ctx.runMutation(
+          internal.aosAccount.redimirTokenInterno,
+          { token: params.token as string }
+        );
+        return { userId };
+      },
+    }),
   ],
 });
