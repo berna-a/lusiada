@@ -22,7 +22,6 @@ import type * as http from "../http.js";
 import type * as lexicon from "../lexicon.js";
 import type * as lusiadas from "../lusiadas.js";
 import type * as memberArea from "../memberArea.js";
-import type * as members from "../members.js";
 import type * as memberships from "../memberships.js";
 import type * as perfis from "../perfis.js";
 import type * as permissions from "../permissions.js";
@@ -59,7 +58,6 @@ declare const fullApi: ApiFromModules<{
   lexicon: typeof lexicon;
   lusiadas: typeof lusiadas;
   memberArea: typeof memberArea;
-  members: typeof members;
   memberships: typeof memberships;
   perfis: typeof perfis;
   permissions: typeof permissions;
