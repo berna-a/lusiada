@@ -17,9 +17,11 @@ import { v } from "convex/values";
 import { internal } from "./_generated/api";
 import { action, internalMutation } from "./_generated/server";
 
-// A instância viva do AOS — "staging" é só o nome da branch; é este o
-// deployment que serve tudo hoje (ver AOS/CLAUDE.md).
-const AOS_BASE_URL = "https://staging.aos.ardo.vc";
+// As acções HTTP do Convex vivem no domínio `.convex.site` do deployment —
+// nunca no domínio do site em si (staging.aos.ardo.vc é só o frontend
+// Vercel, sem rota nenhuma para /v1/*). valuable-dove-859 é o deployment
+// vivo do AOS hoje (ver AOS/CLAUDE.md).
+const AOS_BASE_URL = "https://valuable-dove-859.convex.site";
 const TOKEN_TTL_MS = 2 * 60 * 1000;
 
 type IdentidadeAos = {
