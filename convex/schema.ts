@@ -370,6 +370,8 @@ export default defineSchema({
     onboarding_feito: v.optional(v.boolean()),
     /** Quem esconde o perfil deixa de aparecer em alusiada.pt/<handle>. */
     perfil_privado: v.optional(v.boolean()),
+    /** Quando se enviou o email a avisar que já pode entrar com a Conta AOS. */
+    aos_convite_enviado_em: v.optional(v.string()),
   })
     .index("by_handle", ["handle"])
     .index("by_user", ["user_id"]),

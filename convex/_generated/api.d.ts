@@ -24,6 +24,7 @@ import type * as lexicon from "../lexicon.js";
 import type * as lusiadas from "../lusiadas.js";
 import type * as memberArea from "../memberArea.js";
 import type * as memberships from "../memberships.js";
+import type * as migracaoAos from "../migracaoAos.js";
 import type * as perfis from "../perfis.js";
 import type * as permissions from "../permissions.js";
 import type * as seedAzulejosAlbum from "../seedAzulejosAlbum.js";
@@ -61,6 +62,7 @@ declare const fullApi: ApiFromModules<{
   lusiadas: typeof lusiadas;
   memberArea: typeof memberArea;
   memberships: typeof memberships;
+  migracaoAos: typeof migracaoAos;
   perfis: typeof perfis;
   permissions: typeof permissions;
   seedAzulejosAlbum: typeof seedAzulejosAlbum;
