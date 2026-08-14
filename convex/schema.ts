@@ -437,12 +437,6 @@ export default defineSchema({
     .index("by_post_user", ["post_id", "user_id"])
     .index("by_user", ["user_id"]),
 
-  // ─── Clube Eclético Portuguez (CEP) ───
-  cep_waitlist: defineTable({
-    nome: v.string(),
-    email: v.string(),
-  }).index("by_email", ["email"]),
-
   // Conta AOS: bilhete local de uso único, emitido depois de trocar um
   // código do AOS (convex/aosAccount.ts) pela identidade da pessoa. O
   // provider "aos-account" (convex/auth.ts) resgata-o para abrir a sessão
