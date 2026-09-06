@@ -36,7 +36,7 @@ const CONTRIB_STATUS: Record<string, string> = {
 
 export default function MinhaContaPage() {
   const { isLoading, isAuthenticated } = useConvexAuth();
-  const { signIn, signOut } = useAuthActions();
+  const { signOut } = useAuthActions();
   const membership = useQuery(api.memberships.myMembership);
   const mine = useQuery(api.contributions.mine, isAuthenticated ? {} : "skip");
   const [searchParams] = useSearchParams();
@@ -63,12 +63,8 @@ export default function MinhaContaPage() {
         <p className="mt-4 font-body text-foreground/70 leading-relaxed">
           Inicie sessão para ver o seu perfil e as suas contribuições.
         </p>
-        <Button
-          className="mt-8"
-          onClick={() => signIn("google", { redirectTo: "/conta" })}
-          variant="accent"
-        >
-          Entrar com Google
+        <Button asChild className="mt-8" variant="accent">
+          <Link to="/entrar?destino=/conta">Entrar ou criar conta</Link>
         </Button>
       </main>
     );

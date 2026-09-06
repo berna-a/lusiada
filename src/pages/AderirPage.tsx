@@ -1,4 +1,3 @@
-import { useAuthActions } from "@convex-dev/auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useConvexAuth, useMutation, useQuery } from "convex/react";
 import { CheckCircle2, Clock, Loader2 } from "lucide-react";
@@ -110,7 +109,6 @@ function Card({ children }: { children: React.ReactNode }) {
 
 export default function AderirPage() {
   const { isLoading, isAuthenticated } = useConvexAuth();
-  const { signIn } = useAuthActions();
   const membership = useQuery(api.memberships.myMembership);
 
   if (isLoading || (isAuthenticated && membership === undefined)) {
@@ -128,15 +126,12 @@ export default function AderirPage() {
       <Shell>
         <Card>
           <p className="font-body text-base text-foreground/80 leading-relaxed">
-            Para aderir, inicie sessão com a sua conta Google. Assim a sua
-            adesão fica ligada ao seu perfil.
+            Para aderir, entre ou crie uma conta. Pode usar Google, a sua conta
+            AOS ou email e palavra-passe. Assim a adesão fica ligada ao seu
+            perfil.
           </p>
-          <Button
-            className="mt-8"
-            onClick={() => signIn("google", { redirectTo: "/aderir" })}
-            variant="accent"
-          >
-            Entrar com Google
+          <Button asChild className="mt-8" variant="accent">
+            <Link to="/entrar?destino=/aderir">Entrar ou criar conta</Link>
           </Button>
           <p className="mt-6 font-body text-muted-foreground text-sm">
             Só quer explorar e contribuir para a Arca?{" "}
