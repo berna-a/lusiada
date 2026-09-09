@@ -14,6 +14,7 @@ import { SitePreferencesProvider } from "@/contexts/SitePreferencesContext";
 import { AdminLayout } from "@/layouts/AdminLayout";
 import { GlobalLayout } from "@/layouts/GlobalLayout";
 import AderirPage from "@/pages/AderirPage";
+import AgendaPage from "@/pages/AgendaPage";
 import ApoiarPage from "@/pages/ApoiarPage";
 import AssociacaoPage from "@/pages/AssociacaoPage";
 import AzulejoPortuguesPage from "@/pages/AzulejoPortuguesPage";
@@ -260,15 +261,7 @@ const App = () => (
                 }
                 path="/arca/obras"
               />
-              <Route
-                element={
-                  <PlaceholderPage
-                    description="Próximos eventos da Associação."
-                    title="Agenda"
-                  />
-                }
-                path="/programa/agenda"
-              />
+              <Route element={<AgendaPage />} path="/programa/agenda" />
               <Route
                 element={
                   <PlaceholderPage
