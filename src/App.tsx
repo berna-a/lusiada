@@ -69,6 +69,7 @@ import ManifestoPage from "@/pages/sobre/ManifestoPage";
 import ObjectivosPage from "@/pages/sobre/ObjectivosPage";
 import PrivacidadePage from "@/pages/sobre/PrivacidadePage";
 import TermosPage from "@/pages/sobre/TermosPage";
+import TorneioGoPage from "@/pages/TorneioGoPage";
 import TorneioXadrezPage from "@/pages/TorneioXadrezPage";
 
 const queryClient = new QueryClient();
@@ -117,6 +118,7 @@ const App = () => (
               <Route element={<DesportoPage />} path="/desporto" />
               <Route element={<DesportoPage />} path="/programa/desporto" />
               <Route element={<TorneioXadrezPage />} path="/xadrez" />
+              <Route element={<TorneioGoPage />} path="/go" />
               <Route
                 element={<Navigate replace to="/xadrez" />}
                 path="/torneio-xadrez"
