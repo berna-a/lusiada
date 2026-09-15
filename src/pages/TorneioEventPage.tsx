@@ -7,6 +7,7 @@ import {
   MapPin,
   Ticket,
 } from "lucide-react";
+import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { Seo } from "@/components/Seo";
 
@@ -27,6 +28,7 @@ export type TorneioConfig = {
   programa: ProgramaItem[];
   subtitulo: string;
   tituloSeo: string;
+  textoInteresse?: string;
 };
 
 const LOCAL = "Biblioteca de Marvila";
@@ -52,7 +54,17 @@ function ChessPattern() {
   );
 }
 
-export default function TorneioEventPage({ event }: { event: TorneioConfig }) {
+export default function TorneioEventPage({
+  children,
+  event,
+}: {
+  children?: ReactNode;
+  event: TorneioConfig;
+}) {
+  const textoInteresse = event.textoInteresse ?? "Quero informações";
+  const IconeInteresse = event.interesse.startsWith("mailto:")
+    ? Mail
+    : ArrowRight;
   const perguntas = [
     {
       pergunta: "Onde e quando se realiza?",
@@ -113,8 +125,8 @@ export default function TorneioEventPage({ event }: { event: TorneioConfig }) {
                 className="inline-flex items-center gap-2 bg-[#073c78] px-6 py-3.5 font-body font-bold text-[#f7edd6] text-sm uppercase tracking-[0.12em] transition-transform hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c73216] focus-visible:outline-offset-4"
                 href={event.interesse}
               >
-                <Mail aria-hidden="true" size={18} />
-                Quero informações
+                <IconeInteresse aria-hidden="true" size={18} />
+                {textoInteresse}
               </a>
               <a
                 className="inline-flex items-center gap-2 border-2 border-[#073c78] px-6 py-3 font-body font-bold text-sm uppercase tracking-[0.12em] transition-colors hover:bg-[#073c78] hover:text-[#f7edd6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c73216] focus-visible:outline-offset-4"
@@ -216,7 +228,7 @@ export default function TorneioEventPage({ event }: { event: TorneioConfig }) {
 
         <div className="mt-14 overflow-hidden border-2 border-[#073c78]">
           <img
-            alt={`Cartaz horizontal do ${event.nome}`}
+            alt={`Imagem do ${event.nome}`}
             className="block aspect-[768/518] w-full object-cover"
             decoding="async"
             src={event.imagemCartaz}
@@ -245,10 +257,12 @@ export default function TorneioEventPage({ event }: { event: TorneioConfig }) {
           className="mt-8 inline-flex items-center gap-2 bg-[#c73216] px-7 py-4 font-black font-body text-sm text-white uppercase tracking-[0.12em] transition-transform hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#073c78] focus-visible:outline-offset-4"
           href={event.interesse}
         >
-          Quero receber informações
+          {event.textoInteresse ?? "Quero receber informações"}
           <ArrowRight aria-hidden="true" size={18} />
         </a>
       </section>
+
+      {children}
 
       <section className="mx-auto max-w-[1120px] px-6 py-24 lg:px-12 lg:py-32">
         <div className="grid gap-12 lg:grid-cols-[0.65fr_1.35fr]">
@@ -310,7 +324,7 @@ export default function TorneioEventPage({ event }: { event: TorneioConfig }) {
             className="inline-flex shrink-0 items-center gap-2 bg-[#f7edd6] px-7 py-4 font-black font-body text-[#073c78] text-sm uppercase tracking-[0.12em] transition-transform hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-4"
             href={event.interesse}
           >
-            Quero informações
+            {textoInteresse}
             <ArrowRight aria-hidden="true" size={18} />
           </a>
         </div>

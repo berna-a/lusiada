@@ -6,13 +6,13 @@ export default function TorneioGoPage() {
       event={{
         caminho: "/go",
         descricao:
-          "Torneio de Go / Igo / Baduk da Associação Memória Lusíada: 24 de Outubro de 2026, na Biblioteca de Marvila.",
+          "Evento de Go / Igo / Baduk da Associação Memória Lusíada: 24 de Outubro de 2026, na Biblioteca de Marvila.",
         imagemCartaz: "/eventos-marvila/go-qtrack.jpg",
         imagemSocial: "/eventos-marvila/go-story.jpg",
         interesse:
-          "mailto:bernardo@alusiada.pt?subject=Torneio%20de%20Go%20%E2%80%94%2024%20de%20Outubro%20de%202026",
+          "mailto:bernardo@alusiada.pt?subject=Evento%20de%20Go%20%E2%80%94%2024%20de%20Outubro%20de%202026",
         modalidade: "Go · Igo · Baduk",
-        nome: "Torneio de Go",
+        nome: "Evento de Go",
         preço: "Entrada livre",
         programa: [
           { hora: "15h30–18h30", titulo: "Convívio, ensino e explicação" },
@@ -20,7 +20,7 @@ export default function TorneioGoPage() {
           { hora: "20h", titulo: "Medalhas" },
         ],
         subtitulo: "Uma tarde para conhecer, aprender e jogar Go.",
-        tituloSeo: "Torneio de Go / Igo / Baduk — LUSÍADA",
+        tituloSeo: "Evento de Go / Igo / Baduk — LUSÍADA",
       }}
     />
   );

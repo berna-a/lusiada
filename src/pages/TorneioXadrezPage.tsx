@@ -1,3 +1,4 @@
+import InscricaoXadrez from "@/pages/InscricaoXadrez";
 import TorneioEventPage from "@/pages/TorneioEventPage";
 
 export default function TorneioXadrezPage() {
@@ -9,8 +10,7 @@ export default function TorneioXadrezPage() {
           "Torneio Aberto de Xadrez da Associação Memória Lusíada: 24 de Outubro de 2026, na Biblioteca de Marvila.",
         imagemCartaz: "/eventos-marvila/xadrez-qtrack.jpg",
         imagemSocial: "/eventos-marvila/xadrez-story.jpg",
-        interesse:
-          "mailto:bernardo@alusiada.pt?subject=Torneio%20de%20Xadrez%20%E2%80%94%2024%20de%20Outubro%20de%202026",
+        interesse: "#inscricao",
         modalidade: "Xadrez",
         nome: "Torneio Aberto de Xadrez",
         preço: "3 EUR · ingresso",
@@ -21,7 +21,10 @@ export default function TorneioXadrezPage() {
         ],
         subtitulo: "Uma manhã para jogar, pensar e conviver.",
         tituloSeo: "Torneio Aberto de Xadrez — LUSÍADA",
+        textoInteresse: "Inscrever-me",
       }}
-    />
+    >
+      <InscricaoXadrez />
+    </TorneioEventPage>
   );
 }
