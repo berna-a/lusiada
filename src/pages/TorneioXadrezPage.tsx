@@ -1,4 +1,4 @@
-import InscricaoXadrez from "@/pages/InscricaoXadrez";
+import InscricaoEvento from "@/pages/InscricaoEvento";
 import TorneioEventPage from "@/pages/TorneioEventPage";
 
 export default function TorneioXadrezPage() {
@@ -24,7 +24,11 @@ export default function TorneioXadrezPage() {
         textoInteresse: "Inscrever-me",
       }}
     >
-      <InscricaoXadrez />
+      <InscricaoEvento
+        evento="Torneio Aberto de Xadrez"
+        modalidade="Xadrez"
+        pago
+      />
     </TorneioEventPage>
   );
 }
