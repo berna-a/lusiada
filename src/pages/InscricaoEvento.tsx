@@ -75,7 +75,7 @@ export default function InscricaoEvento({
           Inscrição
         </h2>
         <p className="mt-6 max-w-[760px] font-body text-[#f7edd6]/80 text-lg leading-relaxed">
-          Indique o seu nome e pelo menos um contacto. A inscrição é preparada
+          Indica o teu nome e pelo menos um contacto. A inscrição é preparada
           por email e só fica confirmada depois da resposta da Associação.
         </p>
 
@@ -220,7 +220,7 @@ export default function InscricaoEvento({
               <ArrowRight aria-hidden="true" size={18} />
             </button>
             <p className="mt-4 font-body text-[#081f42]/70 text-sm leading-relaxed">
-              Revê e envia a mensagem na sua aplicação de email. Os dados não
+              Revê e envia a mensagem na tua aplicação de email. Os dados não
               são guardados no site antes desse envio.
             </p>
           </form>
