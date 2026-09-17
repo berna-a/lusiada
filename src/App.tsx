@@ -25,6 +25,7 @@ import AdminDefinicoesPage from "@/pages/admin/AdminDefinicoesPage";
 import AdminLusopediaPage from "@/pages/admin/AdminLusopediaPage";
 import AdminModeracaoPage from "@/pages/admin/AdminModeracaoPage";
 import AdminPortalPage from "@/pages/admin/AdminPortalPage";
+import AdminProjectosPage from "@/pages/admin/AdminProjectosPage";
 import AdminSociosPage from "@/pages/admin/AdminSociosPage";
 import ArcaPage from "@/pages/arca/ArcaPage";
 import ArtigoPage from "@/pages/arca/ArtigoPage";
@@ -65,6 +66,8 @@ import MembrosPage from "@/pages/MembrosPage";
 import MinhaContaPage from "@/pages/MinhaContaPage";
 import NotFound from "@/pages/NotFound";
 import ProgramaPage from "@/pages/ProgramaPage";
+import ProjectoPage from "@/pages/ProjectoPage";
+import ProjectosPage from "@/pages/ProjectosPage";
 import ManifestoPage from "@/pages/sobre/ManifestoPage";
 import ObjectivosPage from "@/pages/sobre/ObjectivosPage";
 import PrivacidadePage from "@/pages/sobre/PrivacidadePage";
@@ -124,6 +127,14 @@ const App = () => (
                 path="/torneio-xadrez"
               />
               <Route element={<ApoiarPage />} path="/apoiar" />
+              <Route element={<ProjectosPage />} path="/projectos" />
+              {import.meta.env.DEV && (
+                <Route
+                  element={<AdminProjectosPage demoMode />}
+                  path="/demonstracao/projectos"
+                />
+              )}
+              <Route element={<ProjectoPage />} path="/projectos/:slug" />
               <Route element={<ContactosPage />} path="/contactos" />
               <Route element={<AderirPage />} path="/aderir" />
               <Route element={<MinhaContaPage />} path="/conta" />
@@ -323,6 +334,7 @@ const App = () => (
               <Route element={<AdminModeracaoPage />} path="/admin/moderacao" />
               <Route element={<AdminAzulejosPage />} path="/admin/azulejos" />
               <Route element={<AdminPortalPage />} path="/admin/portal" />
+              <Route element={<AdminProjectosPage />} path="/admin/projectos" />
               <Route
                 element={<AdminDefinicoesPage />}
                 path="/admin/definicoes"

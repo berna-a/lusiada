@@ -10,6 +10,7 @@ import {
   Loader2,
   LogOut,
   Settings,
+  Shapes,
   Users,
 } from "lucide-react";
 import { Link, Outlet, useLocation } from "react-router-dom";
@@ -23,6 +24,7 @@ const adminLinks = [
   { label: "Moderação", to: "/admin/moderacao", icon: Inbox },
   { label: "Azulejos", to: "/admin/azulejos", icon: Camera },
   { label: "Portal de Sócios", to: "/admin/portal", icon: FolderLock },
+  { label: "Projectos", to: "/admin/projectos", icon: Shapes },
   { label: "Definições", to: "/admin/definicoes", icon: Settings },
 ];
 

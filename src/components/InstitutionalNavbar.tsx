@@ -54,6 +54,7 @@ const menus: Record<MenuKey, { label: string; items: DropdownItem[] }> = {
         subtitle: "Linhas de acção",
         to: "/programa/iniciativas",
       },
+      { label: "Projectos", subtitle: "Construir juntos", to: "/projectos" },
       {
         label: "Blogue",
         subtitle: "Crónicas e ensaios",

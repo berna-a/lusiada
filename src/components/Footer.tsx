@@ -4,6 +4,7 @@ const navLinks = [
   { label: "Associação", to: "/associacao" },
   { label: "Programa", to: "/programa" },
   { label: "Apoiar", to: "/apoiar" },
+  { label: "Projectos", to: "/projectos" },
   { label: "Aderir", to: "/aderir" },
   { label: "A minha conta", to: "/conta" },
   { label: "Contactos", to: "/contactos" },

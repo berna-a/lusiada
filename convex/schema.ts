@@ -317,6 +317,82 @@ export default defineSchema({
     .index("by_published", ["is_published"])
     .index("by_date", ["date"]),
 
+  // Projectos financiáveis. A publicação é editorial; intenções de apoio e
+  // contribuições confirmadas vivem em tabelas separadas para que uma intenção
+  // nunca seja apresentada como dinheiro recebido.
+  funded_projects: defineTable({
+    slug: v.string(),
+    title: v.string(),
+    eyebrow: v.optional(v.union(v.string(), v.null())),
+    summary: v.string(),
+    description: v.string(),
+    cover_image_url: v.optional(v.union(v.string(), v.null())),
+    status: v.union(
+      v.literal("preparing"),
+      v.literal("funding"),
+      v.literal("funded"),
+      v.literal("completed")
+    ),
+    goal_cents: v.number(),
+    currency: v.literal("EUR"),
+    budget_note: v.optional(v.union(v.string(), v.null())),
+    material_needs: v.array(v.string()),
+    technical_needs: v.array(v.string()),
+    volunteer_needs: v.array(v.string()),
+    updates: v.array(
+      v.object({
+        title: v.string(),
+        body: v.string(),
+        published_at: v.number(),
+      })
+    ),
+    is_published: v.boolean(),
+    updated_at: v.number(),
+  })
+    .index("by_slug", ["slug"])
+    .index("by_published", ["is_published"]),
+
+  // Pedidos privados de contacto associados a um projecto. Não são doações,
+  // não alimentam o progresso financeiro e nunca são expostos por query pública.
+  project_support_intents: defineTable({
+    project_id: v.optional(v.union(v.id("funded_projects"), v.null())),
+    project_slug: v.string(),
+    name: v.string(),
+    email: v.string(),
+    support_type: v.union(
+      v.literal("financial"),
+      v.literal("material"),
+      v.literal("technical"),
+      v.literal("volunteer")
+    ),
+    message: v.string(),
+    amount_cents: v.optional(v.union(v.number(), v.null())),
+    status: v.union(
+      v.literal("new"),
+      v.literal("contacted"),
+      v.literal("closed")
+    ),
+  })
+    .index("by_project", ["project_slug"])
+    .index("by_project_email_created", ["project_slug", "email"])
+    .index("by_status", ["status"]),
+
+  // Só pagamentos efectivamente confirmados poderão entrar aqui. O frontend
+  // soma apenas estes registos, nunca intenções nem valores pendentes.
+  project_contributions: defineTable({
+    project_id: v.id("funded_projects"),
+    amount_cents: v.number(),
+    currency: v.literal("EUR"),
+    provider: v.string(),
+    provider_reference: v.string(),
+    confirmed_at: v.number(),
+    created_by: v.id("users"),
+    revoked_at: v.optional(v.union(v.number(), v.null())),
+    revoked_by: v.optional(v.union(v.id("users"), v.null())),
+  })
+    .index("by_project", ["project_id"])
+    .index("by_project_reference", ["project_id", "provider_reference"]),
+
   // Doações
   donations: defineTable({
     donor_email: v.string(),

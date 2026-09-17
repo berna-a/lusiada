@@ -1,0 +1,81 @@
+.crowdfunding-scope {
+  color: hsl(var(--foreground));
+  background: hsl(var(--background));
+}
+
+.crowdfunding-scope h1,
+.crowdfunding-scope h2,
+.crowdfunding-scope h3,
+.crowdfunding-scope h4 {
+  font-family: "Cinzel", "Georgia", serif;
+  font-weight: 500;
+  color: hsl(var(--primary));
+  text-transform: none;
+}
+
+.crowdfunding-scope input,
+.crowdfunding-scope select,
+.crowdfunding-scope textarea {
+  color: hsl(var(--foreground));
+  background: hsl(var(--card));
+  border-color: hsl(var(--input));
+  border-radius: var(--radius);
+}
+
+.crowdfunding-scope input:focus-visible,
+.crowdfunding-scope select:focus-visible,
+.crowdfunding-scope textarea:focus-visible {
+  outline: 2px solid hsl(var(--ring) / 0.3);
+  outline-offset: 2px;
+  border-color: hsl(var(--accent));
+}
+
+.crowdfunding-scope button {
+  border-radius: 9999px;
+}
+
+.cf-surface {
+  color: hsl(var(--card-foreground));
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 1rem;
+  box-shadow:
+    0 8px 28px -16px hsl(var(--primary) / 0.22),
+    0 1px 3px hsl(var(--primary) / 0.08);
+}
+
+.cf-primary-action {
+  color: hsl(var(--destructive-foreground));
+  background: hsl(var(--destructive));
+  border-radius: 9999px;
+  box-shadow:
+    0 6px 20px hsl(var(--destructive) / 0.3),
+    inset 0 1px 0 hsl(0 0% 100% / 0.18);
+}
+
+.cf-primary-action:hover {
+  background: hsl(var(--destructive) / 0.92);
+  filter: brightness(1.05);
+}
+
+.cf-secondary-action {
+  color: hsl(var(--primary));
+  background: transparent;
+  border: 1px solid hsl(var(--accent) / 0.55);
+  border-radius: 9999px;
+}
+
+.cf-secondary-action:hover {
+  background: hsl(var(--accent) / 0.1);
+  border-color: hsl(var(--accent));
+}
+
+.cf-progress {
+  background: hsl(var(--accent));
+}
+
+.cf-ornament {
+  width: 3.75rem;
+  height: 1px;
+  background: hsl(var(--accent));
+}

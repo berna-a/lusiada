@@ -120,6 +120,15 @@
     font-weight: 400;
     text-transform: uppercase;
   }
+  .crowdfunding-scope h1,
+  .crowdfunding-scope h2,
+  .crowdfunding-scope h3,
+  .crowdfunding-scope h4 {
+    font-family: "Cinzel", "Georgia", serif;
+    font-weight: 500;
+    color: hsl(var(--primary));
+    text-transform: none;
+  }
   html {
     scroll-behavior: smooth;
   }

@@ -5,13 +5,21 @@ import { PageHeader } from "@/components/PageHeader";
 
 const FORMAS = [
   {
+    icon: HandHeart,
+    titulo: "Projectos",
+    texto:
+      "Apoie iniciativas concretas com financiamento, material, conhecimento técnico ou voluntariado.",
+    cta: "Ver projectos",
+    to: "/projectos",
+    primary: true,
+  },
+  {
     icon: UserPlus,
     titulo: "Aderir",
     texto:
       "A adesão é livre e gratuita. Cada novo membro fortalece a comunidade que guarda a memória de Portugal.",
     cta: "Tornar-me membro",
     to: "/aderir",
-    primary: true,
   },
   {
     icon: HandHeart,
@@ -43,7 +51,7 @@ export default function ApoiarPage() {
         title="Apoiar"
       />
 
-      <section className="mt-16 grid gap-6 lg:grid-cols-3">
+      <section className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {FORMAS.map((f) => (
           <div
             className={`premium-shadow flex flex-col rounded-2xl border bg-card p-8 ${

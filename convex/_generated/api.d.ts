@@ -27,6 +27,7 @@ import type * as memberships from "../memberships.js";
 import type * as migracaoAos from "../migracaoAos.js";
 import type * as perfis from "../perfis.js";
 import type * as permissions from "../permissions.js";
+import type * as projects from "../projects.js";
 import type * as seedAzulejosAlbum from "../seedAzulejosAlbum.js";
 import type * as seedLusopedia from "../seedLusopedia.js";
 import type * as seedLusopedia2 from "../seedLusopedia2.js";
@@ -65,6 +66,7 @@ declare const fullApi: ApiFromModules<{
   migracaoAos: typeof migracaoAos;
   perfis: typeof perfis;
   permissions: typeof permissions;
+  projects: typeof projects;
   seedAzulejosAlbum: typeof seedAzulejosAlbum;
   seedLusopedia: typeof seedLusopedia;
   seedLusopedia2: typeof seedLusopedia2;
