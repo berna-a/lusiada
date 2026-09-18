@@ -10,6 +10,7 @@ type InscricaoEventoProps = {
 };
 
 const CONTACTO = "bernardo@alusiada.pt";
+const MBWAY = "915 579 855";
 
 export default function InscricaoEvento({
   evento,
@@ -54,7 +55,7 @@ export default function InscricaoEvento({
       "",
       ...(pago
         ? [
-            "Peço a confirmação da inscrição e, se aplicável, os dados para pagamento por MB WAY.",
+            "Envio este pedido de inscrição. Após pagar por MB WAY, responderei a este email com o comprovativo para validação.",
           ]
         : ["Peço a confirmação da inscrição."]),
     ].join("\n");
@@ -94,13 +95,23 @@ export default function InscricaoEvento({
                 </p>
                 <p>
                   Pode pagar por{" "}
-                  <strong className="text-[#f7edd6]">MB WAY</strong> — o
-                  contacto de pagamento é enviado por resposta à inscrição — ou
-                  em <strong className="text-[#f7edd6]">dinheiro</strong> até ao
-                  dia do evento.
+                  <strong className="text-[#f7edd6]">MB WAY</strong> para{" "}
+                  <strong className="text-[#f7edd6]">{MBWAY}</strong> ou em{" "}
+                  <strong className="text-[#f7edd6]">dinheiro</strong> no dia do
+                  evento.
                 </p>
+                <ol className="list-decimal space-y-2 pl-5">
+                  <li>Preencha o formulário e envie o email de inscrição.</li>
+                  <li>Pague 3 € por MB WAY para {MBWAY}.</li>
+                  <li>
+                    Responda ao email de inscrição com o comprovativo de
+                    pagamento.
+                  </li>
+                  <li>Aguarde a confirmação da Associação.</li>
+                </ol>
                 <p className="border-[#ef4b2d] border-l-4 pl-4 font-bold text-[#f7edd6]">
-                  A inscrição só fica confirmada após o pagamento.
+                  A inscrição só fica confirmada depois da validação do
+                  pagamento pela Associação.
                 </p>
               </div>
             ) : (
@@ -221,7 +232,8 @@ export default function InscricaoEvento({
             </button>
             <p className="mt-4 font-body text-[#081f42]/70 text-sm leading-relaxed">
               Revê e envia a mensagem na tua aplicação de email. Os dados não
-              são guardados no site antes desse envio.
+              são guardados no site antes desse envio. Se escolheres MB WAY,
+              responde depois a esse email com o comprovativo.
             </p>
           </form>
         </div>
